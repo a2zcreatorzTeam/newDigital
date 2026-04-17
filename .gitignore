@@ -1,0 +1,73 @@
+# ========================
+# Environment Files
+# ========================
+.env
+.env.*
+!.env.example
+
+# ========================
+# Composer Dependencies
+# ========================
+/vendor
+
+# ========================
+# Node Dependencies
+# ========================
+/node_modules
+
+# ========================
+# Build Files
+# ========================
+/public/build
+/public/hot
+
+# ========================
+# Laravel Storage (except public)
+# ========================
+/storage/*.key
+/storage/app/*
+!/storage/app/public
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/testing/*
+/storage/framework/views/*
+/storage/logs/*
+
+# ========================
+# Cache Files
+# ========================
+/bootstrap/cache/*.php
+
+# ========================
+# PHPUnit
+# ========================
+.phpunit.result.cache
+
+# ========================
+# OS Files
+# ========================
+.DS_Store
+Thumbs.db
+
+# ========================
+# Editor / IDE
+# ========================
+.vscode/
+.idea/
+
+# ========================
+# Logs & Debug
+# ========================
+npm-debug.log
+yarn-error.log
+
+# ========================
+# Keys / Certificates
+# ========================
+*.pem
+*.key
+
+# ========================
+# Laravel Mix / Vite temp
+# ========================
+/public/storage
