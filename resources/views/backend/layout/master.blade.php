@@ -12,5 +12,6 @@
         @yield('content')
 
 </div>
+    @stack('msncript')
 
 @include('backend.layout.footer')

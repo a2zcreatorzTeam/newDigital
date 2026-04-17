@@ -1,59 +1,84 @@
-@extends('backend.layout.master')
-@section('content')
+<div class="table-responsive">
 
+<table class="table table-bordered table-hover align-middle text-center">
 
-<section id="section-dashboard">
-    <div class="flex justify-between items-center mb-4">
-        <h1 class="font-bold text-dark" style="font-size: 1.5rem;">Role Management</h1>
-    </div>
+    <thead class="table-dark">
+        <tr>
+            <th>No</th>
+            <th>Main Class</th>
+            <th>Name</th>
+            <th>Logo</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
 
+    <tbody>
+        @foreach ($data as $item)
+        <tr>
 
-    <div class="card">
-        <div class="flex justify-between items-center mb-4">
-            <h3 class="font-semibold text-dark" style="font-size: 1.1rem;">Roles</h3>
-             @can('role-create')
-            <a class="btn  btn-icon" style="background-color:#ff5733;" href="{{route('roles.create')}}">Create New Role</a>
-             @endcan
-        </div>
-        <div class="table-responsive">
-            <table>
-                <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Name</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($roles as $key => $role)
-                    <tr>
-                        <td>{{ ++$i }}</td>
-                        <td>{{ $role->name }}</td>
-                        <td>
-                            <a class="btn  btn-sm" style="background-color:#ff5733;" href="{{ route('roles.show',$role->id) }}"><i class="fa-solid fa-list"></i> Show</a>
-                            @can('role-edit')
-                            <a class="btn btn-primary btn-sm" href="{{ route('roles.edit',$role->id) }}"><i class="fa-solid fa-pen-to-square"></i> Edit</a>
-                            @endcan
+            <td class="align-middle">
+                {{ $loop->iteration }}
+            </td>
 
-                            @can('role-delete')
-                            <form method="POST" action="{{ route('roles.destroy', $role->id) }}" style="display:inline" class="delete-form">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm">
-                                    <i class="fa-solid fa-trash"></i> Delete
-                                </button>
-                            </form>
-                            @endcan
-                        </td>
-                    </tr>
-                    @endforeach
+            <td class="align-middle">
+                {{ $item->mainClass->name ?? 'N/A' }}
+            </td>
 
-                </tbody>
-            </table>
-        </div>
-    </div>
-</section>
+            <td class="align-middle">
+                {{ $item->name }}
+            </td>
 
+            <td class="align-middle">
+                <img src="{{ asset($item->logo) }}"
+                     width="60"
+                     height="60"
+                     style="object-fit: cover; border-radius: 6px;">
+            </td>
 
-</main>
-@endsection
+            <td class="align-middle">
+                <span class="badge {{ $item->status == 1 ? 'bg-success' : 'bg-danger' }}">
+                    {{ $item->status == 1 ? 'Active' : 'Inactive' }}
+                </span>
+            </td>
+
+            <td class="align-middle">
+                @can('class-edit')
+                <a class="btn btn-primary btn-sm"
+                   href="{{ route('subclass.edit', $item->id) }}">
+                    Edit
+                </a>
+                @endcan
+
+                @can('class-delete')
+                <form method="POST"
+                      action="{{ route('subclass.destroy', $item->id) }}"
+                      style="display:inline">
+
+                    @csrf
+                    @method('DELETE')
+
+                    <button class="btn btn-danger btn-sm">
+                        Delete
+                    </button>
+                </form>
+                @endcan
+            </td>
+
+        </tr>
+        @endforeach
+    </tbody>
+
+</table>
+
+</div>
+
+{{-- PAGINATION OUTSIDE TABLE --}}
+<div class="mt-3">
+    {{ $data->links('pagination::bootstrap-4') }}
+</div>
+
+<div class="mt-2">
+    Showing {{ $data->firstItem() }} to {{ $data->lastItem() }}
+    of {{ $data->total() }} entries
+</div>

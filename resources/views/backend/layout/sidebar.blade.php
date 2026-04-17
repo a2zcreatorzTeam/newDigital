@@ -31,7 +31,7 @@
           @endcan
           @can('subclass-list')
           <div class="nav-item" data-target="manager">
-              <a href="{{route('users.index')}}">
+              <a href="{{route('subclass.filter')}}">
                  <i class="fa-solid fa-layer-group"></i> Sub Class Management
               </a>
           </div>

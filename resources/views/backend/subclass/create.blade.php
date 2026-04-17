@@ -1,51 +1,80 @@
 @extends('backend.layout.master')
 @section('content')
 
-
 <section id="section-dashboard">
     <div class="flex justify-between items-center mb-4">
-        <h1 class="font-bold text-dark" style="font-size: 1.5rem;">Create Role</h1>
+        <h1 class="font-bold text-dark" style="font-size: 1.5rem;">Create Sub Class</h1>
     </div>
-
 
     <div class="card">
         <div class="flex justify-between items-center mb-4">
-            <h3 class="font-semibold text-dark" style="font-size: 1.1rem;">Roles</h3>
-            @can('role-list')
-            <a class="btn  btn-icon" style="background-color:#ff5733;" href="{{route('roles.index')}}">Role List</a>
+            <h3 class="font-semibold text-dark" style="font-size: 1.1rem;">Sub Classes</h3>
+
+            @can('class-list')
+            <a class="btn btn-icon" style="background-color:#ff5733;" href="{{ route('class.index') }}">
+                Class List
+            </a>
             @endcan
-         </div>
-        <form method="POST" action="{{ route('roles.store') }}">
+        </div>
+
+        <form method="POST" action="{{ route('subclass.store') }}" enctype="multipart/form-data">
             @csrf
+
             <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-12">
+
+                <!-- Main Class Dropdown -->
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <strong>Main Class:</strong>
+                        <select name="class_id" class="form-control">
+                            <option value="">Select Main Class</option>
+                            @foreach($classes as $class)
+                                <option value="{{ $class->id }}">
+                                    {{ $class->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Sub Class Name -->
+                <div class="col-md-12 mt-2">
                     <div class="form-group">
                         <strong>Name:</strong>
-                        <input type="text" name="name" placeholder="Name" class="form-control">
+                        <input type="text" name="name" placeholder="Enter Sub Class Name" class="form-control">
                     </div>
                 </div>
-                <div class="col-xs-12 col-sm-12 col-md-12">
+
+                <!-- Logo -->
+                <div class="col-md-12 mt-2">
                     <div class="form-group">
-                        <strong>Permission:</strong>
-                        <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top:10px;">
-                            @foreach($permission as $value)
-                            <label style="background:#f1f1f1; padding:6px 12px; border-radius:20px; cursor:pointer;">
-                                <input type="checkbox" name="permission[{{$value->id}}]" value="{{$value->id}}" style="margin-right:5px;">
-                                {{ $value->name }}
-                            </label>
-                            @endforeach
-                        </div>
+                        <strong>Logo:</strong>
+                        <input type="file" name="logo" class="form-control">
                     </div>
                 </div>
-                <div class="col-xs-12 col-sm-12 col-md-12 text-center">
-                    <button type="submit" class="btn btn-primary btn-sm mb-3"><i class="fa-solid fa-floppy-disk"></i> Submit</button>
+
+                <!-- Status -->
+                <div class="col-md-12 mt-2">
+                    <div class="form-group">
+                        <strong>Status:</strong>
+                        <select name="status" class="form-control">
+                            <option value="1">Active</option>
+                            <option value="0">Inactive</option>
+                        </select>
+                    </div>
                 </div>
+
+                <!-- Submit -->
+                <div class="col-md-12 text-center mt-3">
+                    <button type="submit" class="btn btn-primary btn-sm">
+                        <i class="fa-solid fa-floppy-disk"></i> Submit
+                    </button>
+                </div>
+
             </div>
         </form>
-
 
     </div>
 </section>
 
-</main>
 @endsection

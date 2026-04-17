@@ -77,7 +77,7 @@ class MainClassController extends Controller
             'status' => $request->status,
         ]);
 
-        return redirect()->route('mainclasses.index')
+        return redirect()->route('class.index')
             ->with('success', 'Main Class updated successfully');
     }
 
@@ -91,7 +91,7 @@ class MainClassController extends Controller
 
         $class->delete();
 
-        return redirect()->route('mainclasses.index')
+        return redirect()->route('class.index')
             ->with('success', 'Main Class deleted successfully');
     }
 

@@ -11,9 +11,9 @@
     <div class="card">
         <div class="flex justify-between items-center mb-4">
             <h3 class="font-semibold text-dark" style="font-size: 1.1rem;">Main Classess</h3>
-             @can('class-create')
+            @can('class-create')
             <a class="btn  btn-icon" style="background-color:#ff5733;" href="{{route('class.create')}}">Create New Class</a>
-             @endcan
+            @endcan
         </div>
         <div class="table-responsive">
             <table>
@@ -31,20 +31,20 @@
                     <tr>
                         <td>{{ $loop->index+1 }}</td>
                         <td>{{ $data->name }}</td>
-                       
+
                         <td>
                             <img src="{{asset($data->logo)}}" alt="logo image" width="100px" height="100px">
                         </td>
-                         <td>{{ $data->status==1 ? 'Active' : 'In active' }}</td>
-                        
+                        <td>{{ $data->status==1 ? 'Active' : 'In active' }}</td>
+
 
                         <td>
-                            @can('role-edit')
-                            <a class="btn btn-primary btn-sm" href="{{ route('roles.edit',$data->id) }}"><i class="fa-solid fa-pen-to-square"></i> Edit</a>
+                            @can('class-edit')
+                            <a class="btn btn-primary btn-sm" href="{{ route('class.edit',$data->id) }}"><i class="fa-solid fa-pen-to-square"></i> Edit</a>
                             @endcan
 
-                            @can('role-delete')
-                            <form method="POST" action="{{ route('roles.destroy', $data->id) }}" style="display:inline" class="delete-form">
+                            @can('class-delete')
+                            <form method="POST" action="{{ route('class.destroy', $data->id) }}" style="display:inline" class="delete-form">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger btn-sm">
