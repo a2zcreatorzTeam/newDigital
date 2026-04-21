@@ -7,6 +7,7 @@ use App\Http\Controllers\backend\AuthController;
 use App\Http\Controllers\backend\DashboardController;
 use App\Http\Controllers\backend\MainClassController;
 use App\Http\Controllers\backend\SubClassController;
+use App\Http\Controllers\Frontend\FrontendController;
 
 
 Route::get('/', function () {
@@ -53,3 +54,13 @@ Route::prefix('admin')->name('admin.')->controller(AuthController::class)->group
         Route::post('user/login', 'login')->name('login.user');
         Route::get('user/logout', 'logout')->name('logout.user');
 });
+
+
+
+  Route::prefix('/')->name('frontend.')->controller(FrontendController::class)->group(function () {
+                Route::get('/profile', 'profile')->name('profile');
+                Route::get('/', 'home')->name('index');
+                Route::get('/logout', 'logout')->name('logout');
+                Route::post('/signup', 'signup')->name('signup');
+                Route::post('/signin', 'signin')->name('signin');
+        });

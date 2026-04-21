@@ -1,0 +1,17 @@
+.mytooltip {
+    position: relative;
+    display: inline-block;
+    margin-top: 0.75rem;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    color: #fff;
+    min-width: 6.25rem;
+    cursor: pointer;
+}
