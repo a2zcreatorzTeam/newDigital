@@ -62,6 +62,7 @@ Route::prefix('/')->name('frontend.')->controller(FrontendController::class)->gr
         Route::get('/', 'home')->name('index');
         Route::post('/signup', 'signup')->name('signup');
         Route::post('/signin', 'signin')->name('signin');
+        Route::post('/forgot-password','forgotPassword')->name('forgot.password');
 });
 
 Route::prefix('/')->name('frontend.')->controller(FrontendController::class)

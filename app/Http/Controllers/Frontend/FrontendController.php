@@ -3,13 +3,16 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\User;
-use Hash;
-use Auth;
-use Mail;
 use App\Mail\SignupEmail;
+use App\Models\User;
+use Auth;
+use Hash;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Password;
+use Mail;
+
 class FrontendController extends Controller
 {
     public function home()
@@ -114,5 +117,38 @@ class FrontendController extends Controller
     {
         Auth::logout();
         return redirect()->back()->with('success', 'Logout Successfully!');
+    }
+
+    public function forgotPassword(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+        ]);
+        try{
+            $status = Password::sendResetLink(
+                $request->only('email')
+            );
+
+            if ($status === Password::RESET_LINK_SENT) {
+                return response()->json([
+                    'status' => true,
+                    'message' => 'If your email exists, we have sent a reset link',
+                ]);
+            }
+
+            Log::warning('Password reset failed for: '.$request->email);
+            return response()->json([
+                'status' => false,
+                'message' => __($status),
+            ], 429);
+
+        } catch (\Exception $e) {
+            Log::warning('Password reset exception for:: '.$request->email.', reason:'.$e->getMessage());
+            return response()->json([
+                'status' => false,
+                'message' => 'Something went wrong',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 }
