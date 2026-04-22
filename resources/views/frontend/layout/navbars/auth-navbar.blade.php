@@ -40,7 +40,7 @@
                          </div>
                          <div class="tgmenu__navbar-wrap tgmenu__main-menu d-none d-lg-flex">
                              <ul class="navigation">
-                                 <li class="active"><a href="index.php">Home</a>
+                                 <li class="active"><a href="{{route('frontend.index')}}">Home</a>
                                  </li>
                                  <li><a href="products.php">Products</a>
                                  </li>

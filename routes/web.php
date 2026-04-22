@@ -14,11 +14,11 @@ Route::get('/', function () {
         return view('welcome');
 });
 
-Auth::routes();
+Auth::routes(['verify' => true]);
 
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Auth::routes();
+
 
 Route::group(['middleware' => ['user.role']], function () {
         Route::resource('roles', RoleController::class);
@@ -57,10 +57,16 @@ Route::prefix('admin')->name('admin.')->controller(AuthController::class)->group
 
 
 
-  Route::prefix('/')->name('frontend.')->controller(FrontendController::class)->group(function () {
+Route::prefix('/')->name('frontend.')->controller(FrontendController::class)->group(function () {
+
+        Route::get('/', 'home')->name('index');
+        Route::post('/signup', 'signup')->name('signup');
+        Route::post('/signin', 'signin')->name('signin');
+});
+
+Route::prefix('/')->name('frontend.')->controller(FrontendController::class)
+        ->middleware('front.role')
+        ->group(function () {
                 Route::get('/profile', 'profile')->name('profile');
-                Route::get('/', 'home')->name('index');
                 Route::get('/logout', 'logout')->name('logout');
-                Route::post('/signup', 'signup')->name('signup');
-                Route::post('/signin', 'signin')->name('signin');
         });

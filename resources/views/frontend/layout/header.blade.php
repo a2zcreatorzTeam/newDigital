@@ -52,14 +52,10 @@
     <header class="transparent-header">
         {{-- here when user login then auth navbar should be login else without-auth navbar--}}
         <div id="authNavbar">
-          
             @include('frontend.layout.navbars.auth-navbar')
-         
         </div>
         <div id="guestNavbar">
-         
             @include('frontend.layout.navbars.without-auth-navbar')
-          
         </div>
 
         <!-- offCanvas-menu -->

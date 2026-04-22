@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Hash;
 use Auth;
+use Mail;
+use App\Mail\SignupEmail;
+use Illuminate\Support\Facades\Crypt;
 class FrontendController extends Controller
 {
     public function home()
@@ -15,7 +18,8 @@ class FrontendController extends Controller
     }
 
 
-    public function profile(){
+    public function profile()
+    {
         return view('frontend.my-profile');
     }
 
@@ -25,18 +29,27 @@ class FrontendController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
-            'phone' => ['required', 'regex:/^03[0-9]{9}$/'],
-            'password' => 'required|min:6|confirmed', // matches password_confirmation
+            'phone_no' => 'required|regex:/^03[0-9]{2}-[0-9]{7}$/',
+            'cnic' => 'required|regex:/^[0-9]{5}-[0-9]{7}-[0-9]$/',
+            'password' => 'required|min:6|confirmed',
         ]);
 
         try {
+            $data=$request->all();
+          
             // ✅ Create User
             $user = User::create([
                 'name' => $validated['name'],
                 'email' => $validated['email'],
-                'phone' => $validated['phone'],
+                'phone_no' => $validated['phone_no'],
+                'cnic' => $validated['cnic'],
                 'password' => Hash::make($validated['password']),
             ]);
+            $encrypted = Crypt::encryptString($user->id);
+            
+        
+
+            Mail::to($validated['email'])->send(new SignupEmail($data));
 
             // ✅ Success Response (for AJAX)
             return response()->json([
@@ -64,7 +77,7 @@ class FrontendController extends Controller
 
             // ✅ Check user exists
             $user = User::where('email', $validated['email'])->first();
-   
+
 
             if (!$user) {
                 return response()->json([
@@ -97,9 +110,9 @@ class FrontendController extends Controller
             ], 500);
         }
     }
-    public function logout(){
+    public function logout()
+    {
         Auth::logout();
-        return redirect()->back()->with('success','Logout Successfully!');
+        return redirect()->back()->with('success', 'Logout Successfully!');
     }
-
 }

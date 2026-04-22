@@ -1,7 +1,10 @@
+@extends('frontend.layout.master')
+@section('content')
+
 <!-- header-area-start -->
-<link rel="stylesheet" href="css/sub-header.css">
-<link rel="stylesheet" href="css/profile.css">
-<?php include "header.php" ?>
+<link rel="stylesheet" href="{{ asset('frontend/css/sub-header.css') }}">
+<link rel="stylesheet" href="{{ asset('frontend/css/profile.css') }}">
+
 <!-- header-area-end -->
 
 <main class="fix">
@@ -14,7 +17,7 @@
                         <h2 class="title">My Profile</h2>
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="index.php">Home</a></li>
+                                <li class="breadcrumb-item"><a href="{{route('frontend.index')}}">Home</a></li>
                                 <li class="breadcrumb-item active" aria-current="page">My Profile</li>
                             </ol>
                         </nav>
@@ -33,7 +36,7 @@
     <!-- breadcrumb-area-end -->
 
     <!-- main-area -->
-    <section id="scroll" class="services-area services-bg" data-background="images/services_bg.jpg">
+    <section id="scroll" class="services-area services-bg" data-background="{{ asset('frontend/images/services_bg.jpg') }}">
         <div class="container">
             <div class="row my-pol">
                 <div class="col-md-3">
@@ -43,14 +46,14 @@
                 </div>
                 <div class="col-md-7">
                     <div class="section-title mt-3 tg-heading-subheading animation-style3">
-                        <h4 class="title tg-element-title" style="font-size: 25px;">Hanzala Ahmed</h4>
+                        <h4 class="title tg-element-title" style="font-size: 25px;">{{ ucfirst(Auth::user()->name) }}</h4>
                     </div>
                     <div class="claim-document-small">Email:</div>
-                    <div class="claim-document-num">hanzala@a2zcreatorz.com</div>
-                    <div class="claim-document-small">Mobile Number:</div>
-                    <div class="claim-document-num">+923434640324</div>
-                    <div class="claim-document-small">Country:</div>
-                    <div class="claim-document-num">Pakistan</div>
+                    <div class="claim-document-num">{{ Auth::user()->email }}</div>
+                    
+                    <div class="claim-document-small">Phone No:</div>
+                    <div class="claim-document-num">{{ Auth::user()->phone_no }}</div>
+    
                 </div>
                 <div class="col-md-2 text-end">
                     <div class="profile-edit-btn">
@@ -65,4 +68,4 @@
 </main>
 
 
-<?php include "footer.php" ?>
+@endsection
