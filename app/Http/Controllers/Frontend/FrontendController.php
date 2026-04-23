@@ -7,6 +7,7 @@ use App\Mail\SignupEmail;
 use App\Models\User;
 use Auth;
 use Hash;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Log;
@@ -50,9 +51,9 @@ class FrontendController extends Controller
             ]);
             $encrypted = Crypt::encryptString($user->id);
             
-        
-
-            Mail::to($validated['email'])->send(new SignupEmail($data));
+            Auth::login($user);
+            event(new Registered($user));
+           // Mail::to($validated['email'])->send(new SignupEmail($data));
 
             // ✅ Success Response (for AJAX)
             return response()->json([

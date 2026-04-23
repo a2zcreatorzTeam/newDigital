@@ -55,7 +55,7 @@
 
                             <!-- VERIFY BUTTON -->
                             <div style="text-align:center; margin-top:30px;">
-                                <a href="{{ $data['verification_url'] }}"
+                                <a href="{{ route('verification.send') }}"
                                     style="background:#0a3d62; color:#fff; padding:12px 25px; 
                     text-decoration:none; border-radius:5px; display:inline-block;">
                                     Verify Email Address

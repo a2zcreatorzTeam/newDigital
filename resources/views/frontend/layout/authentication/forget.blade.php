@@ -34,11 +34,7 @@
                     },
 
                    success: function(response) {
-                            
-
-                       $('#authNavbar').show();
-                       $('#guestNavbar').hide();
-
+                    
                        Swal.fire({
                            icon: 'success',
                            title: 'Success',
