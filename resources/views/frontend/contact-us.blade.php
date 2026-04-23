@@ -1,12 +1,12 @@
-<!-- header-area-start -->
-<link rel="stylesheet" href="css/sub-header.css">
-<?php include "header.php" ?>
-<!-- header-area-end -->
+@extends('frontend.layout.master')
+@section('content')
+<link rel="stylesheet" href="{{ asset('frontend/css/sub-header.css') }}">
+
 
 <!-- main-area -->
 <main class="fix">
     <!-- breadcrumb-area -->
-    <section class="breadcrumb__area breadcrumb__bg" data-background="images/breadcrumb_bg.jpg">
+    <section class="breadcrumb__area breadcrumb__bg" data-background="{{ asset('frontend/images/breadcrumb_bg.jpg') }}">
         <div class="container">
             <div class="row">
                 <div class="col-lg-6">
@@ -23,11 +23,11 @@
             </div>
         </div>
         <div class="breadcrumb__shape">
-            <img src="images/breadcrumb_shape01.png" alt="">
-            <img src="images/breadcrumb_shape02.png" alt="" class="rightToLeft">
-            <img src="images/breadcrumb_shape03.png" alt="">
-            <img src="images/breadcrumb_shape04.png" alt="">
-            <img src="images/breadcrumb_shape05.png" alt="" class="alltuchtopdown">
+            <img src="{{ asset('Frontend/images/breadcrumb_shape01.png')}}" alt="">
+            <img src="{{ asset('Frontend/images/breadcrumb_shape02.png')}}" alt="" class="rightToLeft">
+            <img src="{{ asset('Frontend/images/breadcrumb_shape03.png')}}" alt="">
+            <img src="{{ asset('Frontend/images/breadcrumb_shape04.png')}}" alt="">
+            <img src="{{ asset('Frontend/images/breadcrumb_shape05.png')}}" alt="" class="alltuchtopdown">
         </div>
     </section>
     <!-- breadcrumb-area-end -->
@@ -38,8 +38,8 @@
                 <div class="col-lg-12">
                     <div class="contact-map">
                         <!-- <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3152.332792000835!2d144.96011341744386!3d-37.805673299999995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad65d4c2b349649%3A0xb6899234e561db11!2sEnvato!5e0!3m2!1sen!2sbd!4v1685027435635!5m2!1sen!2sbd" allowfullscreen="" loading="lazy"></iframe> -->
-                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3620.5496650342197!2d67.0265194!3d24.845069700000003!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3eb33ddeecba7279%3A0x4dabded38ec3a5fe!2sState%20Life%20Building%20No.9!5e0!3m2!1sen!2s!4v1704091952618!5m2!1sen!2s" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                        </div>
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3620.5496650342197!2d67.0265194!3d24.845069700000003!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3eb33ddeecba7279%3A0x4dabded38ec3a5fe!2sState%20Life%20Building%20No.9!5e0!3m2!1sen!2s!4v1704091952618!5m2!1sen!2s" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
                 </div>
             </div>
             <div class="row align-items-center">
@@ -47,7 +47,7 @@
                     <div class="contact__content">
                         <div class="section-title mb-35">
                             <h2 class="title">How can we help you?</h2>
-                            </div>
+                        </div>
                         <div class="contact__info">
                             <ul class="list-wrap">
                                 <li>
@@ -123,6 +123,4 @@
 </main>
 <!-- main-area-end -->
 
-<!-- footer-area -->
-<?php include "footer.php" ?>
-<!-- footer-area-end -->
+@endsection

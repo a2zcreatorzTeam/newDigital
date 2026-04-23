@@ -58,8 +58,10 @@ Route::prefix('admin')->name('admin.')->controller(AuthController::class)->group
 
 
 Route::prefix('/')->name('frontend.')->controller(FrontendController::class)->group(function () {
-
         Route::get('/', 'home')->name('index');
+        Route::get('/cart', 'cart')->name('cart');
+        Route::get('/forget-password', 'forget_password')->name('forget_password');
+        Route::get('/contact', 'contact')->name('contact');
         Route::post('/signup', 'signup')->name('signup');
         Route::post('/signin', 'signin')->name('signin');
 });

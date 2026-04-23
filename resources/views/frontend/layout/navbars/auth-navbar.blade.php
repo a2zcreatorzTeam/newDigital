@@ -15,8 +15,8 @@
                              <li class="menu-item-has-children"><a href="#" id="profile_name"><i class="flaticon-user"></i>shoaib nasir</a>
                                  <ul class="sub-menu">        
                                      <li><a href="{{route('frontend.profile')}}"><i class="flaticon-user"></i> My Profile</a></li>
-                                     <li><a href="forgot-password.php"><i class="flaticon-target"></i> Change Password</a></li>
-                                     <li><a href="cart.php"><i class="flaticon-shopping-cart"></i> Abandoned Cart</a></li>
+                                     <li><a href="{{route('frontend.forget_password')}}"><i class="flaticon-target"></i> Change Password</a></li>
+                                     <li><a href="{{route('frontend.cart')}}"><i class="flaticon-shopping-cart"></i> Abandoned Cart</a></li>
                                      <li><a href="{{route('frontend.logout')}}" class="top-signout-btn">Signout</a></li>
                                  </ul>
                              </li>
@@ -82,7 +82,7 @@
                                          </li>
                                      </ul>
                                  </li>
-                                 <li><a href="contact-us.php">Contact Us</a></li>
+                                 <li><a href="{{route('frontend.contact')}}">Contact Us</a></li>
                                  <li><a href="complaint-feedback.php">Complaints & Feedback</a></li>
                              </ul>
                          </div>
