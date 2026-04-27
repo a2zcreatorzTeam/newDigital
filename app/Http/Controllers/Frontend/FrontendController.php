@@ -27,6 +27,18 @@ class FrontendController extends Controller
         return view('frontend.my-profile');
     }
 
+
+    public function cart(){
+        return view('frontend.cart');
+    }
+    
+    public function forget_password(){
+        return view('frontend.forgot-password');
+    }
+    public function contact(){
+        return view('frontend.contact-us');
+    }
+
     public function signup(Request $request)
     {
 

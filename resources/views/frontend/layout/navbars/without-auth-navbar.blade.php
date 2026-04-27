@@ -64,7 +64,7 @@
                                                 </li>
                                             </ul>
                                         </li>
-                                        <li><a href="contact-us.php">Contact Us</a></li>
+                                        <li><a href="{{route('frontend.contact')}}">Contact Us</a></li>
                                         <li><a href="complaint-feedback.php">Complaints & Feedback</a></li>
                                     </ul>
                                 </div>

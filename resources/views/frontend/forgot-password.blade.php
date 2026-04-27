@@ -1,12 +1,12 @@
-<!-- header-area-start -->
-<link rel="stylesheet" href="css/sub-header.css">
-<?php include "header.php" ?>
+@extends('frontend.layout.master')
+@section('content')<!-- header-area-start -->
+<link rel="stylesheet" href="{{ asset('frontend/css/sub-header.css') }}">
 <!-- header-area-end -->
 
 <!-- main-area -->
 <main class="fix">
     <!-- breadcrumb-area -->
-    <section class="breadcrumb__area breadcrumb__bg" data-background="images/breadcrumb_bg.jpg">
+    <section class="breadcrumb__area breadcrumb__bg" data-background="{{ asset('frontend/images/breadcrumb_bg.jpg')}}">
         <div class="container">
             <div class="row">
                 <div class="col-lg-6">
@@ -23,11 +23,11 @@
             </div>
         </div>
         <div class="breadcrumb__shape">
-            <img src="images/breadcrumb_shape01.png" alt="">
-            <img src="images/breadcrumb_shape02.png" alt="" class="rightToLeft">
-            <img src="images/breadcrumb_shape03.png" alt="">
-            <img src="images/breadcrumb_shape04.png" alt="">
-            <img src="images/breadcrumb_shape05.png" alt="" class="alltuchtopdown">
+            <img src="{{ asset('Frontend/images/breadcrumb_shape01.png')}}" alt="">
+            <img src="{{ asset('Frontend/images/breadcrumb_shape02.png')}}" alt="" class="rightToLeft">
+            <img src="{{ asset('Frontend/images/breadcrumb_shape03.png')}}" alt="">
+            <img src="{{ asset('Frontend/images/breadcrumb_shape04.png')}}" alt="">
+            <img src="{{ asset('Frontend/images/breadcrumb_shape05.png')}}" alt="" class="alltuchtopdown">
         </div>
     </section>
     <!-- breadcrumb-area-end -->
@@ -68,6 +68,4 @@
 </main>
 <!-- main-area-end -->
 
-<!-- footer-area -->
-<?php include "footer.php" ?>
-<!-- footer-area-end -->
+@endsection
