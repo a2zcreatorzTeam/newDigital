@@ -10,8 +10,10 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Auth\Notifications\VerifyEmail as BaseVerifyEmail;
 
 #[Fillable(['name', 'email', 'password', 'user_type', 'cnic', 'phone_no'])]
 #[Hidden(['password', 'remember_token'])]
@@ -36,5 +38,22 @@ class User extends Authenticatable  implements MustVerifyEmail
     public function sendPasswordResetNotification($token)
     {
         $this->notify(new CustomResetPasswordNotification($token));
+    }
+    public function sendEmailVerificationNotification()
+    {
+        $this->notify(new class extends BaseVerifyEmail {
+
+            public function toMail($notifiable)
+            {
+                $verificationUrl = $this->verificationUrl($notifiable);
+
+                return (new MailMessage)
+                    ->subject('Verify Your Email') // ✅ your subject
+                    ->view('emails.signup', [
+                        'url' => $verificationUrl,
+                        'user' => $notifiable
+                    ]);
+            }
+        });
     }
 }

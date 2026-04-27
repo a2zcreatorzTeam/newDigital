@@ -32,7 +32,7 @@
                     <tr>
                         <td style="padding:30px; color:#333;">
 
-                            <h3>Hi {{ $data['name'] }} 👋</h3>
+                            <h3>Hi {{ $user->name }}</h3>
 
                             <p>
                                 Thank you for registering with <b>State Life Insurance Corporation</b>.
@@ -41,7 +41,7 @@
 
                             <p>
                                 Your registered email:
-                                <b>{{ $data['email'] }}</b>
+                                <b>{{ $user->email }}</b>
                             </p>
 
                             <!-- Info Box -->
@@ -55,7 +55,7 @@
 
                             <!-- VERIFY BUTTON -->
                             <div style="text-align:center; margin-top:30px;">
-                                <a href="{{ route('verification.send') }}"
+                                <a href="{{ $url }}"
                                     style="background:#0a3d62; color:#fff; padding:12px 25px; 
                     text-decoration:none; border-radius:5px; display:inline-block;">
                                     Verify Email Address

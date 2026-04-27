@@ -53,7 +53,7 @@ class FrontendController extends Controller
             
             Auth::login($user);
             event(new Registered($user));
-           // Mail::to($validated['email'])->send(new SignupEmail($data));
+            //Mail::to($validated['email'])->send(new SignupEmail($data));
 
             // ✅ Success Response (for AJAX)
             return response()->json([
@@ -62,7 +62,7 @@ class FrontendController extends Controller
                 'data' => $user
             ]);
         } catch (\Exception $e) {
-
+            Log::warning('Password reset exception for:: '.$request->email.', reason:'.$e->getMessage());
             return response()->json([
                 'status' => false,
                 'message' => 'Something went wrong',

@@ -1,17 +1,76 @@
-<h2>WELCOME TO STATE LIFE</h2>
+<!DOCTYPE html>
+<html>
 
-<p>Hello {{ $user->name }},</p>
+<head>
+    <meta charset="UTF-8">
+    <title>Set Account Password</title>
+</head>
 
-<p>We're thrilled to have you on board. To get started, you need to set up your account password.</p>
+<body style="margin:0; padding:0; background:#f4f6f9; font-family:Arial, sans-serif;">
 
-<p>Please click the button below to set your password:</p>
+    <table width="100%" cellpadding="0" cellspacing="0" style="padding:30px 0;">
+        <tr>
+            <td align="center">
 
-<a href="{{ $url }}" style="background:#28a745;color:#fff;padding:10px 15px;text-decoration:none;">
-    Reset Password
-</a>
+                <table width="600" cellpadding="0" cellspacing="0"
+                    style="background:#ffffff; border-radius:10px; overflow:hidden; box-shadow:0 4px 12px rgba(0,0,0,0.1);">
 
-<p>This link expires in 60 minutes.</p>
+                    <!-- Header -->
+                    <tr>
+                        <td style="background:#0a3d62; padding:20px; text-align:center;">
 
-<p>If you have any questions or need assistance, 
-    feel free to contact our support team at complaints.digital.life@statelife.com.pk.</p>
-<p>Thank you</p>
+                            <img src="{{ asset('frontend/images/logo.png') }}"
+                                width="120"
+                                style="margin-bottom:10px;">
+
+                            <h2 style="color:#ffffff; margin:0;">State Life Insurance</h2>
+                            <p style="color:#dcdde1; margin:5px 0 0;">Set Account Password</p>
+                        </td>
+                    </tr>
+
+                    <!-- Body -->
+                    <tr>
+                        <td style="padding:30px; color:#333;">
+
+                            <h3>Hi {{ $user->name }}</h3>
+
+                            <p>We're thrilled to have you on board. To get started, you need to set up your account password.</p>
+                            
+                            <p>Please click the button below to set your password:</p>
+
+
+                            <!-- VERIFY BUTTON -->
+                            <div style="text-align:center; margin-top:30px;">
+                                <a href="{{ $url }}"
+                                    style="background:#0a3d62; color:#fff; padding:12px 25px; 
+                    text-decoration:none; border-radius:5px; display:inline-block;">
+                                     Reset Password
+                                </a>
+                            </div>
+                            <p style="margin-top:25px; font-size:13px; color:#888;">
+                                This link expires in 60 minutes.
+                            </p>
+
+                            <p style="margin-top:25px; font-size:13px; color:#888;">
+                                If you did not create this account, you can ignore this email.
+                            </p>
+
+                        </td>
+                    </tr>
+
+                    <!-- Footer -->
+                    <tr>
+                        <td style="background:#ecf0f1; text-align:center; padding:15px; font-size:12px; color:#555;">
+                            © {{ date('Y') }} State Life Insurance Corporation of Pakistan. All rights reserved.
+                        </td>
+                    </tr>
+
+                </table>
+
+            </td>
+        </tr>
+    </table>
+
+</body>
+
+</html>
