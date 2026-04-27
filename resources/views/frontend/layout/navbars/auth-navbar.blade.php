@@ -42,7 +42,7 @@
                              <ul class="navigation">
                                  <li class="active"><a href="{{route('frontend.index')}}">Home</a>
                                  </li>
-                                 <li><a href="products.php">Products</a>
+                                 <li><a href="{{route('frontend.product')}}">Products</a>
                                  </li>
                                  <li class="menu-item-has-children"><a href="#">Policies</a>
                                      <ul class="sub-menu">

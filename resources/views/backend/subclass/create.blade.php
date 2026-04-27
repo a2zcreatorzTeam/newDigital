@@ -3,16 +3,16 @@
 
 <section id="section-dashboard">
     <div class="flex justify-between items-center mb-4">
-        <h1 class="font-bold text-dark" style="font-size: 1.5rem;">Create Sub Class</h1>
+        <h1 class="font-bold text-dark" style="font-size: 1.5rem;">Create Policies</h1>
     </div>
 
     <div class="card">
         <div class="flex justify-between items-center mb-4">
-            <h3 class="font-semibold text-dark" style="font-size: 1.1rem;">Sub Classes</h3>
+            <h3 class="font-semibold text-dark" style="font-size: 1.1rem;">Policies</h3>
 
             @can('class-list')
             <a class="btn btn-icon" style="background-color:#ff5733;" href="{{ route('class.index') }}">
-                Class List
+                Policies List
             </a>
             @endcan
         </div>
@@ -25,9 +25,9 @@
                 <!-- Main Class Dropdown -->
                 <div class="col-md-12">
                     <div class="form-group">
-                        <strong>Main Class:</strong>
+                        <strong>Category:</strong>
                         <select name="class_id" class="form-control">
-                            <option value="">Select Main Class</option>
+                            <option value="">Select Category</option>
                             @foreach($classes as $class)
                                 <option value="{{ $class->id }}">
                                     {{ $class->name }}

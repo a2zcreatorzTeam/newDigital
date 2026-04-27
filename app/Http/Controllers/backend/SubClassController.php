@@ -51,7 +51,6 @@ class SubClassController extends Controller
     }
 
 
-
     public function create()
     {
         $classes = MainClass::where('status', 1)->get();
@@ -81,7 +80,7 @@ class SubClassController extends Controller
         ]);
 
         return redirect()->route('subclass.filter')
-            ->with('success', 'Sub Class created successfully');
+            ->with('success', 'Policy created successfully');
     }
 
     public function edit($id)
@@ -123,7 +122,7 @@ class SubClassController extends Controller
         ]);
 
         return redirect()->route('subclass.filter')
-            ->with('success', 'Sub Class updated successfully');
+            ->with('success', 'Policy updated successfully');
     }
 
     public function destroy($id)
@@ -137,7 +136,7 @@ class SubClassController extends Controller
         $subClass->delete();
 
         return redirect()->route('subclass.filter')
-            ->with('success', 'Sub Class deleted successfully');
+            ->with('success', 'Policy deleted successfully');
     }
 
     public function toggleStatus($id)

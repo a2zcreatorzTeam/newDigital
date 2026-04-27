@@ -1,12 +1,11 @@
-<!-- header-area-start -->
-<link rel="stylesheet" href="css/sub-header.css">
-<?php include "header.php" ?>
-<!-- header-area-end -->
+@extends('frontend.layout.master')
+@section('content')
+<link rel="stylesheet" href="{{ asset('frontend/css/sub-header.css') }}">
 
 <!-- main-area -->
 <main class="fix">
     <!-- breadcrumb-area -->
-    <section class="breadcrumb__area breadcrumb__bg" data-background="images/breadcrumb_bg.jpg">
+    <section class="breadcrumb__area breadcrumb__bg" data-background="{{ asset('frontend/images/breadcrumb_bg.jpg') }}">
         <div class="container">
             <div class="row">
                 <div class="col-lg-6">
@@ -14,7 +13,7 @@
                         <h2 class="title">Products</h2>
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="index.php">Home</a></li>
+                                <li class="breadcrumb-item"><a href="{{route('frontend.index')}}">Home</a></li>
                                 <li class="breadcrumb-item active" aria-current="page">Products</li>
                             </ol>
                         </nav>
@@ -23,11 +22,11 @@
             </div>
         </div>
         <div class="breadcrumb__shape">
-            <img src="images/breadcrumb_shape01.png" alt="">
-            <img src="images/breadcrumb_shape02.png" alt="" class="rightToLeft">
-            <img src="images/breadcrumb_shape03.png" alt="">
-            <img src="images/breadcrumb_shape04.png" alt="">
-            <img src="images/breadcrumb_shape05.png" alt="" class="alltuchtopdown">
+            <img src="{{ asset('frontend/images/breadcrumb_shape01.png') }}" alt="">
+            <img src="{{ asset('frontend/images/breadcrumb_shape02.png') }}" alt="" class="rightToLeft">
+            <img src="{{ asset('frontend/images/breadcrumb_shape03.png') }}" alt="">
+            <img src="{{ asset('frontend/images/breadcrumb_shape04.png') }}" alt="">
+            <img src="{{ asset('frontend/images/breadcrumb_shape05.png') }}" alt="" class="alltuchtopdown">
         </div>
     </section>
     <!-- breadcrumb-area-end -->
@@ -51,11 +50,11 @@
                         <div class="box" id="box1">
                             <div class="services-item shine-animate-item">
                                 <div class="services-thumb">
-                                    <a href="#section1" class="shine-animate"><img src="images/services_img01.jpg" alt=""></a>
+                                    <a href="#section1" class="shine-animate"><img src="{{ asset('frontend/images/services_img01.jpg')}}" alt=""></a>
                                 </div>
                                 <div class="services-content">
                                     <div class="icon">
-                                        <img src="images/life-insurance.png" alt="">
+                                        <img src="{{ asset('frontend/images/life-insurance.png')}}" alt="">
                                     </div>
                                     <h4 class="title"><a href="#section1">Life Insurance</a></h4>
                                     <a href="#section1" class="btn">Read More</a>
@@ -68,7 +67,7 @@
                         <div class="box" id="box2">
                             <div class="services-item shine-animate-item">
                                 <div class="services-thumb">
-                                    <a href="#section2" class="shine-animate"><img src="images/services_img04.jpg" alt=""></a>
+                                    <a href="#section2" class="shine-animate"><img src="{{ asset('frontend/images/services_img04.jpg')}}" alt=""></a>
                                 </div>
                                 <div class="services-content">
                                     <div class="icon">
@@ -98,7 +97,7 @@
                                     </div>
                                     <div class="services-content">
                                         <div class="icon">
-                                            <img src="images/Mahfooz-Plan.png" alt="">
+                                            <img src="{{ asset('frontend/images/Mahfooz-Plan.png')}}" alt="">
                                         </div>
                                         <h4 class="title"><a href="#section3">Mahfooz Plan</a></h4>
                                         <a href="#section3" class="btn">Read More</a>
@@ -137,11 +136,11 @@
                             <div class="services-item shine-animate-item">
                                 <div class="box" id="box5">
                                     <div class="services-thumb">
-                                        <a href="#section5" class="shine-animate"><img src="images/health-img1.jpg" alt=""></a>
+                                        <a href="#section5" class="shine-animate"><img src="{{ asset('frontend/images/health-img1.jpg')}}" alt=""></a>
                                     </div>
                                     <div class="services-content">
                                         <div class="icon">
-                                            <img width="35px" src="images/icon2.png" alt="">
+                                            <img width="35px" src="{{ asset('frontend/images/icon2.png')}}" alt="">
                                         </div>
                                         <h4 class="title"><a href="#section5">Sinf E Aahan Cancer Protection</a></h4>
                                         <a href="#section5" class="btn">Read More</a>
@@ -150,7 +149,7 @@
                             </div>
                         </div>
                     </div>
-                    <div style="text-align: center;"><img width="600px" src="images/line.png" alt=""></div>
+                    <div style="text-align: center;"><img width="600px" src="{{ asset('frontend/images/line.png')}}" alt=""></div>
                 </div>
             </div>
             <!-- End Health Insurance -->
@@ -177,7 +176,7 @@
                     <div class="col-xl-3 col-md-6">
                         <div class="project-item">
                             <div class="project-thumb">
-                                <a href="dashboard.php"><img src="images/project_img01.jpg" alt=""></a>
+                                <a href="dashboard.php"><img src="{{ asset('frontend/images/project_img01.jpg')}}" alt=""></a>
                             </div>
                             <div class="project-content">
                                 <div class="left-side-content">
@@ -198,7 +197,7 @@
                     <div class="col-xl-3 col-md-6">
                         <div class="project-item">
                             <div class="project-thumb">
-                                <a href="dashboard.php"><img src="images/project_img01.jpg" alt=""></a>
+                                <a href="dashboard.php"><img src="{{ asset('frontend/images/project_img01.jpg')}}" alt=""></a>
                             </div>
                             <div class="project-content">
                                 <div class="left-side-content">
@@ -219,7 +218,7 @@
                     <div class="col-xl-3 col-md-6">
                         <div class="project-item">
                             <div class="project-thumb">
-                                <a href="dashboard.php"><img src="images/project_img01.jpg" alt=""></a>
+                                <a href="dashboard.php"><img src="{{ asset('frontend/images/project_img01.jpg')}}" alt=""></a>
                             </div>
                             <div class="project-content">
                                 <div class="left-side-content">
@@ -250,8 +249,8 @@
             </div>
         </div>
         <div class="project-shape-wrap">
-            <img src="images/project_shape01.png" alt="" class="alltuchtopdown">
-            <img src="images/project_shape02.png" alt="" class="rotateme">
+            <img src="{{ asset('frontend/images/project_shape01.png')}}" alt="" class="alltuchtopdown">
+            <img src="{{ asset('frontend/images/project_shape02.png')}}" alt="" class="rotateme">
         </div>
     </section>
 
@@ -273,7 +272,7 @@
                     <div class="col-xl-3 col-md-6">
                         <div class="project-item">
                             <div class="project-thumb">
-                                <a href="dashboard.php"><img src="images/project_img02.jpg" alt=""></a>
+                                <a href="dashboard.php"><img src="{{ asset('frontend/images/project_img02.jpg')}}" alt=""></a>
                             </div>
                             <div class="project-content">
                                 <div class="left-side-content">
@@ -294,7 +293,7 @@
                     <div class="col-xl-3 col-md-6">
                         <div class="project-item">
                             <div class="project-thumb">
-                                <a href="dashboard.php"><img src="images/project_img03.jpg" alt=""></a>
+                                <a href="dashboard.php"><img src="{{ asset('frontend/images/project_img03.jpg')}}" alt=""></a>
                             </div>
                             <div class="project-content">
                                 <div class="left-side-content">
@@ -318,8 +317,8 @@
             </div>
         </div>
         <div class="project-shape-wrap">
-            <img src="images/project_shape01.png" alt="" class="alltuchtopdown">
-            <img src="images/project_shape02.png" alt="" class="rotateme">
+            <img src="{{ asset('frontend/images/project_shape01.png')}}" alt="" class="alltuchtopdown">
+            <img src="{{ asset('frontend/images/project_shape02.png')}}" alt="" class="rotateme">
         </div>
     </section>
 
@@ -391,4 +390,4 @@
         });
     });
 </script>
-<?php include "footer.php" ?>
+@endsection

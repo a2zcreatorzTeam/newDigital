@@ -5,8 +5,8 @@
     <thead class="table-dark">
         <tr>
             <th>No</th>
-            <th>Main Class</th>
-            <th>Name</th>
+            <th>Category Name</th>
+            <th>Policy Name</th>
             <th>Logo</th>
             <th>Status</th>
             <th>Action</th>

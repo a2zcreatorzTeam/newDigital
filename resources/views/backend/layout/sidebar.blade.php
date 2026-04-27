@@ -25,14 +25,14 @@
           @can('class-list')
           <div class="nav-item" data-target="manager">
               <a href="{{route('class.index')}}">
-                 <i class="fa-solid fa-chalkboard-user"></i> Class Management
+                 <i class="fa-solid fa-chalkboard-user"></i> Category Management
               </a>
           </div>
           @endcan
           @can('subclass-list')
           <div class="nav-item" data-target="manager">
               <a href="{{route('subclass.filter')}}">
-                 <i class="fa-solid fa-layer-group"></i> Sub Class Management
+                 <i class="fa-solid fa-layer-group"></i> Policies Management
               </a>
           </div>
           @endcan

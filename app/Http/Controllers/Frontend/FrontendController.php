@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Mail\SignupEmail;
+use App\Models\MainClass;
+use App\Models\SubClass;
 use App\Models\User;
 use Auth;
 use Hash;
@@ -18,7 +20,8 @@ class FrontendController extends Controller
 {
     public function home()
     {
-        return view('frontend.index');
+        $category=MainClass::where('status',1)->get();
+        return view('frontend.index')->with(['category'=>$category]);
     }
 
 
@@ -35,6 +38,7 @@ class FrontendController extends Controller
     public function forget_password(){
         return view('frontend.forgot-password');
     }
+
     public function contact(){
         return view('frontend.contact-us');
     }
@@ -164,4 +168,20 @@ class FrontendController extends Controller
             ], 500);
         }
     }
+    public function product(Request $request)
+    {
+        return view('frontend.products');
+    }
+    public function getPolicies(Request $request){
+          $policies=SubClass::where('class_id',$request->category_id)->get();
+          $main_category=MainClass::where('id',$request->category_id)->select('name')->first();
+          return view('frontend.get-policies',['policies'=>$policies,'main_category'=>$main_category]);
+    }
+
+    public function policyForm(){
+        return view('frontend.policy-form');
+    }
+
+
+    
 }

@@ -4,15 +4,15 @@
 
 <section id="section-dashboard">
     <div class="flex justify-between items-center mb-4">
-        <h1 class="font-bold text-dark" style="font-size: 1.5rem;">Create Main Class</h1>
+        <h1 class="font-bold text-dark" style="font-size: 1.5rem;">Create Policies Category</h1>
     </div>
 
 
     <div class="card">
         <div class="flex justify-between items-center mb-4">
-            <h3 class="font-semibold text-dark" style="font-size: 1.1rem;">Main Classes</h3>
+            <h3 class="font-semibold text-dark" style="font-size: 1.1rem;">Main Policies Category</h3>
             @can('class-list')
-            <a class="btn  btn-icon" style="background-color:#ff5733;" href="{{route('roles.index')}}">Role List</a>
+            <a class="btn  btn-icon" style="background-color:#ff5733;" href="{{route('class.index')}}">Category List</a>
             @endcan
         </div>
         <form method="POST" action="{{ route('class.store') }}" enctype="multipart/form-data">

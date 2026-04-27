@@ -41,7 +41,7 @@ class MainClassController extends Controller
         ]);
 
         return redirect()->route('class.index')
-            ->with('success', 'Main Class created successfully');
+            ->with('success', 'Category created successfully');
     }
 
     public function edit($id)
@@ -78,7 +78,7 @@ class MainClassController extends Controller
         ]);
 
         return redirect()->route('class.index')
-            ->with('success', 'Main Class updated successfully');
+            ->with('success', 'Category updated successfully');
     }
 
     public function destroy($id)
@@ -92,7 +92,7 @@ class MainClassController extends Controller
         $class->delete();
 
         return redirect()->route('class.index')
-            ->with('success', 'Main Class deleted successfully');
+            ->with('success', 'Category deleted successfully');
     }
 
     // 🔥 OPTIONAL: quick toggle active/inactive

@@ -9,17 +9,17 @@
 
 <section id="section-dashboard">
     <div class="flex justify-between items-center mb-4">
-        <h1 class="font-bold text-dark" style="font-size: 1.5rem;">Sub Class Management</h1>
+        <h1 class="font-bold text-dark" style="font-size: 1.5rem;">Policies Management</h1>
     </div>
 
     <div class="card">
         <div class="flex justify-between items-center mb-4">
-            <h3 class="font-semibold text-dark" style="font-size: 1.1rem;">Sub Classes</h3>
+            <h3 class="font-semibold text-dark" style="font-size: 1.1rem;">Policies Product</h3>
 
             @can('class-create')
             <a class="btn btn-icon" style="background-color:#ff5733;"
                 href="{{ route('subclass.create') }}">
-                Create New Sub Class
+                Create Policies
             </a>
             @endcan
         </div>
@@ -39,9 +39,9 @@
                                 <div class="row g-3">
 
                                     <div class="col-md-4">
-                                        <label>Main Classess</label>
+                                        <label>Policy Category</label>
                                         <select name="" id="main_class" class="form-control">
-                                            <option value="">Select Main Class</option>
+                                            <option value="">Select Category</option>
                                             @foreach ($Classes as $item)
                                             <option value="{{ $item->id }}">{{ $item->name }}</option>
                                             @endforeach

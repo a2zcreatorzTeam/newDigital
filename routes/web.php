@@ -65,9 +65,12 @@ Route::prefix('/')->name('frontend.')->controller(FrontendController::class)->gr
         Route::get('/cart', 'cart')->name('cart');
         Route::get('/forget-password', 'forget_password')->name('forget_password');
         Route::get('/contact', 'contact')->name('contact');
+        Route::get('/product', 'product')->name('product');
         Route::post('/signup', 'signup')->name('signup');
         Route::post('/signin', 'signin')->name('signin');
         Route::post('/forgot-password','forgotPassword')->name('forgot.password');
+        Route::post('/get-policies','getPolicies')->name('getPolicies');
+        Route::get('/policy-form', 'policyForm')->name('policyForm');
 });
 
 Route::prefix('/')->name('frontend.')->controller(FrontendController::class)
