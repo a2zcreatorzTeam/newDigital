@@ -47,7 +47,7 @@ class FrontendController extends Controller
             'email' => 'required|email|unique:users,email',
             'phone_no' => 'required|regex:/^03[0-9]{2}-[0-9]{7}$/',
             'cnic' => 'required|regex:/^[0-9]{5}-[0-9]{7}-[0-9]$/',
-            'password' => 'required|min:6|confirmed',
+            'password' => 'required|min:8|confirmed',
         ]);
 
         try {
@@ -70,7 +70,7 @@ class FrontendController extends Controller
             // ✅ Success Response (for AJAX)
             return response()->json([
                 'status' => true,
-                'message' => 'User registered successfully',
+                'message' => 'User registered successfully. We have sent a verification email—please verify your email address.',
                 'data' => $user
             ]);
         } catch (\Exception $e) {
