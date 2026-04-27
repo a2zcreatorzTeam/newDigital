@@ -71,7 +71,6 @@
 <script>
     $(document).ready(function() {
 
-        // CSRF
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -88,21 +87,23 @@
                 type: "POST",
                 data: formData,
 
-                success: function(response) {
+                // ✅ Show loader before request
+                beforeSend: function() {
+                    $('#loader_data').show();
+                },
 
-                    // ✅ Success Alert
+                success: function(response) {
                     Swal.fire({
                         icon: 'success',
                         title: 'Success',
                         text: response.message,
                     });
+
                     $('.offcanvas-close').trigger('click');
                     $('#signupForm')[0].reset();
                 },
 
                 error: function(xhr) {
-
-                    // ✅ Validation Errors (422)
                     if (xhr.status === 422) {
                         let errors = xhr.responseJSON.errors;
                         let errorMsg = '';
@@ -116,16 +117,18 @@
                             title: 'Validation Error',
                             text: errorMsg,
                         });
-                    }
-
-                    // ❌ Other Errors (500, etc.)
-                    else {
+                    } else {
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
                             text: 'Something went wrong. Please try again.',
                         });
                     }
+                },
+
+                // ✅ Hide loader after request (success or error)
+                complete: function() {
+                    $('#loader_data').hide();
                 }
             });
 

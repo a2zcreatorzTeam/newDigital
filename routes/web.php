@@ -1,13 +1,16 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\backend\RoleController;
-use App\Http\Controllers\backend\UserController;
 use App\Http\Controllers\backend\AuthController;
 use App\Http\Controllers\backend\DashboardController;
 use App\Http\Controllers\backend\MainClassController;
+use App\Http\Controllers\backend\RoleController;
 use App\Http\Controllers\backend\SubClassController;
+use App\Http\Controllers\backend\UserController;
 use App\Http\Controllers\Frontend\FrontendController;
+use App\Models\User;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', function () {
@@ -64,6 +67,7 @@ Route::prefix('/')->name('frontend.')->controller(FrontendController::class)->gr
         Route::get('/contact', 'contact')->name('contact');
         Route::post('/signup', 'signup')->name('signup');
         Route::post('/signin', 'signin')->name('signin');
+        Route::post('/forgot-password','forgotPassword')->name('forgot.password');
 });
 
 Route::prefix('/')->name('frontend.')->controller(FrontendController::class)
@@ -72,3 +76,11 @@ Route::prefix('/')->name('frontend.')->controller(FrontendController::class)
                 Route::get('/profile', 'profile')->name('profile');
                 Route::get('/logout', 'logout')->name('logout');
         });
+        
+Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+                $user = User::findOrFail($request->id);
+                Auth::login($user);
+                $request->fulfill();
+                return redirect()->route('frontend.index');
+            
+            })->middleware(['auth','signed'])->name('verification.verify');

@@ -54,9 +54,12 @@
                    url: "{{ route('frontend.signin') }}",
                    type: "POST",
                    data: formData,
+                   beforeSend: function() {
+                       $('#loader_data').show();
+                   },
 
                    success: function(response) {
-                            
+
 
                        $('#authNavbar').show();
                        $('#guestNavbar').hide();
@@ -97,6 +100,9 @@
                                text: 'Something went wrong. Please try again.',
                            });
                        }
+                   },
+                   complete: function() {
+                       $('#loader_data').hide();
                    }
                });
 

@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <link rel="shortcut icon" type="image/x-icon" href="images/favicon.jpg">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('frontend/images/logo.png')}}">
     <!-- Place favicon.ico in the root directory -->
 
 
@@ -32,6 +32,27 @@
 
 <body>
 
+<div id="loader_data" style="
+    display:none;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.5);
+    z-index:9999;
+    text-align:center;
+">
+    <div style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%);">
+        
+        <!-- ✅ Your GIF Loader -->
+        <img src="https://statelife.com.pk/public/images/loading-slic.gif" 
+             alt="Loading..." 
+             style="width:100px;">
+
+    </div>
+</div>
+
     <!--Preloader-->
     <div id="preloader">
         <div id="loader" class="loader">
@@ -42,7 +63,7 @@
     </div>
     <!--Preloader-end -->
 
-    
+
 
     <!-- Scroll-top -->
     <button class="scroll__top scroll-to-target" data-target="html">
