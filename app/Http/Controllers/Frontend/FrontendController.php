@@ -181,6 +181,9 @@ class FrontendController extends Controller
     public function policyForm(){
         return view('frontend.policy-form');
     }
+    public function dashboard(){
+        return view('frontend.dashboard');
+    }
 
 
     

@@ -33,7 +33,7 @@
     display: none;
 }
 
-#msform input, #msform textarea{
+#msform input, #msform textarea select{
     padding: 10px 15px;
     border: 1px solid #ccc;
     border-radius: 5px;

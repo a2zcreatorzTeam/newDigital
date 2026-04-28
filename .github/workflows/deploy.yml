@@ -1,0 +1,40 @@
+on:
+  push:
+    branches:
+      - staging
+
+jobs:
+  web-deploy:
+    name: 🎉 Deploy to Staging
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🚚 Get latest code
+        uses: actions/checkout@v4
+
+      - name: 📂 Sync files via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+
+      - name: ✅ SSH into Server & Deploy Laravel
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.DEPLOY_SERVER_KEY }}
+          port: 3117
+          script: |
+            cd ${{ secrets.SSH_DIR }}
+            composer install --no-dev --optimize-autoloader --no-interaction
+            php artisan down || true
+            composer install --no-dev --optimize-autoloader --no-interaction
+            php artisan migrate --force
+            php artisan config:clear
+            php artisan config:cache
+            php artisan route:cache
+            php artisan view:cache
+            php artisan up
+            php artisan optimize:clear

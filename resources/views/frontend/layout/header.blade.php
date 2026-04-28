@@ -30,6 +30,19 @@
 
 
 </head>
+<style>
+    /* Target Chrome, Safari, Edge, and Opera */
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    /* Target Firefox */
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
+</style>
 
 <body>
 

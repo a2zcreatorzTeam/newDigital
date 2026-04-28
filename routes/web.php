@@ -71,6 +71,7 @@ Route::prefix('/')->name('frontend.')->controller(FrontendController::class)->gr
         Route::post('/forgot-password','forgotPassword')->name('forgot.password');
         Route::post('/get-policies','getPolicies')->name('getPolicies');
         Route::get('/policy-form', 'policyForm')->name('policyForm');
+        Route::get('/dashboard', 'dashboard')->name('dashboard');
 });
 
 Route::prefix('/')->name('frontend.')->controller(FrontendController::class)
