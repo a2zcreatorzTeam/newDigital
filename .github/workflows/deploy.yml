@@ -17,9 +17,10 @@ jobs:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./public/  # 👈 Fixed
+          local-dir: ./public/
           server-dir: public_html/statelife2
-          ftp: { passive: true }
+          ftp:
+            passive: true  # 👈 Fixed
 
       - name: ✅ SSH into Server & Deploy Laravel
         uses: appleboy/ssh-action@v1.0.0
