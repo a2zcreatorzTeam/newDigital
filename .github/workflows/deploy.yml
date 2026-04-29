@@ -4,9 +4,10 @@ on:
       - staging
 
 jobs:
-  deploy:
+  web-deploy:
     name: 🎉 Deploy to Staging
     runs-on: ubuntu-latest
+
     steps:
       - name: 🚚 Get latest code
         uses: actions/checkout@v4
@@ -19,21 +20,24 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./public
           server-dir: public_html/statelife2
-          ftp: { passive: true }
+          
 
       - name: ✅ SSH into Server & Deploy Laravel
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.FTP_SERVER }}
-          username: laravel11
+          username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.DEPLOY_SERVER_KEY }}
           port: 21
           script: |
-            cd public_html/statelife2
-            composer install --no-dev --optimize-autoloader
+           
+            composer install --no-dev --optimize-autoloader --no-interaction
             php artisan down || true
+            composer install --no-dev --optimize-autoloader --no-interaction
             php artisan migrate --force
+            php artisan config:clear
             php artisan config:cache
             php artisan route:cache
             php artisan view:cache
             php artisan up
+            php artisan optimize:clear
