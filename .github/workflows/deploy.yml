@@ -30,7 +30,7 @@ jobs:
           key: ${{ secrets.DEPLOY_SERVER_KEY }}
           port: 21
           script: |
-           
+            cd ${{ secrets.SSH_DIR }}
             composer install --no-dev --optimize-autoloader --no-interaction
             php artisan down || true
             composer install --no-dev --optimize-autoloader --no-interaction
