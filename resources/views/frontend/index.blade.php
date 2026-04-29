@@ -57,7 +57,7 @@
                         <div class="box" id="box{{ $data->id }}" data-id="{{ $data->id }}">
                             <div class="services-item shine-animate-item">
                                 <div class="services-thumb">
-                                    <a href="#section1" class="shine-animate"><img src="{{asset($data->logo)}}" alt=""></a>
+                                    <a href="#section1" class="shine-animate"><img src="{{ asset('storage/'.$data->logo) }}" alt=""></a>
                                 </div>
                                 <div class="services-content">
                                     <div class="icon">

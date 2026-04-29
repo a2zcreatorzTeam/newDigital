@@ -138,7 +138,7 @@
 <script src="{{asset('frontend/js/login.js')}}"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<script>
+<!-- <script>
     const text = document.querySelector('.circle');
     text.innerHTML = text.textContent.replace(/\S/g, "<span>$&</span>");
 
@@ -146,10 +146,31 @@
     for (let i = 0; i < element.length; i++) {
         element[i].style.transform = "rotate(" + i * 17 + "deg)"
     }
+</script> -->
+
+
+<script>
+    @if(session('success'))
+        Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: "{{ session('success') }}",
+        });
+    @endif
+
+    @if(session('error'))
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: "{{ session('error') }}",
+        });
+    @endif
 </script>
 
 <script>
     const isLoggedIn = @json(Auth::check());
+    console.log(isLoggedIn);
+    
 
     if (isLoggedIn) {
         const user = @json(Auth::user());

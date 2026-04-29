@@ -72,13 +72,14 @@ Route::prefix('/')->name('frontend.')->controller(FrontendController::class)->gr
         Route::post('/get-policies','getPolicies')->name('getPolicies');
         Route::get('/policy-form', 'policyForm')->name('policyForm');
         Route::get('/dashboard', 'dashboard')->name('dashboard');
+         Route::get('/logout', 'logout')->name('logout');
 });
 
 Route::prefix('/')->name('frontend.')->controller(FrontendController::class)
         ->middleware('front.role')
         ->group(function () {
                 Route::get('/profile', 'profile')->name('profile');
-                Route::get('/logout', 'logout')->name('logout');
+               
         });
         
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {

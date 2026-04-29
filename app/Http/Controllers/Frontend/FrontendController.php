@@ -7,7 +7,7 @@ use App\Mail\SignupEmail;
 use App\Models\MainClass;
 use App\Models\SubClass;
 use App\Models\User;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Hash;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
@@ -69,7 +69,7 @@ class FrontendController extends Controller
             
             Auth::login($user);
             event(new Registered($user));
-            //Mail::to($validated['email'])->send(new SignupEmail($data));
+      
 
             // ✅ Success Response (for AJAX)
             return response()->json([
@@ -133,7 +133,7 @@ class FrontendController extends Controller
     public function logout()
     {
         Auth::logout();
-        return redirect()->back()->with('success', 'Logout Successfully!');
+        return redirect()->route('frontend.index')->with('success', 'Logout Successfully!');
     }
 
     public function forgotPassword(Request $request)

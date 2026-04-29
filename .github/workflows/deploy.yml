@@ -25,7 +25,7 @@ jobs:
           host: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.DEPLOY_SERVER_KEY }}
-          port: 3117
+          port: 21
           script: |
             cd ${{ secrets.SSH_DIR }}
             composer install --no-dev --optimize-autoloader --no-interaction
