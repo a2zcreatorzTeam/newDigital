@@ -68,11 +68,12 @@ Route::prefix('/')->name('frontend.')->controller(FrontendController::class)->gr
         Route::get('/product', 'product')->name('product');
         Route::post('/signup', 'signup')->name('signup');
         Route::post('/signin', 'signin')->name('signin');
-        Route::post('/forgot-password','forgotPassword')->name('forgot.password');
-        Route::post('/get-policies','getPolicies')->name('getPolicies');
+        Route::post('/forgot-password', 'forgotPassword')->name('forgot.password');
+        Route::post('/get-policies', 'getPolicies')->name('getPolicies');
         Route::get('/policy-form', 'policyForm')->name('policyForm');
         Route::get('/dashboard', 'dashboard')->name('dashboard');
         Route::get('/profile-form', 'profileForm')->name('profileForm');
+        Route::post('/updateBasicDetails', 'updateBasicDetails')->name('updateBasicDetails');
         Route::post('/updateProfile', 'updateProfile')->name('updateProfile');
         Route::get('/logout', 'logout')->name('logout');
 });
@@ -81,13 +82,11 @@ Route::prefix('/')->name('frontend.')->controller(FrontendController::class)
         ->middleware('front.role')
         ->group(function () {
                 Route::get('/profile', 'profile')->name('profile');
-               
         });
-        
+
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-                $user = User::findOrFail($request->id);
-                Auth::login($user);
-                $request->fulfill();
-                return redirect()->route('frontend.index');
-            
-            })->middleware(['auth','signed'])->name('verification.verify');
+        $user = User::findOrFail($request->id);
+        Auth::login($user);
+        $request->fulfill();
+        return redirect()->route('frontend.index');
+})->middleware(['auth', 'signed'])->name('verification.verify');

@@ -3,25 +3,29 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
-use App\Mail\SignupEmail;
 use App\Models\MainClass;
 use App\Models\SubClass;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Hash;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\DB;
+use App\Models\BasicDetail;
 use Illuminate\Support\Facades\Password;
+use App\Http\Requests\BasicDetailRequest;
+
 use Mail;
 
 class FrontendController extends Controller
 {
     public function home()
     {
-        $category=MainClass::where('status',1)->get();
-        return view('frontend.index')->with(['category'=>$category]);
+        $category = MainClass::where('status', 1)->get();
+        return view('frontend.index')->with(['category' => $category]);
     }
 
 
@@ -31,15 +35,18 @@ class FrontendController extends Controller
     }
 
 
-    public function cart(){
+    public function cart()
+    {
         return view('frontend.cart');
     }
-    
-    public function forget_password(){
+
+    public function forget_password()
+    {
         return view('frontend.forgot-password');
     }
 
-    public function contact(){
+    public function contact()
+    {
         return view('frontend.contact-us');
     }
 
@@ -55,8 +62,8 @@ class FrontendController extends Controller
         ]);
 
         try {
-            $data=$request->all();
-          
+            $data = $request->all();
+
             // ✅ Create User
             $user = User::create([
                 'name' => $validated['name'],
@@ -66,10 +73,10 @@ class FrontendController extends Controller
                 'password' => Hash::make($validated['password']),
             ]);
             $encrypted = Crypt::encryptString($user->id);
-            
+
             Auth::login($user);
             event(new Registered($user));
-      
+
 
             // ✅ Success Response (for AJAX)
             return response()->json([
@@ -78,7 +85,7 @@ class FrontendController extends Controller
                 'data' => $user
             ]);
         } catch (\Exception $e) {
-            Log::warning('Password reset exception for:: '.$request->email.', reason:'.$e->getMessage());
+            Log::warning('Password reset exception for:: ' . $request->email . ', reason:' . $e->getMessage());
             return response()->json([
                 'status' => false,
                 'message' => 'Something went wrong',
@@ -141,7 +148,7 @@ class FrontendController extends Controller
         $request->validate([
             'email' => 'required|email',
         ]);
-        try{
+        try {
             $status = Password::sendResetLink(
                 $request->only('email')
             );
@@ -153,14 +160,13 @@ class FrontendController extends Controller
                 ]);
             }
 
-            Log::warning('Password reset failed for: '.$request->email);
+            Log::warning('Password reset failed for: ' . $request->email);
             return response()->json([
                 'status' => false,
                 'message' => __($status),
             ], 429);
-
         } catch (\Exception $e) {
-            Log::warning('Password reset exception for:: '.$request->email.', reason:'.$e->getMessage());
+            Log::warning('Password reset exception for:: ' . $request->email . ', reason:' . $e->getMessage());
             return response()->json([
                 'status' => false,
                 'message' => 'Something went wrong',
@@ -172,22 +178,55 @@ class FrontendController extends Controller
     {
         return view('frontend.products');
     }
-    public function getPolicies(Request $request){
-          $policies=SubClass::where('class_id',$request->category_id)->get();
-          $main_category=MainClass::where('id',$request->category_id)->select('name')->first();
-          return view('frontend.get-policies',['policies'=>$policies,'main_category'=>$main_category]);
+    public function getPolicies(Request $request)
+    {
+        $policies = SubClass::where('class_id', $request->category_id)->get();
+        $main_category = MainClass::where('id', $request->category_id)->select('name')->first();
+        return view('frontend.get-policies', ['policies' => $policies, 'main_category' => $main_category]);
     }
 
-    public function policyForm(){
+    public function policyForm()
+    {
         return view('frontend.policy-form');
     }
-    public function dashboard(){
+    public function dashboard()
+    {
         return view('frontend.dashboard');
     }
 
-    public function profileForm(){
-         return view('frontend.profile-form');
-    } 
+    public function profileForm()
+    {
+        $user=User::with('basicDetail')->where('id',Auth::user()->id)->first();
+        return view('frontend.profile-form',['user'=>$user]);
+    }
 
-    
+    public function updateBasicDetails(BasicDetailRequest $request)
+    {
+        try {
+            DB::beginTransaction();
+
+            $userId = auth()->id();
+            $data = $request->validated();
+
+            $basicDetail = BasicDetail::updateOrCreate(
+                ['user_id' => $userId],
+                $data + ['user_id' => $userId]
+            );
+
+            DB::commit();
+
+            // AJAX ke liye success JSON return karein
+            return response()->json([
+                'success' => true,
+                'message' => 'Basic details saved successfully'
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Something went wrong: ' . $e->getMessage()
+            ], 500);
+        }
+    }
 }

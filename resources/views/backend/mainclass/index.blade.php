@@ -21,7 +21,7 @@
                     <tr>
                         <th>No</th>
                         <th>Name</th>
-                        <th>logo</th>
+                        <th>Image</th>
                         <th>status</th>
                         <th>Action</th>
                     </tr>

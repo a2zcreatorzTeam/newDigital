@@ -33,12 +33,12 @@
                 <!-- Old Logo Preview -->
                 <div class="col-md-12 mt-2">
                     <div class="form-group">
-                        <strong>Current Logo:</strong><br>
+                        <strong>Current Image:</strong><br>
 
                         @if($class->logo)
                         <img src="{{ asset('storage/'.$class->logo) }}" width="80">
                         @else
-                        <span class="text-muted">No Logo</span>
+                        <span class="text-muted">No Image</span>
                         @endif
                     </div>
                 </div>

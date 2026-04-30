@@ -52,7 +52,7 @@
                 <!-- Current Logo -->
                 <div class="col-md-12 mt-2">
                     <div class="form-group">
-                        <strong>Current Logo:</strong><br>
+                        <strong>Current Image:</strong><br>
 
                         @if($subclass->logo)
                             <img src="{{ asset('storage/'.$subclass->logo) }}" width="80">

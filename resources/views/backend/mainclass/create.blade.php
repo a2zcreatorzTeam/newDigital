@@ -31,7 +31,7 @@
                 <!-- Logo -->
                 <div class="col-md-12 mt-2">
                     <div class="form-group">
-                        <strong>Logo:</strong>
+                        <strong>Image:</strong>
                         <input type="file" name="logo" class="form-control">
                     </div>
                 </div>
