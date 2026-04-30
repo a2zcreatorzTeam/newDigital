@@ -72,7 +72,9 @@ Route::prefix('/')->name('frontend.')->controller(FrontendController::class)->gr
         Route::post('/get-policies','getPolicies')->name('getPolicies');
         Route::get('/policy-form', 'policyForm')->name('policyForm');
         Route::get('/dashboard', 'dashboard')->name('dashboard');
-         Route::get('/logout', 'logout')->name('logout');
+        Route::get('/profile-form', 'profileForm')->name('profileForm');
+        Route::post('/updateProfile', 'updateProfile')->name('updateProfile');
+        Route::get('/logout', 'logout')->name('logout');
 });
 
 Route::prefix('/')->name('frontend.')->controller(FrontendController::class)

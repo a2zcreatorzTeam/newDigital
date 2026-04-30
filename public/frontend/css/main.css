@@ -13007,7 +13007,7 @@ blockquote p {
 
 .box-form-login {
   background-color: var(--tg-color-gray-3);
-  max-width: 579px;
+  /* max-width: 579px; */
   margin: auto;
   padding: 63px 61px;
   border: 1px solid var(--tg-border-1);
@@ -13030,7 +13030,7 @@ blockquote p {
 }
 
 .box-form-login .form-control.account {
-  background-image: url(../images/account.svg);
+  /* background-image: url(../images/account.svg); */
   background-repeat: no-repeat;
   background-position: right 26px center;
 }

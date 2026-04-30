@@ -185,6 +185,9 @@ class FrontendController extends Controller
         return view('frontend.dashboard');
     }
 
+    public function profileForm(){
+         return view('frontend.profile-form');
+    } 
 
     
 }
