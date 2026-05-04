@@ -1,104 +1,207 @@
-  <form action="#" method="POST">
-                @csrf
-                <h2 class="profile-section-title">Health Information</h2>
-                <div class="box-form-login">
-                    <div class="row">
-                        <!-- Height (In cm) -->
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label>Height (In cm) (قد سینٹی میٹر میں)*</label>
-                                <input type="text" class="form-control" name="height_cm">
-                            </div>
-                        </div>
-                        <!-- Height (In Feet) -->
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label>Height (In Feet)*</label>
-                                <input type="text" class="form-control" name="height_feet">
-                            </div>
-                        </div>
 
-                        <!-- Weight (In Kg) -->
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label>Weight (In Kg) (وزن کلوگرام میں)*</label>
-                                <input type="text" class="form-control" name="weight_kg">
-                            </div>
-                        </div>
-                        <!-- Chest Insp (In cm) -->
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label>Chest Insp (In cm) (سینہ پھیلانے کے ساتھ - سینٹی میٹر میں)*</label>
-                                <input type="text" class="form-control" name="chest_insp_cm">
-                            </div>
-                        </div>
 
-                        <!-- Chest Insp (In Inches) -->
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label>Chest Insp (In Inches)*</label>
-                                <input type="text" class="form-control" name="chest_insp_inches">
-                            </div>
-                        </div>
-                        <!-- Chest Exp (In cm) -->
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label>Chest Exp (In cm) (سینہ پھیلانے کے بغیر - سینٹی میٹر میں)*</label>
-                                <input type="text" class="form-control" name="chest_exp_cm">
-                            </div>
-                        </div>
+<form action="#" id="health_info">
+    @csrf
 
-                        <!-- Chest Exp (In Inches) -->
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label>Chest Exp (In Inches)*</label>
-                                <input type="text" class="form-control" name="chest_exp_inches">
-                            </div>
-                        </div>
-                        <!-- Abdomen (In cm) -->
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label>Abdomen (In cm) (پیٹ - سینٹی میٹر میں)*</label>
-                                <input type="text" class="form-control" name="abdomen_cm">
-                            </div>
-                        </div>
+    <h2 class="profile-section-title">Health Information</h2>
 
-                        <!-- Abdomen (In Inches) -->
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label>Abdomen (In Inches)*</label>
-                                <input type="text" class="form-control" name="abdomen_inches">
-                            </div>
-                        </div>
-                        <!-- Weight Loss (In Kg) -->
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label>Weight Loss (In Kg) (وزن میں کمی - کلوگرام میں)*</label>
-                                <input type="text" class="form-control" name="weight_loss_kg">
-                            </div>
-                        </div>
+    <div class="box-form-login">
+        <div class="row">
 
-                        <!-- Weight Gain (In Kg) -->
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label>Weight Gain (In Kg) (وزن میں اضافہ - کلوگرام میں)*</label>
-                                <input type="text" class="form-control" name="weight_gain_kg">
-                            </div>
-                        </div>
-
-                        <!-- Empty column for layout balance if needed -->
-                        <div class="col-6"></div>
-
-                        <!-- Reason of Increase Weight -->
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label>Reason of Increase Weight (وزن بڑھنے کی وجہ)*</label>
-                                <textarea class="form-control" name="weight_increase_reason" rows="3"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="update-btn-container">
-                        <button type="submit" class="btn-update">Update Health Info</button>
-                    </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label>Height (In cm) (قد سینٹی میٹر میں)*</label>
+                    <input type="number" class="form-control" name="height_cm"
+                        value="{{ $user->health->height_cm ?? '' }}">
                 </div>
-            </form>
+            </div>
+
+            <div class="col-6">
+                <div class="form-group">
+                    <label>Height (In Feet)*</label>
+                    <input type="number" class="form-control" name="height_ft"
+                        value="{{ $user->health->height_ft ?? '' }}">
+                </div>
+            </div>
+
+            <div class="col-6">
+                <div class="form-group">
+                    <label>Weight (In Kg)*</label>
+                    <input type="number" class="form-control" name="weight_kg"
+                        value="{{ $user->health->weight_kg ?? '' }}">
+                </div>
+            </div>
+
+            <div class="col-6">
+                <div class="form-group">
+                    <label>Chest Insp (cm)*</label>
+                    <input type="number" class="form-control" name="chest_insp_cm"
+                        value="{{ $user->health->chest_insp_cm ?? '' }}">
+                </div>
+            </div>
+
+            <div class="col-6">
+                <div class="form-group">
+                    <label>Chest Insp (Inches)*</label>
+                    <input type="number" class="form-control" name="chest_insp_inches"
+                        value="{{ $user->health->chest_insp_inches ?? '' }}">
+                </div>
+            </div>
+
+            <div class="col-6">
+                <div class="form-group">
+                    <label>Chest Exp (cm)*</label>
+                    <input type="number" class="form-control" name="chest_exp_cm"
+                        value="{{ $user->health->chest_exp_cm ?? '' }}">
+                </div>
+            </div>
+
+            <div class="col-6">
+                <div class="form-group">
+                    <label>Chest Exp (Inches)*</label>
+                    <input type="number" class="form-control" name="chest_exp_inches"
+                        value="{{ $user->health->chest_exp_inches ?? '' }}">
+                </div>
+            </div>
+
+            <div class="col-6">
+                <div class="form-group">
+                    <label>Abdomen (cm)*</label>
+                    <input type="number" class="form-control" name="abdomen_cm"
+                        value="{{ $user->health->abdomen_cm ?? '' }}">
+                </div>
+            </div>
+
+            <div class="col-6">
+                <div class="form-group">
+                    <label>Abdomen (Inches)*</label>
+                    <input type="number" class="form-control" name="abdomen_inches"
+                        value="{{ $user->health->abdomen_inches ?? '' }}">
+                </div>
+            </div>
+
+            <div class="col-6">
+                <div class="form-group">
+                    <label>Weight Loss (Kg)*</label>
+                    <input type="number" class="form-control" name="weight_loss_kg"
+                        value="{{ $user->health->weight_loss_kg ?? '' }}">
+                </div>
+            </div>
+
+            <div class="col-6">
+                <div class="form-group">
+                    <label>Weight Gain (Kg)*</label>
+                    <input type="number" class="form-control" name="weight_gain_kg"
+                        value="{{ $user->health->weight_gain_kg ?? '' }}">
+                </div>
+            </div>
+
+            <div class="col-6">
+                <div class="form-group">
+                    <label>Reason of Increase Weight*</label>
+                    <textarea class="form-control" name="weight_increase_reason" rows="3">{{ $user->health->weight_increase_reason ?? '' }}</textarea>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="update-btn-container">
+            <button type="submit" class="btn-update">Update Health Info</button>
+        </div>
+    </div>
+</form>
+
+  @push('js')
+  <script>
+      $(document).ready(function() {
+          $('#health_info').on('submit', function(e) {
+              e.preventDefault();
+
+              let formData = $(this).serialize();
+              let isValid = true;
+
+              // Simple Validation: Check if required fields are empty
+              $(this).find('.form-control').each(function() {
+                  let fieldName = $(this).attr('name');
+                  let fieldValue = $(this).val().trim();
+
+                  // In fields ko skip karna hai (Optional fields)
+                  let optionalFields = [];
+
+                  // Agar field khali hai AUR wo optional list mein NAHI hai
+                  if (fieldValue === "" && !optionalFields.includes(fieldName)) {
+                      $(this).css('border-color', 'red');
+                      isValid = false;
+                  } else {
+                      $(this).css('border-color', ''); // Error khatam hone par border normal kar dein
+                  }
+              });
+
+              if (!isValid) {
+                  Swal.fire('Error', 'Please fill all required fields.', 'error');
+                  return false;
+              }
+
+              // AJAX Call
+              $.ajax({
+                  method: 'POST',
+                  url: '{{ route("frontend.updateHealth") }}', // Apna sahi route yahan likhein
+                  data: formData,
+                  beforeSend: function() {
+                      Swal.fire({
+                          title: 'Updating...',
+                          text: 'Please wait while we save your details',
+                          allowOutsideClick: false,
+                          didOpen: () => {
+                              Swal.showLoading();
+                          }
+                      });
+                  },
+                  success: function(response) {
+                      Swal.close();
+                      console.log(response);
+
+                      if (response.success) {
+                          Swal.fire({
+                              title: 'Success!',
+                              text: 'Profile updated successfully.',
+                              icon: 'success',
+                              timer: 2000
+                          });
+                      } else {
+                          Swal.fire('Error', response.message || 'Something went wrong', 'error');
+                      }
+                  },
+                  error: function(xhr) {
+                      Swal.close();
+
+                      if (xhr.status === 422) {
+                          // Laravel validation errors yahan hote hain: xhr.responseJSON.errors
+                          let errors = xhr.responseJSON.errors;
+                          let errorString = '';
+
+                          // Saare errors ko ek string mein jama karein
+                          $.each(errors, function(key, value) {
+                              errorString += value[0] + '<br>'; // value[0] mein actual message hota hai
+
+                              // Optional: Field ka border red karne ke liye
+                              $('[name="' + key + '"]').css('border-color', 'red');
+                          });
+
+                          Swal.fire({
+                              title: 'Validation Error',
+                              html: errorString, // html property use karein taake <br> kaam kare
+                              icon: 'error'
+                          });
+                      } else {
+                          Swal.fire('Error', 'Something went wrong on the server.', 'error');
+                      }
+                  }
+              });
+          });
+
+
+
+      });
+  </script>
+  @endpush

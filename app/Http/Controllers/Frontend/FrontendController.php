@@ -3,21 +3,30 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AddressInfoRequest;
+use App\Http\Requests\BasicDetailRequest;
+use App\Http\Requests\UserHealthRequest;
+use App\Http\Requests\UserOccupationRequest;
+use App\Models\AddressInfo;
+use App\Models\BasicDetail;
+use App\Models\City;
+use App\Models\District;
 use App\Models\MainClass;
+use App\Models\Provinces;
 use App\Models\SubClass;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
+use App\Models\UserHealth;
+use App\Models\UserOccupation;
 use Hash;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Crypt;
-use Illuminate\Validation\ValidationException;
-use Illuminate\Support\Facades\DB;
-use App\Models\BasicDetail;
-use Illuminate\Support\Facades\Password;
-use App\Http\Requests\BasicDetailRequest;
+use Illuminate\Support\Facades\Auth;
 
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Validation\ValidationException;
 use Mail;
 
 class FrontendController extends Controller
@@ -191,13 +200,15 @@ class FrontendController extends Controller
     }
     public function dashboard()
     {
-        return view('frontend.dashboard');
+        $user = User::with('basicDetail', 'AddressInfo', 'occupation', 'health')->where('id', Auth::user()->id)->first();
+        return view('frontend.dashboard',['user'=>$user]);
     }
 
     public function profileForm()
     {
-        $user=User::with('basicDetail')->where('id',Auth::user()->id)->first();
-        return view('frontend.profile-form',['user'=>$user]);
+        $user = User::with('basicDetail', 'AddressInfo', 'occupation', 'health')->where('id', Auth::user()->id)->first();
+        $provinces = Provinces::get();
+        return view('frontend.profile-form', ['user' => $user, 'provinces' => $provinces]);
     }
 
     public function updateBasicDetails(BasicDetailRequest $request)
@@ -228,5 +239,105 @@ class FrontendController extends Controller
                 'message' => 'Something went wrong: ' . $e->getMessage()
             ], 500);
         }
+    }
+    public function updateAddressInfo(AddressInfoRequest $request)
+    {
+        try {
+            DB::beginTransaction();
+
+            $userId = auth()->id();
+            $data = $request->validated();
+
+            $address_info = AddressInfo::updateOrCreate(
+                ['user_id' => $userId],
+                $data + ['user_id' => $userId]
+            );
+
+            DB::commit();
+
+            // AJAX ke liye success JSON return karein
+            return response()->json([
+                'success' => true,
+                'message' => 'Basic details saved successfully'
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Something went wrong: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+    public function updateOccupation(UserOccupationRequest $request)
+    {
+        try {
+            DB::beginTransaction();
+
+            $userId = auth()->id();
+            $data = $request->validated();
+
+            $address_info = UserOccupation::updateOrCreate(
+                ['user_id' => $userId],
+                $data + ['user_id' => $userId]
+            );
+
+            DB::commit();
+
+            // AJAX ke liye success JSON return karein
+            return response()->json([
+                'success' => true,
+                'message' => 'Basic details saved successfully'
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Something went wrong: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+    public function updateHealth(UserHealthRequest $request)
+    {
+        try {
+            DB::beginTransaction();
+
+            $userId = auth()->id();
+            $data = $request->validated();
+
+            $address_info = UserHealth::updateOrCreate(
+                ['user_id' => $userId],
+                $data + ['user_id' => $userId]
+            );
+
+            DB::commit();
+
+            // AJAX ke liye success JSON return karein
+            return response()->json([
+                'success' => true,
+                'message' => 'Basic details saved successfully'
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Something went wrong: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function getcityData(Request $request)
+    {
+        $province_id = $request->province_id;
+        $cities = City::where('province_id', $province_id)->get();
+        return $cities;
+    }
+    public function getDistrictData(Request $request)
+    {
+        $city_id = $request->city_id;
+        $district = District::where('city_id', $city_id)->get();
+        return $district;
     }
 }

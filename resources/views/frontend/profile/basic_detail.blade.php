@@ -6,7 +6,7 @@
             <div class="col-6">
                 <div class="form-group">
                     <label for="">Life Proposed Full Name (بیمہ زندگی کے لئے مجوزہ کا پورا نام)</label>
-                    <input type="text" value="{{$user->basicDetail->life_proposed_full_name ?? ''}}" name="life_proposed_full_name" class="form-control account">
+                    <input type="text" value="{{$user->basicDetail?->life_proposed_full_name ?? ''}}" name="life_proposed_full_name" class="form-control account">
                     @error('life_proposed_full_name')
                     <div class="invalid-feedback" style="display: block;">
                         {{ $message }}
@@ -17,7 +17,7 @@
             <div class="col-6">
                 <div class="form-group">
                     <label for="">Mobile Number Personal (ذاتی موبائل نمبر)</label>
-                    <input type="text" value="{{$user->basicDetail->mobile_number ?? ''}}" name="mobile_number" class="form-control account">
+                    <input type="text" value="{{$user->basicDetail->mobile_number ?? ''}}" name="mobile_number" class="form-control account" placeholder="0321-6905568">
                 </div>
             </div>
 
@@ -67,8 +67,8 @@
                     <label>Gender/Sex (جنس)*</label>
                     <select name='gender' class="form-control">
                         <option value="">Select Gender</option>
-                        <option value="Male" {{ $user->basicDetail->gender == 'Male' ? 'selected' : '' }}>Male</option>
-                        <option value="Female" {{ $user->basicDetail->gender == 'Female' ? 'selected' : '' }}>FeMale</option>
+                        <option value="Male" {{ ($user->basicDetail->gender ?? '') == 'Male' ? 'selected' : '' }}>Male</option>
+                        <option value="Female" {{ ($user->basicDetail->gender ?? '') == 'Female' ? 'selected' : '' }}>Female</option>
                     </select>
                 </div>
             </div>
@@ -151,8 +151,8 @@
                     <label>Is Client Dual National? (کیا سائل ڈوئل قومیت رکھتا ہے؟)*</label>
                     <select name="is_client_dual_national" class="form-control" id="is_client_dual_national">
                         <option value="">Select Option</option>
-                        <option value="Yes"  >Yes</option>
-                        <option value="No">No</option>
+                        <option value="Yes"  {{ ($user->basicDetail->is_client_dual_national ?? '') == 'Yes' ? 'selected' : '' }} >Yes</option>
+                        <option value="No"  {{ ($user->basicDetail->is_client_dual_national ?? '') == 'No' ? 'selected' : '' }}>No</option>
                     </select>
 
                 </div>
@@ -164,7 +164,7 @@
             <div class="col-6">
                 <div class="form-group">
                     <label>Primary Nationality (قومیت)*</label>
-                    <input type="text" name='primary_nationality' class="form-control account">
+                    <input type="text" value="{{ $user->basicDetail->primary_nationality ?? '' }}" name='primary_nationality' class="form-control account">
                 </div>
             </div>
 
@@ -172,7 +172,7 @@
             <div class="col-6">
                 <div class="form-group">
                     <label>Dual Nationality (دوہری قومیت)*</label>
-                    <input type="text" name='dual_nationality' class="form-control account">
+                    <input type="text" value="{{ $user->basicDetail->dual_nationality ?? '' }}" name='dual_nationality' class="form-control account">
                 </div>
             </div>
 
@@ -180,7 +180,7 @@
             <div class="col-6">
                 <div class="form-group">
                     <label>Birth Place (مقامِ پیدائش)*</label>
-                    <input type="text" name='birth_placed' class="form-control account">
+                    <input type="text"  value="{{ $user->basicDetail->birth_placed ?? '' }}" name='birth_placed' class="form-control account">
                 </div>
             </div>
 
@@ -190,8 +190,8 @@
                     <label>Proposer & Life Proposed are same?*</label>
                     <select name="is_same_person" class="form-control">
                         <option value="">Select Option</option>
-                        <option value="Yes">Yes</option>
-                        <option value="No">No</option>
+                        <option value="Yes" {{ ($user->basicDetail->is_same_person ?? '') == 'Yes' ? 'selected' : '' }}>Yes</option>
+                        <option value="No" {{ ($user->basicDetail->is_same_person ?? '') == 'No' ? 'selected' : '' }}>No</option>
                     </select>
                 </div>
             </div>

@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class BasicDetailRequest extends FormRequest
+class AddressInfoRequest extends FormRequest
 {
     /**
      * Authorize user
@@ -20,35 +20,20 @@ class BasicDetailRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'life_proposed_full_name' => 'required|string|max:255',
-            'mobile_number' => [
-                'nullable',
-                'regex:/^[0-9]{3,4}-[0-9]{7,8}$/'
-            ],
-            'cnic_number' => [
-                'required',
-                'regex:/^[0-9]{5}-[0-9]{7}-[0-9]{1}$/'
-            ],
-
-            'cnic_issue_date' => 'required|date',
-            'cnic_expiry_date' => 'required|date|after:cnic_issue_date',
-            'date_of_birth' => 'required|date|before:today',
-            'age_nearest_date' => 'required|integer|min:0|max:120',
-            'gender' => 'required|in:Male,Female',
-            'mother_maiden_name' => 'nullable|string|max:255',
-            'father_name' => 'nullable|string|max:255',
-            'husband_name' => 'nullable|string|max:255',
-            'religion' => 'nullable|string|max:100',
-            'email' => 'required|email|max:255',
-            'age_proof' => 'nullable|string|max:255',
-            'phone_number_office' => 'nullable|digits_between:7,15',
-            'phone_number_residente' => 'nullable|digits_between:7,15',
-            'fax_number' => 'nullable|digits_between:7,15',
-            'is_client_dual_national' => 'required',
-            'primary_nationality' => 'required|string|max:100',
-            'dual_nationality' => 'nullable|string|max:100',
-            'birth_placed' => 'nullable|string|max:255',
-            'is_same_person' => 'required',
+            'permanent_province_id' => 'required|int',
+            'permanent_district_id' => 'required|int',
+            'permanent_city_id' => 'required|int',
+            'corres_province_id' => 'required|int',
+            'corres_district_id' => 'required|int',
+            'corres_city_id' => 'required|int',
+            'temp_province_id' => 'required|int',
+            'temp_district_id' => 'required|int',
+            'temp_city_id' => 'required|int',
+            'permanent_address' => 'required|string',
+            'corres_address' => 'required|string',
+            'temp_address' => 'required|string'
+          
+           
         ];
 
     }

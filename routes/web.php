@@ -74,6 +74,15 @@ Route::prefix('/')->name('frontend.')->controller(FrontendController::class)->gr
         Route::get('/dashboard', 'dashboard')->name('dashboard');
         Route::get('/profile-form', 'profileForm')->name('profileForm');
         Route::post('/updateBasicDetails', 'updateBasicDetails')->name('updateBasicDetails');
+        
+        Route::post('/updateAddressInfo', 'updateAddressInfo')->name('updateAddressInfo');
+        Route::post('/updateOccupation', 'updateOccupation')->name('updateOccupation');
+        Route::post('/updateHealth', 'updateHealth')->name('updateHealth');
+
+
+
+        Route::post('/get/city/data', 'getcityData')->name('getcityData');
+        Route::post('/get/district/data', 'getDistrictData')->name('getDistrictData');
         Route::post('/updateProfile', 'updateProfile')->name('updateProfile');
         Route::get('/logout', 'logout')->name('logout');
 });

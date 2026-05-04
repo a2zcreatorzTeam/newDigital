@@ -107,11 +107,11 @@
             <!-- Section 1: Basic Details -->
             @include('frontend.profile.basic_detail',['user'=>$user])
             <!-- Section 2: Personal Details / Addresses -->
-            @include('frontend.profile.address_info')
+            @include('frontend.profile.address_info',['user'=>$user,'provinces'=>$provinces])
             <!-- Section 3: Occupation -->
-            @include('frontend.profile.occupation')
+            @include('frontend.profile.occupation',['user'=>$user])
             <!-- Section 4: Health Information -->
-            @include('frontend.profile.health_info')
+            @include('frontend.profile.health_info',['user'=>$user])
 
 
         </div>
