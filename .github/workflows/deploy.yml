@@ -27,10 +27,14 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.DEPLOY_SERVER_KEY }}
 <<<<<<< HEAD
+<<<<<<< HEAD
           port: 21
 =======
           port: 22
 >>>>>>> 7da16d147765e39aa63be7375500cedd9b04c1c1
+=======
+          port: 21
+>>>>>>> d2617880a81585672874e973f0db6ca059bd3fe5
           script: |
             cd ${{ secrets.SSH_DIR }}
             composer install --no-dev --optimize-autoloader --no-interaction
