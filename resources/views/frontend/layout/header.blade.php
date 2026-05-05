@@ -7,7 +7,7 @@
     <title>Digital Insurance - State Life</title>
     <meta name="description" content="Digital Insurance - State Life">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+   <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('frontend\images\favicon.jpg') }}">
 

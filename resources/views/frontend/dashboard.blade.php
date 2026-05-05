@@ -66,15 +66,15 @@
                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
                     </div> <br> <!-- fieldsets -->
                     <!-- Upload Information -->
-                    @include('frontend.policyFlow.step1')
+                    @include('frontend.policyFlow.form',['user'=>$user])
                     <!-- Choose Product -->
-                    @include('frontend.policyFlow.step2')
+                    @include('frontend.policyFlow.step2',['user'=>$user])
                     <!-- Upload info & Documents -->
-                    @include('frontend.policyFlow.step3')
+                    @include('frontend.policyFlow.step3',['user'=>$user])
                     <!-- Make Payment -->
-                    @include('frontend.policyFlow.step4')
+                    @include('frontend.policyFlow.step4',['user'=>$user])
                     <!-- Summary -->
-                    @include('frontend.policyFlow.step5')
+                    @include('frontend.policyFlow.step5',['user'=>$user])
                 </form>
             </div>
 

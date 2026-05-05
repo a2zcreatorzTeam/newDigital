@@ -57,7 +57,6 @@
                                                         <div class="jbl-field">
                                                             <div class="vdp-datepicker jbl-dynamic-input">
                                                                 <div class="">
-                                                                    <input type="text" name="date_of_birth" placeholder="DD-MM-YYYY" class="jbl-generated-input" required>
                                                                 </div>
                                                                 <div class="jbl-calendar vdp-datepicker__calendar" style="display: none;">
                                                                     <header><span class="prev">&lt;</span> <span class="day__month_btn up">Dec 2023</span> <span class="next">&gt;</span></header>

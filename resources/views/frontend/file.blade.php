@@ -540,7 +540,7 @@
                                                             <div class="jbl-field">
                                                                 <div class="vdp-datepicker jbl-dynamic-input">
                                                                     <div class="">
-                                                                        <input type="text" name="date_of_birth" placeholder="DD-MM-YYYY" class="jbl-generated-input" required>
+                                                                        
                                                                     </div>
                                                                     <div class="jbl-calendar vdp-datepicker__calendar" style="display: none;">
                                                                         <header><span class="prev">&lt;</span> <span class="day__month_btn up">Dec 2023</span> <span class="next">&gt;</span></header>
@@ -598,7 +598,7 @@
                                                         <div>
                                                             <div><label>CNIC Number<span class="requi">*</span></label>
                                                                 <div class="jbl-field">
-                                                                    <input type="text" name="cnic_number" placeholder="Enter CNIC Number" class="jbl-dynamic-input" required></div> <!----> <!---->
+                                                                    <input type="text" name="" placeholder="Enter CNIC Number" class="jbl-dynamic-input" required></div> <!----> <!---->
                                                             </div>
                                                         </div>
                                                     </div>

@@ -4,7 +4,7 @@
 
 <!-- main-area -->
 <main class="fix">
-
+    <input type="hidden" id="csrf_token" value="{{ csrf_token() }}">
     <!-- banner-area -->
     <section class="banner-area banner-bg" data-background="{{asset('frontend/images/Bd-1.jpg')}}">
         <div class="container">
@@ -157,6 +157,12 @@
 <script>
     $(document).ready(function() {
 
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
         $(".box").click(function() {
 
             let category_id = $(this).data("id");
@@ -165,7 +171,6 @@
                 url: "{{ route('frontend.getPolicies') }}",
                 type: "POST",
                 data: {
-                    _token: "{{ csrf_token() }}",
                     category_id: category_id
                 },
 
@@ -175,15 +180,17 @@
 
                 success: function(response) {
                     $("#policies_data").html(response);
-                    // Scroll to policies section
+
                     $('html, body').animate({
                         scrollTop: $("#policies_data").offset().top - 100
                     }, 500);
                 },
 
-                error: function() {
-                    $("#policies").html("<p style='color:red;'>Something went wrong</p>");
+                error: function(xhr) {
+                    console.log(xhr.responseText);
+                    alert("CSRF error ya server issue");
                 },
+
                 complete: function() {
                     $('#loader_data').hide();
                 }

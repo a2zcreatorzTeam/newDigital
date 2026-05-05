@@ -93,7 +93,8 @@
             <div class="col-6">
                 <div class="form-group">
                     <label>Husband Name of Life Proposed (بیمہ کنندہ کے شوہر کا نام)*</label>
-                    <input type="text" name='husbent_name' class="form-control account" value="{{ $user->basicDetail->husbent_name ?? '' }}">
+                    <input type="text" name="husband_name" class="form-control account"
+                        value="{{ $user->basicDetail->husband_name ?? '' }}">
                 </div>
             </div>
 
@@ -101,7 +102,7 @@
             <div class="col-6">
                 <div class="form-group">
                     <label>Religion (مذہب)*</label>
-                    <input type="text" name='religion' class="form-control account"  value="{{ $user->basicDetail->religion ?? '' }}">
+                    <input type="text" name='religion' class="form-control account" value="{{ $user->basicDetail->religion ?? '' }}">
                 </div>
             </div>
 
@@ -151,8 +152,8 @@
                     <label>Is Client Dual National? (کیا سائل ڈوئل قومیت رکھتا ہے؟)*</label>
                     <select name="is_client_dual_national" class="form-control" id="is_client_dual_national">
                         <option value="">Select Option</option>
-                        <option value="Yes"  {{ ($user->basicDetail->is_client_dual_national ?? '') == 'Yes' ? 'selected' : '' }} >Yes</option>
-                        <option value="No"  {{ ($user->basicDetail->is_client_dual_national ?? '') == 'No' ? 'selected' : '' }}>No</option>
+                        <option value="Yes" {{ ($user->basicDetail->is_client_dual_national ?? '') == 'Yes' ? 'selected' : '' }}>Yes</option>
+                        <option value="No" {{ ($user->basicDetail->is_client_dual_national ?? '') == 'No' ? 'selected' : '' }}>No</option>
                     </select>
 
                 </div>
@@ -180,7 +181,7 @@
             <div class="col-6">
                 <div class="form-group">
                     <label>Birth Place (مقامِ پیدائش)*</label>
-                    <input type="text"  value="{{ $user->basicDetail->birth_placed ?? '' }}" name='birth_placed' class="form-control account">
+                    <input type="text" value="{{ $user->basicDetail->birth_placed ?? '' }}" name='birth_placed' class="form-control account">
                 </div>
             </div>
 

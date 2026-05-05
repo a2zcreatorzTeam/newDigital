@@ -14,7 +14,7 @@
                          <ul class="navigation justify-content-center">
                              <li class="menu-item-has-children"><a href="#" id="profile_name"><i class="flaticon-user"></i>shoaib nasir</a>
                                  <ul class="sub-menu">        
-                                     <li><a href="{{route('frontend.profile')}}"><i class="flaticon-user"></i> My Profile</a></li>
+                                     <li><a href="{{route('frontend.profileForm')}}"><i class="flaticon-user"></i> My Profile</a></li>
                                      <li><a href="{{route('frontend.forget_password')}}"><i class="flaticon-target"></i> Change Password</a></li>
                                      <li><a href="{{route('frontend.cart')}}"><i class="flaticon-shopping-cart"></i> Abandoned Cart</a></li>
                                      <li><a href="{{route('frontend.logout')}}" class="top-signout-btn">Signout</a></li>

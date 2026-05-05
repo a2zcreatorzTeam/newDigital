@@ -79,6 +79,8 @@ Route::prefix('/')->name('frontend.')->controller(FrontendController::class)->gr
         Route::post('/updateOccupation', 'updateOccupation')->name('updateOccupation');
         Route::post('/updateHealth', 'updateHealth')->name('updateHealth');
 
+        Route::post('policy/user/data/save', 'policyDataSave')->name('policyUserDataSave');
+
 
 
         Route::post('/get/city/data', 'getcityData')->name('getcityData');

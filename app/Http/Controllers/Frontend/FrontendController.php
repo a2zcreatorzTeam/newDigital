@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AddressInfoRequest;
 use App\Http\Requests\BasicDetailRequest;
+use App\Http\Requests\PolicyUserDataRequest;
 use App\Http\Requests\UserHealthRequest;
 use App\Http\Requests\UserOccupationRequest;
 use App\Models\AddressInfo;
@@ -17,11 +18,12 @@ use App\Models\SubClass;
 use App\Models\User;
 use App\Models\UserHealth;
 use App\Models\UserOccupation;
+use App\Models\UserPolicyData;
 use Hash;
 use Illuminate\Auth\Events\Registered;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -200,8 +202,22 @@ class FrontendController extends Controller
     }
     public function dashboard()
     {
+        if (!Auth::check()) {
+            return redirect()->back()->with('error', 'You must log in first before proceeding');
+        }
         $user = User::with('basicDetail', 'AddressInfo', 'occupation', 'health')->where('id', Auth::user()->id)->first();
-        return view('frontend.dashboard',['user'=>$user]);
+        if (
+            !$user->basicDetail ||
+            !$user->AddressInfo ||
+            !$user->occupation ||
+            !$user->health
+        ) {
+            return redirect()
+                ->route('frontend.profileForm')
+                ->with('error', 'Please complete your profile before proceeding!');
+        }
+        $provinces = Provinces::get();
+        return view('frontend.dashboard', ['user' => $user, 'provinces' => $provinces]);
     }
 
     public function profileForm()
@@ -339,5 +355,36 @@ class FrontendController extends Controller
         $city_id = $request->city_id;
         $district = District::where('city_id', $city_id)->get();
         return $district;
+    }
+
+    public function policyDataSave(PolicyUserDataRequest $request)
+    {
+        try {
+            DB::beginTransaction();
+
+            $userId = auth()->id();
+            $data = $request->validated();
+
+
+            $address_info = UserPolicyData::updateOrCreate(
+                ['user_id' => $userId],
+                $data + ['user_id' => $userId]
+            );
+
+            DB::commit();
+
+            // AJAX ke liye success JSON return karein
+            return response()->json([
+                'success' => true,
+                'message' => 'Basic details saved successfully'
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Something went wrong: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }
