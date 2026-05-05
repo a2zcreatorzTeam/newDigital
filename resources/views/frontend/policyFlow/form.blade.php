@@ -15,7 +15,7 @@
              @include('frontend.policyFlow.form.Personal_Details',['user'=>$user])
              @include('frontend.policyFlow.form.basic_Details',['user'=>$user])
              @include('frontend.policyFlow.form.occupation',['user'=>$user])
-             @include('frontend.policyFlow.form.product_detail',['user'=>$user])
+             @include('frontend.policyFlow.form.product_detail',['user'=>$user,'id'=>$id,'product'=>$product])
              @include('frontend.policyFlow.form.health_info',['user'=>$user])
         
          </div>

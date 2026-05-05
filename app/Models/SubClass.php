@@ -22,4 +22,8 @@ class SubClass extends Model
     {
         return $this->belongsTo(MainClass::class, 'class_id', 'id');
     }
+      public function product()
+    {
+        return $this->hasOne(PlanAgeMaturity::class, 'plan_id', 'id');
+    }
 }

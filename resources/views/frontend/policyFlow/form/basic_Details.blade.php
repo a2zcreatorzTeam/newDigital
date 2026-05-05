@@ -35,7 +35,7 @@
 
             <div class="col-md-6 px-0 px-sm-3">
                 <label>Age Nearest Birth-date (عمر)<span class="requi">*</span></label>
-                <input type="text" value="{{$user->basicDetail->age_nearest_date ?? ''}}" name="age_nearest_date" class="form-control account" readonly>
+                <input type="text" id="age_birth" value="{{$user->basicDetail->age_nearest_date ?? ''}}" name="age_nearest_date" class="form-control account" readonly>
             </div>
 
             <div class="col-md-6 px-0 px-sm-3">

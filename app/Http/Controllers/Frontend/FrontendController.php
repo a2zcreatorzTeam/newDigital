@@ -13,6 +13,7 @@ use App\Models\BasicDetail;
 use App\Models\City;
 use App\Models\District;
 use App\Models\MainClass;
+use App\Models\PlanAgeMaturity;
 use App\Models\Provinces;
 use App\Models\SubClass;
 use App\Models\User;
@@ -20,8 +21,8 @@ use App\Models\UserHealth;
 use App\Models\UserOccupation;
 use App\Models\UserPolicyData;
 use Hash;
-use Illuminate\Auth\Events\Registered;
 
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
@@ -200,8 +201,9 @@ class FrontendController extends Controller
     {
         return view('frontend.policy-form');
     }
-    public function dashboard()
+    public function dashboard(Request $request, $id)
     {
+
         if (!Auth::check()) {
             return redirect()->back()->with('error', 'You must log in first before proceeding');
         }
@@ -216,8 +218,10 @@ class FrontendController extends Controller
                 ->route('frontend.profileForm')
                 ->with('error', 'Please complete your profile before proceeding!');
         }
+        $product = SubClass::with('product')->where('id', $id)->first();
+        
         $provinces = Provinces::get();
-        return view('frontend.dashboard', ['user' => $user, 'provinces' => $provinces]);
+        return view('frontend.dashboard', ['user' => $user, 'provinces' => $provinces, 'product' => $product,'id'=>$id]);
     }
 
     public function profileForm()
@@ -386,5 +390,10 @@ class FrontendController extends Controller
                 'message' => 'Something went wrong: ' . $e->getMessage()
             ], 500);
         }
+    }
+
+    public function getPlanData(Request $request){
+          $data=PlanAgeMaturity::with('surrendervalues')->where('paln_id',$request->product_id)->where('age',$request->age)->first();
+         
     }
 }

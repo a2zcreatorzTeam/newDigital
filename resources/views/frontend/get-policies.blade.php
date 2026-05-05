@@ -7,7 +7,7 @@
                  <div class="box" id="box3">
                      <div class="services-item shine-animate-item">
                          <div class="services-thumb">
-                             <a href="{{ route('frontend.dashboard') }}" class="shine-animate"><img src="{{ asset('storage/'.$data->logo) }}" alt="image"></a>
+                             <a href="{{ route('frontend.dashboard',[$data->id]) }}" class="shine-animate"><img src="{{ asset('storage/'.$data->logo) }}" alt="image"></a>
                          </div>
                          <div class="services-content">
                              <div class="icon">

@@ -30,7 +30,7 @@
                 </td>
 
                 <td class="align-middle">
-                    <img src="{{ asset($item->logo) }}"
+                    <img src="{{ asset('storage/'.$item->logo) }}"
                         width="60"
                         height="60"
                         style="object-fit: cover; border-radius: 6px;">
