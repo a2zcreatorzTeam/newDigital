@@ -12,5 +12,8 @@ class City extends Model
     protected $table = 'cities';
      protected $guarded = ['id'];
 
+     public function province(){
+        return $this->hasOne(Provinces::class, 'id', 'province_id');
+     }
  
 }
