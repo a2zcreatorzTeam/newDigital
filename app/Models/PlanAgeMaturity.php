@@ -18,6 +18,6 @@ class PlanAgeMaturity extends Model
     // }
       public function surrendervalues()
     {
-        return $this->hasOne(SurrenderValues::class, 'plan_age_id', 'id');
+        return $this->hasMany(SurrenderValues::class, 'plan_age_id', 'id');
     }
 }

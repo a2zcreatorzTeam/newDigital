@@ -6,7 +6,7 @@
             <div class="col-6">
                 <div class="form-group">
                     <label for="">Life Proposed Full Name (بیمہ زندگی کے لئے مجوزہ کا پورا نام)</label>
-                    <input type="text" value="{{$user->basicDetail?->life_proposed_full_name ?? ''}}" name="life_proposed_full_name" class="form-control account">
+                    <input type="text" value="{{$user->basicDetail?->life_proposed_full_name ?? ''}}" name="life_proposed_full_name" class="form-control account" required>
                     @error('life_proposed_full_name')
                     <div class="invalid-feedback" style="display: block;">
                         {{ $message }}
@@ -17,14 +17,14 @@
             <div class="col-6">
                 <div class="form-group">
                     <label for="">Mobile Number Personal (ذاتی موبائل نمبر)</label>
-                    <input type="text" value="{{$user->basicDetail->mobile_number ?? ''}}" name="mobile_number" class="form-control account" placeholder="0321-6905568">
+                    <input type="text" value="{{$user->basicDetail->mobile_number ?? ''}}" name="mobile_number" class="form-control account" placeholder="0321-6905568" required>
                 </div>
             </div>
 
             <div class="col-6">
                 <div class="form-group">
                     <label for="">CNIC / B-FORM NO (قومی شناختی کارڈ نمبر)</label>
-                    <input type="text" name="cnic_number" value="{{$user->basicDetail->cnic_number ?? ''}}" class="form-control account">
+                    <input type="text" required name="cnic_number" value="{{$user->basicDetail->cnic_number ?? ''}}" class="form-control account">
                 </div>
             </div>
             <div class="col-6">
@@ -32,7 +32,7 @@
                     <label for="">Cnic Issue Date (شناختی کارڈ جاری کرنے کی تاریخ)</label>
                     <input type="date"
                         value="{{$user->basicDetail->cnic_issue_date ?? ''}}"
-                        name="cnic_issue_date"
+                        name="cnic_issue_date" required
                         class="form-control account">
                 </div>
 
@@ -40,14 +40,14 @@
             <div class="col-6">
                 <div class="form-group">
                     <label for="">Cnic Expiry Date (شناختی کارڈ کی میعاد ختم ہونے کی تاریخ)</label>
-                    <input type="date" name="cnic_expiry_date" value="{{$user->basicDetail->cnic_expiry_date ?? ''}}" class="form-control account">
+                    <input type="date" required name="cnic_expiry_date" value="{{$user->basicDetail->cnic_expiry_date ?? ''}}" class="form-control account">
                 </div>
 
             </div>
             <div class="col-6">
                 <div class="form-group">
                     <label for="">Date Of Birth (تاریخِ پیدائش)</label>
-                    <input type="date" name="date_of_birth" class="form-control account" value="{{$user->basicDetail->date_of_birth ?? ''}}">
+                    <input type="date" name="date_of_birth" class="form-control account" value="{{$user->basicDetail->date_of_birth ?? ''}}" required>
                 </div>
 
             </div>
@@ -57,7 +57,7 @@
             <div class="col-6">
                 <div class="form-group">
                     <label>Age Nearest Birth-date (عمر)*</label>
-                    <input type="text" id="age_birth" value="{{$user->basicDetail->age_nearest_date ?? ''}}" readonly name="age_nearest_date" class="form-control account">
+                    <input type="text" required id="age_birth" value="{{$user->basicDetail->age_nearest_date ?? ''}}" readonly name="age_nearest_date" class="form-control account">
                 </div>
             </div>
 
@@ -65,7 +65,7 @@
             <div class="col-6">
                 <div class="form-group">
                     <label>Gender/Sex (جنس)*</label>
-                    <select name='gender' class="form-control">
+                    <select name='gender' class="form-control" required>
                         <option value="">Select Gender</option>
                         <option value="Male" {{ ($user->basicDetail->gender ?? '') == 'Male' ? 'selected' : '' }}>Male</option>
                         <option value="Female" {{ ($user->basicDetail->gender ?? '') == 'Female' ? 'selected' : '' }}>Female</option>
@@ -77,7 +77,7 @@
             <div class="col-6">
                 <div class="form-group">
                     <label>Mother Maiden Name (والدہ کا خاندانی نام)*</label>
-                    <input type="text" value="{{ $user->basicDetail->mother_maiden_name ?? '' }}" name='mother_maiden_name' class="form-control account">
+                    <input required type="text" value="{{ $user->basicDetail->mother_maiden_name ?? '' }}" name='mother_maiden_name' class="form-control account">
                 </div>
             </div>
 
@@ -85,7 +85,7 @@
             <div class="col-6">
                 <div class="form-group">
                     <label>Father’s Name of Life Proposed (مجوزہ بیمہ کے والد کا نام)*</label>
-                    <input type="text" name='father_name' class="form-control account" value="{{ $user->basicDetail->father_name ?? '' }}">
+                    <input required type="text" name='father_name' class="form-control account" value="{{ $user->basicDetail->father_name ?? '' }}">
                 </div>
             </div>
 
@@ -93,7 +93,7 @@
             <div class="col-6">
                 <div class="form-group">
                     <label>Husband Name of Life Proposed (بیمہ کنندہ کے شوہر کا نام)*</label>
-                    <input type="text" name="husband_name" class="form-control account"
+                    <input type="text" required name="husband_name" class="form-control account"
                         value="{{ $user->basicDetail->husband_name ?? '' }}">
                 </div>
             </div>
@@ -102,7 +102,7 @@
             <div class="col-6">
                 <div class="form-group">
                     <label>Religion (مذہب)*</label>
-                    <input type="text" name='religion' class="form-control account" value="{{ $user->basicDetail->religion ?? '' }}">
+                    <input type="text" required name='religion' class="form-control account" value="{{ $user->basicDetail->religion ?? '' }}">
                 </div>
             </div>
 
@@ -110,7 +110,7 @@
             <div class="col-6">
                 <div class="form-group">
                     <label>Email Address (ای میل ایڈریس)*</label>
-                    <input type="email" name="email" class="form-control account" value="{{ $user->basicDetail->email ?? '' }}">
+                    <input type="email" name="email" class="form-control required account" value="{{ $user->basicDetail->email ?? '' }}">
                 </div>
             </div>
 
@@ -118,7 +118,7 @@
             <div class="col-6">
                 <div class="form-group">
                     <label>Age Proof (عمر کا ثبوت)*</label>
-                    <input type="text" name='age_proof' class="form-control account" value="{{ $user->basicDetail->age_proof ?? '' }}">
+                    <input type="text" name='age_proof' required class="form-control account" value="{{ $user->basicDetail->age_proof ?? '' }}">
                 </div>
             </div>
 
@@ -142,7 +142,7 @@
             <div class="col-6">
                 <div class="form-group">
                     <label>Fax No (فیکس نمبر)*</label>
-                    <input type="text" value="{{ $user->basicDetail->fax_number ?? '' }}" name='fax_number' class="form-control account">
+                    <input type="text" required value="{{ $user->basicDetail->fax_number ?? '' }}" name='fax_number' class="form-control account">
                 </div>
             </div>
 
@@ -150,7 +150,7 @@
             <div class="col-6">
                 <div class="form-group">
                     <label>Is Client Dual National? (کیا سائل ڈوئل قومیت رکھتا ہے؟)*</label>
-                    <select name="is_client_dual_national" class="form-control" id="is_client_dual_national">
+                    <select name="is_client_dual_national" required class="form-control" id="is_client_dual_national">
                         <option value="">Select Option</option>
                         <option value="Yes" {{ ($user->basicDetail->is_client_dual_national ?? '') == 'Yes' ? 'selected' : '' }}>Yes</option>
                         <option value="No" {{ ($user->basicDetail->is_client_dual_national ?? '') == 'No' ? 'selected' : '' }}>No</option>
@@ -165,7 +165,7 @@
             <div class="col-6">
                 <div class="form-group">
                     <label>Primary Nationality (قومیت)*</label>
-                    <input type="text" value="{{ $user->basicDetail->primary_nationality ?? '' }}" name='primary_nationality' class="form-control account">
+                    <input type="text" required value="{{ $user->basicDetail->primary_nationality ?? '' }}" name='primary_nationality' class="form-control account">
                 </div>
             </div>
 
@@ -181,7 +181,7 @@
             <div class="col-6">
                 <div class="form-group">
                     <label>Birth Place (مقامِ پیدائش)*</label>
-                    <input type="text" value="{{ $user->basicDetail->birth_placed ?? '' }}" name='birth_placed' class="form-control account">
+                    <input type="text" required value="{{ $user->basicDetail->birth_placed ?? '' }}" name='birth_placed' class="form-control account">
                 </div>
             </div>
 
@@ -189,7 +189,7 @@
             <div class="col-6">
                 <div class="form-group">
                     <label>Proposer & Life Proposed are same?*</label>
-                    <select name="is_same_person" class="form-control">
+                    <select name="is_same_person" required class="form-control">
                         <option value="">Select Option</option>
                         <option value="Yes" {{ ($user->basicDetail->is_same_person ?? '') == 'Yes' ? 'selected' : '' }}>Yes</option>
                         <option value="No" {{ ($user->basicDetail->is_same_person ?? '') == 'No' ? 'selected' : '' }}>No</option>

@@ -52,7 +52,7 @@ class PolicyUserDataRequest extends FormRequest
             'husband_name' => 'nullable|string|max:100',
 
             'religion' => 'required|string|max:50',
-            'email' => 'nullable|email',
+            'user_email' => 'required|email',
 
             // ===== Contact =====
             'phone_number_office' => 'nullable|string|max:20',

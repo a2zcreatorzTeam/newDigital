@@ -219,9 +219,9 @@ class FrontendController extends Controller
                 ->with('error', 'Please complete your profile before proceeding!');
         }
         $product = SubClass::with('product')->where('id', $id)->first();
-        
+
         $provinces = Provinces::get();
-        return view('frontend.dashboard', ['user' => $user, 'provinces' => $provinces, 'product' => $product,'id'=>$id]);
+        return view('frontend.dashboard', ['user' => $user, 'provinces' => $provinces, 'product' => $product, 'id' => $id]);
     }
 
     public function profileForm()
@@ -367,20 +367,38 @@ class FrontendController extends Controller
             DB::beginTransaction();
 
             $userId = auth()->id();
-            $data = $request->validated();
+            $data   = $request->validated();
+            $policy_id = session('policy_id');
 
+            $policy = null;
 
-            $address_info = UserPolicyData::updateOrCreate(
-                ['user_id' => $userId],
-                $data + ['user_id' => $userId]
-            );
+            if ($policy_id) {
+                $policy = UserPolicyData::where('user_id', $userId)
+                    ->where('policy_id', $policy_id)
+                    ->first();
+            }
+
+            // ✅ If found → UPDATE
+            if ($policy) {
+                $policy->update($data);
+            } else {
+                do {
+                    $policy_id = 'POL-' . date('Y') . '-' . random_int(100000, 999999);
+                    session(['policy_id' => $policy_id]);
+                } while (UserPolicyData::where('policy_id', $policy_id)->exists());
+                $data['status']='Incart';
+                $policy = UserPolicyData::create([
+                    'user_id'   => $userId,
+                    'policy_id' => $policy_id,
+                ] + $data);
+            }
 
             DB::commit();
 
-            // AJAX ke liye success JSON return karein
             return response()->json([
-                'success' => true,
-                'message' => 'Basic details saved successfully'
+                'success'   => true,
+                'message'   => 'Policy saved successfully',
+                'policy_id' => $policy->policy_id
             ]);
         } catch (\Exception $e) {
             DB::rollBack();
@@ -392,8 +410,34 @@ class FrontendController extends Controller
         }
     }
 
-    public function getPlanData(Request $request){
-          $data=PlanAgeMaturity::with('surrendervalues')->where('paln_id',$request->product_id)->where('age',$request->age)->first();
-         
+    public function getPlanData(Request $request)
+    {
+        $plan = PlanAgeMaturity::with('surrendervalues')
+            ->where('plan_id', $request->product_id)
+            ->where('age', $request->age)
+            ->first();
+
+        return [
+            'plan' => $plan,
+            'surrender_values' => $plan?->surrendervalues ?? []
+        ];
+    }
+
+    public function getSumAssured(Request $request)
+    {
+        $plan = PlanAgeMaturity::with('surrendervalues')
+            ->where('plan_id', $request->product_id)
+            ->where('age', $request->age)
+            ->first();
+
+        if (!$plan) {
+            return 0;
+        }
+
+        $surrender = $plan->surrendervalues
+            ->where('duration', $request->term_value)
+            ->first();
+
+        return $surrender?->amount ?? 0;
     }
 }

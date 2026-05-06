@@ -81,6 +81,7 @@ Route::prefix('/')->name('frontend.')->controller(FrontendController::class)->gr
         Route::post('/updateHealth', 'updateHealth')->name('updateHealth');
         Route::post('policy/user/data/save', 'policyDataSave')->name('policyUserDataSave');
         Route::post('get/plan/data', 'getPlanData')->name('getPlanData');
+        Route::post('get/sum/aasured', 'getSumAssured')->name('getSumAssured');
 
 
 
