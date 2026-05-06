@@ -1,17 +1,19 @@
 <?php
 
 use App\Http\Controllers\backend\AuthController;
+use App\Http\Controllers\backend\CityController;
 use App\Http\Controllers\backend\DashboardController;
+use App\Http\Controllers\backend\DistrictController;
 use App\Http\Controllers\backend\MainClassController;
 use App\Http\Controllers\backend\RoleController;
 use App\Http\Controllers\backend\SubClassController;
 use App\Http\Controllers\backend\UserController;
 use App\Http\Controllers\Frontend\FrontendController;
+use App\Models\District;
 use App\Models\User;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
-
 use Illuminate\Support\Facades\Route;
 
 
@@ -28,6 +30,9 @@ Auth::routes(['verify' => true]);
 Route::group(['middleware' => ['user.role']], function () {
         Route::resource('roles', RoleController::class);
         Route::resource('users', UserController::class);
+        Route::resource('city', CityController::class);
+        Route::resource('district', DistrictController::class);
+
         Route::prefix('admin/dashboard')->name('admin.')->controller(DashboardController::class)->group(function () {
                 Route::get('/', 'dashboard')->name('dashboard');
         });

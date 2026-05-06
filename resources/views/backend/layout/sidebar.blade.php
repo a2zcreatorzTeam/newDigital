@@ -36,6 +36,21 @@
               </a>
           </div>
           @endcan
+          @can('city-list')
+          <div class="nav-item" data-target="manager">
+              <a href="{{route('city.index')}}">
+                 <i class="fa-solid fa-layer-group"></i> City Management
+              </a>
+          </div>
+          @endcan
+          @can('district-list')
+          <div class="nav-item" data-target="manager">
+              <a href="{{route('district.index')}}">
+                 <i class="fa-solid fa-layer-group"></i> District Management
+              </a>
+          </div>
+          @endcan
+          
 
       </nav>
 
