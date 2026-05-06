@@ -4,17 +4,17 @@
 
 <section id="section-dashboard">
     <div class="flex justify-between items-center mb-4">
-        <h1 class="font-bold text-dark" style="font-size: 1.5rem;">Create City</h1>
+        <h1 class="font-bold text-dark" style="font-size: 1.5rem;">Create District</h1>
     </div>
 
     <div class="card">
         <div class="flex justify-between items-center mb-4">
-            <h3 class="font-semibold text-dark" style="font-size: 1.1rem;">Cities</h3>
-            @can('city-list')
-            <a class="btn  btn-icon" style="background-color:#ff5733;" href="{{route('city.index')}}">City List</a>
+            <h3 class="font-semibold text-dark" style="font-size: 1.1rem;">Districts</h3>
+            @can('district-list')
+            <a class="btn  btn-icon" style="background-color:#ff5733;" href="{{route('district.index')}}">District List</a>
             @endcan
          </div>
-        <form method="POST" action="{{ route('city.store') }}">
+        <form method="POST" action="{{ route('district.store') }}">
             @csrf
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-12">
@@ -28,14 +28,14 @@
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-12">
                     <div class="form-group">
-                        <strong>Provinces:</strong>
-                        <select name="province" class="form-control">
-                            <option value=""> Select Province</option>
-                        @foreach($provinces as $value)
+                        <strong>City:</strong>
+                        <select name="city_id" class="form-control">
+                            <option value=""> Select City</option>
+                        @foreach($cities as $value)
                             <option value="{{ $value->id }}">{{ $value->name }}</option>
                         @endforeach
                         </select>
-                        @error('province')
+                        @error('city_id')
                             <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>

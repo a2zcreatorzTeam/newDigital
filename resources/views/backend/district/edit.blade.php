@@ -4,23 +4,25 @@
 
 <section id="section-dashboard">
     <div class="flex justify-between items-center mb-4">
-        <h1 class="font-bold text-dark" style="font-size: 1.5rem;">Create City</h1>
+        <h1 class="font-bold text-dark" style="font-size: 1.5rem;">Edit District</h1>
     </div>
 
     <div class="card">
         <div class="flex justify-between items-center mb-4">
-            <h3 class="font-semibold text-dark" style="font-size: 1.1rem;">Cities</h3>
-            @can('city-list')
-            <a class="btn  btn-icon" style="background-color:#ff5733;" href="{{route('city.index')}}">City List</a>
+            <h3 class="font-semibold text-dark" style="font-size: 1.1rem;">Districts</h3>
+            @can('district-list')
+            <a class="btn  btn-icon" style="background-color:#ff5733;" href="{{route('district.index')}}">District List</a>
             @endcan
-         </div>
-        <form method="POST" action="{{ route('city.store') }}">
+        </div>
+        <form method="POST" action="{{ route('district.update', $district->id) }}">
             @csrf
+            @method('PUT')
+
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-12">
                     <div class="form-group">
                         <strong>Name:</strong>
-                        <input type="text" name="name" placeholder="Name" class="form-control">
+                        <input type="text" name="name" placeholder="Name" class="form-control" value="{{ $district->name }}">
                         @error('name')
                             <small class="text-danger">{{ $message }}</small>
                         @enderror
@@ -28,14 +30,14 @@
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-12">
                     <div class="form-group">
-                        <strong>Provinces:</strong>
-                        <select name="province" class="form-control">
-                            <option value=""> Select Province</option>
-                        @foreach($provinces as $value)
-                            <option value="{{ $value->id }}">{{ $value->name }}</option>
+                        <strong>City:</strong>
+                        <select name="city_id" class="form-control">
+                            <option value=""> Select City</option>
+                        @foreach($cities as $value)
+                            <option value="{{ $value->id }}" {{ ($value->id == $district->city_id) ? 'selected' : '' }}>{{ $value->name }}</option>
                         @endforeach
                         </select>
-                        @error('province')
+                        @error('city_id')
                             <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
