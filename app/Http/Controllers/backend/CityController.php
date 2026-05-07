@@ -26,15 +26,34 @@ class CityController extends Controller
          $this->middleware('permission:city-delete', ['only' => ['destroy']]);
     }
     
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index(Request $request): View
+    public function index(Request $request)
     {
-        $cities = City::with('province')->orderBy('id','ASC')->paginate(10);
-        return view('backend.city.index',compact('cities'));
+        $query = City::with('province');
+        
+        //provincefilter
+        if ($request->province) {
+            $query->where('province_id', $request->province);
+        }
+
+        //city_name filter
+        if ($request->city_name) {
+            $query->where('name', 'like', '%' . $request->city_name . '%');
+        }
+        // Sorting
+        $sortBy = $request->sorting ?? 'id';
+        $direction = $request->direction ?? 'asc';
+
+        $query->orderBy($sortBy, $direction);
+
+        $cities = $query->paginate($request->qty ?? 10);
+        
+        //AJAX RESPONSE (ONLY ROWS)
+        if ($request->ajax()) {
+            return view('backend.city.table', compact('cities'))->render();
+        }
+        $provinces = Provinces::get();
+
+        return view('backend.city.index',compact('cities','provinces'));
     }
     
     /**

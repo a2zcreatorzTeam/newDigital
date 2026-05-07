@@ -15,47 +15,99 @@
             <a class="btn  btn-icon" style="background-color:#ff5733;" href="{{route('district.create')}}">Add New District</a>
              @endcan
         </div>
-        <div class="table-responsive">
-            <table>
-                <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Name</th>
-                        <th>City</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($districts as $key => $district)
-                    <tr>
-                        <td>{{ $loop->iteration}}</td>
-                        <td>{{ $district->name }}</td>
-                        <td>{{ $district->city->name }}</td>
-                        <td>
-                            @can('district-edit')
-                            <a class="btn btn-primary btn-sm" href="{{ route('district.edit',$district->id) }}"><i class="fa-solid fa-pen-to-square"></i> Edit</a>
-                            @endcan
+        <div class="bg-light p-3">
 
-                            @can('district-delete')
-                            <form method="POST" action="{{ route('district.destroy', $district->id) }}" style="display:inline" class="delete-form">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm">
-                                    <i class="fa-solid fa-trash"></i> Delete
-                                </button>
-                            </form>
-                            @endcan
-                        </td>
-                    </tr>
-                    @endforeach
+            <!-- FILTERS -->
+            <div class="row mb-3">
 
-                </tbody>
-            </table>
-            {{ $districts->links() }}
+                <div class="col-md-3">
+                    <select id="city" class="form-control">
+                        <option value="">Select City</option>
+                        @foreach($cities as $p)
+                            <option value="{{ $p->id }}">{{ $p->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <input type="text" id="name" class="form-control" placeholder="District name">
+                </div>
+
+                <div class="col-md-2">
+                    <select id="sorting" class="form-control">
+                        <option value="id">ID</option>
+                        <option value="name">Name</option>
+                    </select>
+                </div>
+
+                <div class="col-md-2">
+                    <select id="direction" class="form-control">
+                        <option value="asc">ASC</option>
+                        <option value="desc" selected>DESC</option>
+                    </select>
+                </div>
+
+                <div class="col-md-2">
+                    <select id="qty" class="form-control">
+                        <option value="10">10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <!-- AJAX CONTENT -->
+            <div id="table_data">
+                @include('backend.district.table')
+            </div>
+
         </div>
     </div>
 </section>
 
 
 </main>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+<script>
+$(document).ready(function () {
+
+    function loadData(page = 1) {
+
+        $.ajax({
+            url: "{{ route('district.index') }}?page=" + page,
+            type: "GET",
+            data: {
+                city: $("#city").val(),
+                name: $("#name").val(),
+                sorting: $("#sorting").val(),
+                direction: $("#direction").val(),
+                qty: $("#qty").val(),
+            },
+            success: function (data) {
+                $("#table_data").html(data);
+            }
+        });
+
+    }
+
+    // filters
+    $("#city, #sorting, #direction, #qty").on("change", function () {
+        loadData();
+    });
+
+    $("#name").on("keyup", function () {
+        loadData();
+    });
+
+    // pagination
+    $(document).on("click", ".pagination a", function (e) {
+        e.preventDefault();
+        let page = $(this).attr("href").split("page=")[1];
+        loadData(page);
+    });
+
+});
+</script>
 @endsection

@@ -65,7 +65,7 @@ class UserPolicyController extends Controller
         
         //AJAX RESPONSE (ONLY ROWS)
         if ($request->ajax()) {
-            return view('backend.userPolicy.rows', compact('data'))->render();
+            return view('backend.userPolicy.table', compact('data'))->render();
         }
         return view('backend.userPolicy.list', compact('data','Classes'));
     }

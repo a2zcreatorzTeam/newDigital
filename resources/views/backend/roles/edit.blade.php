@@ -29,12 +29,15 @@
                 <div class="col-xs-12 col-sm-12 col-md-12">
                     <div class="form-group">
                         <strong>Permission:</strong>
-                        <br />
-                        @foreach($permission as $value)
-                        <label><input type="checkbox" name="permission[{{$value->id}}]" value="{{$value->id}}" class="name" {{ in_array($value->id, $rolePermissions) ? 'checked' : ''}}>
-                            {{ $value->name }}</label>
-                        <br />
-                        @endforeach
+                        <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top:10px;">
+                            @foreach($permission as $value)
+                            <label style="background:#f1f1f1; padding:6px 12px; border-radius:20px; cursor:pointer;">
+                                <input type="checkbox" name="permission[{{$value->id}}]" value="{{$value->id}}"
+                                {{ in_array($value->id, $rolePermissions) ? 'checked' : ''}} style="margin-right:5px;">
+                                {{ $value->name }}
+                            </label>
+                            @endforeach
+                        </div>
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-12 text-center">
