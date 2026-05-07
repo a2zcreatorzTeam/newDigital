@@ -87,8 +87,7 @@ Route::prefix('/')->name('frontend.')->controller(FrontendController::class)->gr
         Route::post('policy/user/data/save', 'policyDataSave')->name('policyUserDataSave');
         Route::post('get/plan/data', 'getPlanData')->name('getPlanData');
         Route::post('get/sum/aasured', 'getSumAssured')->name('getSumAssured');
-
-
+        Route::get('payment/success', 'successPayment')->name('successPayment');
 
         Route::post('/get/city/data', 'getcityData')->name('getcityData');
         Route::post('/get/district/data', 'getDistrictData')->name('getDistrictData');

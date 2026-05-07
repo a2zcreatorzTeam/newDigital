@@ -36,7 +36,11 @@ class FrontendController extends Controller
 {
     public function home()
     {
+        if (session()->has('policy_id')) {
+            session()->forget('policy_id');
+        }
         $category = MainClass::where('status', 1)->get();
+
         return view('frontend.index')->with(['category' => $category]);
     }
 
@@ -203,6 +207,10 @@ class FrontendController extends Controller
     }
     public function dashboard(Request $request, $id)
     {
+
+        if (session()->has('policy_id')) {
+            session()->forget('policy_id');
+        }
 
         if (!Auth::check()) {
             return redirect()->back()->with('error', 'You must log in first before proceeding');
@@ -386,7 +394,7 @@ class FrontendController extends Controller
                     $policy_id = 'POL-' . date('Y') . '-' . random_int(100000, 999999);
                     session(['policy_id' => $policy_id]);
                 } while (UserPolicyData::where('policy_id', $policy_id)->exists());
-                $data['status']='Incart';
+                $data['status'] = 'Incart';
                 $policy = UserPolicyData::create([
                     'user_id'   => $userId,
                     'policy_id' => $policy_id,
@@ -439,5 +447,21 @@ class FrontendController extends Controller
             ->first();
 
         return $surrender?->amount ?? 0;
+    }
+
+
+
+
+
+
+    public function successPayment(Request $request)
+    {
+        $policy_id = session('policy_id');
+
+        if ($policy_id) {
+            $policy = UserPolicyData::with('product')->where('policy_id', $policy_id)
+                ->first();
+        }
+        return view('frontend.payment.success', ['policy' => $policy]);
     }
 }

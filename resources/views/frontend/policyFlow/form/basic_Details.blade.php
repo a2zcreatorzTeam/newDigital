@@ -59,7 +59,7 @@
 
             <div class="col-md-6 px-0 px-sm-3">
                 <label>Husband Name of Life Proposed (بیمہ کنندہ کے شوہر کا نام)<span class="requi">*</span></label>
-                <input required type="text" value="{{ $user->basicDetail->husband_name ?? '' }}" name="husband_name" class="form-control account">
+                <input  type="text" value="{{ $user->basicDetail->husband_name ?? '' }}" name="husband_name" class="form-control account">
             </div>
 
             <div class="col-md-6 px-0 px-sm-3">
@@ -69,7 +69,7 @@
 
             <div class="col-md-6 px-0 px-sm-3">
                 <label>Email Address (ای میل ایڈریس)<span class="requi">*</span></label>
-                <input required type="email" value="{{ $user->basicDetail->user_email ?? '' }}" name="user_email" class="form-control account">
+                <input required type="email" value="{{ $user->basicDetail->email ?? '' }}" name="user_email" class="form-control account">
             </div>
 
             <div class="col-md-6 px-0 px-sm-3">

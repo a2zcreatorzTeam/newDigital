@@ -22,7 +22,7 @@
      </div>
 
      <input type="button" name="next" class="next action-button" id='user_details_submited' value="Continue" />
-     <input type="button" name="previous" class="previous action-button-previous" value="Previous" />
+  
  </fieldset>
 
 

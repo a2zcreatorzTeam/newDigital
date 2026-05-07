@@ -10,7 +10,10 @@ class UserPolicyData extends Model
     use HasFactory;
 
     protected $table = 'user_personal_policy_data';
-     protected $guarded = ['id'];
+    protected $guarded = ['id'];
 
- 
+       public function product()
+    {
+        return $this->hasOne(SubClass::class, 'id', 'plan');
+    }
 }
