@@ -9,7 +9,7 @@
 
                         <div class="col-md-4">
                             <label>Policy Category</label>
-                            <select name="" id="main_class" class="form-control">
+                            <select name="" id="plan" class="form-control">
                                 <option value="">Select Category</option>
                                 @foreach ($Classes as $item)
                                 <option value="{{ $item->id }}">{{ $item->name }}</option>
@@ -105,7 +105,7 @@
                 }
             });
         }
-        $('body').on('change', '#sorting, #direction, #qty, #main_class', function () {
+        $('body').on('change', '#sorting, #direction, #qty, #plan', function () {
             filter_data();
         });
 
