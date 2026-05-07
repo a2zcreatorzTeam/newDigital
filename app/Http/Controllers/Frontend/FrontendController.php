@@ -213,7 +213,7 @@ class FrontendController extends Controller
         }
 
         if (!Auth::check()) {
-            return redirect()->back()->with('error', 'You must log in first before proceeding');
+            return redirect()->back()->with('info', 'You must log in first before proceeding');
         }
         $user = User::with('basicDetail', 'AddressInfo', 'occupation', 'health')->where('id', Auth::user()->id)->first();
         if (
@@ -224,7 +224,7 @@ class FrontendController extends Controller
         ) {
             return redirect()
                 ->route('frontend.profileForm')
-                ->with('error', 'Please complete your profile before proceeding!');
+                ->with('info', 'Please complete your profile before proceeding!');
         }
         $product = SubClass::with('product')->where('id', $id)->first();
 

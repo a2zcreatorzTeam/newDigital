@@ -8,6 +8,7 @@ use App\Http\Controllers\backend\MainClassController;
 use App\Http\Controllers\backend\RoleController;
 use App\Http\Controllers\backend\SubClassController;
 use App\Http\Controllers\backend\UserController;
+use App\Http\Controllers\backend\UserPolicyController;
 use App\Http\Controllers\Frontend\FrontendController;
 use App\Models\District;
 use App\Models\User;
@@ -55,6 +56,10 @@ Route::group(['middleware' => ['user.role']], function () {
                 Route::put('/update/{id}', 'update')->name('update');
                 Route::delete('/destroy/{id}', 'destroy')->name('destroy');
                 Route::get('/toggleStatus/{id}', 'toggleStatus')->name('toggleStatus');
+        });
+        Route::prefix('admin/dashboard/userPolicy')->name('user.policy.')->controller(UserPolicyController::class)->group(function () {
+                Route::get('/list', 'allUserPolicyList')->name('list');
+                Route::get('/policyDetail/{id}', 'policy_detail')->name('policyDetail');
         });
 });
 
@@ -112,12 +117,12 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
 
 Route::get('/test-email', function () {
 
-    $toEmail = "shoaibnasir315@gmail.com";
+        $toEmail = "shoaibnasir315@gmail.com";
 
-    Mail::raw('This is a test email from Laravel web route.', function ($message) use ($toEmail) {
-        $message->to($toEmail)
-                ->subject('Test Email');
-    });
+        Mail::raw('This is a test email from Laravel web route.', function ($message) use ($toEmail) {
+                $message->to($toEmail)
+                        ->subject('Test Email');
+        });
 
-    return "Test email sent successfully!";
+        return "Test email sent successfully!";
 });
