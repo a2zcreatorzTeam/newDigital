@@ -18,11 +18,11 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class="breadcrumb__content">
-                        <h2 class="title">Accidental & Indemnity Product (150K Coverage)</h2>
+                        <h2 class="title">{{ $product->name }}</h2>
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="products.php">Products</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">Accidental & Indemnity Product (150K Coverage)</li>
+                                <li class="breadcrumb-item active" aria-current="page">{{ $product->name }}</li>
                             </ol>
                         </nav>
                     </div>
@@ -49,24 +49,27 @@
                         <li class="active fa-regular fa-file">
                             <p class="foorm-font">Upload <br>Information</p>
                         </li>
-                        <li class="fa-brands fa-codepen">
+                        <!-- <li class="fa-brands fa-codepen">
                             <p class="foorm-font">Choose <br>Product</p>
-                        </li>
+                        </li> -->
+
                         <li class="fa-regular fa-file">
-                            <p class="foorm-font">Upload info & <br>Documents</p>
+                            <p class="foorm-font">Payment</p>
                         </li>
-                        <li class="fa-regular fa-credit-card">
+                        
+                        <!-- <li class="fa-regular fa-credit-card">
                             <p class="foorm-font">Make <br>Payment</p>
                         </li>
+
                         <li class="fa-regular fa-square-check">
                             <p class="foorm-font">Summary <br>Details</p>
-                        </li>
+                        </li> -->
                     </ul>
                     <div class="progress">
                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
                     </div> <br> <!-- fieldsets -->
                     <!-- Upload Information -->
-                    @include('frontend.policyFlow.form',['user'=>$user])
+                    @include('frontend.policyFlow.form',['user'=>$user,'product'=>$product])
                     <!-- Choose Product -->
                     @include('frontend.policyFlow.step2',['user'=>$user])
                     <!-- Upload info & Documents -->

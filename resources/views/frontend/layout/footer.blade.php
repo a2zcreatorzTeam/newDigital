@@ -151,26 +151,33 @@
 
 <script>
     @if(session('success'))
-        Swal.fire({
-            icon: 'success',
-            title: 'Success',
-            text: "{{ session('success') }}",
-        });
+    Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: "{{ session('success') }}",
+    });
+    @endif
+    @if(session('info'))
+    Swal.fire({
+        icon: 'info',
+        title: 'Info',
+        text: "{{ session('info') }}",
+    });
     @endif
 
     @if(session('error'))
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: "{{ session('error') }}",
-        });
+    Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: "{{ session('error') }}",
+    });
     @endif
 </script>
 
 <script>
     const isLoggedIn = @json(Auth::check());
     console.log(isLoggedIn);
-    
+
 
     if (isLoggedIn) {
         const user = @json(Auth::user());

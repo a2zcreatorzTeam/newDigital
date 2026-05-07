@@ -117,7 +117,7 @@
                                                     <div>
                                                         <div><label>CNIC Number<span class="requi">*</span></label>
                                                             <div class="jbl-field">
-                                                                <input type="text" name="cnic_number" placeholder="Enter CNIC Number" class="jbl-dynamic-input" required>
+                                                                <input type="text"  placeholder="Enter CNIC Number" class="jbl-dynamic-input" required>
                                                             </div> <!----> <!---->
                                                         </div>
                                                     </div>

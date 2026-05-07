@@ -1,5 +1,5 @@
    <fieldset>
-                        <div class="form-card">
+       {{-- <div class="form-card">
                             <div class="row">
                                 <div class="col-md-3">
                                     <div class="filters">
@@ -148,7 +148,16 @@
                             </div>
 
 
+
                         </div>
+                        
                         <!-- <input type="button" name="next" class="next action-button" value="Next" /> -->
                         <input type="button" name="previous" class="previous action-button-previous" value="Previous" required />
-                    </fieldset>
+                  --}}
+       <h1>Payment System</h1>
+       <a href="{{route('frontend.successPayment')}}" class="action-button">Payment</a>
+       <input type="button" name="previous" class="previous action-button-previous" value="Previous" />
+
+
+
+   </fieldset>

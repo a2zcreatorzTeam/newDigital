@@ -33,7 +33,7 @@
                         <td>{{ $data->name }}</td>
 
                         <td>
-                            <img src="{{asset($data->logo)}}" alt="logo image" width="100px" height="100px">
+                            <img src="{{ asset('storage/'.$data->logo) }}" alt="logo image" width="100px" height="100px">
                         </td>
                         <td>{{ $data->status==1 ? 'Active' : 'In active' }}</td>
 

@@ -15,14 +15,14 @@
              @include('frontend.policyFlow.form.Personal_Details',['user'=>$user])
              @include('frontend.policyFlow.form.basic_Details',['user'=>$user])
              @include('frontend.policyFlow.form.occupation',['user'=>$user])
-             @include('frontend.policyFlow.form.product_detail',['user'=>$user])
+             @include('frontend.policyFlow.form.product_detail',['user'=>$user,'id'=>$id,'product'=>$product])
              @include('frontend.policyFlow.form.health_info',['user'=>$user])
         
          </div>
      </div>
 
      <input type="button" name="next" class="next action-button" id='user_details_submited' value="Continue" />
-     <input type="button" name="previous" class="previous action-button-previous" value="Previous" />
+  
  </fieldset>
 
 

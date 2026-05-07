@@ -13,6 +13,7 @@ use App\Models\BasicDetail;
 use App\Models\City;
 use App\Models\District;
 use App\Models\MainClass;
+use App\Models\PlanAgeMaturity;
 use App\Models\Provinces;
 use App\Models\SubClass;
 use App\Models\User;
@@ -20,8 +21,8 @@ use App\Models\UserHealth;
 use App\Models\UserOccupation;
 use App\Models\UserPolicyData;
 use Hash;
-use Illuminate\Auth\Events\Registered;
 
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
@@ -35,7 +36,11 @@ class FrontendController extends Controller
 {
     public function home()
     {
+        if (session()->has('policy_id')) {
+            session()->forget('policy_id');
+        }
         $category = MainClass::where('status', 1)->get();
+
         return view('frontend.index')->with(['category' => $category]);
     }
 
@@ -200,10 +205,15 @@ class FrontendController extends Controller
     {
         return view('frontend.policy-form');
     }
-    public function dashboard()
+    public function dashboard(Request $request, $id)
     {
+
+        if (session()->has('policy_id')) {
+            session()->forget('policy_id');
+        }
+
         if (!Auth::check()) {
-            return redirect()->back()->with('error', 'You must log in first before proceeding');
+            return redirect()->back()->with('info', 'You must log in first before proceeding');
         }
         $user = User::with('basicDetail', 'AddressInfo', 'occupation', 'health')->where('id', Auth::user()->id)->first();
         if (
@@ -214,10 +224,12 @@ class FrontendController extends Controller
         ) {
             return redirect()
                 ->route('frontend.profileForm')
-                ->with('error', 'Please complete your profile before proceeding!');
+                ->with('info', 'Please complete your profile before proceeding!');
         }
+        $product = SubClass::with('product')->where('id', $id)->first();
+
         $provinces = Provinces::get();
-        return view('frontend.dashboard', ['user' => $user, 'provinces' => $provinces]);
+        return view('frontend.dashboard', ['user' => $user, 'provinces' => $provinces, 'product' => $product, 'id' => $id]);
     }
 
     public function profileForm()
@@ -363,20 +375,38 @@ class FrontendController extends Controller
             DB::beginTransaction();
 
             $userId = auth()->id();
-            $data = $request->validated();
+            $data   = $request->validated();
+            $policy_id = session('policy_id');
 
+            $policy = null;
 
-            $address_info = UserPolicyData::updateOrCreate(
-                ['user_id' => $userId],
-                $data + ['user_id' => $userId]
-            );
+            if ($policy_id) {
+                $policy = UserPolicyData::where('user_id', $userId)
+                    ->where('policy_id', $policy_id)
+                    ->first();
+            }
+
+            // ✅ If found → UPDATE
+            if ($policy) {
+                $policy->update($data);
+            } else {
+                do {
+                    $policy_id = 'POL-' . date('Y') . '-' . random_int(100000, 999999);
+                    session(['policy_id' => $policy_id]);
+                } while (UserPolicyData::where('policy_id', $policy_id)->exists());
+                $data['status'] = 'Incart';
+                $policy = UserPolicyData::create([
+                    'user_id'   => $userId,
+                    'policy_id' => $policy_id,
+                ] + $data);
+            }
 
             DB::commit();
 
-            // AJAX ke liye success JSON return karein
             return response()->json([
-                'success' => true,
-                'message' => 'Basic details saved successfully'
+                'success'   => true,
+                'message'   => 'Policy saved successfully',
+                'policy_id' => $policy->policy_id
             ]);
         } catch (\Exception $e) {
             DB::rollBack();
@@ -386,5 +416,52 @@ class FrontendController extends Controller
                 'message' => 'Something went wrong: ' . $e->getMessage()
             ], 500);
         }
+    }
+
+    public function getPlanData(Request $request)
+    {
+        $plan = PlanAgeMaturity::with('surrendervalues')
+            ->where('plan_id', $request->product_id)
+            ->where('age', $request->age)
+            ->first();
+
+        return [
+            'plan' => $plan,
+            'surrender_values' => $plan?->surrendervalues ?? []
+        ];
+    }
+
+    public function getSumAssured(Request $request)
+    {
+        $plan = PlanAgeMaturity::with('surrendervalues')
+            ->where('plan_id', $request->product_id)
+            ->where('age', $request->age)
+            ->first();
+
+        if (!$plan) {
+            return 0;
+        }
+
+        $surrender = $plan->surrendervalues
+            ->where('duration', $request->term_value)
+            ->first();
+
+        return $surrender?->amount ?? 0;
+    }
+
+
+
+
+
+
+    public function successPayment(Request $request)
+    {
+        $policy_id = session('policy_id');
+
+        if ($policy_id) {
+            $policy = UserPolicyData::with('product')->where('policy_id', $policy_id)
+                ->first();
+        }
+        return view('frontend.payment.success', ['policy' => $policy]);
     }
 }

@@ -36,7 +36,7 @@
                  <div class="tgmenu__wrap">
                      <nav class="tgmenu__nav">
                          <div class="logo">
-                             <a href="index.php"><img src="{{ asset('frontend/images/logo.png') }}" alt="Logo"></a>
+                             <a href="{{ route('frontend.index') }}"><img src="{{ asset('frontend/images/logo.png') }}" alt="Logo"></a>
                          </div>
                          <div class="tgmenu__navbar-wrap tgmenu__main-menu d-none d-lg-flex">
                              <ul class="navigation">

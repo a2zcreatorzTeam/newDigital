@@ -13487,4 +13487,28 @@ ul.form-serach-ul {
 .top-menu .tgmenu__main-menu li.menu-item-has-children>a::after {
   color: white !important;
 }
+.payment-btn {
+        display: inline-block;
+        padding: 12px 30px;
+        background: linear-gradient(135deg, #4facfe, #00c6fb);
+        color: #000;
+        font-size: 16px;
+        font-weight: 600;
+        text-decoration: none;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(0, 198, 251, 0.3);
+        border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .payment-btn:hover {
+        background: linear-gradient(135deg, #00c6fb, #4facfe);
+        color: #111;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 18px rgba(0, 198, 251, 0.5);
+    }
+
+    .payment-btn:active {
+        transform: scale(0.98);
+    }
 /* Complaints & Feedback End*/

@@ -102,7 +102,7 @@
                             <nav class="tgmobile__menu-box">
                                 <div class="close-btn"><i class="fas fa-times"></i></div>
                                 <div class="nav-logo">
-                                    <a href="index.html"><img src="{{ asset('frontend/images/logo.png')}}" alt="Logo"></a>
+                                    <a href="{{ route('frontend.index') }}"><img src="{{ asset('frontend/images/logo.png')}}" alt="Logo"></a>
                                 </div>
                                 <div class="tgmobile__search">
                                     <form action="#">

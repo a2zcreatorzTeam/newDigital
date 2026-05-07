@@ -1,15 +1,20 @@
 <?php
 
 use App\Http\Controllers\backend\AuthController;
+use App\Http\Controllers\backend\CityController;
 use App\Http\Controllers\backend\DashboardController;
+use App\Http\Controllers\backend\DistrictController;
 use App\Http\Controllers\backend\MainClassController;
 use App\Http\Controllers\backend\RoleController;
 use App\Http\Controllers\backend\SubClassController;
 use App\Http\Controllers\backend\UserController;
+use App\Http\Controllers\backend\UserPolicyController;
 use App\Http\Controllers\Frontend\FrontendController;
+use App\Models\District;
 use App\Models\User;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 
@@ -26,6 +31,9 @@ Auth::routes(['verify' => true]);
 Route::group(['middleware' => ['user.role']], function () {
         Route::resource('roles', RoleController::class);
         Route::resource('users', UserController::class);
+        Route::resource('city', CityController::class);
+        Route::resource('district', DistrictController::class);
+
         Route::prefix('admin/dashboard')->name('admin.')->controller(DashboardController::class)->group(function () {
                 Route::get('/', 'dashboard')->name('dashboard');
         });
@@ -49,6 +57,10 @@ Route::group(['middleware' => ['user.role']], function () {
                 Route::delete('/destroy/{id}', 'destroy')->name('destroy');
                 Route::get('/toggleStatus/{id}', 'toggleStatus')->name('toggleStatus');
         });
+        Route::prefix('admin/dashboard/userPolicy')->name('user.policy.')->controller(UserPolicyController::class)->group(function () {
+                Route::get('/list', 'allUserPolicyList')->name('list');
+                Route::get('/policyDetail/{id}', 'policy_detail')->name('policyDetail');
+        });
 });
 
 
@@ -71,17 +83,16 @@ Route::prefix('/')->name('frontend.')->controller(FrontendController::class)->gr
         Route::post('/forgot-password', 'forgotPassword')->name('forgot.password');
         Route::post('/get-policies', 'getPolicies')->name('getPolicies');
         Route::get('/policy-form', 'policyForm')->name('policyForm');
-        Route::get('/dashboard', 'dashboard')->name('dashboard');
+        Route::get('/dashboard/{id}', 'dashboard')->name('dashboard');
         Route::get('/profile-form', 'profileForm')->name('profileForm');
         Route::post('/updateBasicDetails', 'updateBasicDetails')->name('updateBasicDetails');
-        
         Route::post('/updateAddressInfo', 'updateAddressInfo')->name('updateAddressInfo');
         Route::post('/updateOccupation', 'updateOccupation')->name('updateOccupation');
         Route::post('/updateHealth', 'updateHealth')->name('updateHealth');
-
         Route::post('policy/user/data/save', 'policyDataSave')->name('policyUserDataSave');
-
-
+        Route::post('get/plan/data', 'getPlanData')->name('getPlanData');
+        Route::post('get/sum/aasured', 'getSumAssured')->name('getSumAssured');
+        Route::get('payment/success', 'successPayment')->name('successPayment');
 
         Route::post('/get/city/data', 'getcityData')->name('getcityData');
         Route::post('/get/district/data', 'getDistrictData')->name('getDistrictData');
@@ -101,3 +112,17 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
         $request->fulfill();
         return redirect()->route('frontend.index');
 })->middleware(['auth', 'signed'])->name('verification.verify');
+
+
+
+Route::get('/test-email', function () {
+
+        $toEmail = "shoaibnasir315@gmail.com";
+
+        Mail::raw('This is a test email from Laravel web route.', function ($message) use ($toEmail) {
+                $message->to($toEmail)
+                        ->subject('Test Email');
+        });
+
+        return "Test email sent successfully!";
+});
