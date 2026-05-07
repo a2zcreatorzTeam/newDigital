@@ -74,4 +74,13 @@ class UserPolicyData extends Model
         return $this->hasOne(City::class, 'id', 'temp_city_id');
     }
 
+     public function policyPlan()
+     {
+         return $this->belongsTo(SubClass::class, 'plan', 'id');
+     }
+
+     public function user()
+     {
+         return $this->belongsTo(User::class, 'user_id', 'id');
+     }
 }
