@@ -12,5 +12,13 @@ class UserPolicyData extends Model
     protected $table = 'user_personal_policy_data';
      protected $guarded = ['id'];
 
- 
+     public function policyPlan()
+     {
+         return $this->belongsTo(SubClass::class, 'plan', 'id');
+     }
+
+     public function user()
+     {
+         return $this->belongsTo(User::class, 'user_id', 'id');
+     }
 }
