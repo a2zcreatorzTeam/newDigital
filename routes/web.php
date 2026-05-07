@@ -6,6 +6,7 @@ use App\Http\Controllers\backend\MainClassController;
 use App\Http\Controllers\backend\RoleController;
 use App\Http\Controllers\backend\SubClassController;
 use App\Http\Controllers\backend\UserController;
+use App\Http\Controllers\backend\UserPolicyController;
 use App\Http\Controllers\Frontend\FrontendController;
 use App\Models\User;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
@@ -51,6 +52,10 @@ Route::group(['middleware' => ['user.role']], function () {
                 Route::delete('/destroy/{id}', 'destroy')->name('destroy');
                 Route::get('/toggleStatus/{id}', 'toggleStatus')->name('toggleStatus');
         });
+        Route::prefix('admin/dashboard/userPolicy')->name('user.policy.')->controller(UserPolicyController::class)->group(function () {
+                Route::get('/list', 'allUserPolicyList')->name('list');
+                Route::get('/policyDetail/{id}', 'policy_detail')->name('policyDetail');
+        });       
 });
 
 

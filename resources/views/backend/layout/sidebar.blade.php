@@ -36,6 +36,13 @@
               </a>
           </div>
           @endcan
+          @can('userPolicy-list')
+          <div class="nav-item" data-target="manager">
+              <a href="{{route('user.policy.list')}}">
+                 <i class="fa-solid fa-scale-balanced"></i> User Policies
+              </a>
+          </div>
+          @endcan
 
       </nav>
 
