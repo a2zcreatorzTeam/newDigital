@@ -716,7 +716,7 @@
             </div>
             
             <div class="custom-divider"></div>
-            @if($data->status || $data->admin_comment)
+            @if($data->status == 'Approved' || $data->status == 'Rejected')
 
             <div class="section-title">
                 Approval Information
@@ -831,13 +831,14 @@
                             placeholder="Write your comment here..."
                         ></textarea>
                     </div>
-
+                    @can('userPolicy-status-update')
                     {{-- Buttons --}}
                     <div class="col-md-12">
                         <button type="submit" class="btn btn-success px-4">
                             <i class="fa-solid fa-check"></i> Submit
                         </button>
                     </div>
+                    @endcan
 
                 </div>
             </form>

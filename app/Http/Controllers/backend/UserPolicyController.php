@@ -10,7 +10,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class UserPolicyController extends Controller
-{
+{  
+    function __construct()
+    {
+         $this->middleware('permission:userPolicy-status-update', ['only' => ['mark_status']]);
+    }
     public function allUserPolicyList(Request $request)
     {
         $Classes = SubClass::latest()->get();
