@@ -234,7 +234,18 @@
                 Swal.fire('Error', 'Please fill all required fields.', 'error');
                 return false;
             }
+            // Check age should be greater than 20
+            let age = parseInt($('#age_birth').val());
 
+            if (age < 20) {
+                Swal.fire(
+                    'Eligibility Criteria Not Met',
+                    'We regret to inform you that this policy is only available for individuals aged above 20 years.',
+                    'warning'
+                );
+
+                return false;
+            }
             // AJAX Call
             $.ajax({
                 method: 'POST',
