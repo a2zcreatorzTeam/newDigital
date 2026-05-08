@@ -533,6 +533,45 @@
 
             /* Move logout to top or hide on small mobile for brevity */
         }
+
+        .pagination {
+            margin-bottom: 0;
+        }
+
+        .pagination .page-link {
+            border-radius: 8px;
+            margin: 0 3px;
+            border: 1px solid #dee2e6;
+            color: #0d6efd !important;
+            transition: all 0.2s ease;
+        }
+
+        .pagination .page-link:hover {
+            background-color: #0d6efd;
+            color: #fff !important;
+            border-color: #0d6efd;
+        }
+
+        .pagination .active .page-link {
+            background-color: #0d6efd;
+            border-color: #0d6efd;
+            color: #fff !important;
+            font-weight: 600;
+            box-shadow: 0 2px 6px rgba(13, 110, 253, 0.25);
+        }
+        .pdmadatalist .form-group {
+            margin-bottom: 15px;
+        }
+
+        .pdmadatalist label {
+            display: block;
+            text-align: left;
+        }
+
+        .pdmadatalist .select2-container {
+            width: 100% !important;
+            text-align: left;
+        }
     </style>
 </head>
 

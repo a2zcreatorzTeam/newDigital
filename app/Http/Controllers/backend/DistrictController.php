@@ -25,16 +25,34 @@ class DistrictController extends Controller
          $this->middleware('permission:district-edit', ['only' => ['edit','update']]);
          $this->middleware('permission:district-delete', ['only' => ['destroy']]);
     }
-    
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index(Request $request): View
+    public function index(Request $request)
     {
-        $districts = District::with('city')->orderBy('id','ASC')->paginate(10);
-        return view('backend.district.index',compact('districts'));
+        $query = District::with('city');
+        
+        //provincefilter
+        if ($request->city) {
+            $query->where('city_id', $request->city);
+        }
+
+        //city_name filter
+        if ($request->name) {
+            $query->where('name', 'like', '%' . $request->name . '%');
+        }
+        // Sorting
+        $sortBy = $request->sorting ?? 'id';
+        $direction = $request->direction ?? 'asc';
+
+        $query->orderBy($sortBy, $direction);
+
+        $districts = $query->paginate($request->qty ?? 10);
+        
+        //AJAX RESPONSE (ONLY ROWS)
+        if ($request->ajax()) {
+            return view('backend.district.table', compact('districts'))->render();
+        }
+        $cities = City::get();
+
+        return view('backend.district.index',compact('districts','cities'));
     }
     
     /**
