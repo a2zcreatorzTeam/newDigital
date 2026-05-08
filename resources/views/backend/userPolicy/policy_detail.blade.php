@@ -128,9 +128,19 @@
             </div>
 
             <div class="mt-2 mt-md-0">
-                <span class="badge-status">
-                    Active Policy
-                </span>
+                @if($data->status == 'Approved')
+                        <span class="badge bg-success">
+                            Approved
+                        </span>
+                @elseif($data->status == 'Rejected')
+                        <span class="badge bg-danger">
+                            Rejected
+                        </span>
+                @else
+                        <span class="badge bg-warning">
+                            {{ ucfirst($data->status) }}
+                        </span>
+                @endif
             </div>
         </div>
 
