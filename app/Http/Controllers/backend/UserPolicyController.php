@@ -7,6 +7,7 @@ use App\Models\SubClass;
 use App\Models\User;
 use App\Models\UserPolicyData;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserPolicyController extends Controller
 {
@@ -25,7 +26,8 @@ class UserPolicyController extends Controller
                                     'mobile_number',
                                     'cnic_number',
                                     'plan',
-                                    'status'
+                                    'status',
+                                    'status_updated_by'
                                 );
 
         //Policy Category filter
@@ -76,5 +78,21 @@ class UserPolicyController extends Controller
         return view('backend.userPolicy.policy_detail', compact('data'));
     }
     
+    public function mark_status(Request $request,$id)
+    {
+        $request->validate([
+                'status' => 'required|in:Approved,Rejected',
+                'admin_comment' => 'nullable|string|max:1000',
+            ]);
+        
+            $policy = UserPolicyData::findOrFail($id);
+        
+            $policy->status = $request->status;
+            $policy->admin_comment = $request->admin_comment;
+            $policy->status_updated_by =  Auth::user()->id;
+            $policy->save();
+        
+            return redirect()->back()->with('success', 'Policy status updated successfully.');
+    }
 
 }

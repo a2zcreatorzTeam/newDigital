@@ -29,13 +29,6 @@ class UserPolicyData extends Model
     {
         return $this->hasOne(Provinces::class, 'id', 'temp_province_id');
     }
-
-
-
-
-
-
-
    
     public function get_permanent_district()
     {
@@ -49,18 +42,6 @@ class UserPolicyData extends Model
     {
         return $this->hasOne(District::class, 'id', 'temp_district_id');
     }
-
-
-
-
-
-
-
-
-
-
-
-
     public function get_permanent_city()
     {
         return $this->hasOne(City::class, 'id', 'permanent_city_id');
@@ -73,7 +54,6 @@ class UserPolicyData extends Model
     {
         return $this->hasOne(City::class, 'id', 'temp_city_id');
     }
-
      public function policyPlan()
      {
          return $this->belongsTo(SubClass::class, 'plan', 'id');
@@ -83,4 +63,9 @@ class UserPolicyData extends Model
      {
          return $this->belongsTo(User::class, 'user_id', 'id');
      }
+
+     public function StatusUpdatedBy()
+    {
+        return $this->belongsTo(User::class, 'status_updated_by');
+    }
 }

@@ -27,10 +27,29 @@
                             </span>
                         </div>
                     </td>
-                    <td>{{ ucfirst($row->status) ?? '-' }}</td>
+                    <td>
+                        @if($row->status == 'Approved')
+                                <span class="badge bg-success">
+                                    Approved
+                                </span>
+                        @elseif($row->status == 'Rejected')
+                                <span class="badge bg-danger">
+                                    Rejected
+                                </span>
+                        @else
+                                <span class="badge bg-warning">
+                                    {{ ucfirst($row->status) }}
+                                </span>
+                        @endif
+                        @if($row->status_updated_by)
+                            <div class="small text-muted mt-1" style="font-size: 9px;">
+                                By: {{ $row->StatusUpdatedBy->name }}
+                            </div>
+                        @endif
+                    </td>
                         <td>
                             <a class="btn p-2" style="font-size:12px;background-color:#ff5733;"
-                             href="{{ route('user.policy.policyDetail',$row->id) }}"><i class="fa-solid fa-list"></i> Show Detail</a>
+                             href="{{ route('user.policy.policyDetail',$row->id) }}">Detail</a>
                         </td>
                     </tr>
                    @empty

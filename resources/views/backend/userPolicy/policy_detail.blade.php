@@ -704,12 +704,135 @@
 
 
             </div>
+            
+            <div class="custom-divider"></div>
+            @if($data->status || $data->admin_comment)
 
+            <div class="section-title">
+                Approval Information
+            </div>
 
+            <div class="row">
 
+                {{-- Status --}}
+                <div class="col-md-4 mb-3">
+                    <div class="detail-box">
 
+                        <div class="detail-label">
+                            Status
+                        </div>
+
+                        <div class="detail-value">
+                            @if($data->status == 'Approved')
+                                <span class="badge bg-success">
+                                    Approved
+                                </span>
+                            @elseif($data->status == 'Rejected')
+                                <span class="badge bg-danger">
+                                    Rejected
+                                </span>
+                            @else
+                                <span class="badge bg-warning">
+                                    {{ ucfirst($data->status) }}
+                                </span>
+                            @endif
+                        </div>
+
+                    </div>
+                </div>
+
+            {{-- Updated By --}}
+            <div class="col-md-4 mb-3">
+                <div class="detail-box">
+
+                    <div class="detail-label">
+                        Updated By
+                    </div>
+
+                    <div class="detail-value">
+                        {{ $data->StatusUpdatedBy->name ?? '---' }}
+                    </div>
+
+                </div>
+            </div>
+
+            {{-- Updated At --}}
+            <div class="col-md-4 mb-3">
+                <div class="detail-box">
+
+                    <div class="detail-label">
+                        Updated At
+                    </div>
+
+                    <div class="detail-value">
+                        {{ $data->updated_at ? $data->updated_at->format('d M Y h:i A') : '---' }}
+                    </div>
+
+                </div>
+            </div>
+
+            {{-- Comment --}}
+            <div class="col-md-12 mb-3">
+                <div class="detail-box">
+
+                    <div class="detail-label">
+                        Admin Comment
+                    </div>
+
+                    <div class="detail-value">
+                        {{ $data->admin_comment ?? '---' }}
+                    </div>
+
+                </div>
+            </div>
+
+            </div>
+
+        @else
+            {{-- Approval Section --}}
+            <div class="section-title">
+                Approval Action
+            </div>
+
+            <form action="{{ route('user.policy.markStatus', $data->id) }}" method="POST">
+                @csrf
+
+                <div class="row">
+
+                    {{-- Status --}}
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-semibold">Select Status</label>
+
+                        <select name="status" class="form-select" required>
+                            <option value="" disabled selected>Select Status</option>
+                            <option value="Approved">Approved</option>
+                            <option value="Rejected">Rejected</option>
+                        </select>
+                    </div>
+
+                    {{-- Comment --}}
+                    <div class="col-md-12 mb-3">
+                        <label class="form-label fw-semibold">Comment</label>
+
+                        <textarea
+                            name="admin_comment"
+                            rows="5"
+                            class="form-control"
+                            placeholder="Write your comment here..."
+                        ></textarea>
+                    </div>
+
+                    {{-- Buttons --}}
+                    <div class="col-md-12">
+                        <button type="submit" class="btn btn-success px-4">
+                            <i class="fa-solid fa-check"></i> Submit
+                        </button>
+                    </div>
+
+                </div>
+            </form>
+        @endif
         </div>
-
     </div>
 
 </section>
