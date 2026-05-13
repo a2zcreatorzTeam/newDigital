@@ -3,16 +3,16 @@
 
 <section id="section-dashboard">
     <div class="flex justify-between items-center mb-4">
-        <h1 class="font-bold text-dark" style="font-size: 1.5rem;">Edit Policy</h1>
+        <h1 class="font-bold text-dark" style="font-size: 1.5rem;">Edit Policies</h1>
     </div>
 
     <div class="card">
         <div class="flex justify-between items-center mb-4">
-            <h3 class="font-semibold text-dark" style="font-size: 1.1rem;">Policy</h3>
+            <h3 class="font-semibold text-dark" style="font-size: 1.1rem;">Policies</h3>
 
             @can('class-list')
             <a class="btn btn-icon" style="background-color:#ff5733;" href="{{ route('subclass.index') }}">
-                Policiy List
+                Policies List
             </a>
             @endcan
         </div>
@@ -45,7 +45,7 @@
                         <strong>Name:</strong>
                         <input type="text" name="name" class="form-control"
                                value="{{ $subclass->name }}"
-                               placeholder="Enter Sub Class Name">
+                               placeholder="Enter Policy Name">
                     </div>
                 </div>
 
