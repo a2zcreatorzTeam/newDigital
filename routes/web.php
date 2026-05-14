@@ -16,6 +16,8 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\URL;
 
 
 Route::get('/', function () {
@@ -106,12 +108,22 @@ Route::prefix('/')->name('frontend.')->controller(FrontendController::class)
                 Route::get('/profile', 'profile')->name('profile');
         });
 
-Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-        $user = User::findOrFail($request->id);
-        Auth::login($user);
-        $request->fulfill();
-        return redirect()->route('frontend.index');
-})->middleware(['auth', 'signed'])->name('verification.verify');
+        Route::get('/email/verify/{id}/{hash}', function (Request $request, $id, $hash) {
+                $user = User::findOrFail($id);
+                if (! URL::hasValidSignature($request)) {
+                    abort(403, 'Invalid or expired verification link.');
+                }
+                if (! hash_equals(sha1($user->getEmailForVerification()), $hash)) {
+                    abort(403, 'Invalid verification hash.');
+                }
+                if (! $user->hasVerifiedEmail()) {
+                    $user->markEmailAsVerified();
+                }
+                Auth::login($user);
+                return redirect()->route('frontend.index');
+        })->middleware(['signed'])->name('verification.verify');
+            
+            
 
 
 
