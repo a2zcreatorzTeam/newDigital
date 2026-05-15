@@ -62,6 +62,7 @@ Route::group(['middleware' => ['user.role']], function () {
         Route::prefix('admin/dashboard/userPolicy')->name('user.policy.')->controller(UserPolicyController::class)->group(function () {
                 Route::get('/list', 'allUserPolicyList')->name('list');
                 Route::get('/policyDetail/{id}', 'policy_detail')->name('policyDetail');
+                Route::get('/export', 'export')->name('export');
         });
 });
 

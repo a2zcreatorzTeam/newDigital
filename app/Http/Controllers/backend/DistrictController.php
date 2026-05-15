@@ -26,14 +26,34 @@ class DistrictController extends Controller
          $this->middleware('permission:district-delete', ['only' => ['destroy']]);
     }
     
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index(Request $request): View
+    public function index(Request $request)
     {
-        $districts = District::with('city')->orderBy('id','ASC')->paginate(10);
+       
+        $query =  District::with('city')->orderBy('id','ASC');
+        if ($request->has('export')) {
+            
+            $filename = 'district.csv';
+            $headers = [
+                "Content-Type" => "text/csv",
+                "Content-Disposition" => "attachment; filename=$filename",
+            ];
+            $districts = $query->get();
+            $callback = function () use ($districts) {
+    
+                $file = fopen('php://output', 'w');
+                // Header row
+                fputcsv($file, ['Name', 'City']);
+                foreach ($districts as $district) {
+                        fputcsv($file, [
+                            ucwords($district->name), 
+                            ucwords($district->city?->name) ?? 'No City found'
+                        ]);
+                }
+                fclose($file);
+            };
+            return response()->stream($callback, 200, $headers);
+        }
+        $districts =$query->paginate(10);
         return view('backend.district.index',compact('districts'));
     }
     

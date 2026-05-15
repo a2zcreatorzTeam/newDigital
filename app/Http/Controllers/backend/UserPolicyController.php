@@ -4,10 +4,9 @@ namespace App\Http\Controllers\backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\SubClass;
-use App\Models\User;
 use App\Models\UserPolicyData;
 use Illuminate\Http\Request;
-
+use App\Exports\UserPolicyExport;
 class UserPolicyController extends Controller
 {
     public function allUserPolicyList(Request $request)
@@ -76,5 +75,11 @@ class UserPolicyController extends Controller
         return view('backend.userPolicy.policy_detail', compact('data'));
     }
     
-
+    public function export(Request $request)
+    {
+        return Excel::download(
+            new UserPolicyExport($request),
+            'user-policies.csv'
+        );
+    }
 }
