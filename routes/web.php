@@ -63,6 +63,8 @@ Route::group(['middleware' => ['user.role']], function () {
                 Route::get('/list', 'allUserPolicyList')->name('list');
                 Route::get('/policyDetail/{id}', 'policy_detail')->name('policyDetail');
                 Route::get('/export', 'export')->name('export');
+                Route::get('/profile/{id}/download-pdf', 'downloadPolicyUserPdf')
+                ->name('download.pdf');
         });
 });
 

@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\backend;
 
+use App\Exports\UserPolicyExport;
 use App\Http\Controllers\Controller;
 use App\Models\SubClass;
 use App\Models\UserPolicyData;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
-use App\Exports\UserPolicyExport;
+use Maatwebsite\Excel\Facades\Excel;
+
 class UserPolicyController extends Controller
 {
     public function allUserPolicyList(Request $request)
@@ -81,5 +84,15 @@ class UserPolicyController extends Controller
             new UserPolicyExport($request),
             'user-policies.csv'
         );
+    }
+
+    public function downloadPolicyUserPdf($id)
+    {
+        $data = UserPolicyData::where('id',$id)->first();
+
+        $pdf = Pdf::loadView('backend.policy.pdf', compact('data'))
+            ->setPaper('a4', 'portrait');
+
+        return $pdf->download('policy-'.$data->policy_id.'.pdf');
     }
 }
