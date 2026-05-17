@@ -8,11 +8,13 @@ use App\Http\Requests\BasicDetailRequest;
 use App\Http\Requests\PolicyUserDataRequest;
 use App\Http\Requests\UserHealthRequest;
 use App\Http\Requests\UserOccupationRequest;
+use App\Mail\SendOtpMail;
 use App\Models\AddressInfo;
 use App\Models\BasicDetail;
 use App\Models\City;
 use App\Models\District;
 use App\Models\MainClass;
+use App\Models\Otp;
 use App\Models\PlanAgeMaturity;
 use App\Models\Provinces;
 use App\Models\SubClass;
@@ -20,17 +22,16 @@ use App\Models\User;
 use App\Models\UserHealth;
 use App\Models\UserOccupation;
 use App\Models\UserPolicyData;
-use Hash;
-
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\ValidationException;
-use Mail;
 
 class FrontendController extends Controller
 {
@@ -88,17 +89,30 @@ class FrontendController extends Controller
                 'cnic' => $validated['cnic'],
                 'password' => Hash::make($validated['password']),
             ]);
-            $encrypted = Crypt::encryptString($user->id);
+            
+            // ✅ Generate OTP
+            $otpCode = rand(100000, 999999);
 
-            Auth::login($user);
-            event(new Registered($user));
+            // ✅ Save OTP
+            Otp::create([
+                'user_id' => $user->id,
+                'otp' => $otpCode,
+                'type' => 'email',
+                'expires_at' => now()->addMinutes(5),
+            ]);
 
+            // ✅ Send OTP Email
+            Mail::to($user->email)->send(new SendOtpMail($otpCode,$user));
+
+            // ✅ Login User
+           // Auth::login($user);
 
             // ✅ Success Response (for AJAX)
             return response()->json([
                 'status' => true,
-                'message' => 'User registered successfully. We have sent a verification email—please verify your email address.',
-                'data' => $user
+                'message' => 'OTP sent successfully to your email.',
+                'data' => $user,
+                'user_id' => $user->id
             ]);
         } catch (\Exception $e) {
             Log::warning('Password reset exception for:: ' . $request->email . ', reason:' . $e->getMessage());
@@ -463,5 +477,51 @@ class FrontendController extends Controller
                 ->first();
         }
         return view('frontend.payment.success', ['policy' => $policy]);
+    }
+
+    public function verifyOtp(Request $request)
+    {
+        $request->validate([
+            'user_id' => 'required',
+            'otp' => 'required'
+        ]);
+
+        $otp = Otp::where('user_id', $request->user_id)
+            ->where('otp', $request->otp)
+            ->where('is_used', false)
+            ->latest()
+            ->first();
+
+        if (!$otp) {
+
+            return response()->json([
+                'status' => false,
+                'message' => 'Invalid OTP'
+            ], 422);
+        }
+
+        if ($otp->expires_at < now()) {
+
+            return response()->json([
+                'status' => false,
+                'message' => 'OTP expired'
+            ], 422);
+        }
+
+        $otp->update([
+            'is_used' => true
+        ]);
+
+        $user = $otp->user;
+
+        $user->email_verified_at = now();
+        $user->save();
+
+         // 🔥 LOGIN ONLY AFTER OTP SUCCESS
+        Auth::login($user);
+        return response()->json([
+            'status' => true,
+            'message' => 'Email verified successfully'
+        ]);
     }
 }

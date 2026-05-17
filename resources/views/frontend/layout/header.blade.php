@@ -111,6 +111,8 @@
                     @include('frontend.layout.authentication.forget')
                     <!-- Sign Up Form -->
                     @include('frontend.layout.authentication.signup')
+                     <!-- OTP Form -->
+                    @include('frontend.layout.authentication.otp')
 
                 </div>
 

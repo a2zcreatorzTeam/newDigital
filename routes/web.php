@@ -98,6 +98,7 @@ Route::prefix('/')->name('frontend.')->controller(FrontendController::class)->gr
         Route::post('/get/district/data', 'getDistrictData')->name('getDistrictData');
         Route::post('/updateProfile', 'updateProfile')->name('updateProfile');
         Route::get('/logout', 'logout')->name('logout');
+        Route::post('/verify-otp','verifyOtp')->name('verify.otp');
 });
 
 Route::prefix('/')->name('frontend.')->controller(FrontendController::class)

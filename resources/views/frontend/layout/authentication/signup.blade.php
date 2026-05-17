@@ -63,8 +63,10 @@
     </div>
 
     <button type="submit" class="btn btn-primary">Sign Up</button>
+    <p>Already a User? Please <a id="signin" style="cursor: pointer;">Sign In</a></p>
+
 </form>
-<p>Already a User? Please <a id="signin" style="cursor: pointer;">Sign In</a></p>
+
 
 
 @push('js')
@@ -99,7 +101,12 @@
                         text: response.message,
                     });
 
-                    $('.offcanvas-close').trigger('click');
+                    $('#signupForm').hide();
+
+                    $('#otpForm').show();
+
+                    $('#otp_user_id').val(response.user_id);
+
                     $('#signupForm')[0].reset();
                 },
 
@@ -181,6 +188,9 @@
 
         e.target.value = value;
     });
+
+
+    
 </script>
 
 
