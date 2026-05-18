@@ -4,7 +4,6 @@ namespace App\Http\Controllers\backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\SubClass;
-use App\Models\User;
 use App\Models\UserPolicyData;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
@@ -85,6 +84,86 @@ class UserPolicyController extends Controller
             ->setPaper('a4', 'portrait');
 
         return $pdf->download('policy-'.$data->policy_id.'.pdf');
+    }
+    public function export(Request $request)
+    {
+        $fileName = 'user-policies.csv';
+    
+        $headers = [
+            "Content-Type" => "text/csv",
+            "Content-Disposition" => "attachment; filename=$fileName",
+        ];
+    
+        $callback = function () use ($request) {
+    
+            $file = fopen('php://output', 'w');
+    
+            // HEADINGS
+            fputcsv($file, [
+                'Policy Number',
+                'Policy Plan',
+                'Category',
+                'User Name',
+                'User Email',
+                'Mobile',
+                'CNIC',
+                'Status',
+            ]);
+    
+            $query = UserPolicyData::with([
+                'user:id,name,email',
+                'policyPlan:id,name,class_id',
+                'policyPlan.mainClass:id,name'
+            ]);
+    
+            // Policy Category
+            if ($request->main_class) {
+                $query->whereHas('policyPlan', function ($q) use ($request) {
+                    $q->where('class_id', $request->main_class);
+                });
+            }
+    
+            // Policy Number
+            if ($request->policy_number) {
+                $query->where('policy_id', 'like', '%' . $request->policy_number . '%');
+            }
+    
+            // User search
+            if ($request->user_detail_search) {
+    
+                $search = $request->user_detail_search;
+    
+                $query->where(function ($q) use ($search) {
+                    $q->where('mobile_number', 'like', "%$search%")
+                      ->orWhere('cnic_number', 'like', "%$search%")
+                      ->orWhereHas('user', function ($q2) use ($search) {
+                          $q2->where('name', 'like', "%$search%")
+                             ->orWhere('email', 'like', "%$search%");
+                      });
+                });
+            }
+    
+            // IMPORTANT: chunk for large data (avoid memory crash)
+            $query->chunk(1000, function ($rows) use ($file) {
+    
+                foreach ($rows as $row) {
+                    fputcsv($file, [
+                        $row->policy_id,
+                        optional($row->policyPlan)->name,
+                        optional(optional($row->policyPlan)->mainClass)->name,
+                        optional($row->user)->name,
+                        optional($row->user)->email,
+                        $row->mobile_number,
+                        $row->cnic_number,
+                        ucfirst($row->status),
+                    ]);
+                }
+            });
+    
+            fclose($file);
+        };
+    
+        return response()->stream($callback, 200, $headers);
     }
     
 }

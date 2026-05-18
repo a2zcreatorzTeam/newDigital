@@ -118,7 +118,7 @@
         <p>Complete information of policy holder and insurance profile</p>
 
         <span class="badge-status">
-            Active Policy
+           {{ $data->status ?? '---' }}
         </span>
     </div>
 

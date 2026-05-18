@@ -46,6 +46,12 @@
                                 <option value="50">50</option>
                             </select>
                         </div>
+                        <div class="col-md-12" style="text-align: right;">
+                        <a href="{{ route('user.policy.export', request()->query()) }}"
+                        class="btn" style="background: #b7b5b1;">
+                            <i class="fa-solid fa-file-csv"></i> Export CSV
+                        </a>
+                        </div>
 
 
 

@@ -134,7 +134,7 @@
                     <i class="fa fa-download"></i> Download PDF
                 </a>
                 <span class="badge-status">
-                    Active Policy
+                    {{ $data->status ?? '---' }}
                 </span>
             </div>
         </div>
