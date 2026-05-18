@@ -66,8 +66,7 @@
 
                 $('.offcanvas-close').trigger('click');
 
-                window.location.href = "/statelife";
-
+                window.location.href = "{{ route('frontend.index') }}";
             },
 
             error: function(xhr) {
