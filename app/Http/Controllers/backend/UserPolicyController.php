@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\SubClass;
 use App\Models\User;
 use App\Models\UserPolicyData;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class UserPolicyController extends Controller
@@ -75,6 +76,15 @@ class UserPolicyController extends Controller
 
         return view('backend.userPolicy.policy_detail', compact('data'));
     }
-    
 
+    public function downloadPolicyUserPdf($id)
+    {
+        $data = UserPolicyData::where('id',$id)->first();
+        // run this command   ->    composer require barryvdh/laravel-dompdf
+        $pdf = Pdf::loadView('backend.userPolicy.policy-detail-pdf', compact('data'))
+            ->setPaper('a4', 'portrait');
+
+        return $pdf->download('policy-'.$data->policy_id.'.pdf');
+    }
+    
 }

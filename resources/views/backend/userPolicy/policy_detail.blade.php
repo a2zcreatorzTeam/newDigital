@@ -127,7 +127,12 @@
                 <p>Complete information of policy holder and insurance profile</p>
             </div>
 
-            <div class="mt-2 mt-md-0">
+            <div class="mt-2 mt-md-0 d-flex gap-2">
+
+                <a href="{{ route('user.policy.download.pdf', $data->id) }}"
+                class="btn btn-info btn-sm">
+                    <i class="fa fa-download"></i> Download PDF
+                </a>
                 <span class="badge-status">
                     Active Policy
                 </span>
