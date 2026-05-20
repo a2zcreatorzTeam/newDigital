@@ -26,14 +26,33 @@ class CityController extends Controller
          $this->middleware('permission:city-delete', ['only' => ['destroy']]);
     }
     
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index(Request $request): View
+    public function index(Request $request)
     {
-        $cities = City::with('province')->orderBy('id','ASC')->paginate(10);
+        $query = City::with('province')->orderBy('id','ASC');
+        if ($request->has('export')) {
+            
+            $filename = 'city.csv';
+            $headers = [
+                "Content-Type" => "text/csv",
+                "Content-Disposition" => "attachment; filename=$filename",
+            ];
+            $cities = $query->get();
+            $callback = function () use ($cities) {
+    
+                $file = fopen('php://output', 'w');
+                // Header row
+                fputcsv($file, ['Name', 'Province']);
+                foreach ($cities as $city) {
+                        fputcsv($file, [
+                            ucwords($city->name), 
+                            ucwords($city->province?->name) ?? 'No province found'
+                        ]);
+                }
+                fclose($file);
+            };
+            return response()->stream($callback, 200, $headers);
+        }
+        $cities = $query->paginate(10);
         return view('backend.city.index',compact('cities'));
     }
     
