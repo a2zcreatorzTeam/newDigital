@@ -134,7 +134,7 @@
                     <i class="fa fa-download"></i> Download PDF
                 </a>
                 <span class="badge-status">
-                    {{ $data->status ?? '---' }}
+                    {{ $data->status ?? '---' }}     
                 </span>
             </div>
         </div>
