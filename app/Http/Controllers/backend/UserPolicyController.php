@@ -33,6 +33,11 @@ class UserPolicyController extends Controller
             $query->where('plan', $request->plan);
         }
 
+        //Policy status filter
+        if ($request->status) {
+            $query->where('status', $request->status);
+        }
+
         //Policy Number filter
         if ($request->policy_number) {
             $query->where('policy_id', 'like', '%' . $request->policy_number . '%');
@@ -62,12 +67,13 @@ class UserPolicyController extends Controller
         $query->orderBy($sortBy, $direction);
 
         $data = $query->latest()->paginate($request->qty ?? 10);
-        
+        $dataCount = $query->count();
+
         //AJAX RESPONSE (ONLY ROWS)
         if ($request->ajax()) {
-            return view('backend.userPolicy.rows', compact('data'))->render();
+            return view('backend.userPolicy.rows', compact('data','dataCount'))->render();
         }
-        return view('backend.userPolicy.list', compact('data','Classes'));
+        return view('backend.userPolicy.list', compact('data','Classes','dataCount'));
     }
     public function policy_detail($id)
     {
@@ -101,13 +107,77 @@ class UserPolicyController extends Controller
             // HEADINGS
             fputcsv($file, [
                 'Policy Number',
+                'Status',
                 'Policy Plan',
                 'Category',
                 'User Name',
                 'User Email',
                 'Mobile',
                 'CNIC',
-                'Status',
+                'CNIC Issue Date',
+                'CNIC Expiry Date',
+                'Date Of Birth',
+                'Age Nearest Date',
+                'Gender',
+                'Mother Maiden Name',
+                'Father Name',
+                'Husband Name',
+                'Religion',
+                'User Email',
+                'Age Proof',
+                'Phone Office',
+                'Phone Residence',
+                'Fax Number',
+                'Dual National',
+                'Primary Nationality',
+                'Dual Nationality',
+                'Birth Place',
+                'Same Person',
+                'Permanent Province',
+                'Permanent District',
+                'Permanent City',
+                'Permanent Address',
+                'Correspondence Province',
+                'Correspondence District',
+                'Correspondence City',
+                'Correspondence Address',
+                'Temporary Province',
+                'Temporary District',
+                'Temporary City',
+                'Temporary Address',
+                'Employment',
+                'Business',
+                'Holding Land',
+                'Average Monthly Income',
+                'Ex Defence Personal',
+                'Discharged On Medical',
+                'Hazardous Occupation',
+                'Comment',
+                'Height CM',
+                'Height FT',
+                'Weight KG',
+                'Chest Insp CM',
+                'Chest Insp Inches',
+                'Chest Exp CM',
+                'Chest Exp Inches',
+                'Abdomen CM',
+                'Abdomen Inches',
+                'Weight Loss KG',
+                'Weight Gain KG',
+                'Weight Increase Reason',
+                'Plan',
+                'Table No',
+                'Term',
+                'Sum Assured',
+                'ND Applied',
+                'Payment Mode',
+                'Automatic Paid Up',
+                'Automatic Premium Loan',
+                'AIB Rider',
+                'ADB Rider',
+                'TIR Rider',
+                'FIB Rider',
+                'Admin Comment',
             ]);
     
             $query = UserPolicyData::with([
@@ -122,7 +192,10 @@ class UserPolicyController extends Controller
                     $q->where('class_id', $request->main_class);
                 });
             }
-    
+            //Policy status filter
+            if ($request->status) {
+                $query->where('status', $request->status);
+            }
             // Policy Number
             if ($request->policy_number) {
                 $query->where('policy_id', 'like', '%' . $request->policy_number . '%');
@@ -149,13 +222,78 @@ class UserPolicyController extends Controller
                 foreach ($rows as $row) {
                     fputcsv($file, [
                         $row->policy_id,
+                        ucfirst($row->status),
                         optional($row->policyPlan)->name,
                         optional(optional($row->policyPlan)->mainClass)->name,
                         optional($row->user)->name,
                         optional($row->user)->email,
                         $row->mobile_number,
                         $row->cnic_number,
-                        ucfirst($row->status),
+                        $row->cnic_issue_date,
+                        $row->cnic_expiry_date,
+                        $row->date_of_birth,
+                        $row->age_nearest_date,
+                        $row->gender,
+                        $row->mother_maiden_name,
+                        $row->father_name,
+                        $row->husband_name,
+                        $row->religion,
+                        $row->user_email,
+                        $row->age_proof,
+                        $row->phone_number_office,
+                        $row->phone_number_residente,
+                        $row->fax_number,
+                        $row->is_client_dual_national,
+                        $row->primary_nationality,
+                        $row->dual_nationality,
+                        $row->birth_placed,
+                        $row->is_same_person,
+                        $row->permanent_province_id,
+                        $row->permanent_district_id,
+                        $row->permanent_city_id,
+                        $row->permanent_address,
+                        $row->corres_province_id,
+                        $row->corres_district_id,
+                        $row->corres_city_id,
+                        $row->corres_address,
+                        $row->temp_province_id,
+                        $row->temp_district_id,
+                        $row->temp_city_id,
+                        $row->temp_address,
+                        $row->is_emaployemnt,
+                        $row->is_business,
+                        $row->is_holding_land,
+                        $row->avaerage_monthly_income,
+                        $row->ex_defence_personal,
+                        $row->discharged_on_medical,
+                        $row->hazardous_occupation,
+                        $row->comment,
+                        $row->height_cm,
+                        $row->height_ft,
+                        $row->weight_kg,
+                        $row->chest_insp_cm,
+                        $row->chest_insp_inches,
+                        $row->chest_exp_cm,
+                        $row->chest_exp_inches,
+                        $row->abdomen_cm,
+                        $row->abdomen_inches,
+                        $row->weight_loss_kg,
+                        $row->weight_gain_kg,
+                        $row->weight_increase_reason,
+                        $row->plan,
+                        $row->table_no,
+                        $row->term,
+                        $row->sum_assured,
+                        $row->is_nd_applied,
+                        $row->payment_mode,
+                        $row->automatic_paid_up,
+                        $row->automatic_premium_loan,
+                        $row->aib_rider,
+                        $row->adb_rider,
+                        $row->tir_rider,
+                        $row->fib_rider,
+                        $row->admin_comment,
+
                     ]);
                 }
             });

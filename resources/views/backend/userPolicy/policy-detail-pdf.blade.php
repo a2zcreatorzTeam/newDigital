@@ -116,10 +116,6 @@
     <div class="profile-header">
         <h2>Policy Detail</h2>
         <p>Complete information of policy holder and insurance profile</p>
-
-        <span class="badge-status">
-           {{ $data->status ?? '---' }}
-        </span>
     </div>
 
     <div class="content">
@@ -304,7 +300,23 @@
             <tr>
                 <td>
                     <div class="detail-label">Policy Status</div>
-                    <div class="detail-value">{{ $data->status ?? '---' }}</div>
+                        <div class="detail-value ">
+                            <!-- Status Badge -->
+                            <span style="
+                                padding:4px 11px;
+                                border-radius:30px;
+                                font-size:11px;
+                                font-weight:600;
+                                letter-spacing:0.5px;
+                                background-color:
+                                            {{ $data->status == 'Approved' ? '#95f0b8' : 
+                                            ($data->status == 'Pending' ? '#cdeaff' : 
+                                            ($data->status == 'Rejected' ? '#f1c2c7' :
+                                            ($data->status == 'InCart' ? '#f6ca90' : '#edf19e'))) }};
+                            ">
+                                {{ $data->status ?? '---' }}
+                            </span>
+                        </div>
                 </td>
 
                 <td>

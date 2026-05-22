@@ -27,11 +27,27 @@
                             </span>
                         </div>
                     </td>
-                    <td>{{ ucfirst($row->status) ?? '-' }}</td>
-                        <td>
-                            <a class="btn p-2" style="font-size:12px;background-color:#ff5733;"
-                             href="{{ route('user.policy.policyDetail',$row->id) }}"><i class="fa-solid fa-list"></i> Show Detail</a>
-                        </td>
+                    <td>
+                        <span style="
+                            display:inline-block;
+                            padding:4px 11px;
+                            border-radius:20px;
+                            font-size:11px;
+                            font-weight:600;
+                            background-color:
+                                {{ $row->status == 'Approved' ? '#95f0b8' : 
+                                ($row->status == 'Pending' ? '#cdeaff' : 
+                                ($row->status == 'Rejected' ? '#f1c2c7' :
+                                ($row->status == 'InCart' ? '#f6ca90' : '#edf19e'))) }};
+                        ">
+                            {{ ucfirst($row->status ?? '-') }}
+                        </span>
+                    </td>
+                    <td> 
+                        <a class="btn p-2" style="font-size:12px;background-color:#ff5733;" 
+                        href="{{ route('user.policy.policyDetail',$row->id) }}">
+                        Show Detail</a>
+                    </td>
                     </tr>
                    @empty
                    <tr><td colspan="7" class="text-center text-muted">No policy available</td></tr>
