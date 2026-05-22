@@ -27,6 +27,11 @@
         Verify OTP
     </button>
 
+    <div class="mt-3">
+        <button type="button" id="resendOtpBtn" class="" style="background: white;border: none;">
+            Resend OTP
+        </button>
+    </div>
 </form>
 @push('js')
   <script>
@@ -89,6 +94,66 @@
             }
 
         });
+
+        });
+        $('#resendOtpBtn').click(function() {
+
+            $.ajax({
+
+                url: "{{ route('frontend.resend.otp') }}",
+                type: "POST",
+
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+
+                data: {
+                    user_id: $('#otp_user_id').val()
+                },
+
+                beforeSend: function() {
+
+                    $('#loader_data').show();
+
+                    $('#resendOtpBtn').prop('disabled', true);
+
+                },
+
+                success: function(response) {
+
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'OTP Sent',
+                        text: response.message,
+                    });
+
+                },
+
+                error: function(xhr) {
+
+                    let message = xhr.responseJSON?.message ??
+                        'Failed to resend OTP';
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: message,
+                    });
+                },
+
+                complete: function() {
+
+                    $('#loader_data').hide();
+
+                    // enable again after 30 sec
+                    setTimeout(() => {
+
+                        $('#resendOtpBtn').prop('disabled', false);
+
+                    }, 30000);
+                }
+
+            });
 
         });
       });
