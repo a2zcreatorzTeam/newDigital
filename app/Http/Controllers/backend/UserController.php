@@ -13,17 +13,64 @@ use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
 
 class UserController extends Controller
-{
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index(Request $request): View
+{    
+    public function index(Request $request)
     {
-        $data = User::latest()->get();
+        $query = User::latest();
 
-        return view('backend.users.index', compact('data'));
+        // ✔️ User role
+        if ($request->role) {
+            $query->role($request->role);
+        }
+        // ✔️ User detail search (name, email)
+        if ($request->user_detail_search) {
+
+            $search = $request->user_detail_search;
+
+            $query->where('name', 'like', "%$search%")
+                ->orWhere('email', 'like', "%$search%");
+        }
+        
+        // ✔️ Sorting
+        $sortBy = $request->sorting ?? 'id';
+        $direction = $request->direction ?? 'desc';
+
+        $query->orderBy($sortBy, $direction);
+
+        //export
+        if ($request->has('export')) {
+            
+            $filename = 'User.csv';
+            $headers = [
+                "Content-Type" => "text/csv",
+                "Content-Disposition" => "attachment; filename=$filename",
+            ];
+            $user = $query->get();
+            $callback = function () use ($user) {
+    
+                $file = fopen('php://output', 'w');
+                // Header row
+                fputcsv($file, ['Name', 'Province']);
+                foreach ($user as $data) {
+                        fputcsv($file, [
+                            ucwords($data->name), 
+                            $data->email
+                        ]);
+                }
+                fclose($file);
+            };
+            return response()->stream($callback, 200, $headers);
+        }
+        
+       
+        $data = $query->latest()->paginate($request->qty ?? 10);
+       
+         //AJAX RESPONSE (ONLY ROWS)
+        if ($request->ajax()) {
+            return view('backend.users.rows', compact('data'))->render();
+        }
+        $roles = Role::orderBy('id','ASC')->get();
+        return view('backend.users.index', compact('data','roles'));
     }
 
     /**
