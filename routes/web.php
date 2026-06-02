@@ -102,6 +102,7 @@ Route::prefix('/')->name('frontend.')->controller(FrontendController::class)->gr
         Route::post('/updateProfile', 'updateProfile')->name('updateProfile');
         Route::get('/logout', 'logout')->name('logout');
         Route::post('/verify-otp','verifyOtp')->name('verify.otp');
+        Route::post('/resend-otp', 'resendOtp')->name('resend.otp');
 });
 
 Route::prefix('/')->name('frontend.')->controller(FrontendController::class)

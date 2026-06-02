@@ -150,7 +150,36 @@ class FrontendController extends Controller
                     'message' => 'Invalid credentials'
                 ], 401);
             }
+            // ✅ EMAIL NOT VERIFIED
+            if (!$user->email_verified_at) {
 
+                // delete old otp
+                Otp::where('user_id', $user->id)->delete();
+
+                // generate new otp
+                $otpCode = rand(100000, 999999);
+
+                // save otp
+                Otp::create([
+                    'user_id' => $user->id,
+                    'otp' => $otpCode,
+                    'type' => 'email',
+                    'expires_at' => now()->addMinutes(5),
+                ]);
+
+                // resend email
+                Mail::to($user->email)
+                    ->send(new SendOtpMail($otpCode, $user));
+
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Email not verified. New OTP sent.',
+                    'user_id' => $user->id,
+                    'verification_required' => true
+                ], 403);
+            }
+
+            // ✅ VERIFIED USER LOGIN
             Auth::login($user);
 
             return response()->json([
@@ -522,6 +551,37 @@ class FrontendController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'Email verified successfully'
+        ]);
+    }
+    public function resendOtp(Request $request)
+    {
+        $request->validate([
+            'user_id' => 'required|exists:users,id'
+        ]);
+
+        $user = User::find($request->user_id);
+
+        // remove old otp
+        Otp::where('user_id', $user->id)->delete();
+
+        // generate new otp
+        $otpCode = rand(100000, 999999);
+
+        // save otp
+        Otp::create([
+            'user_id' => $user->id,
+            'otp' => $otpCode,
+            'type' => 'email',
+            'expires_at' => now()->addMinutes(5),
+        ]);
+
+        // send mail
+        Mail::to($user->email)
+            ->send(new SendOtpMail($otpCode, $user));
+
+        return response()->json([
+            'status' => true,
+            'message' => 'New OTP sent successfully'
         ]);
     }
 }
