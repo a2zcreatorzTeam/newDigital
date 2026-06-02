@@ -10,6 +10,7 @@ use App\Http\Controllers\backend\SubClassController;
 use App\Http\Controllers\backend\UserController;
 use App\Http\Controllers\backend\UserPolicyController;
 use App\Http\Controllers\Frontend\FrontendController;
+use App\Http\Controllers\Frontend\PolicyController;
 use App\Models\District;
 use App\Models\User;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
@@ -108,6 +109,14 @@ Route::prefix('/')->name('frontend.')->controller(FrontendController::class)
         ->middleware('front.role')
         ->group(function () {
                 Route::get('/profile', 'profile')->name('profile');
+        });
+
+//self policy listing
+Route::prefix('/')->name('frontend.')->controller(PolicyController::class)
+        ->middleware('front.role')
+        ->group(function () {
+                Route::get('/self-policy', 'self_policy')->name('self-policy');
+                Route::get('/self-policy-detail/{id}', 'policy_detail')->name('policyDetail');
         });
 
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
