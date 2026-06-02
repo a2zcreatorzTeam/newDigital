@@ -84,7 +84,7 @@
     $(document).ready(function() {
         $('.select2').select2();
         function filter_data(currentpage) {
-            $('.filter_data').html('<div id="loading"></div>');
+            $('.policy_list').html('<div id="loading"></div>');
             var action = 'fetch_data';
             var sorting = $("#sorting").val();
             var direction = $("#direction").val();
@@ -93,10 +93,9 @@
             var policy_number = $("#policy_number").val();
             var user_detail_search = $("#user_detail_search").val();
             var status = $("#status").val();
-            var ayis_page = currentpage ?? 1;
+            var page = currentpage ?? 1;
 
             $.ajax({
-                type: 'POST',
                 url: "{{ route('user.policy.list') }}",
                 type: 'GET',
                 data: {
@@ -108,11 +107,11 @@
                     qty: qty,
                     plan: plan,
                     status:status,
-                    ayis_page: ayis_page,
+                    page: page,
                 },
 
                 beforeSend: function () {
-                    $('#filter_data').html(`
+                    $('#policy_list').html(`
                         <tr>
                             <td colspan="7" class="text-center">Loading...</td>
                         </tr>
@@ -120,7 +119,7 @@
                 },
                 success: function(data) {
 
-                    $('#filter_data').html(data);
+                    $('#policy_list').html(data);
                 },
                 error: function(data) {
                     console.log(data);

@@ -164,7 +164,7 @@
                     <div class="col-md-3 mb-3 mb-md-0">
                         <div class="summary-item">
                             <h5>Sum Assured</h5>
-                            <h4>PKR 5,000,000</h4>
+                            <h4>---</h4>
                         </div>
                     </div>
 

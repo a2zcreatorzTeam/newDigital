@@ -66,7 +66,7 @@ class UserPolicyController extends Controller
 
         $query->orderBy($sortBy, $direction);
 
-        $data = $query->latest()->paginate($request->qty ?? 10);
+        $data = $query->latest()->paginate($request->qty ?? 10)->withQueryString();
         $dataCount = $query->count();
 
         //AJAX RESPONSE (ONLY ROWS)
