@@ -45,15 +45,8 @@
                         <h4 class="title tg-element-title" style="font-size: 25px;">Policy Listing</h4>
                     </div>
                 </div>
-                <div class="col-xl-6 col-lg-8">
-                    <ul class="form-serach-ul">
-                        <li>
-                           
-                        </li>
-                        <li>
-                            <a class="btn" href="{{ route('frontend.product') }}">ADD POLICY</a>
-                        </li>
-                    </ul>
+                <div class="col-xl-6 col-lg-8" style="text-align: -webkit-right;">
+                     <a class="btn" href="{{ route('frontend.product') }}">ADD POLICY</a>
                 </div>
                 
                 <table class="claim-document-table">

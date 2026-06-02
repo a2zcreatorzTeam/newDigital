@@ -26,7 +26,9 @@
                                         </li>
                                         <li><a href="{{route('frontend.product')}}">Products</a>
                                         </li>
-                                        <li class="menu-item-has-children"><a href="#">Policies</a>
+                                        <li><a href="{{route('frontend.self-policy')}}">Self Policy</a>
+                                        </li>
+                                        <!-- <li class="menu-item-has-children"><a href="#">Policies</a>
                                             <ul class="sub-menu">
                                                 <li class="mega"><a href="#">Policy Listing</a>
                                                     <ul class="sub-sub-menu">
@@ -36,7 +38,7 @@
                                                 </li>
                                                 <li><a href="policyservicing.php">Policy Servicing</a></li>
                                             </ul>
-                                        </li>
+                                        </li> -->
                                         <li class="menu-item-has-children"><a href="#">Claims</a>
                                             <ul class="sub-menu">
                                                 <li class="mega"><a href="#">Claims Listing</a>
