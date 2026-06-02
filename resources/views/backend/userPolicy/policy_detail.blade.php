@@ -132,8 +132,7 @@
 
                 <!-- Download Button -->
                 <a href="{{ route('user.policy.download.pdf', $data->id) }}"
-                class="btn  btn-sm px-3 py-2 rounded-3 shadow-sm" style="background: #bcbfbf;">
-
+                class="btn  btn-sm px-3 py-2 rounded-3 shadow-sm" style="background: #e65f97;">
                     <i class="fa-solid fa-download me-1"></i>
                     Download PDF
                 </a>
