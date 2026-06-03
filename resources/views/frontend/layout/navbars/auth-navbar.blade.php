@@ -48,7 +48,7 @@
                                      <ul class="sub-menu">
                                          <li class="mega"><a href="#">Policy Listing</a>
                                              <ul class="sub-sub-menu">
-                                                 <li><a href="self-policies.php">Self Policy Listing</a></li>
+                                                 <li><a href="{{ route('frontend.self-policy') }}">Self Policy Listing</a></li>
                                                  <li><a href="nominated-policies.php">Nominated Policy Listing</a></li>
                                              </ul>
                                          </li>
