@@ -10,32 +10,10 @@
     <div class="card">
         @include('backend.userPolicy.filter')
         <div class="table-responsive">
-            <table>
-                <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Policy Number</th>
-                        <th>Policy Plan</th>
-                        <th>User</th>
-                        <th>User Detail</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody id="filter_data">
+                <div id="policy_list">
                     @include('backend.userPolicy.rows')
-                </tbody>
-            </table>
+                </div>
         </div>
-        {{-- PAGINATION OUTSIDE TABLE --}}
-    <div class="mt-3">
-        {{ $data->links('pagination::bootstrap-4') }}
-    </div>
-
-    <div class="mt-2">
-        Showing {{ $data->firstItem() }} to {{ $data->lastItem() }}
-        of {{ $data->total() }} entries
-    </div>
     </div>
 </section>
 

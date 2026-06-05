@@ -96,7 +96,7 @@
             </div>
         </div>
     </section>
-
+   
     <section class="profile-form-area mt-80 mb-80">
         <div class="container">
             <div class="text-center mb-50">

@@ -65,20 +65,18 @@ class UserPolicyController extends Controller
         $direction = $request->direction ?? 'desc';
 
         $query->orderBy($sortBy, $direction);
-        //dump($request->qty);
-        $data = $query->latest()->paginate($request->qty ?? 10);
-        $dataCount = $query->count();
 
-        //AJAX RESPONSE (ONLY ROWS)
+        $data = $query->latest()->paginate($request->qty ?? 10)->withQueryString();
+        $dataCount = $query->count();
         if ($request->ajax()) {
             return view('backend.userPolicy.rows', compact('data', 'dataCount'))->render();
         }
         return view('backend.userPolicy.list', compact('data', 'Classes', 'dataCount'));
     }
+    
     public function policy_detail($id)
     {
         $id = Crypt::decryptString($id);
-        $id = unserialize($id);
         $data = UserPolicyData::where('id', $id)->first();
 
 
@@ -88,7 +86,6 @@ class UserPolicyController extends Controller
     public function downloadPolicyUserPdf($id)
     {
         $data = UserPolicyData::where('id', $id)->first();
-        // run this command   ->    composer require barryvdh/laravel-dompdf
         $pdf = Pdf::loadView('backend.userPolicy.policy-detail-pdf', compact('data'))
             ->setPaper('a4', 'portrait');
 

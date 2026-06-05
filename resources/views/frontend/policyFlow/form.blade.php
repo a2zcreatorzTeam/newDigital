@@ -56,12 +56,13 @@
                         console.log(response);
 
                         if (response.success) {
-                            Swal.fire({
-                                title: 'Success!',
-                                text: 'Data Save successfully.',
-                                icon: 'success',
-                                timer: 2000
-                            });
+                            window.location.href = response.redirect_url;
+                            // Swal.fire({
+                            //     title: 'Success!',
+                            //     text: 'Data Save successfully.',
+                            //     icon: 'success',
+                            //     timer: 2000
+                            // });
                         } else {
                             Swal.fire('Error', response.message || 'Something went wrong', 'error');
                         }

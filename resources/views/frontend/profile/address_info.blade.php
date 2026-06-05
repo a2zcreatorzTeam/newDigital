@@ -6,7 +6,7 @@
             <div class="row">
                 <div class="col-md-4 mb-3">
                     <div class="form-group">
-                        <label>Province (صوبہ)</label>
+                        <label>Province (صوبہ)<span class="text-danger"> *</span></label>
                         <select name="permanent_province_id" id="permanent_province_id" class="form-control">
                             <option>Select Provinces</option>
                             @foreach ($provinces as $item)
@@ -17,7 +17,7 @@
                 </div>
                 <div class="col-md-4 mb-3">
                     <div class="form-group">
-                        <label>City (شہر)</label>
+                        <label>City (شہر)<span class="text-danger"> *</span></label>
                         <select name="permanent_city_id" id="permanent_city_id" class="form-control">
                             <option>Select City</option>
                         </select>
@@ -26,7 +26,7 @@
                 </div>
                 <div class="col-md-4 mb-3">
                     <div class="form-group">
-                        <label>District (ضلع)</label>
+                        <label>District (ضلع)<span class="text-danger"> *</span></label>
                         <select name="permanent_district_id" id="permanent_district_id" class="form-control">
                             <option>Select District</option>
                         </select>
@@ -35,7 +35,7 @@
 
                 <div class="col-md-12 mb-3">
                     <div class="form-group">
-                        <label>Address Line (مکمل پتہ)</label>
+                        <label>Address Line (مکمل پتہ)<span class="text-danger"> *</span></label>
                         <input type="text" value="{{$user->AddressInfo->permanent_address ?? ''}}" class="form-control" name="permanent_address">
                     </div>
                 </div>
@@ -45,7 +45,7 @@
 
                 <div class="col-md-4 mb-3">
                     <div class="form-group">
-                        <label>Province (صوبہ)</label>
+                        <label>Province (صوبہ)<span class="text-danger"> *</span></label>
                         <select name="corres_province_id" id="corres_province_id" class="form-control">
                             <option>Select Provinces</option>
                             @foreach ($provinces as $item)
@@ -56,7 +56,7 @@
                 </div>
                 <div class="col-md-4 mb-3">
                     <div class="form-group">
-                        <label>City (شہر)</label>
+                        <label>City (شہر)<span class="text-danger"> *</span></label>
                         <select name="corres_city_id" id="corres_city_id" class="form-control">
                             <option>Select City</option>
                         </select>
@@ -65,7 +65,7 @@
                 </div>
                 <div class="col-md-4 mb-3">
                     <div class="form-group">
-                        <label>District (ضلع)</label>
+                        <label>District (ضلع)<span class="text-danger"> *</span></label>
                         <select name="corres_district_id" id="corres_district_id" class="form-control">
                             <option>Select District</option>
                         </select>
@@ -74,7 +74,7 @@
 
                 <div class="col-md-12 mb-3">
                     <div class="form-group">
-                        <label>Address Line (مکمل پتہ)</label>
+                        <label>Address Line (مکمل پتہ)<span class="text-danger"> *</span></label>
                         <input type="text" value="{{$user->AddressInfo->corres_address ?? ''}}" class="form-control" name="corres_address">
                     </div>
                 </div>
@@ -86,7 +86,7 @@
             <div class="row">
                 <div class="col-md-4 mb-3">
                     <div class="form-group">
-                        <label>Province (صوبہ)</label>
+                        <label>Province (صوبہ)<span class="text-danger"> *</span></label>
                         <select name="temp_province_id" id="temp_province_id" class="form-control">
                             <option>Select Provinces</option>
                             @foreach ($provinces as $item)
@@ -97,7 +97,7 @@
                 </div>
                 <div class="col-md-4 mb-3">
                     <div class="form-group">
-                        <label>City (شہر)</label>
+                        <label>City (شہر)<span class="text-danger"> *</span></label>
                         <select name="temp_city_id" id="temp_city_id" class="form-control">
                             <option>Select City</option>
                         </select>
@@ -106,7 +106,7 @@
                 </div>
                 <div class="col-md-4 mb-3">
                     <div class="form-group">
-                        <label>District (ضلع)</label>
+                        <label>District (ضلع)<span class="text-danger"> *</span></label>
                         <select name="temp_district_id" id="temp_district_id" class="form-control">
                             <option>Select District</option>
                         </select>
@@ -114,7 +114,7 @@
                 </div>
                 <div class="col-md-12 mb-3">
                     <div class="form-group">
-                        <label>Address Line (مکمل پتہ)</label>
+                        <label>Address Line (مکمل پتہ)<span class="text-danger"> *</span></label>
                         <input type="text" class="form-control" value="{{$user->AddressInfo->temp_address ?? ''}}" name="temp_address">
                     </div>
                 </div>

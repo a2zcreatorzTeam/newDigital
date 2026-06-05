@@ -18,11 +18,11 @@ class UserController extends Controller
     {
         $query = User::latest();
 
-        // ✔️ User role
+       
         if ($request->role) {
             $query->role($request->role);
         }
-        // ✔️ User detail search (name, email)
+      
         if ($request->user_detail_search) {
 
             $search = $request->user_detail_search;
@@ -31,7 +31,7 @@ class UserController extends Controller
                 ->orWhere('email', 'like', "%$search%");
         }
         
-        // ✔️ Sorting
+      
         $sortBy = $request->sorting ?? 'id';
         $direction = $request->direction ?? 'desc';
 

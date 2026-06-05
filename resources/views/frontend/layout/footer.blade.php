@@ -138,45 +138,50 @@
 <script src="{{asset('frontend/js/login.js')}}"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<!-- <script>
-    const text = document.querySelector('.circle');
-    text.innerHTML = text.textContent.replace(/\S/g, "<span>$&</span>");
 
-    const element = document.querySelectorAll('.circle span');
-    for (let i = 0; i < element.length; i++) {
-        element[i].style.transform = "rotate(" + i * 17 + "deg)"
-    }
-</script> -->
 
 
 <script>
     @if(session('success'))
     Swal.fire({
+        toast: true,
+        position: 'top-end',
         icon: 'success',
-        title: 'Success',
-        text: "{{ session('success') }}",
+        title: "{{ session('success') }}",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true
     });
     @endif
+
     @if(session('info'))
     Swal.fire({
+        toast: true,
+        position: 'top-end',
         icon: 'info',
-        title: 'Info',
-        text: "{{ session('info') }}",
+        title: "{{ session('info') }}",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true
     });
     @endif
 
     @if(session('error'))
     Swal.fire({
+        toast: true,
+        position: 'top-end',
         icon: 'error',
-        title: 'Error',
-        text: "{{ session('error') }}",
+        title: "{{ session('error') }}",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true
     });
     @endif
 </script>
 
 <script>
     const isLoggedIn = @json(Auth::check());
-    console.log(isLoggedIn);
+   
 
 
     if (isLoggedIn) {

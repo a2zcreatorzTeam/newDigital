@@ -11,7 +11,7 @@ use App\Http\Controllers\backend\UserController;
 use App\Http\Controllers\backend\UserPolicyController;
 use App\Http\Controllers\Frontend\FrontendController;
 use App\Http\Controllers\Frontend\PolicyController;
-use App\Models\District;
+use App\Http\Controllers\Frontend\VoucheController;
 use App\Models\User;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Auth;
@@ -66,7 +66,7 @@ Route::group(['middleware' => ['user.role']], function () {
                 Route::get('/export', 'export')->name('export');
         });
 });
-
+        
 
 Route::prefix('admin')->name('admin.')->controller(AuthController::class)->group(function () {
         Route::get('login/', 'loginPage')->name('login');
@@ -106,6 +106,30 @@ Route::prefix('/')->name('frontend.')->controller(FrontendController::class)->gr
         Route::post('/resend-otp', 'resendOtp')->name('resend.otp');
 });
 
+
+
+
+
+
+
+Route::prefix('/voucher')->name('voucher.')->controller(VoucheController::class)->group(function () {
+        Route::get('/{id}', 'voucher')->name('voucher');
+      
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Route::prefix('/')->name('frontend.')->controller(FrontendController::class)
         ->middleware('front.role')
         ->group(function () {
@@ -140,3 +164,8 @@ Route::get('/test-email', function () {
 
         return "Test email sent successfully!";
 });
+
+
+
+
+

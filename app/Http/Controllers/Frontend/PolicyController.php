@@ -29,6 +29,8 @@ class PolicyController extends Controller
     }
     public function policy_detail($id)
     {
+        $id = decrypt($id);
+   
         $data = UserPolicyData::where('id',$id)->first();
 
         return view('frontend.self-policy.policy_detail', compact('data'));

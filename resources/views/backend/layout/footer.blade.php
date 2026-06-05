@@ -29,24 +29,31 @@
     });
     document.addEventListener('DOMContentLoaded', function() {
 
-        @if(session('success'))
-        Swal.fire({
-            icon: 'success',
-            title: 'Success',
-            text: "{{ session('success') }}",
-            timer: 10000,
-            showConfirmButton: true
-        });
-        @endif
+@if(session('success'))
+Swal.fire({
+    toast: true,
+    position: 'top-end',
+    icon: 'success',
+    title: 'Success',
+    text: "{{ session('success') }}",
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true
+});
+@endif
 
-        @if(session('error'))
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            showConfirmButton: true,
-            text: "{{ session('error') }}"
-        });
-        @endif
+@if(session('error'))
+Swal.fire({
+    toast: true,
+    position: 'top-end',
+    icon: 'error',
+    title: 'Error',
+    text: "{{ session('error') }}",
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true
+});
+@endif
 
     });
 </script>

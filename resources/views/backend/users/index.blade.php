@@ -1,6 +1,12 @@
 @extends('backend.layout.master')
 @section('content')
-
+<style>
+    label {
+    display: inline-block;
+    text-align: start !important;
+    width: 100%;
+}
+</style>
 
 <section id="section-dashboard">
     <div class="flex justify-between items-center mb-4">

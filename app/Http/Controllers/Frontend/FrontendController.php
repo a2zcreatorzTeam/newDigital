@@ -12,6 +12,8 @@ use App\Mail\SendOtpMail;
 use App\Models\AddressInfo;
 use App\Models\BasicDetail;
 use App\Models\City;
+use Carbon\Carbon;
+use App\Models\Voucher;
 use App\Models\District;
 use App\Models\MainClass;
 use App\Models\Otp;
@@ -89,7 +91,7 @@ class FrontendController extends Controller
                 'cnic' => $validated['cnic'],
                 'password' => Hash::make($validated['password']),
             ]);
-            
+
             // ✅ Generate OTP
             $otpCode = rand(100000, 999999);
 
@@ -102,10 +104,10 @@ class FrontendController extends Controller
             ]);
 
             // ✅ Send OTP Email
-            Mail::to($user->email)->send(new SendOtpMail($otpCode,$user));
+            Mail::to($user->email)->send(new SendOtpMail($otpCode, $user));
 
             // ✅ Login User
-           // Auth::login($user);
+            // Auth::login($user);
 
             // ✅ Success Response (for AJAX)
             return response()->json([
@@ -250,7 +252,7 @@ class FrontendController extends Controller
     }
     public function dashboard(Request $request, $id)
     {
-
+         
         if (session()->has('policy_id')) {
             session()->forget('policy_id');
         }
@@ -442,6 +444,9 @@ class FrontendController extends Controller
                     'user_id'   => $userId,
                     'policy_id' => $policy_id,
                 ] + $data);
+
+                 $this->generateCustomerVoucher($policy);
+                 
             }
 
             DB::commit();
@@ -449,7 +454,8 @@ class FrontendController extends Controller
             return response()->json([
                 'success'   => true,
                 'message'   => 'Policy saved successfully',
-                'policy_id' => $policy->policy_id
+                'policy_id' => $policy->policy_id,
+                'redirect_url' => route('voucher.voucher', [$policy->id])
             ]);
         } catch (\Exception $e) {
             DB::rollBack();
@@ -459,6 +465,38 @@ class FrontendController extends Controller
                 'message' => 'Something went wrong: ' . $e->getMessage()
             ], 500);
         }
+    }
+
+
+
+    protected   function generateCustomerVoucher($order)
+    {
+
+
+        $prefix = "01520";
+        $currentDate = Carbon::now();
+        $billingMonth = $currentDate->format('ym');
+
+        $sequence = str_pad($order->id, 7, '0', STR_PAD_LEFT);
+
+        $consumerNumber = $prefix . $billingMonth . $sequence;
+     
+        // DB me insert karna
+        return Voucher::create([
+            'consumer_number' => $consumerNumber,
+            'customer_name' => $order->life_proposed_full_name,
+            // 'amount_within_due_date' => $order->total_amount,
+            'amount_within_due_date' => 1000,
+            // 'amount_after_due_date' => $order->total_amount + 150, // Late fee agar applicable ho
+            'amount_after_due_date' => 1000 + 150, // Late fee agar applicable ho
+            'due_date' => Carbon::now()->addDays(10)->format('Y-m-d'),
+            'billing_month' => $billingMonth,
+            'email' => $order->user_email,
+            'contact_number' => $order->mobile_number,
+            'status' => 'U',
+            'order_id'=>$order->id,
+            'policy_id'=>$order->policy_id
+        ]);
     }
 
     public function getPlanData(Request $request)
@@ -546,7 +584,7 @@ class FrontendController extends Controller
         $user->email_verified_at = now();
         $user->save();
 
-         // 🔥 LOGIN ONLY AFTER OTP SUCCESS
+        // 🔥 LOGIN ONLY AFTER OTP SUCCESS
         Auth::login($user);
         return response()->json([
             'status' => true,
@@ -584,4 +622,8 @@ class FrontendController extends Controller
             'message' => 'New OTP sent successfully'
         ]);
     }
+
+
+
+    
 }
