@@ -533,6 +533,16 @@
 
             /* Move logout to top or hide on small mobile for brevity */
         }
+        .pagination .page-link {
+            color: #000 !important;
+            background-color: #fff !important;
+        }
+
+        .pagination .page-item.active .page-link {
+            color: #fff !important;
+            background-color: #0d6efd !important;
+            border-color: #0d6efd !important;
+        }
     </style>
 </head>
 

@@ -9,11 +9,25 @@
 
 
     <div class="card">
-        <div class="flex justify-between items-center mb-4">
-            <h3 class="font-semibold text-dark" style="font-size: 1.1rem;">Policies Category</h3>
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+            <h3 class="font-semibold text-dark mb-0" style="font-size: 1.1rem;">Policies Category</h3>
+            <div class="d-flex align-items-center gap-2">
+
+            <a href="{{ request()->fullUrlWithQuery(['export' => 1]) }}"
+            class="btn"
+            style="border-radius:6px;
+                    background:#b7b5b1;
+                    color:#84827f;
+                    border-color:#b7b5b1;">
+
+                <i class="fa-solid fa-file-csv"></i>
+                <span>Export</span>
+            </a>
+
             @can('class-create')
             <a class="btn  btn-icon" style="background-color:#ff5733;" href="{{route('class.create')}}">Create New Category</a>
             @endcan
+        </div>
         </div>
         <div class="table-responsive">
             <table>
@@ -58,6 +72,14 @@
 
                 </tbody>
             </table>
+            <div class="mt-3">
+                {{ $classes->links('pagination::bootstrap-4') }}
+            </div>
+
+            <div class="mt-2">
+                Showing {{ $classes->firstItem() }} to {{ $classes->lastItem() }}
+                of {{ $classes->total() }} entries
+            </div>
         </div>
     </div>
 </section>

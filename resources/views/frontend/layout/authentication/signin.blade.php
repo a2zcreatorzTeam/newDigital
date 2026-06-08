@@ -66,9 +66,13 @@
                        $("#profile_name").text(response.data.name);
 
                        Swal.fire({
+                           toast: true,
+                           position: 'top-end',
                            icon: 'success',
-                           title: 'Success',
-                           text: response.message,
+                           title: response.message,
+                           showConfirmButton: false,
+                           timer: 3000,
+                           timerProgressBar: true
                        });
                        $('.offcanvas-close').trigger('click');
                        $('#signinForm')[0].reset();
@@ -91,7 +95,24 @@
                                text: errorMsg,
                            });
                        }
+                       // ✅ EMAIL NOT VERIFIED
+                       else if (xhr.status === 403 && xhr.responseJSON.verification_required) {
 
+                           Swal.fire({
+                               icon: 'warning',
+                               title: 'Email Verification Required',
+                               text: xhr.responseJSON.message,
+                           });
+
+                           // hide signin
+                           $('#signinForm').hide();
+
+                           // show otp form
+                           $('#otpForm').show();
+
+                           // set user id
+                           $('#otp_user_id').val(xhr.responseJSON.user_id);
+                       }
                        // ❌ Other Errors (500, etc.)
                        else {
                            Swal.fire({

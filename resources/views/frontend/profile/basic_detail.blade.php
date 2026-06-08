@@ -1,11 +1,12 @@
 <form action="#" method="POST" id="basicDetailsForm">
     @csrf
+    
     <h2 class="profile-section-title">Basic Details</h2>
     <div class="box-form-login">
         <div class="row">
             <div class="col-6">
                 <div class="form-group">
-                    <label for="">Life Proposed Full Name (بیمہ زندگی کے لئے مجوزہ کا پورا نام)</label>
+                    <label for="">Life Proposed Full Name (بیمہ زندگی کے لئے مجوزہ کا پورا نام)<span class="text-danger"> *</span></label>
                     <input type="text" value="{{$user->basicDetail?->life_proposed_full_name ?? ''}}" name="life_proposed_full_name" class="form-control account" required>
                     @error('life_proposed_full_name')
                     <div class="invalid-feedback" style="display: block;">
@@ -16,20 +17,20 @@
             </div>
             <div class="col-6">
                 <div class="form-group">
-                    <label for="">Mobile Number Personal (ذاتی موبائل نمبر)</label>
-                    <input type="text" value="{{$user->basicDetail->mobile_number ?? ''}}" name="mobile_number" class="form-control account" placeholder="0321-6905568" required>
+                    <label for="">Mobile Number Personal (ذاتی موبائل نمبر)<span class="text-danger"> *</span><span class="text-danger"> *</span></label>
+                    <input type="text" value="{{$user->basicDetail->mobile_number ?? ''}}" name="mobile_number" class="form-control account" placeholder="0322-9847785" required>
                 </div>
             </div>
 
             <div class="col-6">
                 <div class="form-group">
-                    <label for="">CNIC / B-FORM NO (قومی شناختی کارڈ نمبر)</label>
+                    <label for="">CNIC / B-FORM NO (قومی شناختی کارڈ نمبر)<span class="text-danger"> *</span></label>
                     <input type="text" required name="cnic_number" value="{{$user->basicDetail->cnic_number ?? ''}}" class="form-control account">
                 </div>
             </div>
             <div class="col-6">
                 <div class="form-group">
-                    <label for="">Cnic Issue Date (شناختی کارڈ جاری کرنے کی تاریخ)</label>
+                    <label for="">Cnic Issue Date (شناختی کارڈ جاری کرنے کی تاریخ)<span class="text-danger"> *</span></label>
                     <input type="date"
                         value="{{$user->basicDetail->cnic_issue_date ?? ''}}"
                         name="cnic_issue_date" required
@@ -39,14 +40,14 @@
             </div>
             <div class="col-6">
                 <div class="form-group">
-                    <label for="">Cnic Expiry Date (شناختی کارڈ کی میعاد ختم ہونے کی تاریخ)</label>
+                    <label for="">Cnic Expiry Date (شناختی کارڈ کی میعاد ختم ہونے کی تاریخ)<span class="text-danger"> *</span></label>
                     <input type="date" required name="cnic_expiry_date" value="{{$user->basicDetail->cnic_expiry_date ?? ''}}" class="form-control account">
                 </div>
 
             </div>
             <div class="col-6">
                 <div class="form-group">
-                    <label for="">Date Of Birth (تاریخِ پیدائش)</label>
+                    <label for="">Date Of Birth (تاریخِ پیدائش)<span class="text-danger"> *</span></label>
                     <input type="date" name="date_of_birth" class="form-control account" value="{{$user->basicDetail->date_of_birth ?? ''}}" required>
                 </div>
 
@@ -56,7 +57,7 @@
             <!-- Age -->
             <div class="col-6">
                 <div class="form-group">
-                    <label>Age Nearest Birth-date (عمر)*</label>
+                    <label>Age Nearest Birth-date (عمر)<span class="text-danger"> *</span></label>
                     <input type="text" required id="age_birth" value="{{$user->basicDetail->age_nearest_date ?? ''}}" readonly name="age_nearest_date" class="form-control account">
                 </div>
             </div>
@@ -64,7 +65,7 @@
             <!-- Gender -->
             <div class="col-6">
                 <div class="form-group">
-                    <label>Gender/Sex (جنس)*</label>
+                    <label>Gender/Sex (جنس)<span class="text-danger"> *</span></label>
                     <select name='gender' class="form-control" required>
                         <option value="">Select Gender</option>
                         <option value="Male" {{ ($user->basicDetail->gender ?? '') == 'Male' ? 'selected' : '' }}>Male</option>
@@ -76,7 +77,7 @@
             <!-- Mother Maiden Name -->
             <div class="col-6">
                 <div class="form-group">
-                    <label>Mother Maiden Name (والدہ کا خاندانی نام)*</label>
+                    <label>Mother Maiden Name (والدہ کا خاندانی نام)<span class="text-danger"> *</span></label>
                     <input required type="text" value="{{ $user->basicDetail->mother_maiden_name ?? '' }}" name='mother_maiden_name' class="form-control account">
                 </div>
             </div>
@@ -84,7 +85,7 @@
             <!-- Father Name -->
             <div class="col-6">
                 <div class="form-group">
-                    <label>Father’s Name of Life Proposed (مجوزہ بیمہ کے والد کا نام)*</label>
+                    <label>Father’s Name of Life Proposed (مجوزہ بیمہ کے والد کا نام)<span class="text-danger"> *</span></label>
                     <input required type="text" name='father_name' class="form-control account" value="{{ $user->basicDetail->father_name ?? '' }}">
                 </div>
             </div>
@@ -92,7 +93,7 @@
             <!-- Husband Name -->
             <div class="col-6">
                 <div class="form-group">
-                    <label>Husband Name of Life Proposed (بیمہ کنندہ کے شوہر کا نام)*</label>
+                    <label>Husband Name of Life Proposed (بیمہ کنندہ کے شوہر کا نام)<span class="text-danger"> *</span></label>
                     <input type="text" required name="husband_name" class="form-control account"
                         value="{{ $user->basicDetail->husband_name ?? '' }}">
                 </div>
@@ -101,7 +102,7 @@
             <!-- Religion -->
             <div class="col-6">
                 <div class="form-group">
-                    <label>Religion (مذہب)*</label>
+                    <label>Religion (مذہب)<span class="text-danger"> *</span></label>
                     <input type="text" required name='religion' class="form-control account" value="{{ $user->basicDetail->religion ?? '' }}">
                 </div>
             </div>
@@ -109,7 +110,7 @@
             <!-- Email -->
             <div class="col-6">
                 <div class="form-group">
-                    <label>Email Address (ای میل ایڈریس)*</label>
+                    <label>Email Address (ای میل ایڈریس)<span class="text-danger"> *</span></label>
                     <input type="email" name="email" class="form-control required account" value="{{ $user->basicDetail->email ?? '' }}">
                 </div>
             </div>
@@ -117,7 +118,7 @@
             <!-- Age Proof -->
             <div class="col-6">
                 <div class="form-group">
-                    <label>Age Proof (عمر کا ثبوت)*</label>
+                    <label>Age Proof (عمر کا ثبوت)<span class="text-danger"> *</span></label>
                     <input type="text" name='age_proof' required class="form-control account" value="{{ $user->basicDetail->age_proof ?? '' }}">
                 </div>
             </div>
@@ -125,7 +126,7 @@
             <!-- Office Phone -->
             <div class="col-6">
                 <div class="form-group">
-                    <label>Phone Number Office (آفس فون نمبر)*</label>
+                    <label>Phone Number Office (آفس فون نمبر)</label>
                     <input type="text" name='phone_number_office' class="form-control account" value="{{ $user->basicDetail->phone_number_office ?? '' }}">
                 </div>
             </div>
@@ -133,7 +134,7 @@
             <!-- Residential Phone -->
             <div class="col-6">
                 <div class="form-group">
-                    <label>Phone Number Residential (رہائشی فون نمبر)*</label>
+                    <label>Phone Number Residential (رہائشی فون نمبر)</label>
                     <input type="text" name='phone_number_residente' class="form-control account" value="{{ $user->basicDetail->phone_number_residente ?? '' }}">
                 </div>
             </div>
@@ -141,7 +142,7 @@
             <!-- Fax -->
             <div class="col-6">
                 <div class="form-group">
-                    <label>Fax No (فیکس نمبر)*</label>
+                    <label>Fax No (فیکس نمبر)<span class="text-danger"> *</span></label>
                     <input type="text" required value="{{ $user->basicDetail->fax_number ?? '' }}" name='fax_number' class="form-control account">
                 </div>
             </div>
@@ -149,7 +150,7 @@
             <!-- Dual National -->
             <div class="col-6">
                 <div class="form-group">
-                    <label>Is Client Dual National? (کیا سائل ڈوئل قومیت رکھتا ہے؟)*</label>
+                    <label>Is Client Dual National? (کیا سائل ڈوئل قومیت رکھتا ہے؟)<span class="text-danger"> *</span></label>
                     <select name="is_client_dual_national" required class="form-control" id="is_client_dual_national">
                         <option value="">Select Option</option>
                         <option value="Yes" {{ ($user->basicDetail->is_client_dual_national ?? '') == 'Yes' ? 'selected' : '' }}>Yes</option>
@@ -164,7 +165,7 @@
             <!-- Primary Nationality -->
             <div class="col-6">
                 <div class="form-group">
-                    <label>Primary Nationality (قومیت)*</label>
+                    <label>Primary Nationality (قومیت)<span class="text-danger"> *</span></label>
                     <input type="text" required value="{{ $user->basicDetail->primary_nationality ?? '' }}" name='primary_nationality' class="form-control account">
                 </div>
             </div>
@@ -172,7 +173,7 @@
             <!-- Dual Nationality -->
             <div class="col-6">
                 <div class="form-group">
-                    <label>Dual Nationality (دوہری قومیت)*</label>
+                    <label>Dual Nationality (دوہری قومیت)<span class="text-danger"> *</span></label>
                     <input type="text" value="{{ $user->basicDetail->dual_nationality ?? '' }}" name='dual_nationality' class="form-control account">
                 </div>
             </div>
@@ -180,7 +181,7 @@
             <!-- Birth Place -->
             <div class="col-6">
                 <div class="form-group">
-                    <label>Birth Place (مقامِ پیدائش)*</label>
+                    <label>Birth Place (مقامِ پیدائش)<span class="text-danger"> *</span></label>
                     <input type="text" required value="{{ $user->basicDetail->birth_placed ?? '' }}" name='birth_placed' class="form-control account">
                 </div>
             </div>
@@ -188,7 +189,7 @@
             <!-- Proposer & Life Proposed Same -->
             <div class="col-6">
                 <div class="form-group">
-                    <label>Proposer & Life Proposed are same?*</label>
+                    <label>Proposer & Life Proposed are same?<span class="text-danger"> *</span></label>
                     <select name="is_same_person" required class="form-control">
                         <option value="">Select Option</option>
                         <option value="Yes" {{ ($user->basicDetail->is_same_person ?? '') == 'Yes' ? 'selected' : '' }}>Yes</option>

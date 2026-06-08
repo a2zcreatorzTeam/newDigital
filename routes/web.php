@@ -10,7 +10,8 @@ use App\Http\Controllers\backend\SubClassController;
 use App\Http\Controllers\backend\UserController;
 use App\Http\Controllers\backend\UserPolicyController;
 use App\Http\Controllers\Frontend\FrontendController;
-use App\Models\District;
+use App\Http\Controllers\Frontend\PolicyController;
+use App\Http\Controllers\Frontend\VoucheController;
 use App\Models\User;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Auth;
@@ -60,9 +61,12 @@ Route::group(['middleware' => ['user.role']], function () {
         Route::prefix('admin/dashboard/userPolicy')->name('user.policy.')->controller(UserPolicyController::class)->group(function () {
                 Route::get('/list', 'allUserPolicyList')->name('list');
                 Route::get('/policyDetail/{id}', 'policy_detail')->name('policyDetail');
+                Route::get('/profile/{id}/download-pdf', 'downloadPolicyUserPdf')
+                ->name('download.pdf');
+                Route::get('/export', 'export')->name('export');
         });
 });
-
+        
 
 Route::prefix('admin')->name('admin.')->controller(AuthController::class)->group(function () {
         Route::get('login/', 'loginPage')->name('login');
@@ -98,12 +102,46 @@ Route::prefix('/')->name('frontend.')->controller(FrontendController::class)->gr
         Route::post('/get/district/data', 'getDistrictData')->name('getDistrictData');
         Route::post('/updateProfile', 'updateProfile')->name('updateProfile');
         Route::get('/logout', 'logout')->name('logout');
+        Route::post('/verify-otp','verifyOtp')->name('verify.otp');
+        Route::post('/resend-otp', 'resendOtp')->name('resend.otp');
 });
+
+
+
+
+
+
+
+Route::prefix('/voucher')->name('voucher.')->controller(VoucheController::class)->group(function () {
+        Route::get('/{id}', 'voucher')->name('voucher');
+      
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 Route::prefix('/')->name('frontend.')->controller(FrontendController::class)
         ->middleware('front.role')
         ->group(function () {
                 Route::get('/profile', 'profile')->name('profile');
+        });
+
+//self policy listing
+Route::prefix('/')->name('frontend.')->controller(PolicyController::class)
+        ->middleware('front.role')
+        ->group(function () {
+                Route::get('/self-policy', 'self_policy')->name('self-policy');
+                Route::get('/self-policy-detail/{id}', 'policy_detail')->name('policyDetail');
         });
 
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
@@ -126,3 +164,8 @@ Route::get('/test-email', function () {
 
         return "Test email sent successfully!";
 });
+
+
+
+
+

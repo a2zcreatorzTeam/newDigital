@@ -17,6 +17,13 @@ return [
     'postmark' => [
         'key' => env('POSTMARK_API_KEY'),
     ],
+    
+    'kuickpay' => [
+        'base_url'      => env('KUICKPAY_BASE_URL'),
+        'username'      => env('KUICKPAY_USERNAME'),
+        'password'      => env('KUICKPAY_PASSWORD'),
+        'bank_mnemonic' => env('KUICKPAY_BANK_MNEMONIC'),
+    ],
 
     'resend' => [
         'key' => env('RESEND_API_KEY'),

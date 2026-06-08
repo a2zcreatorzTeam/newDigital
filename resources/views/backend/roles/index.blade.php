@@ -50,6 +50,14 @@
 
                 </tbody>
             </table>
+            <div class="mt-3">
+                {{ $roles->links('pagination::bootstrap-4') }}
+            </div>
+
+            <div class="mt-2">
+                Showing {{ $roles->firstItem() }} to {{ $roles->lastItem() }}
+                of {{ $roles->total() }} entries
+            </div>
         </div>
     </div>
 </section>

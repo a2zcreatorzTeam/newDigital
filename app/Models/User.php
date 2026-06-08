@@ -3,8 +3,10 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Otp;
 use App\Notifications\CustomResetPasswordNotification;
 use Database\Factories\UserFactory;
+use Illuminate\Auth\Notifications\VerifyEmail as BaseVerifyEmail;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -13,11 +15,10 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
-use Illuminate\Auth\Notifications\VerifyEmail as BaseVerifyEmail;
 
 #[Fillable(['name', 'email', 'password', 'user_type', 'cnic', 'phone_no'])]
 #[Hidden(['password', 'remember_token'])]
-class User extends Authenticatable  implements MustVerifyEmail
+class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable, HasRoles;
@@ -76,5 +77,9 @@ class User extends Authenticatable  implements MustVerifyEmail
                     ]);
             }
         });
+    }
+    public function otps()
+    {
+        return $this->hasMany(Otp::class);
     }
 }

@@ -10,7 +10,7 @@
 
             <div class="col-6">
                 <div class="form-group">
-                    <label>Height (In cm) (قد سینٹی میٹر میں)*</label>
+                    <label>Height (In cm) (قد سینٹی میٹر میں)<span class="text-danger"> *</span></label>
                     <input type="number" class="form-control" name="height_cm"
                         value="{{ $user->health->height_cm ?? '' }}">
                 </div>
@@ -18,7 +18,7 @@
 
             <div class="col-6">
                 <div class="form-group">
-                    <label>Height (In Feet)*</label>
+                    <label>Height (In Feet)<span class="text-danger"> *</span></label>
                     <input type="number" class="form-control" name="height_ft"
                         value="{{ $user->health->height_ft ?? '' }}">
                 </div>
@@ -26,7 +26,7 @@
 
             <div class="col-6">
                 <div class="form-group">
-                    <label>Weight (In Kg)*</label>
+                    <label>Weight (In Kg)<span class="text-danger"> *</span></label>
                     <input type="number" class="form-control" name="weight_kg"
                         value="{{ $user->health->weight_kg ?? '' }}">
                 </div>
@@ -34,7 +34,7 @@
 
             <div class="col-6">
                 <div class="form-group">
-                    <label>Chest Insp (cm)*</label>
+                    <label>Chest Insp (cm)<span class="text-danger"> *</span></label>
                     <input type="number" class="form-control" name="chest_insp_cm"
                         value="{{ $user->health->chest_insp_cm ?? '' }}">
                 </div>
@@ -42,7 +42,7 @@
 
             <div class="col-6">
                 <div class="form-group">
-                    <label>Chest Insp (Inches)*</label>
+                    <label>Chest Insp (Inches)<span class="text-danger"> *</span></label>
                     <input type="number" class="form-control" name="chest_insp_inches"
                         value="{{ $user->health->chest_insp_inches ?? '' }}">
                 </div>
@@ -50,7 +50,7 @@
 
             <div class="col-6">
                 <div class="form-group">
-                    <label>Chest Exp (cm)*</label>
+                    <label>Chest Exp (cm)<span class="text-danger"> *</span></label>
                     <input type="number" class="form-control" name="chest_exp_cm"
                         value="{{ $user->health->chest_exp_cm ?? '' }}">
                 </div>
@@ -58,7 +58,7 @@
 
             <div class="col-6">
                 <div class="form-group">
-                    <label>Chest Exp (Inches)*</label>
+                    <label>Chest Exp (Inches)<span class="text-danger"> *</span></label>
                     <input type="number" class="form-control" name="chest_exp_inches"
                         value="{{ $user->health->chest_exp_inches ?? '' }}">
                 </div>
@@ -66,7 +66,7 @@
 
             <div class="col-6">
                 <div class="form-group">
-                    <label>Abdomen (cm)*</label>
+                    <label>Abdomen (cm)<span class="text-danger"> *</span></label>
                     <input type="number" class="form-control" name="abdomen_cm"
                         value="{{ $user->health->abdomen_cm ?? '' }}">
                 </div>
@@ -74,7 +74,7 @@
 
             <div class="col-6">
                 <div class="form-group">
-                    <label>Abdomen (Inches)*</label>
+                    <label>Abdomen (Inches)<span class="text-danger"> *</span></label>
                     <input type="number" class="form-control" name="abdomen_inches"
                         value="{{ $user->health->abdomen_inches ?? '' }}">
                 </div>
@@ -82,7 +82,7 @@
 
             <div class="col-6">
                 <div class="form-group">
-                    <label>Weight Loss (Kg)*</label>
+                    <label>Weight Loss (Kg)<span class="text-danger"> *</span></label>
                     <input type="number" class="form-control" name="weight_loss_kg"
                         value="{{ $user->health->weight_loss_kg ?? '' }}">
                 </div>
@@ -90,7 +90,7 @@
 
             <div class="col-6">
                 <div class="form-group">
-                    <label>Weight Gain (Kg)*</label>
+                    <label>Weight Gain (Kg)<span class="text-danger"> *</span></label>
                     <input type="number" class="form-control" name="weight_gain_kg"
                         value="{{ $user->health->weight_gain_kg ?? '' }}">
                 </div>
@@ -98,7 +98,7 @@
 
             <div class="col-6">
                 <div class="form-group">
-                    <label>Reason of Increase Weight*</label>
+                    <label>Reason of Increase Weight<span class="text-danger"> *</span></label>
                     <textarea class="form-control" name="weight_increase_reason" rows="3">{{ $user->health->weight_increase_reason ?? '' }}</textarea>
                 </div>
             </div>

@@ -25,20 +25,30 @@
                             <label>User Search</label>
                             <input type="text" id="user_detail_search" class="form-control" placeholder="Name, Email, Mobile, CNIC">
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
+                            <label for="Sorting">Status</label>
+                            <select name="status" id="status" class="form-control">
+                                <option value="">Select status</option>
+                                <option value="Approved">Approved</option>
+                                <option value="Pending">Pending</option>
+                                <option value="Rejected">Rejected</option>
+                                <option value="InCart">InCart</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
                             <label for="Sorting">Sort By</label>
                             <select name="sorting" id="sorting" class="form-control">
                                 <option value="id">ID</option>
                             </select>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <label for="Sorting">Direction</label>
                             <select name="direction" id="direction" class="form-control">
                                 <option value="asc">ASC</option>
                                 <option value="desc" selected>DESC</option>
                             </select>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <label for="Sorting">Qty</label>
                             <select name="qty" id="qty" class="form-control">
                                 <option value="10" selected>10</option>
@@ -46,6 +56,16 @@
                                 <option value="50">50</option>
                             </select>
                         </div>
+                        @if($dataCount > 0)
+                        <div class="col-md-12" style="text-align: right;">
+                        <a href="javascript:void(0)"
+                            id="exportCsv"
+                            class="btn"
+                            style="background: #b7b5b1;">
+                                <i class="fa-solid fa-file-csv"></i> Export CSV
+                        </a>
+                        </div>
+                        @endif
 
 
 
@@ -64,7 +84,7 @@
     $(document).ready(function() {
         $('.select2').select2();
         function filter_data(currentpage) {
-            $('.filter_data').html('<div id="loading"></div>');
+            $('.policy_list').html('<div id="loading"></div>');
             var action = 'fetch_data';
             var sorting = $("#sorting").val();
             var direction = $("#direction").val();
@@ -72,10 +92,10 @@
             var plan = $("#plan").val();
             var policy_number = $("#policy_number").val();
             var user_detail_search = $("#user_detail_search").val();
-            var ayis_page = currentpage ?? 1;
+            var status = $("#status").val();
+            var page = currentpage ?? 1;
 
             $.ajax({
-                type: 'POST',
                 url: "{{ route('user.policy.list') }}",
                 type: 'GET',
                 data: {
@@ -86,11 +106,12 @@
                     direction: direction,
                     qty: qty,
                     plan: plan,
-                    ayis_page: ayis_page,
+                    status:status,
+                    page: page,
                 },
 
                 beforeSend: function () {
-                    $('#filter_data').html(`
+                    $('#policy_list').html(`
                         <tr>
                             <td colspan="7" class="text-center">Loading...</td>
                         </tr>
@@ -98,14 +119,14 @@
                 },
                 success: function(data) {
 
-                    $('#filter_data').html(data);
+                    $('#policy_list').html(data);
                 },
                 error: function(data) {
                     console.log(data);
                 }
             });
         }
-        $('body').on('change', '#sorting, #direction, #qty, #plan', function () {
+        $('body').on('change', '#sorting, #direction, #qty, #plan,#status', function () {
             filter_data();
         });
 
@@ -118,5 +139,23 @@
             filter_data(page);
         });
     });
+    $('#exportCsv').on('click', function () {
+
+        let params = {
+            plan: $("#plan").val(),
+            policy_number: $("#policy_number").val(),
+            user_detail_search: $("#user_detail_search").val(),
+            status: $("#status").val(),
+            sorting: $("#sorting").val(),
+            direction: $("#direction").val(),
+            qty: $("#qty").val(),
+        };
+
+        let query = $.param(params);
+
+        let url = "{{ url('/admin/dashboard/userPolicy/export') }}" + '?' + query;
+
+        window.location.href = url;
+        });
 </script>
 

@@ -8,11 +8,15 @@ use App\Http\Requests\BasicDetailRequest;
 use App\Http\Requests\PolicyUserDataRequest;
 use App\Http\Requests\UserHealthRequest;
 use App\Http\Requests\UserOccupationRequest;
+use App\Mail\SendOtpMail;
 use App\Models\AddressInfo;
 use App\Models\BasicDetail;
 use App\Models\City;
+use Carbon\Carbon;
+use App\Models\Voucher;
 use App\Models\District;
 use App\Models\MainClass;
+use App\Models\Otp;
 use App\Models\PlanAgeMaturity;
 use App\Models\Provinces;
 use App\Models\SubClass;
@@ -20,17 +24,16 @@ use App\Models\User;
 use App\Models\UserHealth;
 use App\Models\UserOccupation;
 use App\Models\UserPolicyData;
-use Hash;
-
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\ValidationException;
-use Mail;
 
 class FrontendController extends Controller
 {
@@ -88,17 +91,30 @@ class FrontendController extends Controller
                 'cnic' => $validated['cnic'],
                 'password' => Hash::make($validated['password']),
             ]);
-            $encrypted = Crypt::encryptString($user->id);
 
-            Auth::login($user);
-            event(new Registered($user));
+            // ✅ Generate OTP
+            $otpCode = rand(100000, 999999);
 
+            // ✅ Save OTP
+            Otp::create([
+                'user_id' => $user->id,
+                'otp' => $otpCode,
+                'type' => 'email',
+                'expires_at' => now()->addMinutes(5),
+            ]);
+
+            // ✅ Send OTP Email
+            Mail::to($user->email)->send(new SendOtpMail($otpCode, $user));
+
+            // ✅ Login User
+            // Auth::login($user);
 
             // ✅ Success Response (for AJAX)
             return response()->json([
                 'status' => true,
-                'message' => 'User registered successfully. We have sent a verification email—please verify your email address.',
-                'data' => $user
+                'message' => 'OTP sent successfully to your email.',
+                'data' => $user,
+                'user_id' => $user->id
             ]);
         } catch (\Exception $e) {
             Log::warning('Password reset exception for:: ' . $request->email . ', reason:' . $e->getMessage());
@@ -136,7 +152,36 @@ class FrontendController extends Controller
                     'message' => 'Invalid credentials'
                 ], 401);
             }
+            // ✅ EMAIL NOT VERIFIED
+            if (!$user->email_verified_at) {
 
+                // delete old otp
+                Otp::where('user_id', $user->id)->delete();
+
+                // generate new otp
+                $otpCode = rand(100000, 999999);
+
+                // save otp
+                Otp::create([
+                    'user_id' => $user->id,
+                    'otp' => $otpCode,
+                    'type' => 'email',
+                    'expires_at' => now()->addMinutes(5),
+                ]);
+
+                // resend email
+                Mail::to($user->email)
+                    ->send(new SendOtpMail($otpCode, $user));
+
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Email not verified. New OTP sent.',
+                    'user_id' => $user->id,
+                    'verification_required' => true
+                ], 403);
+            }
+
+            // ✅ VERIFIED USER LOGIN
             Auth::login($user);
 
             return response()->json([
@@ -207,7 +252,7 @@ class FrontendController extends Controller
     }
     public function dashboard(Request $request, $id)
     {
-
+         
         if (session()->has('policy_id')) {
             session()->forget('policy_id');
         }
@@ -395,10 +440,13 @@ class FrontendController extends Controller
                     session(['policy_id' => $policy_id]);
                 } while (UserPolicyData::where('policy_id', $policy_id)->exists());
                 $data['status'] = 'Incart';
+
                 $policy = UserPolicyData::create([
                     'user_id'   => $userId,
                     'policy_id' => $policy_id,
                 ] + $data);
+                 $this->generateCustomerVoucher($policy);
+                 
             }
 
             DB::commit();
@@ -406,7 +454,8 @@ class FrontendController extends Controller
             return response()->json([
                 'success'   => true,
                 'message'   => 'Policy saved successfully',
-                'policy_id' => $policy->policy_id
+                'policy_id' => $policy->policy_id,
+                'redirect_url' => route('voucher.voucher', [$policy->id])
             ]);
         } catch (\Exception $e) {
             DB::rollBack();
@@ -416,6 +465,45 @@ class FrontendController extends Controller
                 'message' => 'Something went wrong: ' . $e->getMessage()
             ], 500);
         }
+    }
+
+
+     public function ip_address()
+    {
+        return request()->ip();
+    }
+
+
+
+    protected   function generateCustomerVoucher($order)
+    {
+
+
+        $prefix = "01520";
+        $currentDate = Carbon::now();
+        $billingMonth = $currentDate->format('ym');
+
+        $sequence = str_pad($order->id, 7, '0', STR_PAD_LEFT);
+
+        $consumerNumber = $prefix . $billingMonth . $sequence;
+     
+        // DB me insert karna
+        return Voucher::create([
+            'consumer_number' => $consumerNumber,
+            'customer_name' => $order->life_proposed_full_name,
+            // 'amount_within_due_date' => $order->total_amount,
+            'amount_within_due_date' => 1000,
+            // 'amount_after_due_date' => $order->total_amount + 150, // Late fee agar applicable ho
+            'amount_after_due_date' => 1000 + 150, // Late fee agar applicable ho
+            'due_date' => Carbon::now()->addDays(10)->format('Y-m-d'),
+            'billing_month' => $billingMonth,
+            'email' => $order->user_email,
+            'contact_number' => $order->mobile_number,
+            'status' => 'U',
+            'order_id'=>$order->id,
+            'policy_id'=>$order->policy_id,
+            'user_ip_address'=>$this->ip_address()
+        ]);
     }
 
     public function getPlanData(Request $request)
@@ -464,4 +552,85 @@ class FrontendController extends Controller
         }
         return view('frontend.payment.success', ['policy' => $policy]);
     }
+
+    public function verifyOtp(Request $request)
+    {
+        $request->validate([
+            'user_id' => 'required',
+            'otp' => 'required'
+        ]);
+
+        $otp = Otp::where('user_id', $request->user_id)
+            ->where('otp', $request->otp)
+            ->where('is_used', false)
+            ->latest()
+            ->first();
+
+        if (!$otp) {
+
+            return response()->json([
+                'status' => false,
+                'message' => 'Invalid OTP'
+            ], 422);
+        }
+
+        if ($otp->expires_at < now()) {
+
+            return response()->json([
+                'status' => false,
+                'message' => 'OTP expired'
+            ], 422);
+        }
+
+        $otp->update([
+            'is_used' => true
+        ]);
+
+        $user = $otp->user;
+
+        $user->email_verified_at = now();
+        $user->save();
+
+        // 🔥 LOGIN ONLY AFTER OTP SUCCESS
+        Auth::login($user);
+        return response()->json([
+            'status' => true,
+            'message' => 'Email verified successfully'
+        ]);
+    }
+    public function resendOtp(Request $request)
+    {
+        $request->validate([
+            'user_id' => 'required|exists:users,id'
+        ]);
+
+        $user = User::find($request->user_id);
+
+        // remove old otp
+        Otp::where('user_id', $user->id)->delete();
+
+        // generate new otp
+        $otpCode = rand(100000, 999999);
+
+        // save otp
+        Otp::create([
+            'user_id' => $user->id,
+            'otp' => $otpCode,
+            'type' => 'email',
+            'expires_at' => now()->addMinutes(5),
+        ]);
+
+        // send mail
+        Mail::to($user->email)
+            ->send(new SendOtpMail($otpCode, $user));
+
+        return response()->json([
+            'status' => true,
+            'message' => 'New OTP sent successfully'
+        ]);
+    }
+
+
+
+    
 }

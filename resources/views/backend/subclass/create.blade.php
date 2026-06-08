@@ -41,7 +41,7 @@
                 <div class="col-md-12 mt-2">
                     <div class="form-group">
                         <strong>Name:</strong>
-                        <input type="text" name="name" placeholder="Enter Sub Class Name" class="form-control">
+                        <input type="text" name="name" placeholder="Enter Policy Name" class="form-control">
                     </div>
                 </div>
 
