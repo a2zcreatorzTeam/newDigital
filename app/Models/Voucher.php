@@ -20,7 +20,9 @@ class Voucher extends Model
         'date_paid',
         'bank_mnemonic',
         'order_id',
-        'policy_id'
+        'policy_id',
+        'user_ip_address',
+        'payment_ip_address'
     ];
 
 

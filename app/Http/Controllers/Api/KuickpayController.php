@@ -6,9 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Models\Voucher;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Exception;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class KuickpayController extends Controller
-{   
+{
     // Credentials jo Kuickpay ke headers ko verify karne ke liye use honge 
     private $apiUser = "Kuickpaytest"; // Replace with Live Username 
     private $apiPass = "Kuickpay@test12"; // Replace with Live Password 
@@ -22,6 +25,53 @@ class KuickpayController extends Controller
             $request->header('password') === $this->apiPass;
     }
 
+
+ 
+
+
+    /**
+ * @OA\Post(
+ *     path="/api/bill-inquiry",
+ *     tags={"Kuickpay"},
+ *     summary="Bill Inquiry API",
+ *     description="Fetch voucher/bill details using consumer number",
+ *
+ *     @OA\Parameter(
+ *         name="username",
+ *         in="header",
+ *         required=true,
+ *         @OA\Schema(type="string")
+ *     ),
+ *
+ *     @OA\Parameter(
+ *         name="password",
+ *         in="header",
+ *         required=true,
+ *         @OA\Schema(type="string")
+ *     ),
+ *
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\JsonContent(
+ *             required={"consumer_number", "bank_mnemonic"},
+ *             @OA\Property(property="consumer_number", type="string", example="0152001123456"),
+ *             @OA\Property(property="bank_mnemonic", type="string", example="KPY"),
+ *             @OA\Property(property="reserved", type="string", example="")
+ *         )
+ *     ),
+ *
+ *     @OA\Response(
+ *         response=200,
+ *         description="Success Response"
+ *     ),
+ *
+ *     @OA\Response(
+ *         response=400,
+ *         description="Invalid Credentials / Bad Request"
+ *     )
+ * )
+ */
+
     /**
      * 1. BILL INQUIRY API [cite: 14, 30]
      */
@@ -32,7 +82,22 @@ class KuickpayController extends Controller
             return response()->json(['response_Code' => '04', 'message' => 'Invalid Data/Credentials'], 400); // [cite: 85, 140]
         }
 
+        if ($request->bank_mnemonic != 'KPY') {
+            return response()->json([
+                'response_Code' => '04',
+                'message' => 'Invalid Data'
+            ]);
+        }
+
         $consumerNumber = $request->input('consumer_number'); // [cite: 40]
+
+        // Bad Transaction
+        if (empty($consumerNumber)) {
+            return response()->json([
+                'response_Code' => '03',
+                'message' => 'Unknown Error/Bad Transaction'
+            ]);
+        }
 
         // Database me search karna
         $voucher = Voucher::where('consumer_number', $consumerNumber)->first();
@@ -58,7 +123,7 @@ class KuickpayController extends Controller
         // Response Data Preparation ke format ke mutabiq [cite: 46, 62]
         $response = [
             'response_Code'         => '00', // Success [cite: 85, 140]
-            'consumer Detail'       => str_pad($voucher->customer_name, 30, ' ', STR_PAD_RIGHT), // Left justified, right padded [cite: 85]
+            'consumer_Detail'       => str_pad($voucher->customer_name, 30, ' ', STR_PAD_RIGHT), // Left justified, right padded [cite: 85]
             'bill_status'           => $voucher->status, // U or P [cite: 85]
             'due_date'              => Carbon::parse($voucher->due_date)->format('Ymd'), // yyyyMMdd [cite: 91]
             'amount_within_dueDate' => Voucher::formatKuickpayAmount($voucher->amount_within_due_date, true), // [cite: 91]
@@ -75,46 +140,142 @@ class KuickpayController extends Controller
         return response()->json($response);
     }
 
-    /**
-     * 2. BILL PAYMENT API [cite: 15, 110]
-     */
+   
+
+
+
+/**
+ * @OA\Post(
+ *     path="/api/bill-payment",
+ *     tags={"Kuickpay"},
+ *     summary="Bill Payment API",
+ *     description="Process bill payment and update voucher status",
+ *
+ *     @OA\Parameter(
+ *         name="username",
+ *         in="header",
+ *         required=true,
+ *         @OA\Schema(type="string")
+ *     ),
+ *
+ *     @OA\Parameter(
+ *         name="password",
+ *         in="header",
+ *         required=true,
+ *         @OA\Schema(type="string")
+ *     ),
+ *
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\JsonContent(
+ *             required={"consumer_number", "tran_auth_id", "transaction_amount", "bank_mnemonic"},
+ *             @OA\Property(property="consumer_number", type="string", example="0152001123456"),
+ *             @OA\Property(property="tran_auth_id", type="string", example="TXN123456"),
+ *             @OA\Property(property="transaction_amount", type="number", example=5000),
+ *             @OA\Property(property="bank_mnemonic", type="string", example="KPY"),
+ *             @OA\Property(property="reserved", type="string", example="")
+ *         )
+ *     ),
+ *
+ *     @OA\Response(
+ *         response=200,
+ *         description="Payment Success"
+ *     ),
+ *
+ *     @OA\Response(
+ *         response=400,
+ *         description="Invalid Request"
+ *     ),
+ *
+ *     @OA\Response(
+ *         response=500,
+ *         description="Processing Failed"
+ *     )
+ * )
+ */
+
     public function billPayment(Request $request)
     {
-        // Security Check [cite: 114]
+        // 1. Security & Validation Check
         if (!$this->isAuthorized($request)) {
-            return response()->json(['response_Code' => '04', 'message' => 'Invalid Data/Credentials'], 400); // [cite: 137, 140]
+            return response()->json([
+                'response_Code' => '04',
+                'message' => 'Invalid Data/Credentials'
+            ], 400);
         }
 
-        $consumerNumber = $request->input('consumer_number'); // [cite: 120]
-        $tranAuthId = $request->input('tran_auth_id'); // [cite: 121]
-        $amountPaid = $request->input('transaction_amount'); // [cite: 122]
-        $bankMnemonic = $request->input('bank mnemonic'); // [cite: 125]
+        // 2. Fetch input parameters
+        $consumerNumber = $request->input('consumer_number');
+        $tranAuthId     = $request->input('tran_auth_id');
+        $amountPaid     = $request->input('transaction_amount');
+        $bankMnemonic   = $request->input('bank_mnemonic'); 
 
-        // Voucher search karna
-        $voucher = Voucher::where('consumer_number', $consumerNumber)->first();
+        // Start monitoring operations
+        DB::beginTransaction();
 
-        if (!$voucher) {
-            return response()->json(['response_Code' => '01']); // Not found [cite: 137, 140]
+        try {
+            // 3. Voucher search karna
+            $voucher = Voucher::where('consumer_number', $consumerNumber)->first();
+
+            // '01' - Voucher number does not exist
+            if (!$voucher) {
+                DB::rollBack();
+                return response()->json(['response_Code' => '01']);
+            }
+
+            if ($request->bank_mnemonic != 'KPY') {
+                DB::rollBack();
+                return response()->json(['Invalid Data' => '04']);
+            }
+
+
+
+
+            // '02' - Blocked / Dormant / Inactive (Example condition, adapt to your schema)
+            if (isset($voucher->status) && $voucher->status === 'B') {
+                DB::rollBack();
+                return response()->json(['response_Code' => '02']);
+            }
+
+            // '03' - Duplicate / Bad Transaction (Already paid)
+            if ($voucher->status === 'P') {
+                DB::rollBack();
+                return response()->json(['response_Code' => '03']);
+            }
+
+            // 4. Business Logic: Database Update
+            $voucher->update([
+                'status'        => 'P',
+                'tran_auth_id'  => $tranAuthId,
+                'date_paid'     => now(),
+                'bank_mnemonic' => $bankMnemonic,
+                'payment_ip_address' => request()->ip()
+            ]);
+
+            // Commit changes if everything succeeds
+            DB::commit();
+
+            // Success Response ('00')
+            return response()->json([
+                'response_Code'            => '00',
+                'Identification_parameter' => $voucher->email ?? 'success@client.com',
+                'reserved'                 => $request->input('reserved', '')
+            ]);
+        } catch (Exception $e) {
+            // Something broke unexpectedly (Database down, syntax error, missing field, etc.)
+            DB::rollBack();
+
+            // Log the actual error internally for debugging
+            Log::error('Bill Payment Processing Failed: ' . $e->getMessage(), [
+                'consumer_number' => $consumerNumber,
+                'exception' => $e
+            ]);
+
+            // '05' - Processing Failed response according to your specification document
+            return response()->json([
+                'response_Code' => '05',
+                'message' => 'Processing Failed'
+            ], 500);
         }
-
-        // Agar pehle se hi paid ho [cite: 137, 140]
-        if ($voucher->status === 'P') {
-            return response()->json(['response_Code' => '03']); // Duplicate/Bad Transaction [cite: 137, 140]
-        }
-
-        // Business Logic: Database Update karke Paid mark karna
-        $voucher->update([
-            'status'        => 'P', // Paid [cite: 66, 85]
-            'tran_auth_id'  => $tranAuthId, // [cite: 105]
-            'date_paid'     => Carbon::now(),
-            'bank_mnemonic' => $bankMnemonic // [cite: 105]
-        ]);
-
-        // Success Response according to document page 10 [cite: 127]
-        return response()->json([
-            'response_Code'            => '00', // [cite: 130, 137]
-            'Identification_parameter' => $voucher->email ?? 'success@client.com', // [cite: 131]
-            'reserved'                 => $request->input('reserved', '') // [cite: 132]
-        ]);
     }
 }

@@ -440,11 +440,11 @@ class FrontendController extends Controller
                     session(['policy_id' => $policy_id]);
                 } while (UserPolicyData::where('policy_id', $policy_id)->exists());
                 $data['status'] = 'Incart';
+
                 $policy = UserPolicyData::create([
                     'user_id'   => $userId,
                     'policy_id' => $policy_id,
                 ] + $data);
-
                  $this->generateCustomerVoucher($policy);
                  
             }
@@ -465,6 +465,12 @@ class FrontendController extends Controller
                 'message' => 'Something went wrong: ' . $e->getMessage()
             ], 500);
         }
+    }
+
+
+     public function ip_address()
+    {
+        return request()->ip();
     }
 
 
@@ -495,7 +501,8 @@ class FrontendController extends Controller
             'contact_number' => $order->mobile_number,
             'status' => 'U',
             'order_id'=>$order->id,
-            'policy_id'=>$order->policy_id
+            'policy_id'=>$order->policy_id,
+            'user_ip_address'=>$this->ip_address()
         ]);
     }
 
