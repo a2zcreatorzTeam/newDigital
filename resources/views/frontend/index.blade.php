@@ -166,6 +166,8 @@
         $(".box").click(function() {
 
             let category_id = $(this).data("id");
+         
+            
 
             $.ajax({
                 url: "{{ route('frontend.getPolicies') }}",

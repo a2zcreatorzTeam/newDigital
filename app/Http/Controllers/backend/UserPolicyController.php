@@ -77,7 +77,7 @@ class UserPolicyController extends Controller
     public function policy_detail($id)
     {
         $id = Crypt::decryptString($id);
-        $data = UserPolicyData::where('id', $id)->first();
+          $data = UserPolicyData::with('voucher','family_history')->where('id',$id)->first();
 
 
         return view('backend.userPolicy.policy_detail', compact('data'));

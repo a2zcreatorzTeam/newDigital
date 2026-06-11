@@ -12,10 +12,10 @@ class PlanAgeMaturity extends Model
     protected $table = 'plan_age_maturity';
     protected $guarded = ['id'];
 
-    // public function product()
-    // {
-    //     return $this->belongsTo(SubClass::class, 'id', 'plan_id');
-    // }
+    public function product()
+    {
+        return $this->belongsTo(SubClass::class, 'plan_id', 'id');
+    }
       public function surrendervalues()
     {
         return $this->hasMany(SurrenderValues::class, 'plan_age_id', 'id');

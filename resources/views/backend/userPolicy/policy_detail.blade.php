@@ -132,7 +132,7 @@
 
                 <!-- Download Button -->
                 <a href="{{ route('user.policy.download.pdf', $data->id) }}"
-                class="btn  btn-sm px-3 py-2 rounded-3 shadow-sm" style="background: #e65f97;">
+                    class="btn  btn-sm px-3 py-2 rounded-3 shadow-sm" style="background: #e65f97;">
                     <i class="fa-solid fa-download me-1"></i>
                     Download PDF
                 </a>
@@ -725,6 +725,99 @@
 
 
 
+            </div>
+
+            {{-- Voucher Information --}}
+            <div class="section-title">
+                Payment Information
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-3 mb-3">
+                    <div class="detail-box">
+                        <div class="detail-label">Consumer No</div>
+                        <div class="detail-value">{{ $data->voucher->consumer_number  ?? '---' }}</div>
+                    </div>
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <div class="detail-box">
+                        <div class="detail-label">Amount With In Due Date</div>
+                        <div class="detail-value">{{ number_format($data->voucher->amount_within_due_date)  ?? '---' }}</div>
+                    </div>
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <div class="detail-box">
+                        <div class="detail-label">Amount After Date</div>
+                        <div class="detail-value">{{ number_format($data->voucher->amount_after_due_date)  ?? '---' }}</div>
+                    </div>
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <div class="detail-box">
+                        <div class="detail-label">Due Date</div>
+                        <div class="detail-value">{{ $data->voucher->due_date  ?? '---' }}</div>
+                    </div>
+                </div>
+
+
+
+
+
+
+
+
+
+            </div>
+
+
+            {{-- Family History Information --}}
+            <div class="section-title mt-4">
+                Family History Information
+            </div>
+
+            <div class="row">
+                @if($data->family_history && $data->family_history->count() > 0)
+                @foreach($data->family_history as $member)
+                <div class="col-md-6 mb-4">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-light py-2">
+                            <h6 class="mb-0 text-capitalize text-primary"><i class="fas fa-users me-2"></i>{{ $member->memner_flag }}</h6>
+                        </div>
+                        <div class="card-body py-3">
+                            <div class="row">
+                                <div class="col-6 mb-2">
+                                    <small class="text-muted d-block">Current Age</small>
+                                    <strong>{{ $member->age ?? '---' }}</strong>
+                                </div>
+                                <div class="col-6 mb-2">
+                                    <small class="text-muted d-block">State of Health</small>
+                                    <strong>{{ $member->state_of_health ?? '---' }}</strong>
+                                </div>
+                                <div class="col-4">
+                                    <small class="text-muted d-block">Year of Death</small>
+                                    <span>{{ $member->year_of_death ?? '---' }}</span>
+                                </div>
+                                <div class="col-4">
+                                    <small class="text-muted d-block">Age of Death</small>
+                                    <span>{{ $member->age_of_death ?? '---' }}</span>
+                                </div>
+                                <div class="col-4">
+                                    <small class="text-muted d-block">Cause of Death</small>
+                                    <span>{{ $member->cause_of_death ?? '---' }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @endforeach
+                @else
+                <div class="col-12">
+                    <p class="text-muted text-center py-3">No family history recorded for this policy.</p>
+                </div>
+                @endif
             </div>
 
 

@@ -1,4 +1,4 @@
- <fieldset>
+{{--   <fieldset>
                         <div class="form-card">
 
                             <div class="ib-totalcard-price">
@@ -2880,3 +2880,4 @@
                         <input type="button" name="next" class="next action-button" value="Continue" />
                         <input type="button" name="previous" class="previous action-button-previous" value="Previous" />
                     </fieldset>
+                    --}}

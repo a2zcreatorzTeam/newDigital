@@ -40,7 +40,7 @@
 
             <div class="col-md-6 px-0 px-sm-3">
                 <label>Gender/Sex (جنس)<span class="requi">*</span></label>
-                <select name="gender" required class="form-control">
+                <select name="gender" id="gender" required class="form-control">
                     <option value="">Select Gender</option>
                     <option value="Male" {{ ($user->basicDetail->gender ?? '') == 'Male' ? 'selected' : '' }}>Male</option>
                     <option value="Female" {{ ($user->basicDetail->gender ?? '') == 'Female' ? 'selected' : '' }}>Female</option>
@@ -133,6 +133,8 @@
 @push('js')
 <script>
     $(document).ready(function() {
+
+        
 
 
         $('input[name="cnic_number"]').on('input', function() {

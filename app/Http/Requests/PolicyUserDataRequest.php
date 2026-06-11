@@ -45,7 +45,7 @@ class PolicyUserDataRequest extends FormRequest
             'date_of_birth' => 'required',
 
             'age_nearest_date' => 'required|integer|min:0|max:120',
-            'gender' => 'required|integer',
+            'gender' => 'required',
 
             'mother_maiden_name' => 'required|string|max:100',
             'father_name' => 'required|string|max:100',
@@ -97,9 +97,9 @@ class PolicyUserDataRequest extends FormRequest
             'weight_increase_reason' => 'nullable|string|max:255',
 
             // ===== Others =====
-            'profession' => 'required|integer',
-            'marital_status' => 'required|integer',
-            'city' => 'required|integer',
+            // 'profession' => 'required|integer',
+            // 'marital_status' => 'required|integer',
+            // 'city' => 'required|integer',
 
 
             // ===== Product Details =====
@@ -117,6 +117,14 @@ class PolicyUserDataRequest extends FormRequest
             'tir_rider' => 'required',
             'fib_rider' => 'required',
 
+             // ===== Family History =====
+            'father_age' => 'required',
+            'mother_age' => 'required',
+            'mother_health' => 'required',
+            'father_health' => 'required',
+            'premium_paid' => 'required',
+
+
         ];
     }
 
@@ -127,6 +135,7 @@ class PolicyUserDataRequest extends FormRequest
     {
         return [
             // Address
+            'premium_paid.required' => 'Kindly First Calculate the Premium Amount.',
             'permanent_province_id.required' => 'Permanent province is required.',
             'permanent_city_id.required' => 'Permanent city is required.',
             'permanent_district_id.required' => 'Permanent district is required.',

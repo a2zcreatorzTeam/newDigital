@@ -21,7 +21,7 @@
                 <div>
                     <div>
                         <div><label>Table (منصوبہ نمبر)<span class="requi">*</span></label>
-                            <div class="jbl-field"><input required type="text" name="table_no" class="jbl-dynamic-input"></div>
+                            <div class="jbl-field"><input required type="text" name="table_no" value="{{$product->table_no ?? '' }}" class="jbl-dynamic-input"></div>
                         </div>
                     </div>
                 </div>
@@ -32,9 +32,10 @@
                     <div>
                         <div><label>Term (میعاد)<span class="requi">*</span></label>
                             <div class="jbl-field">
-                                <select name="term" id="term" required class="form-control">
+                                <input type="text" name="term" id="term" class="form-control" value="{{$policy_data->term}}" readonly>
+                                <!-- <select name="term" id="term" required class="form-control">
                                     <option value="">Select Option</option>
-                                </select>
+                                </select> -->
 
                             </div>
                         </div>
@@ -54,7 +55,41 @@
                 </div>
             </div>
 
+            <input type="hidden" name="policy_product_id" value="{{$product->id}}" id="policy_product_id">
+
             <div class="col-md-6 px-0 px-sm-3">
+                <div>
+                    <div>
+                        <div><label>Payment Mode (ادائیگی کا طریقہ)<span class="requi">*</span></label>
+                            <div class="jbl-field">
+                                <select required name="payment_mode" class="form-control jbl-dynamic-input" id="payment_mode">
+                                    <option value="">Select Mode</option>
+                                    <option value="Yearly">Yearly (سالانہ)</option>
+                                    <option value="Half Yearly">Half Yearly (ششماہی)</option>
+                                    <option value="Quarterly">Quarterly (سہ ماہی)</option>
+                                    <option value="Monthly">Monthly (ماہانہ)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 px-0 px-sm-3">
+                <div>
+                    <div>
+                        <div>
+                            <a class="btn btn-danger btn-sm" id="calcultae_policy">Calculate</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="showPolicyCalculation"></div>
+
+            <br>
+            <br>
+
+            <div class="col-md-6 px-0 px-sm-3" style="margin-top: 20px;">
                 <div>
                     <div>
                         <div><label>IS ND APPLIED? (YES/NO)<span class="requi">*</span></label>
@@ -70,23 +105,7 @@
                 </div>
             </div>
 
-            <div class="col-md-6 px-0 px-sm-3">
-                <div>
-                    <div>
-                        <div><label>Payment Mode (ادائیگی کا طریقہ)<span class="requi">*</span></label>
-                            <div class="jbl-field">
-                                <select required name="payment_mode" class="form-control jbl-dynamic-input">
-                                    <option value="">Select Mode</option>
-                                    <option value="Yearly">Yearly (سالانہ)</option>
-                                    <option value="Half Yearly">Half Yearly (ششماہی)</option>
-                                    <option value="Quarterly">Quarterly (سہ ماہی)</option>
-                                    <option value="Monthly">Monthly (ماہانہ)</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+
 
 
             <div class="col-md-6 px-0 px-sm-3">
@@ -191,6 +210,8 @@
 @push('js')
 <script>
     $(document).ready(function() {
+
+
         function loadPlanData() {
             let product_id = $('#product_id').val();
             let age_birth = $('#age_birth').val();
@@ -295,6 +316,93 @@
             let term_value = $(this).val();
             getsumassured(term_value);
         });
+
+
+        $('#calcultae_policy').click(function() {
+            let sum_assured = $('#sum_assured').val();
+            let payment_mode = $('#payment_mode').val();
+            let term = $('#term').val();
+            let gender = $('#gender').val();
+            let policy_product_id = $('#policy_product_id').val();
+            let age_birth = $('#age_birth').val();
+
+            // check empty fields
+            if (!sum_assured || !payment_mode || !term || !gender || !policy_product_id || !age_birth) {
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    icon: 'error',
+                    title: 'Please fill all required fields',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true
+                });
+
+                return;
+
+            } else {
+
+
+                $.ajax({
+                    type: 'POST',
+                    url: '{{ route("PolicyCalculator.policy_calculation") }}',
+                    data: {
+                        sum_assured: sum_assured,
+                        payment_mode: payment_mode,
+                        term: term,
+                        gender: gender,
+                        policy_product_id: policy_product_id,
+                        age_birth: age_birth
+                    },
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    beforeSend: function() {
+                        Swal.fire({
+                            title: 'Loading',
+                            text: 'Please wait....',
+                            allowOutsideClick: false,
+                            didOpen: () => {
+                                Swal.showLoading();
+                            }
+                        });
+                    },
+                    success: function(res) {
+                        Swal.close();
+                        $('#showPolicyCalculation').html(res);
+                        console.log(res);
+
+                        // $('#sum_assured').val(res);
+                    },
+                    error: function(err) {
+                        Swal.close();
+                        console.log(err);
+                        alert('Error occurred');
+                    }
+                });
+
+
+
+
+
+
+
+            }
+
+
+
+
+
+
+
+        })
+
+
+
+
+
+
+
 
     });
 </script>

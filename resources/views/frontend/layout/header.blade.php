@@ -60,7 +60,8 @@
         <div style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%);">
 
             <!-- ✅ Your GIF Loader -->
-            <img src="https://statelife.com.pk/public/images/loading-slic.gif"
+             
+            <img src="{{asset('frontend/images/loading-slic.gif')}}"
                 alt="Loading..."
                 style="width:100px;">
 

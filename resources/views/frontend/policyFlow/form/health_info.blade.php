@@ -4,7 +4,7 @@
 
             <div class="col-md-6 px-0 px-sm-3">
                 <label>Height (In cm) (قد سینٹی میٹر میں)<span class="requi">*</span></label>
-                <input  type="number" name="height_cm" class="form-control jbl-dynamic-input"
+                <input type="number" name="height_cm" class="form-control jbl-dynamic-input"
                     value="{{ $user->health->height_cm ?? '' }}" required>
             </div>
 
@@ -72,6 +72,7 @@
                 <label>Reason of Increase Weight<span class="requi">*</span></label>
                 <textarea name="weight_increase_reason" required class="form-control jbl-dynamic-input" rows="3">{{ $user->health->weight_increase_reason ?? '' }}</textarea>
             </div>
+            <input type="button" class="action-button" id='user_details_submited' value="Submited" />
 
         </div>
     </div>

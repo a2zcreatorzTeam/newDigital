@@ -1,4 +1,4 @@
- <fieldset>
+ {{--<fieldset>
                         <div class="form-card">
 
                             <div class="ib-totalcard-price">
@@ -245,3 +245,4 @@
 
                         <!-- Login Button End -->
                     </fieldset>
+--}}

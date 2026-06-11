@@ -23,7 +23,7 @@ class PolicyController extends Controller
             'cnic_number',
             'plan',
             'status','created_at'
-        )->where('user_id',Auth::user()->id)->paginate(1);
+        )->where('user_id',Auth::user()->id)->paginate(10);
         return view('frontend.self-policy.self-policy-listing',compact('policies'));
 
     }
@@ -31,7 +31,7 @@ class PolicyController extends Controller
     {
         $id = decrypt($id);
    
-        $data = UserPolicyData::where('id',$id)->first();
+        $data = UserPolicyData::with('voucher','family_history')->where('id',$id)->first();
 
         return view('frontend.self-policy.policy_detail', compact('data'));
     }

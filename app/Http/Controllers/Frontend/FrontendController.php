@@ -11,6 +11,7 @@ use App\Http\Requests\UserOccupationRequest;
 use App\Mail\SendOtpMail;
 use App\Models\AddressInfo;
 use App\Models\BasicDetail;
+use App\Models\FamilyHistory;
 use App\Models\City;
 use Carbon\Carbon;
 use App\Models\Voucher;
@@ -252,7 +253,7 @@ class FrontendController extends Controller
     }
     public function dashboard(Request $request, $id)
     {
-         
+
         if (session()->has('policy_id')) {
             session()->forget('policy_id');
         }
@@ -272,9 +273,10 @@ class FrontendController extends Controller
                 ->with('info', 'Please complete your profile before proceeding!');
         }
         $product = SubClass::with('product')->where('id', $id)->first();
+        $policy_data = $product->product->where('age', $user->basicDetail->age_nearest_date)->first();
 
         $provinces = Provinces::get();
-        return view('frontend.dashboard', ['user' => $user, 'provinces' => $provinces, 'product' => $product, 'id' => $id]);
+        return view('frontend.dashboard', ['user' => $user, 'provinces' => $provinces, 'policy_data' => $policy_data, 'product' => $product, 'id' => $id]);
     }
 
     public function profileForm()
@@ -414,8 +416,9 @@ class FrontendController extends Controller
         return $district;
     }
 
-    public function policyDataSave(PolicyUserDataRequest $request)
+    public function policyDataSave_old_11_06_2026(PolicyUserDataRequest $request)
     {
+
         try {
             DB::beginTransaction();
 
@@ -445,8 +448,10 @@ class FrontendController extends Controller
                     'user_id'   => $userId,
                     'policy_id' => $policy_id,
                 ] + $data);
-                 $this->generateCustomerVoucher($policy);
-                 
+
+
+
+                $this->generateCustomerVoucher($policy);
             }
 
             DB::commit();
@@ -466,9 +471,129 @@ class FrontendController extends Controller
             ], 500);
         }
     }
+    public function policyDataSave(PolicyUserDataRequest $request)
+    {
+       
+        try {
+            DB::beginTransaction();
+
+            $userId = auth()->id();
+            $data   = $request->validated();
+            $policy_id = session('policy_id');
+
+            $policy = null;
+
+            if ($policy_id) {
+                $policy = UserPolicyData::where('user_id', $userId)
+                    ->where('policy_id', $policy_id)
+                    ->first();
+            }
+
+            // 1. Save or Update User Policy Data
+            if ($policy) {
+                $policy->update($data);
+
+                // Optional: Delete previous history if you want a clean rewrite on updates
+                FamilyHistory::where('user_personal_policy_data_id', $policy->id)->delete();
+            } else {
+                do {
+                    $policy_id = 'POL-' . date('Y') . '-' . random_int(100000, 999999);
+                    session(['policy_id' => $policy_id]);
+                } while (UserPolicyData::where('policy_id', $policy_id)->exists());
+
+                $data['status'] = 'Incart';
+
+                $policy = UserPolicyData::create([
+                    'user_id'   => $userId,
+                    'policy_id' => $policy_id,
+                ] + $data);
+
+                $this->generateCustomerVoucher($policy);
+            }
+
+            // ==========================================
+            // 2. SAVE FAMILY HISTORY DATA HERE
+            // ==========================================
+
+            // --- Process Father Data ---
+            if ($request->filled('father_age')) {
+                FamilyHistory::create([
+                    'user_personal_policy_data_id' => $policy->id,
+                    'policy_id'                    => $policy->policy_id,
+                    'memner_flag'                  => 'father',
+                    'age'                          => $request->input('father_age'),
+                    'state_of_health'              => $request->input('father_health'),
+                    'year_of_death'                => $request->input('father_year_of_death'),
+                    'age_of_death'                 => $request->input('father_age_of_death'),
+                    'cause_of_death'               => $request->input('father_cause_of_death'),
+                ]);
+            }
+
+            // --- Process Mother Data ---
+            if ($request->filled('mother_age')) {
+                FamilyHistory::create([
+                    'user_personal_policy_data_id' => $policy->id,
+                    'policy_id'                    => $policy->policy_id,
+                    'memner_flag'                  => 'mother',
+                    'age'                          => $request->input('mother_age'),
+                    'state_of_health'              => $request->input('mother_health'),
+                    'year_of_death'                => $request->input('mother_year_of_death'),
+                    'age_of_death'                 => $request->input('mother_age_of_death'),
+                    'cause_of_death'               => $request->input('mother_cause_of_death'),
+                ]);
+            }
 
 
-     public function ip_address()
+            $dynamicTypes = ['brother', 'sister', 'son', 'daughter'];
+
+            foreach ($dynamicTypes as $type) {
+                if ($request->has($type . '_age') && is_array($request->input($type . '_age'))) {
+
+                    $ages           = $request->input($type . '_age');
+                    $healths        = $request->input($type . '_health');
+                    $yearsOfDeath   = $request->input($type . '_year_of_death');
+                    $agesOfDeath    = $request->input($type . '_age_of_death');
+                    $causesOfDeath  = $request->input($type . '_cause_of_death');
+
+                    // Loop through array index positions
+                    foreach ($ages as $index => $ageValue) {
+                        // Ignore empty dynamic entries
+                        if (empty($ageValue)) continue;
+
+                        FamilyHistory::create([
+                            'user_personal_policy_data_id' => $policy->id,
+                            'policy_id'                    => $policy->policy_id,
+                            'memner_flag'                  => $type,
+                            'age'                          => $ageValue,
+                            'state_of_health'              => $healths[$index] ?? null,
+                            'year_of_death'                => $yearsOfDeath[$index] ?? null,
+                            'age_of_death'                 => $agesOfDeath[$index] ?? null,
+                            'cause_of_death'               => $causesOfDeath[$index] ?? null,
+                        ]);
+                    }
+                }
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'success'   => true,
+                'message'   => 'Policy Data saved Successfully',
+                'policy_id' => $policy->policy_id,
+                'redirect_url' => route('voucher.voucher', [$policy->id])
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Something went wrong: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+
+    public function ip_address()
     {
         return request()->ip();
     }
@@ -486,23 +611,23 @@ class FrontendController extends Controller
         $sequence = str_pad($order->id, 7, '0', STR_PAD_LEFT);
 
         $consumerNumber = $prefix . $billingMonth . $sequence;
-     
+
         // DB me insert karna
         return Voucher::create([
             'consumer_number' => $consumerNumber,
             'customer_name' => $order->life_proposed_full_name,
             // 'amount_within_due_date' => $order->total_amount,
-            'amount_within_due_date' => 1000,
+            'amount_within_due_date' => $order->premium_paid,
             // 'amount_after_due_date' => $order->total_amount + 150, // Late fee agar applicable ho
-            'amount_after_due_date' => 1000 + 150, // Late fee agar applicable ho
+            'amount_after_due_date' => $order->premium_paid + 150, // Late fee agar applicable ho
             'due_date' => Carbon::now()->addDays(10)->format('Y-m-d'),
             'billing_month' => $billingMonth,
             'email' => $order->user_email,
             'contact_number' => $order->mobile_number,
             'status' => 'U',
-            'order_id'=>$order->id,
-            'policy_id'=>$order->policy_id,
-            'user_ip_address'=>$this->ip_address()
+            'order_id' => $order->id,
+            'policy_id' => $order->policy_id,
+            'user_ip_address' => $this->ip_address()
         ]);
     }
 
@@ -629,8 +754,4 @@ class FrontendController extends Controller
             'message' => 'New OTP sent successfully'
         ]);
     }
-
-
-
-    
 }

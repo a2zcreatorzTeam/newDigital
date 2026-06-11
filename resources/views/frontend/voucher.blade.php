@@ -126,7 +126,7 @@
         });
 
         // 2. Sirf tab chalega jab Controller se 'success' ya 'error' ka session aayega
-        @if(session('success'))
+      
         Swal.fire({
             title: 'Voucher Generated!',
             text: "{{ session('success') }}",
@@ -134,17 +134,8 @@
             confirmButtonColor: '#065f46',
             confirmButtonText: 'Great, Thank You!'
         });
-        @endif
+      
 
-        @if(session('error'))
-        Swal.fire({
-            title: 'Error!',
-            text: "{{ session('error') }}",
-            icon: 'error',
-            confirmButtonColor: '#be123c',
-            confirmButtonText: 'Close'
-        });
-        @endif
 
         // 3. Consumer ID copy karne par Toast alert trigger karna (Yeh pehle ki tarah hi rahega)
         function copyConsumerId(text) {

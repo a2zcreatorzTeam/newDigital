@@ -11,7 +11,7 @@
             <h3 class="font-semibold text-dark" style="font-size: 1.1rem;">Policies</h3>
 
             @can('class-list')
-            <a class="btn btn-icon" style="background-color:#ff5733;" href="{{ route('subclass.index') }}">
+            <a class="btn btn-icon" style="background-color:#ff5733;" href="{{ route('subclass.filter') }}">
                 Policies List
             </a>
             @endcan
@@ -30,10 +30,10 @@
                         <select name="class_id" class="form-control">
                             <option value="">Select Main Class</option>
                             @foreach($classes as $class)
-                                <option value="{{ $class->id }}"
-                                    {{ $subclass->class_id == $class->id ? 'selected' : '' }}>
-                                    {{ $class->name }}
-                                </option>
+                            <option value="{{ $class->id }}"
+                                {{ $subclass->class_id == $class->id ? 'selected' : '' }}>
+                                {{ $class->name }}
+                            </option>
                             @endforeach
                         </select>
                     </div>
@@ -44,8 +44,17 @@
                     <div class="form-group">
                         <strong>Name:</strong>
                         <input type="text" name="name" class="form-control"
-                               value="{{ $subclass->name }}"
-                               placeholder="Enter Policy Name">
+                            value="{{ $subclass->name }}"
+                            placeholder="Enter Policy Name">
+                    </div>
+                </div>
+
+
+                <!-- Table no -->
+                <div class="col-md-12 mt-2">
+                    <div class="form-group">
+                        <strong>Table No:</strong>
+                        <input type="text" value="{{ $subclass->table_no }}" name="table_no" placeholder="Enter Table No" class="form-control">
                     </div>
                 </div>
 
@@ -55,9 +64,9 @@
                         <strong>Current Image:</strong><br>
 
                         @if($subclass->logo)
-                            <img src="{{ asset('storage/'.$subclass->logo) }}" width="80">
+                        <img src="{{ asset('storage/'.$subclass->logo) }}" width="80">
                         @else
-                            <span class="text-muted">No Logo</span>
+                        <span class="text-muted">No Logo</span>
                         @endif
                     </div>
                 </div>

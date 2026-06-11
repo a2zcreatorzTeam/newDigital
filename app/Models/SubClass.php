@@ -15,7 +15,8 @@ class SubClass extends Model
         'name',
         'logo',
         'class_id',
-        'status'
+        'status',
+        'table_no'
     ];
 
     public function mainClass()
@@ -24,6 +25,6 @@ class SubClass extends Model
     }
       public function product()
     {
-        return $this->hasOne(PlanAgeMaturity::class, 'plan_id', 'id');
+        return $this->hasMany(PlanAgeMaturity::class, 'plan_id', 'id');
     }
 }

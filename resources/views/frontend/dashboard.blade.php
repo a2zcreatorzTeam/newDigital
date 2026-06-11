@@ -69,7 +69,7 @@
                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
                     </div> <br> <!-- fieldsets -->
                     <!-- Upload Information -->
-                    @include('frontend.policyFlow.form',['user'=>$user,'product'=>$product])
+                    @include('frontend.policyFlow.form',['user'=>$user,'product'=>$product,'policy_data'=>$policy_data])
                     <!-- Choose Product -->
                     @include('frontend.policyFlow.step2',['user'=>$user])
                     <!-- Upload info & Documents -->

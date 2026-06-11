@@ -77,6 +77,7 @@ class SubClassController extends Controller
             'name'     => $request->name,
             'logo'     => $logoPath,
             'status'   => $request->status,
+            'table_no'=>$request->table_no
         ]);
 
         return redirect()->route('subclass.filter')
@@ -101,6 +102,7 @@ class SubClassController extends Controller
             'name'     => 'required|string|max:255',
             'logo'     => 'nullable|image|mimes:jpg,png,jpeg,svg|max:2048',
             'status'   => 'required|boolean',
+            'table_no'   => 'required',
         ]);
 
         $logoPath = $subClass->logo;
@@ -119,6 +121,7 @@ class SubClassController extends Controller
             'name'     => $request->name,
             'logo'     => $logoPath,
             'status'   => $request->status,
+            'table_no'   => $request->table_no,
         ]);
 
         return redirect()->route('subclass.filter')

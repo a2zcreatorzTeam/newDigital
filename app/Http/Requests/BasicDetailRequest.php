@@ -34,7 +34,7 @@ class BasicDetailRequest extends FormRequest
             'cnic_expiry_date' => 'required|date|after:cnic_issue_date',
             'date_of_birth' => 'required|date|before:today',
             'age_nearest_date' => 'required|integer|min:0|max:120',
-            'gender' => 'required|in:Male,Female',
+            'gender' => 'required',
             'mother_maiden_name' => 'nullable|string|max:255',
             'father_name' => 'nullable|string|max:255',
             'husband_name' => 'nullable|string|max:255',

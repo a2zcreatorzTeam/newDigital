@@ -13,14 +13,13 @@
                              <div class="icon">
                                  <img src="{{asset('frontend/images/Mahfooz-Plan.png')}}" alt="">
                              </div>
-                             <h4 class="title"><a href="{{ route('frontend.product') }}"> {{ $data->name }}</a></h4>
-                           
+                             <h4 class="title"><a href="{{ route('frontend.dashboard',[$data->id]) }}"> {{ $data->name }}</a></h4>
                          </div>
                      </div>
                  </div>
              </div>
              @endforeach
          </div>
-         <div style="text-align: center;"><img width="600px" src="{{asset('frontend/images/line.png')}}" alt=""></div>
+         <div style="text-align: center;"><img width="600px" src="{{asset('frontend/images/line.png')}}" alt="image"></div>
      </div>
  </div>

@@ -1,5 +1,18 @@
 @extends('backend.layout.master')
 @section('content')
+<style>
+    /* Chrome, Safari, Edge, Opera */
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    /* Firefox */
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
+</style>
 
 <section id="section-dashboard">
     <div class="flex justify-between items-center mb-4">
@@ -29,9 +42,9 @@
                         <select name="class_id" class="form-control">
                             <option value="">Select Category</option>
                             @foreach($classes as $class)
-                                <option value="{{ $class->id }}">
-                                    {{ $class->name }}
-                                </option>
+                            <option value="{{ $class->id }}">
+                                {{ $class->name }}
+                            </option>
                             @endforeach
                         </select>
                     </div>
@@ -42,6 +55,13 @@
                     <div class="form-group">
                         <strong>Name:</strong>
                         <input type="text" name="name" placeholder="Enter Policy Name" class="form-control">
+                    </div>
+                </div>
+                <!-- Table no -->
+                <div class="col-md-12 mt-2">
+                    <div class="form-group">
+                        <strong>Table No:</strong>
+                        <input type="text" name="table_no" placeholder="Enter Table No" class="form-control">
                     </div>
                 </div>
 

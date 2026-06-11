@@ -12,6 +12,7 @@ use App\Http\Controllers\backend\UserPolicyController;
 use App\Http\Controllers\Frontend\FrontendController;
 use App\Http\Controllers\Frontend\PolicyController;
 use App\Http\Controllers\Frontend\VoucheController;
+use App\Http\Controllers\Frontend\PolicyCalculatorController;
 use App\Models\User;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Auth;
@@ -114,7 +115,10 @@ Route::prefix('/')->name('frontend.')->controller(FrontendController::class)->gr
 
 Route::prefix('/voucher')->name('voucher.')->controller(VoucheController::class)->group(function () {
         Route::get('/{id}', 'voucher')->name('voucher');
-      
+});
+
+Route::prefix('/policy-calculator')->name('PolicyCalculator.')->controller(PolicyCalculatorController::class)->group(function () {
+        Route::post('/', 'policy_calculation')->name('policy_calculation');
 });
 
 

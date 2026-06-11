@@ -16,6 +16,15 @@ class UserPolicyData extends Model
     {
         return $this->hasOne(SubClass::class, 'id', 'plan');
     }
+
+       public function voucher()
+    {
+        return $this->hasOne(Voucher::class, 'policy_id', 'policy_id');
+    }
+       public function family_history()
+    {
+        return $this->hasMany(FamilyHistory::class, 'policy_id', 'policy_id');
+    }
     
        public function get_permanent_province()
     {

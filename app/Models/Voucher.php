@@ -25,16 +25,12 @@ class Voucher extends Model
         'payment_ip_address'
     ];
 
-
-    public static function formatKuickpayAmount($amount, $includeSign = true)
+    public static function formatKuickpayAmount($amount)
     {
-        // Amount ko 100 se multiply karke paisa me convert kiya aur decimals khatam kiye
+        // Convert to minor units (paisas)
         $minorUnits = round($amount * 100);
-
-        // Total 13 digits tak zeros pad karein (kyunki + sign mila kar 14 banenge) [cite: 91]
-        $padded = str_pad($minorUnits, 13, '0', STR_PAD_LEFT);
-
-        return $includeSign ? '+' . $padded : '0' . $padded;
+        // Ensure exactly 12 digits, left padded with zeros
+        return str_pad($minorUnits, 12, '0', STR_PAD_LEFT);
     }
 
     public function policy()
