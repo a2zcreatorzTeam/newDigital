@@ -82,12 +82,12 @@ class KuickpayController extends Controller
             return response()->json(['response_Code' => '04', 'message' => 'Invalid Data/Credentials'], 400); // [cite: 85, 140]
         }
 
-        if ($request->bank_mnemonic != 'KPY') {
-            return response()->json([
-                'response_Code' => '04',
-                'message' => 'Invalid Data'
-            ]);
-        }
+        // if ($request->bank_mnemonic != 'KPY') {
+        //     return response()->json([
+        //         'response_Code' => '04',
+        //         'message' => 'Invalid Data'
+        //     ]);
+        // }
 
         $consumerNumber = $request->input('consumer_number'); // [cite: 40]
 
@@ -126,8 +126,8 @@ class KuickpayController extends Controller
             'consumer_Detail'       => str_pad($voucher->customer_name, 30, ' ', STR_PAD_RIGHT), // Left justified, right padded [cite: 85]
             'bill_status'           => $voucher->status, // U or P [cite: 85]
             'due_date'              => Carbon::parse($voucher->due_date)->format('Ymd'), // yyyyMMdd [cite: 91]
-            'amount_within_dueDate' => Voucher::formatKuickpayAmount($voucher->amount_within_due_date, true), // [cite: 91]
-            'amount_after_dueDate'  => Voucher::formatKuickpayAmount($voucher->amount_after_due_date, true), // [cite: 91]
+            'amount_within_dueDate' => Voucher::formatTwoKuickpayAmount($voucher->amount_within_due_date, true), // [cite: 91]
+            'amount_after_dueDate'  => Voucher::formatTwoKuickpayAmount($voucher->amount_after_due_date, true), // [cite: 91]
             'email_address'         => str_pad($voucher->email ?? 'example@gmail.com', 30, ' '), // [cite: 91]
             'contact_number'        => $voucher->contact_number ?? '923000000000', // [cite: 95]
             'billing_month'         => $voucher->billing_month, // [cite: 95]
@@ -208,7 +208,26 @@ class KuickpayController extends Controller
         $consumerNumber = $request->input('consumer_number');
         $tranAuthId     = $request->input('tran_auth_id');
         $amountPaid     = $request->input('transaction_amount');
-        $bankMnemonic   = $request->input('bank_mnemonic'); 
+        $bankMnemonic   = $request->input('bank_mnemonic') ?? null;  
+        
+        
+        
+        
+        if (!preg_match('/^\d{6}$/', $tranAuthId)) {
+            return response()->json([
+                'response_Code' => '04',
+                'message' => 'tran_auth_id should be limited to 6 numeric digits only.'
+            ], 400);
+        }
+        
+        // if (!preg_match('/^\d{1,12}(\.\d{1,2})?$/', $amountPaid)) {
+        //     return response()->json([
+        //         'response_Code' => '04',
+        //         'message' => 'transaction_amount should support up to 12 digits with 2 decimal places.'
+        //     ], 400);
+        // }
+        
+        
 
         // Start monitoring operations
         DB::beginTransaction();
@@ -223,10 +242,10 @@ class KuickpayController extends Controller
                 return response()->json(['response_Code' => '01']);
             }
 
-            if ($request->bank_mnemonic != 'KPY') {
-                DB::rollBack();
-                return response()->json(['Invalid Data' => '04']);
-            }
+            // if ($request->bank_mnemonic != 'KPY') {
+            //     DB::rollBack();
+            //     return response()->json(['Invalid Data' => '04']);
+            // }
 
 
 
@@ -248,7 +267,7 @@ class KuickpayController extends Controller
                 'status'        => 'P',
                 'tran_auth_id'  => $tranAuthId,
                 'date_paid'     => now(),
-                'bank_mnemonic' => $bankMnemonic,
+                'bank_mnemonic' => $bankMnemonic ?? null,
                 'payment_ip_address' => request()->ip()
             ]);
 

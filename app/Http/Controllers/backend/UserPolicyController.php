@@ -85,7 +85,7 @@ class UserPolicyController extends Controller
 
     public function downloadPolicyUserPdf($id)
     {
-        $data = UserPolicyData::where('id', $id)->first();
+        $data = UserPolicyData::with('voucher','family_history')->where('id', $id)->first();
         $pdf = Pdf::loadView('backend.userPolicy.policy-detail-pdf', compact('data'))
             ->setPaper('a4', 'portrait');
 

@@ -1,5 +1,6 @@
 @extends('frontend.layout.master')
 @section('content')
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 
 <style>
@@ -117,6 +118,19 @@
             font-size: 22px;
         }
     }
+
+    .btn {
+        display: inline-flex !important;
+        align-items: center !important; 
+        justify-content: center !important;
+        padding: 1rem 1.2rem !important;
+        border-radius: var(--radius-md) !important;
+        font-size: 0.875rem !important;
+        border: none !important;
+        font-weight: 500 !important;
+        cursor: pointer !important;
+        transition: var(--transition) !important;
+    }
 </style>
 <!-- header-area-start -->
 <link rel="stylesheet" href="{{ asset('frontend/css/sub-header.css') }}">
@@ -139,11 +153,16 @@
                 <!-- Right Actions -->
                 <div class="d-flex align-items-center gap-2 flex-wrap">
 
-                    <!-- Download Button -->
+                    <a href="{{ route('user.policy.download.pdf', $data->id) }}"
+                        class="btn  btn-sm px-3 py-2 rounded-3 shadow-sm" style="background: #e65f97;">
+                        <i class="fa-solid fa-download me-1"></i>
+                        Download PDF
+                    </a>
 
 
                 </div>
             </div>
+
 
             <div class="p-4">
 
@@ -168,7 +187,7 @@
                         <div class="col-md-3 mb-3 mb-md-0">
                             <div class="summary-item">
                                 <h5>Sum Assured</h5>
-                                <h4>--</h4>
+                                <h4>{{ number_format($data->sum_assured) ?? '---' }}</h4>
                             </div>
                         </div>
 

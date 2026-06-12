@@ -1,4 +1,6 @@
 <input type="hidden" name="premium_paid" value="{{$premium_paid}}">
+<input type="hidden" name="sum_assured" value="{{$sum_assured}}">
+<input type="hidden" name="payment_mode" value="{{$payment_mode}}">
 
 <table class="table table-striped">
     <tbody>

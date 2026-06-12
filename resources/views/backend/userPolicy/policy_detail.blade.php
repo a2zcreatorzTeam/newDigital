@@ -163,7 +163,7 @@
                     <div class="col-md-3 mb-3 mb-md-0">
                         <div class="summary-item">
                             <h5>Sum Assured</h5>
-                            <h4>---</h4>
+                            <h4>{{ number_format($data->sum_assured) }}</h4>
                         </div>
                     </div>
 

@@ -25,6 +25,17 @@ class Voucher extends Model
         'payment_ip_address'
     ];
 
+
+    public static function formatTwoKuickpayAmount($amount, $includeSign = true)
+    {
+        // Amount ko 100 se multiply karke paisa me convert kiya aur decimals khatam kiye
+        $minorUnits = round($amount * 100);
+
+        // Total 13 digits tak zeros pad karein (kyunki + sign mila kar 14 banenge) [cite: 91]
+        $padded = str_pad($minorUnits, 13, '0', STR_PAD_LEFT);
+
+        return $includeSign ? '+' . $padded : '0' . $padded;
+    }
     public static function formatKuickpayAmount($amount)
     {
         // Convert to minor units (paisas)
