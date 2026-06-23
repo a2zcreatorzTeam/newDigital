@@ -382,8 +382,7 @@
                                             {{ $data->status == 'Approved' ? '#95f0b8' : 
                                             ($data->status == 'Pending' ? '#cdeaff' : 
                                             ($data->status == 'Rejected' ? '#f1c2c7' :
-                                            ($data->status == 'InCart' ? '#f6ca90' : '#edf19e'))) }};
-                            ">
+                                            ($data->status == 'InCart' ? '#f6ca90' : '#edf19e'))) }};">
                                     {{ $data->status ?? '---' }}
                                 </span>
                             </div>

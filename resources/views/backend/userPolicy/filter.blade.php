@@ -32,7 +32,6 @@
                                 <option value="Approved">Approved</option>
                                 <option value="Pending">Pending</option>
                                 <option value="Rejected">Rejected</option>
-                                <option value="InCart">InCart</option>
                             </select>
                         </div>
                         <div class="col-md-3">

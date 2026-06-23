@@ -23,7 +23,7 @@ class PolicyController extends Controller
             'cnic_number',
             'plan',
             'status','created_at'
-        )->where('user_id',Auth::user()->id)->paginate(10);
+        )->where('user_id',Auth::user()->id)->latest()->paginate(10);
         return view('frontend.self-policy.self-policy-listing',compact('policies'));
 
     }

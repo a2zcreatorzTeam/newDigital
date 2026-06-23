@@ -442,7 +442,7 @@ class FrontendController extends Controller
                     $policy_id = 'POL-' . date('Y') . '-' . random_int(100000, 999999);
                     session(['policy_id' => $policy_id]);
                 } while (UserPolicyData::where('policy_id', $policy_id)->exists());
-                $data['status'] = 'Incart';
+                $data['status'] = 'Pending';
 
                 $policy = UserPolicyData::create([
                     'user_id'   => $userId,
@@ -501,7 +501,7 @@ class FrontendController extends Controller
                     session(['policy_id' => $policy_id]);
                 } while (UserPolicyData::where('policy_id', $policy_id)->exists());
 
-                $data['status'] = 'Incart';
+                $data['status'] = 'Pending';
 
                 $policy = UserPolicyData::create([
                     'user_id'   => $userId,
