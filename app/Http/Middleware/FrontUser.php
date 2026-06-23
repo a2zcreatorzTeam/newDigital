@@ -20,7 +20,7 @@ class FrontUser
             if (Auth::check() && Auth::user()->user_type == 1) {
                 return $next($request);
             } else {
-                return redirect()->route('frontend.index');
+                return redirect()->route('frontend.index')->with('info', 'You must log in first before proceeding');
             }
         
 

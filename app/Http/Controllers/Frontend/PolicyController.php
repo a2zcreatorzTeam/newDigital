@@ -11,6 +11,11 @@ class PolicyController extends Controller
     public function self_policy()
     {
         
+      
+        if(!Auth::check()){
+           return redirect()->back()->with('info', 'You must log in first before proceeding');
+        }
+        
         $policies =  UserPolicyData::with([
             'policyPlan:id,name,class_id,logo',
             'policyPlan.mainClass:id,name'

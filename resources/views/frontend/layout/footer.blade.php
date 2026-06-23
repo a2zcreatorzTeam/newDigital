@@ -149,7 +149,7 @@
         icon: 'success',
         title: "{{ session('success') }}",
         showConfirmButton: false,
-        timer: 3000,
+        timer: 4000,
         timerProgressBar: true
     });
     @endif
@@ -161,7 +161,7 @@
         icon: 'info',
         title: "{{ session('info') }}",
         showConfirmButton: false,
-        timer: 3000,
+        timer: 4000,
         timerProgressBar: true
     });
     @endif
@@ -173,7 +173,7 @@
         icon: 'error',
         title: "{{ session('error') }}",
         showConfirmButton: false,
-        timer: 3000,
+        timer: 4000,
         timerProgressBar: true
     });
     @endif

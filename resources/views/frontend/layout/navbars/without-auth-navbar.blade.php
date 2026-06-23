@@ -24,49 +24,9 @@
                                     <ul class="navigation">
                                         <li class="active"><a href="{{route('frontend.index')}}">Home</a>
                                         </li>
-                                    
                                         <li><a href="{{route('frontend.self-policy')}}">Self Policy</a>
                                         </li>
-                                        <!-- <li class="menu-item-has-children"><a href="#">Policies</a>
-                                            <ul class="sub-menu">
-                                                <li class="mega"><a href="#">Policy Listing</a>
-                                                    <ul class="sub-sub-menu">
-                                                        <li><a href="{{ route('frontend.self-policy') }}">Self Policy Listing</a></li>
-                                                        <li><a href="nominated-policies.php">Nominated Policy Listing</a></li>
-                                                    </ul>
-                                                </li>
-                                                <li><a href="policyservicing.php">Policy Servicing</a></li>
-                                            </ul>
-                                        </li> -->
-                                        <li class="menu-item-has-children"><a href="#">Claims</a>
-                                            <ul class="sub-menu">
-                                                <li class="mega"><a href="#">Claims Listing</a>
-                                                    <ul class="sub-sub-menu">
-                                                        <li><a href="self-claims.php">Self Claims Listing</a></li>
-                                                        <li><a href="nominated-claims.php">Nominated Claims Listing</a></li>
-                                                    </ul>
-                                                </li>
-                                                <li><a href="claim-form.php">Claim Forms</a></li>
-                                            </ul>
-                                        </li>
-                                        <li class="menu-item-has-children"><a href="#">Documents</a>
-                                            <ul class="sub-menu">
-                                                <li class="mega"><a href="#">Policy Document</a>
-                                                    <ul class="sub-sub-menu">
-                                                        <li><a href="self-policy-documents.php">Self Policy Documents</a></li>
-                                                        <li><a href="nominated-policy-documents.php">Nominated Policy Documents</a></li>
-                                                    </ul>
-                                                </li>
-                                                <li class="mega"><a href="#">Claim Document</a>
-                                                    <ul class="sub-sub-menu">
-                                                        <li><a href="self-claim-documents.php">Self Claim Documents</a></li>
-                                                        <li><a href="nominated-claim-documents.php">Nominated Claim Documents</a></li>
-                                                    </ul>
-                                                </li>
-                                            </ul>
-                                        </li>
                                         <li><a href="{{route('frontend.contact')}}">Contact Us</a></li>
-                                        <li><a href="complaint-feedback.php">Complaints & Feedback</a></li>
                                     </ul>
                                 </div>
                                 <div class="tgmenu__action d-none d-md-block">
