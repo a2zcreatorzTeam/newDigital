@@ -121,7 +121,6 @@
                     $('#policy_list').html(data);
                 },
                 error: function(data) {
-                    console.log(data);
                 }
             });
         }

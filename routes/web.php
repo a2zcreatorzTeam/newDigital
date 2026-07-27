@@ -67,7 +67,7 @@ Route::group(['middleware' => ['user.role']], function () {
                 Route::get('/export', 'export')->name('export');
         });
 });
-        
+
 
 Route::prefix('admin')->name('admin.')->controller(AuthController::class)->group(function () {
         Route::get('login/', 'loginPage')->name('login');
@@ -76,11 +76,12 @@ Route::prefix('admin')->name('admin.')->controller(AuthController::class)->group
 });
 
 
-   Route::prefix('admin/dashboard/userPolicy')->name('user.policy.')->controller(UserPolicyController::class)->group(function () {
-                Route::get('/profile/{id}/download-pdf', 'downloadPolicyUserPdf')
-                ->name('download.pdf');
-             
-        });
+Route::prefix('admin/dashboard/userPolicy')->name('user.policy.')->controller(UserPolicyController::class)->group(function () {
+        Route::get('/profile/{id}/download-pdf', 'downloadPolicyUserPdf')->name('download.pdf');
+});
+
+
+
 Route::prefix('/')->name('frontend.')->controller(FrontendController::class)->group(function () {
         Route::get('/', 'home')->name('index');
         Route::get('/cart', 'cart')->name('cart');
@@ -107,17 +108,11 @@ Route::prefix('/')->name('frontend.')->controller(FrontendController::class)->gr
         Route::post('/get/district/data', 'getDistrictData')->name('getDistrictData');
         Route::post('/updateProfile', 'updateProfile')->name('updateProfile');
         Route::get('/logout', 'logout')->name('logout');
-        Route::post('/verify-otp','verifyOtp')->name('verify.otp');
+        Route::post('/verify-otp', 'verifyOtp')->name('verify.otp');
         Route::post('/resend-otp', 'resendOtp')->name('resend.otp');
 });
 
-
-
-
-
-
-
-Route::prefix('/voucher')->name('voucher.')->controller(VoucheController::class)->group(function () {
+Route::prefix('/voucher')->name('voucher.')->controller(VoucheController::class)->middleware('prevent-back-history')->group(function () {
         Route::get('/{id}', 'voucher')->name('voucher');
 });
 
@@ -172,8 +167,3 @@ Route::get('/test-email', function () {
 
         return "Test email sent successfully!";
 });
-
-
-
-
-

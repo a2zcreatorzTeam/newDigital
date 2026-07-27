@@ -150,7 +150,7 @@
             <!-- Dual National -->
             <div class="col-6">
                 <div class="form-group">
-                    <label>Is Client Dual National? (کیا سائل ڈوئل قومیت رکھتا ہے؟)<span class="text-danger"> *</span></label>
+                    <label>Dual National? (کیا سائل ڈوئل قومیت رکھتا ہے؟)<span class="text-danger"> *</span></label>
                     <select name="is_client_dual_national" required class="form-control" id="is_client_dual_national">
                         <option value="">Select Option</option>
                         <option value="Yes" {{ ($user->basicDetail->is_client_dual_national ?? '') == 'Yes' ? 'selected' : '' }}>Yes</option>
@@ -253,7 +253,6 @@
                 },
                 success: function(response) {
                     Swal.close();
-                    console.log(response);
 
                     if (response.success) {
                         Swal.fire({

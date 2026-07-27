@@ -1,6 +1,9 @@
 <?php
+
 use App\Models\Voucher;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
+
 
 
 if (!function_exists('format_price')) {
@@ -38,7 +41,7 @@ if (!function_exists('generateCustomerVoucher')) {
      */
     function generateCustomerVoucher($order)
     {
-        
+
 
         $prefix = "01520";
         $currentDate = Carbon::now();
@@ -59,5 +62,23 @@ if (!function_exists('generateCustomerVoucher')) {
             'contact_number' => $order->customer_phone,
             'status' => 'U' // Unpaid [cite: 85]
         ]);
+    }
+}
+
+if (!function_exists('uploadFile')) {
+
+
+    function uploadFile(Request $request, string $field, string $folder = 'uploads/policy_documents')
+    {
+        if (!$request->hasFile($field)) {
+            return null;
+        }
+        $file = $request->file($field);
+        $fileName = uniqid() . '_' . time() . '.' . $file->getClientOriginalExtension();
+        if (!is_dir(public_path($folder))) {
+            mkdir(public_path($folder), 0755, true);
+        }
+        $file->move(public_path($folder), $fileName);
+        return $fileName;
     }
 }

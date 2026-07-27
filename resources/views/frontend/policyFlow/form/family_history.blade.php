@@ -81,11 +81,11 @@
             </div>
             <div class="col-md-4 mb-3 px-sm-3">
                 <label>Age Of Death</label>
-                <input type="number"  name="mother_age_of_death" class="form-control">
+                <input type="number" name="mother_age_of_death" class="form-control">
             </div>
             <div class="col-md-4 mb-3 px-sm-3">
                 <label>Cause Of Death</label>
-                <textarea name="mother_cause_of_death" class="form-control" rows="4" placeholder="Enter cause of death details..."></textarea>    
+                <textarea name="mother_cause_of_death" class="form-control" rows="4" placeholder="Enter cause of death details..."></textarea>
             </div>
 
             <hr class="col-12 my-4">
@@ -120,6 +120,10 @@
             </div>
             <div id="daughters_container" class="col-12 row px-0 mx-0"></div>
 
+        </div>
+        <div class="col-12 d-flex justify-content-between mt-4">
+            <button type="button" class="btn btn-secondary ib-prev-btn">Previous</button>
+            <button type="button" class="btn btn-primary ib-next-btn">Next</button>
         </div>
     </div>
 </div>

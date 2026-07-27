@@ -471,18 +471,51 @@ class FrontendController extends Controller
             ], 500);
         }
     }
+
+
+    private  function uploadFile(Request $request, string $field, string $folder = 'uploads/policy_documents')
+    {
+        if (!$request->hasFile($field)) {
+            return null;
+        }
+        $file = $request->file($field);
+        $fileName = uniqid() . '_' . time() . '.' . $file->getClientOriginalExtension();
+        if (!is_dir(public_path($folder))) {
+            mkdir(public_path($folder), 0755, true);
+        }
+        $file->move(public_path($folder), $fileName);
+        return $fileName;
+    }
+
+
+
     public function policyDataSave(PolicyUserDataRequest $request)
     {
-       
+
         try {
             DB::beginTransaction();
-
             $userId = auth()->id();
             $data   = $request->validated();
+
+            $documents = [
+                'proposer_cnic_front',
+                'proposer_cnic_back',
+                'nominee_document',
+                'proposer_photo',
+                'income_proof',
+                'medical_reports',
+            ];
+
+            foreach ($documents as $document) {
+
+                $imageName = $this->uploadFile($request, $document);
+
+                if ($imageName) {
+                    $data[$document] = $imageName;
+                }
+            }
             $policy_id = session('policy_id');
-
             $policy = null;
-
             if ($policy_id) {
                 $policy = UserPolicyData::where('user_id', $userId)
                     ->where('policy_id', $policy_id)
@@ -492,7 +525,6 @@ class FrontendController extends Controller
             // 1. Save or Update User Policy Data
             if ($policy) {
                 $policy->update($data);
-
                 // Optional: Delete previous history if you want a clean rewrite on updates
                 FamilyHistory::where('user_personal_policy_data_id', $policy->id)->delete();
             } else {
@@ -507,7 +539,6 @@ class FrontendController extends Controller
                     'user_id'   => $userId,
                     'policy_id' => $policy_id,
                 ] + $data);
-
                 $this->generateCustomerVoucher($policy);
             }
 
@@ -554,10 +585,7 @@ class FrontendController extends Controller
                     $yearsOfDeath   = $request->input($type . '_year_of_death');
                     $agesOfDeath    = $request->input($type . '_age_of_death');
                     $causesOfDeath  = $request->input($type . '_cause_of_death');
-
-                    // Loop through array index positions
                     foreach ($ages as $index => $ageValue) {
-                        // Ignore empty dynamic entries
                         if (empty($ageValue)) continue;
 
                         FamilyHistory::create([
@@ -604,7 +632,7 @@ class FrontendController extends Controller
     {
 
 
-         // $prefix = "01520";
+        // $prefix = "01520";
         $prefix = "13051";
         $currentDate = Carbon::now();
         $billingMonth = $currentDate->format('ym');

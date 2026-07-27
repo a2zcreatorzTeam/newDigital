@@ -1,6 +1,10 @@
 @extends('frontend.layout.master')
 @section('content')
-
+<style>
+    .container {
+        max-width: 1416px !important;
+    }
+</style>
 <link rel="stylesheet" href="{{ asset('frontend/css/sub-header.css') }}">
 <link rel="stylesheet" href="{{ asset('frontend/css/complaint.css') }}">
 <link rel="stylesheet" href="{{ asset('frontend/css/di-form.css') }}">
@@ -46,18 +50,18 @@
                 <form id="msform">
                     <!-- progressbar -->
                     <!-- <ul id="progressbar"> -->
-                        <!-- <li class="active fa-regular fa-file">
+                    <!-- <li class="active fa-regular fa-file">
                             <p class="foorm-font">Upload <br>Information</p>
                         </li> -->
-                        <!-- <li class="fa-brands fa-codepen">
+                    <!-- <li class="fa-brands fa-codepen">
                             <p class="foorm-font">Choose <br>Product</p>
                         </li> -->
 
-                        <!-- <li class="fa-regular fa-file">
+                    <!-- <li class="fa-regular fa-file">
                             <p class="foorm-font">Payment</p>
                         </li> -->
-                        
-                        <!-- <li class="fa-regular fa-credit-card">
+
+                    <!-- <li class="fa-regular fa-credit-card">
                             <p class="foorm-font">Make <br>Payment</p>
                         </li>
 

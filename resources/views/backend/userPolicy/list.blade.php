@@ -6,7 +6,6 @@
     <div class="flex justify-between items-center mb-4">
         <h1 class="font-bold text-dark" style="font-size: 1.5rem;">User Policy</h1>
     </div>
-
     <div class="card">
         @include('backend.userPolicy.filter')
         <div class="table-responsive">

@@ -189,7 +189,6 @@
                 },
 
                 error: function(xhr) {
-                    console.log(xhr.responseText);
                     alert("CSRF error ya server issue");
                 },
 

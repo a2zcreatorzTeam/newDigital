@@ -112,6 +112,11 @@
     </div>
 
     <script>
+        window.addEventListener("pageshow", function(event) {
+            if (event.persisted || performance.getEntriesByType("navigation")[0]?.type === "back_forward") {
+                window.location.reload();
+            }
+        });
         // 1. Globally Configured Toast Mixin (For reusable clean toasts)
         const Toast = Swal.mixin({
             toast: true,
@@ -126,7 +131,7 @@
         });
 
         // 2. Sirf tab chalega jab Controller se 'success' ya 'error' ka session aayega
-      
+
         Swal.fire({
             title: 'Voucher Generated!',
             text: "{{ session('success') }}",
@@ -134,7 +139,7 @@
             confirmButtonColor: '#065f46',
             confirmButtonText: 'Great, Thank You!'
         });
-      
+
 
 
         // 3. Consumer ID copy karne par Toast alert trigger karna (Yeh pehle ki tarah hi rahega)

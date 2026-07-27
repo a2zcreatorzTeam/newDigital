@@ -110,6 +110,9 @@
             </div>
 
         </div>
+        <div class="col-12 d-flex justify-content-between mt-4">
+            <button type="button" class="btn btn-primary ib-next-btn">Next</button>
+        </div>
     </div>
 </div>
 
@@ -291,7 +294,6 @@
                 },
                 success: function(response) {
                     Swal.close();
-                    console.log(response);
 
                     if (response.success) {
                         Swal.fire({

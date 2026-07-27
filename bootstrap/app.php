@@ -7,13 +7,15 @@ use Illuminate\Foundation\Configuration\Middleware;
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__ . '/../routes/web.php',
-        api: __DIR__.'/../routes/api.php', // ⚠️ YEH LINE LAZMI HONI CHAHIYE
+        api: __DIR__ . '/../routes/api.php', // ⚠️ YEH LINE LAZMI HONI CHAHIYE
         commands: __DIR__ . '/../routes/console.php',
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
+            'prevent-back-history' => \App\Http\Middleware\PreventBackHistory::class,
+
             'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
             'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
             'user.role' => \App\Http\Middleware\CheckUserRole::class,

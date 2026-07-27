@@ -106,6 +106,11 @@
             border-top: 1px dashed #ccc;
             margin: 25px 0;
         }
+
+        .doc-image {
+            max-height: 120px;
+            max-width: 100%;
+        }
     </style>
 </head>
 
@@ -138,7 +143,7 @@
                 <tr>
                     <td>
                         <div class="summary-title">Sum Assured</div>
-                        <div class="summary-value">{{ $data->sum_assured ?? '---' }}</div>
+                        <div class="summary-value">{{ number_format($data->sum_assured) ?? '---' }}</div>
                     </td>
 
                     <td>
@@ -211,14 +216,14 @@
                     </td>
 
                     <td>
-                        <div class="detail-label">Father Name</div>
+                        <div class="detail-label">Father's Name of Life Proposed</div>
                         <div class="detail-value">{{ $data->father_name ?? '---' }}</div>
                     </td>
                 </tr>
 
                 <tr>
                     <td>
-                        <div class="detail-label">Husband Name</div>
+                        <div class="detail-label">Husband Name of Life Proposed</div>
                         <div class="detail-value">{{ $data->husband_name ?? '---' }}</div>
                     </td>
 
@@ -259,7 +264,7 @@
                     </td>
 
                     <td>
-                        <div class="detail-label">Dual National</div>
+                        <div class="detail-label">Is Client Dual National?</div>
                         <div class="detail-value">{{ $data->is_client_dual_national ?? '---' }}</div>
                     </td>
                 </tr>
@@ -278,13 +283,49 @@
 
                 <tr>
                     <td>
+                        <div class="detail-label">Dual Nationality Country</div>
+                        <div class="detail-value">{{ $data->dual_nationality_country ?? '---' }}</div>
+                    </td>
+
+                    <td>
+                        <div class="detail-label">Dual Nationality Passport Number</div>
+                        <div class="detail-value">{{ $data->dual_passport_number ?? '---' }}</div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
                         <div class="detail-label">Birth Place</div>
                         <div class="detail-value">{{ $data->birth_placed ?? '---' }}</div>
                     </td>
 
                     <td>
-                        <div class="detail-label">Proposer Same Person</div>
+                        <div class="detail-label">Proposer & Life Proposed are same</div>
                         <div class="detail-value">{{ $data->is_same_person ?? '---' }}</div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <div class="detail-label">Life Proposed Name</div>
+                        <div class="detail-value">{{ $data->life_proposed_name ?? '---' }}</div>
+                    </td>
+
+                    <td>
+                        <div class="detail-label">Life Proposed CNIC</div>
+                        <div class="detail-value">{{ $data->life_proposed_cnic ?? '---' }}</div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <div class="detail-label">Life Proposed DOB</div>
+                        <div class="detail-value">{{ $data->life_proposed_dob ?? '---' }}</div>
+                    </td>
+
+                    <td>
+                        <div class="detail-label">Life Proposed RelationShip</div>
+                        <div class="detail-value">{{ $data->life_proposed_relationship ?? '---' }}</div>
                     </td>
                 </tr>
 
@@ -351,38 +392,23 @@
 
                 <tr>
                     <td>
-                        <div class="detail-label">Automatic Paid-Up</div>
-                        <div class="detail-value">{{ $data->automatic_paid_up ?? '---' }}</div>
-                    </td>
-
-                    <td>
-                        <div class="detail-label">Automatic Premium Loan</div>
-                        <div class="detail-value">{{ $data->automatic_premium_loan ?? '---' }}</div>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>
-                        <div class="detail-label">Accidental Death & Indemnity Benefit (AIB)</div>
-                        <div class="detail-value">{{ $data->aib_rider ?? '---' }}</div>
-                    </td>
-
-                    <td>
                         <div class="detail-label">Accidental Death Benefit (ADB)</div>
                         <div class="detail-value">{{ $data->adb_rider ?? '---' }}</div>
                     </td>
-                </tr>
 
-                <tr>
                     <td>
                         <div class="detail-label">Term Insurance Rider (TIR)</div>
                         <div class="detail-value">{{ $data->tir_rider ?? '---' }}</div>
                     </td>
+                </tr>
 
+                <tr>
                     <td>
                         <div class="detail-label">Family Income Benefit (FIB)</div>
                         <div class="detail-value">{{ $data->fib_rider ?? '---' }}</div>
                     </td>
+
+                    <td></td>
                 </tr>
 
             </table>
@@ -500,32 +526,357 @@
                     </td>
 
                     <td>
-                        <div class="detail-label">Monthly Income</div>
-                        <div class="detail-value">{{ $data->avaerage_monthly_income ?? '---' }}</div>
+                        <div class="detail-label">Average Monthly Income</div>
+                        <div class="detail-value">PKR {{ $data->avaerage_monthly_income ?? '---' }}</div>
                     </td>
                 </tr>
 
                 <tr>
                     <td>
-                        <div class="detail-label">Ex Defence Personal</div>
+                        <div class="detail-label">If Defence or Ex-Defence Personal, commercial Airline Flight Crew or plant protection pilot</div>
                         <div class="detail-value">{{ $data->ex_defence_personal ?? '---' }}</div>
                     </td>
 
                     <td>
-                        <div class="detail-label">Medical Discharge</div>
+                        <div class="detail-label">Have you ever been discharged on medical grounds from service / employeement</div>
                         <div class="detail-value">{{ $data->discharged_on_medical ?? '---' }}</div>
                     </td>
                 </tr>
 
                 <tr>
                     <td>
-                        <div class="detail-label">Hazardous Occupation</div>
+                        <div class="detail-label">Are you presently engaged or intent to engage in any hazardous occupation or pastime</div>
                         <div class="detail-value">{{ $data->hazardous_occupation ?? '---' }}</div>
                     </td>
 
                     <td>
                         <div class="detail-label">Comments</div>
                         <div class="detail-value">{{ $data->comment ?? '---' }}</div>
+                    </td>
+                </tr>
+
+            </table>
+
+            {{-- Voucher Information --}}
+            <div class="section-title">
+                Payment Information
+            </div>
+
+            <table>
+
+                <tr>
+                    <td>
+                        <div class="detail-label">Consumer No</div>
+                        <div class="detail-value">{{ $data->voucher->consumer_number ?? '---' }}</div>
+                    </td>
+
+                    <td>
+                        <div class="detail-label">Amount With In Due Date</div>
+                        <div class="detail-value">{{ number_format($data->voucher->amount_within_due_date) ?? '---' }}</div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <div class="detail-label">Amount After Date</div>
+                        <div class="detail-value">{{ number_format($data->voucher->amount_after_due_date) ?? '---' }}</div>
+                    </td>
+
+                    <td>
+                        <div class="detail-label">Due Date</div>
+                        <div class="detail-value">{{ $data->voucher->due_date ?? '---' }}</div>
+                    </td>
+                </tr>
+
+            </table>
+
+            {{-- Family History Information --}}
+            <div class="section-title">
+                Family History Information
+            </div>
+
+            @if($data->family_history && $data->family_history->count() > 0)
+            @foreach($data->family_history as $member)
+            <table style="margin-bottom: 20px;">
+                <tr>
+                    <th colspan="2" style="text-transform: capitalize; color: #0d6efd; padding-bottom: 8px;">
+                        {{ $member->memner_flag }}
+                    </th>
+                </tr>
+
+                <tr>
+                    <td>
+                        <div class="detail-label">Current Age</div>
+                        <div class="detail-value">{{ $member->age ?? '---' }}</div>
+                    </td>
+                    <td>
+                        <div class="detail-label">State of Health</div>
+                        <div class="detail-value">{{ $member->state_of_health ?? '---' }}</div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <div class="detail-label">Year of Death</div>
+                        <div class="detail-value">{{ $member->year_of_death ?? '---' }}</div>
+                    </td>
+                    <td>
+                        <div class="detail-label">Age of Death</div>
+                        <div class="detail-value">{{ $member->age_of_death ?? '---' }}</div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <div class="detail-label">Cause of Death</div>
+                        <div class="detail-value">{{ $member->cause_of_death ?? '---' }}</div>
+                    </td>
+                    <td></td>
+                </tr>
+            </table>
+            @endforeach
+            @else
+            <table>
+                <tr>
+                    <td colspan="2" style="text-align: center; color: #6c757d; padding: 15px 0;">
+                        No family history recorded for this policy.
+                    </td>
+                </tr>
+            </table>
+            @endif
+
+            {{-- Female Section --}}
+            <div class="section-title">
+                Female Section
+            </div>
+
+            <table>
+
+                <tr>
+                    <td>
+                        <div class="detail-label">Date of Last Delivery</div>
+                        <div class="detail-value">{{ $data->date_of_last_delivery ?? '---' }}</div>
+                    </td>
+
+                    <td>
+                        <div class="detail-label">Miscarriage Dates</div>
+                        <div class="detail-value">{{ $data->miscarriage_dates ?? '---' }}</div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <div class="detail-label">Is Pregnant</div>
+                        <div class="detail-value">{{ $data->is_pregnant ?? '---' }}</div>
+                    </td>
+
+                    <td>
+                        <div class="detail-label">Caesarean Details</div>
+                        <div class="detail-value">{{ $data->caesarean_details ?? '---' }}</div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <div class="detail-label">LMP Date</div>
+                        <div class="detail-value">{{ $data->lmp_date ?? '---' }}</div>
+                    </td>
+
+                    <td>
+                        <div class="detail-label">Female Disease History</div>
+                        <div class="detail-value">{{ $data->female_disease_history ?? '---' }}</div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <div class="detail-label">Self Monthly Income</div>
+                        <div class="detail-value">{{ $data->self_monthly_income ?? '---' }}</div>
+                    </td>
+
+                    <td>
+                        <div class="detail-label">Husband Monthly Income</div>
+                        <div class="detail-value">{{ $data->husband_monthly_income ?? '---' }}</div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <div class="detail-label">Qualification</div>
+                        <div class="detail-value">{{ $data->qualification ?? '---' }}</div>
+                    </td>
+
+                    <td>
+                        <div class="detail-label">Pays Tax / Land Revenue</div>
+                        <div class="detail-value">{{ $data->pays_tax_land_revenue ?? '---' }}</div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <div class="detail-label">Husband Policy No.</div>
+                        <div class="detail-value">{{ $data->husband_policy_no ?? '---' }}</div>
+                    </td>
+
+                    <td>
+                        <div class="detail-label">Husband Zone / Company</div>
+                        <div class="detail-value">{{ $data->husband_zone_company ?? '---' }}</div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <div class="detail-label">Husband Sum Assured</div>
+                        <div class="detail-value">{{ $data->husband_sum_assured ?? '---' }}</div>
+                    </td>
+
+                    <td></td>
+                </tr>
+
+            </table>
+
+            {{-- Nominee Information --}}
+            <div class="section-title">
+                Nominee Information
+            </div>
+
+            <table>
+
+                <tr>
+                    <td>
+                        <div class="detail-label">Nominee Name</div>
+                        <div class="detail-value">{{ $data->nominee_name ?? '---' }}</div>
+                    </td>
+
+                    <td>
+                        <div class="detail-label">Nominee CNIC</div>
+                        <div class="detail-value">{{ $data->nominee_cnic ?? '---' }}</div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <div class="detail-label">Nominee Age</div>
+                        <div class="detail-value">{{ $data->nominee_age ?? '---' }}</div>
+                    </td>
+
+                    <td>
+                        <div class="detail-label">Nominee Relationship</div>
+                        <div class="detail-value">{{ $data->nominee_relationship ?? '---' }}</div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <div class="detail-label">Appointee Name</div>
+                        <div class="detail-value">{{ $data->appointee_name ?? '---' }}</div>
+                    </td>
+
+                    <td>
+                        <div class="detail-label">Appointee Relationship</div>
+                        <div class="detail-value">{{ $data->appointee_relationship ?? '---' }}</div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <div class="detail-label">Appointee CNIC</div>
+                        <div class="detail-value">{{ $data->appointee_cnic ?? '---' }}</div>
+                    </td>
+
+                    <td></td>
+                </tr>
+
+            </table>
+
+            {{-- Documents --}}
+            <div class="section-title">
+                Documents
+            </div>
+
+            <table>
+
+                <tr>
+                    <td>
+                        <div class="detail-label">Proposer CNIC Front</div>
+                        <div class="detail-value">
+                            @if($data->proposer_cnic_front)
+                            <img src="{{ public_path('uploads/policy_documents/'.$data->proposer_cnic_front) }}"
+                                alt="Proposer CNIC Front"
+                                class="doc-image">
+                            @else
+                            ---
+                            @endif
+                        </div>
+                    </td>
+
+                    <td>
+                        <div class="detail-label">Proposer CNIC Back</div>
+                        <div class="detail-value">
+                            @if($data->proposer_cnic_back)
+                            <img src="{{ public_path('uploads/policy_documents/'.$data->proposer_cnic_back) }}"
+                                alt="Proposer CNIC Back"
+                                class="doc-image">
+                            @else
+                            ---
+                            @endif
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <div class="detail-label">Nominee Document</div>
+                        <div class="detail-value">
+                            @if($data->nominee_document)
+                            <img src="{{ public_path('uploads/policy_documents/'.$data->nominee_document) }}"
+                                alt="Nominee Document"
+                                class="doc-image">
+                            @else
+                            ---
+                            @endif
+                        </div>
+                    </td>
+
+                    <td>
+                        <div class="detail-label">Proposer Photo</div>
+                        <div class="detail-value">
+                            @if($data->proposer_photo)
+                            <img src="{{ public_path('uploads/policy_documents/'.$data->proposer_photo) }}"
+                                alt="Proposer Photo"
+                                class="doc-image">
+                            @else
+                            ---
+                            @endif
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <div class="detail-label">Income Proof</div>
+                        <div class="detail-value">
+                            @if($data->income_proof)
+                            <img src="{{ public_path('uploads/policy_documents/'.$data->income_proof) }}"
+                                alt="Income Proof"
+                                class="doc-image">
+                            @else
+                            ---
+                            @endif
+                        </div>
+                    </td>
+
+                    <td>
+                        <div class="detail-label">Medical Reports</div>
+                        <div class="detail-value">
+                            @if($data->medical_reports)
+                            <img src="{{ public_path('uploads/policy_documents/'.$data->medical_reports) }}"
+                                alt="Medical Reports"
+                                class="doc-image">
+                            @else
+                            ---
+                            @endif
+                        </div>
                     </td>
                 </tr>
 
@@ -605,100 +956,45 @@
                     </td>
 
                     <td>
+                        <div class="detail-label">Daily Consumption</div>
+                        <div class="detail-value">{{ $data->daily_consumption ?? '---' }}</div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <div class="detail-label">Physical Impairments</div>
+                        <div class="detail-value">{{ $data->physical_impairments ?? '---' }}</div>
+                    </td>
+
+                    <td>
+                        <div class="detail-label">Last Illness / Injury</div>
+                        <div class="detail-value">{{ $data->last_illness_injury ?? '---' }}</div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <div class="detail-label">Medical Investigations</div>
+                        <div class="detail-value">{{ $data->medical_investigations ?? '---' }}</div>
+                    </td>
+
+                    <td>
+                        <div class="detail-label">Medical History</div>
+                        <div class="detail-value">{{ $data->medical_history ?? '---' }}</div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
                         <div class="detail-label">Weight Increase Reason</div>
                         <div class="detail-value">{{ $data->weight_increase_reason ?? '---' }}</div>
                     </td>
-                </tr>
 
-            </table>
-
-            {{-- Voucher Information --}}
-            <div class="section-title">
-                Payment Information
-            </div>
-
-            <table>
-
-                <tr>
-                    <td>
-                        <div class="detail-label">Consumer No</div>
-                        <div class="detail-value">{{ $data->voucher->consumer_number ?? '---' }}</div>
-                    </td>
-
-                    <td>
-                        <div class="detail-label">Amount With In Due Date</div>
-                        <div class="detail-value">{{ number_format($data->voucher->amount_within_due_date) ?? '---' }}</div>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>
-                        <div class="detail-label">Amount After Date</div>
-                        <div class="detail-value">{{ number_format($data->voucher->amount_after_due_date) ?? '---' }}</div>
-                    </td>
-
-                    <td>
-                        <div class="detail-label">Due Date</div>
-                        <div class="detail-value">{{ $data->voucher->due_date ?? '---' }}</div>
-                    </td>
-                </tr>
-
-            </table>
-
-            {{-- Family History Information --}}
-            <div class="section-title">
-                Family History Information
-            </div>
-
-            @if($data->family_history && $data->family_history->count() > 0)
-            @foreach($data->family_history as $member)
-            <table style="margin-bottom: 20px;">
-                <tr>
-                    <th colspan="2" style="text-transform: capitalize; color: #0d6efd; padding-bottom: 8px;">
-                        <i class="fas fa-users" style="margin-right: 8px;"></i>{{ $member->memner_flag }}
-                    </th>
-                </tr>
-
-                <tr>
-                    <td>
-                        <div class="detail-label">Current Age</div>
-                        <div class="detail-value">{{ $member->age ?? '---' }}</div>
-                    </td>
-                    <td>
-                        <div class="detail-label">State of Health</div>
-                        <div class="detail-value">{{ $member->state_of_health ?? '---' }}</div>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>
-                        <div class="detail-label">Year of Death</div>
-                        <div class="detail-value">{{ $member->year_of_death ?? '---' }}</div>
-                    </td>
-                    <td>
-                        <div class="detail-label">Age of Death</div>
-                        <div class="detail-value">{{ $member->age_of_death ?? '---' }}</div>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>
-                        <div class="detail-label">Cause of Death</div>
-                        <div class="detail-value">{{ $member->cause_of_death ?? '---' }}</div>
-                    </td>
                     <td></td>
                 </tr>
+
             </table>
-            @endforeach
-            @else
-            <table>
-                <tr>
-                    <td colspan="2" style="text-align: center; color: #6c757d; padding: 15px 0;">
-                        No family history recorded for this policy.
-                    </td>
-                </tr>
-            </table>
-            @endif
 
         </div>
 

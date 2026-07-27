@@ -14,7 +14,7 @@
             </div>
 
             <div class="col-md-6 px-0 px-sm-3">
-                <label>CNIC / B-FORM NO (قومی شناختی کارڈ نمبر)<span class="requi">*</span></label>
+                <label>CNIC (قومی شناختی کارڈ نمبر)<span class="requi">*</span></label>
                 <input required type="text" value="{{$user->basicDetail->cnic_number ?? ''}}" name="cnic_number" id="cnic_number" class="form-control account">
             </div>
 
@@ -30,7 +30,7 @@
 
             <div class="col-md-6 px-0 px-sm-3">
                 <label>Date Of Birth (تاریخِ پیدائش)<span class="requi">*</span></label>
-               <input required type="date" id="date_of_birth" value="{{$user->basicDetail->date_of_birth ?? ''}}" name="date_of_birth" class="form-control account">
+                <input required type="date" id="date_of_birth" value="{{$user->basicDetail->date_of_birth ?? ''}}" name="date_of_birth" class="form-control account">
             </div>
 
             <div class="col-md-6 px-0 px-sm-3">
@@ -49,7 +49,7 @@
 
             <div class="col-md-6 px-0 px-sm-3">
                 <label>Mother Maiden Name (والدہ کا خاندانی نام)<span class="requi">*</span></label>
-                <input  required type="text" value="{{ $user->basicDetail->mother_maiden_name ?? '' }}" name="mother_maiden_name" class="form-control account">
+                <input required type="text" value="{{ $user->basicDetail->mother_maiden_name ?? '' }}" name="mother_maiden_name" class="form-control account">
             </div>
 
             <div class="col-md-6 px-0 px-sm-3">
@@ -58,8 +58,8 @@
             </div>
 
             <div class="col-md-6 px-0 px-sm-3">
-                <label>Husband Name of Life Proposed (بیمہ کنندہ کے شوہر کا نام)<span class="requi">*</span></label>
-                <input  type="text" value="{{ $user->basicDetail->husband_name ?? '' }}" name="husband_name" class="form-control account">
+                <label>Husband Name of Life Proposed (بیمہ کنندہ کے شوہر کا نام)</label>
+                <input type="text" value="{{ $user->basicDetail->husband_name ?? '' }}" name="husband_name" class="form-control account">
             </div>
 
             <div class="col-md-6 px-0 px-sm-3">
@@ -72,61 +72,67 @@
                 <input required type="email" value="{{ $user->basicDetail->email ?? '' }}" name="user_email" class="form-control account">
             </div>
 
+            {{-- <div class="col-md-6 px-0 px-sm-3">
+                <label>CNIC Copy (شناختی کارڈ کی کاپی)<span class="requi">*</span></label>
+                <input type="file" name="cnic_image" class="form-control account">
+            </div>
+            --}}
+
             <div class="col-md-6 px-0 px-sm-3">
-                <label>Age Proof (عمر کا ثبوت)<span class="requi">*</span></label>
-                <input  type="text" value="{{ $user->basicDetail->age_proof ?? '' }}" name="age_proof" class="form-control account">
+                <label>Phone Number Office (آفس فون نمبر)</label>
+                <input type="text" value="{{ $user->basicDetail->phone_number_office ?? '' }}" name="phone_number_office" class="form-control account">
             </div>
 
             <div class="col-md-6 px-0 px-sm-3">
-                <label>Phone Number Office (آفس فون نمبر)<span class="requi">*</span></label>
-                <input  type="text" value="{{ $user->basicDetail->phone_number_office ?? '' }}" name="phone_number_office" class="form-control account">
+                <label>Phone Number Residential (رہائشی فون نمبر)</label>
+                <input type="text" value="{{ $user->basicDetail->phone_number_residente ?? '' }}" name="phone_number_residente" class="form-control account">
             </div>
 
             <div class="col-md-6 px-0 px-sm-3">
-                <label>Phone Number Residential (رہائشی فون نمبر)<span class="requi">*</span></label>
-                <input  type="text" value="{{ $user->basicDetail->phone_number_residente ?? '' }}" name="phone_number_residente" class="form-control account">
-            </div>
-
-            <div class="col-md-6 px-0 px-sm-3">
-                <label>Fax No (فیکس نمبر)<span class="requi">*</span></label>
-                <input  required type="text" value="{{ $user->basicDetail->fax_number ?? '' }}" name="fax_number" class="form-control account">
+                <label>Fax No (فیکس نمبر)</label>
+                <input type="text" value="{{ $user->basicDetail->fax_number ?? '' }}" name="fax_number" class="form-control account">
             </div>
 
             <div class="col-md-6 px-0 px-sm-3">
                 <label>Is Client Dual National? (کیا سائل دوہری قومیت رکھتا ہے؟)<span class="requi">*</span></label>
-                <select required name="is_client_dual_national" class="form-control">
+                <select required name="is_client_dual_national" id="is_client_dual_national" class="form-control">
                     <option value="">Select Option</option>
                     <option value="Yes" {{ ($user->basicDetail->is_client_dual_national ?? '') == 'Yes' ? 'selected' : '' }}>Yes</option>
                     <option value="No" {{ ($user->basicDetail->is_client_dual_national ?? '') == 'No' ? 'selected' : '' }}>No</option>
                 </select>
             </div>
+            <div id='dual_natunality_fields' class="row">
+                @if($user->basicDetail->is_client_dual_national=='Yes')
+                <div class="col-md-6 px-0 px-sm-3">
+                    <label>Primary Nationality (قومیت)<span class="requi">*</span></label>
+                    <input type="text" value="{{ $user->basicDetail->primary_nationality ?? '' }}" name="primary_nationality" class="form-control account">
+                </div>
 
-            <div class="col-md-6 px-0 px-sm-3">
-                <label>Primary Nationality (قومیت)<span class="requi">*</span></label>
-                <input required type="text" value="{{ $user->basicDetail->primary_nationality ?? '' }}" name="primary_nationality" class="form-control account">
+                <div class="col-md-6 px-0 px-sm-3">
+                    <label>Dual Nationality (دوہری قومیت)<span class="requi">*</span></label>
+                    <input type="text" value="{{ $user->basicDetail->dual_nationality ?? '' }}" name="dual_nationality" class="form-control account">
+                </div>
+                @endif
             </div>
-
-            <div class="col-md-6 px-0 px-sm-3">
-                <label>Dual Nationality (دوہری قومیت)<span class="requi">*</span></label>
-                <input type="text" value="{{ $user->basicDetail->dual_nationality ?? '' }}" name="dual_nationality" class="form-control account">
-            </div>
-
             <div class="col-md-6 px-0 px-sm-3">
                 <label>Birth Place (مقامِ پیدائش)<span class="requi">*</span></label>
                 <input required type="text" value="{{ $user->basicDetail->birth_placed ?? '' }}" name="birth_placed" class="form-control account">
             </div>
-
-            <div class="col-md-6 px-0 px-sm-3">
+            <div class="col-md-12 px-0 px-sm-3">
                 <label>Proposer & Life Proposed are same?<span class="requi">*</span></label>
-                <select required name="is_same_person" class="form-control">
+                <select required name="is_same_person" class="form-control" id="is_same_person">
                     <option value="">Select Option</option>
                     <option value="Yes" {{ ($user->basicDetail->is_same_person ?? '') == 'Yes' ? 'selected' : '' }}>Yes</option>
                     <option value="No" {{ ($user->basicDetail->is_same_person ?? '') == 'No' ? 'selected' : '' }}>No</option>
                 </select>
             </div>
+            <div id="same_person_fields" class="row"></div>
 
         </div>
-
+        <div class="col-12 d-flex justify-content-between mt-4">
+            <button type="button" class="btn btn-secondary ib-prev-btn">Previous</button>
+            <button type="button" class="btn btn-primary ib-next-btn">Next</button>
+        </div>
     </div>
 </div>
 
@@ -134,7 +140,7 @@
 <script>
     $(document).ready(function() {
 
-        
+
 
 
         $('input[name="cnic_number"]').on('input', function() {
@@ -152,6 +158,22 @@
             }
 
             $(this).val(newVal.substring(0, 15)); // Max length 15 characters
+        });
+        $(document).on('input', 'input[name="life_proposed_cnic"]', function() {
+            let val = $(this).val().replace(/\D/g, '');
+            let newVal = '';
+
+            if (val.length > 0) {
+                newVal += val.substring(0, 5);
+            }
+            if (val.length > 5) {
+                newVal += '-' + val.substring(5, 12);
+            }
+            if (val.length > 12) {
+                newVal += '-' + val.substring(12, 13);
+            }
+
+            $(this).val(newVal.substring(0, 15));
         });
 
 

@@ -92,7 +92,6 @@
                     $('#filter_data').html(data);
                 },
                 error: function(data) {
-                    console.log(data);
                 }
             });
         }

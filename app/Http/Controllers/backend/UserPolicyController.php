@@ -13,6 +13,7 @@ class UserPolicyController extends Controller
 {
     public function allUserPolicyList(Request $request)
     {
+        
         $Classes = SubClass::latest()->get();
         $query =  UserPolicyData::with([
             'user:id,name,email',
@@ -28,12 +29,10 @@ class UserPolicyController extends Controller
                 'plan',
                 'status'
             );
-
         //Policy Category filter
         if ($request->plan) {
             $query->where('plan', $request->plan);
         }
-
         //Policy status filter
         if ($request->status) {
             $query->where('status', $request->status);
@@ -46,9 +45,7 @@ class UserPolicyController extends Controller
 
         // ✔️ User detail search (name, email, mobile, cnic)
         if ($request->user_detail_search) {
-
             $search = $request->user_detail_search;
-
             $query->where(function ($q) use ($search) {
 
                 $q->where('mobile_number', 'like', "%$search%")
@@ -59,38 +56,46 @@ class UserPolicyController extends Controller
                     });
             });
         }
-
         // ✔️ Sorting
         $sortBy = $request->sorting ?? 'id';
         $direction = $request->direction ?? 'desc';
-
         $query->orderBy($sortBy, $direction);
-
         $data = $query->latest()->paginate($request->qty ?? 10)->withQueryString();
         $dataCount = $query->count();
-        if ($request->ajax()) {
+        if ($request->ajax()) { 
             return view('backend.userPolicy.rows', compact('data', 'dataCount'))->render();
         }
+  
         return view('backend.userPolicy.list', compact('data', 'Classes', 'dataCount'));
     }
     
     public function policy_detail($id)
     {
         $id = Crypt::decryptString($id);
-          $data = UserPolicyData::with('voucher','family_history')->where('id',$id)->first();
-
-
+        $data = UserPolicyData::with('voucher','family_history')->where('id',$id)->first();
         return view('backend.userPolicy.policy_detail', compact('data'));
     }
 
-    public function downloadPolicyUserPdf($id)
-    {
-        $data = UserPolicyData::with('voucher','family_history')->where('id', $id)->first();
-        $pdf = Pdf::loadView('backend.userPolicy.policy-detail-pdf', compact('data'))
-            ->setPaper('a4', 'portrait');
+    // public function downloadPolicyUserPdf($id)
+    // {
+    //     $data = UserPolicyData::with('voucher','family_history')->where('id', $id)->first();
+    //     $pdf = Pdf::loadView('backend.userPolicy.policy-detail-pdf', compact('data'))
+    //         ->setPaper('a4', 'portrait');
 
-        return $pdf->download('policy-' . $data->policy_id . '.pdf');
-    }
+    //     return $pdf->download('policy-' . $data->policy_id . '.pdf');
+    // }
+
+    public function downloadPolicyUserPdf($id)
+{
+    $data = UserPolicyData::with('voucher', 'family_history')
+        ->where('id', $id)
+        ->first();
+
+    $pdf = Pdf::loadView('backend.userPolicy.policy-detail-pdf', compact('data'))
+        ->setPaper('a4', 'portrait');
+
+    return $pdf->stream('policy-' . $data->policy_id . '.pdf');
+}
     public function export(Request $request)
     {
         $fileName = 'user-policies.csv';

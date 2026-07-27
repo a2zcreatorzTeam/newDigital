@@ -12,6 +12,7 @@ class VoucheController extends Controller
 
     public function voucher($id)
     {
+        session()->forget('policy_id');
         $voucher=Voucher::where('order_id',$id)->first();
         return view('frontend.voucher',['voucher'=>$voucher]);
     }

@@ -20,6 +20,7 @@ class PolicyUserDataRequest extends FormRequest
     public function rules(): array
     {
         return [
+
             // ===== Address =====
             'permanent_province_id' => 'required|integer',
             'permanent_city_id' => 'required|integer',
@@ -35,6 +36,16 @@ class PolicyUserDataRequest extends FormRequest
             'temp_city_id' => 'required|integer',
             'temp_district_id' => 'required|integer',
             'temp_address' => 'required|string|max:255',
+
+
+
+
+
+
+
+
+
+
 
             // ===== Personal Info =====
             'life_proposed_full_name' => 'required|string|max:100',
@@ -53,6 +64,9 @@ class PolicyUserDataRequest extends FormRequest
 
             'religion' => 'required|string|max:50',
             'user_email' => 'required|email',
+            
+
+            // 'cnic_image' => 'required|image|mimes:jpg,jpeg,png|max:2048',
 
             // ===== Contact =====
             'phone_number_office' => 'nullable|string|max:20',
@@ -61,15 +75,46 @@ class PolicyUserDataRequest extends FormRequest
 
             // ===== Nationality =====
             'is_client_dual_national' => 'required|in:Yes,No',
-            'primary_nationality' => 'required|string|max:100',
-            'dual_nationality' => 'nullable|string|max:100',
+            'primary_nationality' => 'required_if:is_client_dual_national,Yes|nullable|string|max:100',
+            'dual_nationality' => 'required_if:is_client_dual_national,Yes|nullable|string|max:100',
+            'dual_nationality_country' => 'required_if:is_client_dual_national,Yes|nullable|string|max:100',
+            'dual_passport_number' => 'required_if:is_client_dual_national,Yes|nullable|string|max:100',
+
             'birth_placed' => 'required|string|max:100',
 
-            // ===== Employment =====
+            // ===== is_same_person =====
             'is_same_person' => 'required|in:Yes,No',
+            'life_proposed_name' => 'required_if:is_same_person,No|string|max:255',
+            'life_proposed_cnic' => 'required_if:is_same_person,No|string|max:25',
+            'life_proposed_dob' => 'required_if:is_same_person,No|date',
+            'life_proposed_relationship' => 'required_if:is_same_person,No|string|max:100',
+
+           
+           
+           
+           
+           
+            // Occupation start
+
             'is_emaployemnt' => 'required|in:Yes,No',
+            'employment_designation' => 'required_if:is_emaployemnt,Yes|string|max:255',
+            'employment_company_name' => 'required_if:is_emaployemnt,Yes|string|max:255',
+
+
+
             'is_business' => 'required|in:Yes,No',
+            'business_name' => 'required_if:is_business,Yes|string|max:255',
+            'nature_of_business' => 'required_if:is_business,Yes|string|max:255',
+
+
+            // ===== Holding Land =====
             'is_holding_land' => 'required|in:Yes,No',
+            'total_acreage' => 'required_if:is_holding_land,Yes|nullable|numeric',
+            'land_location' => 'required_if:is_holding_land,Yes|nullable|string|max:255',
+            'land_type' => 'required_if:is_holding_land,Yes|nullable|in:Agricultural,Commercial,Residential',
+            'estimated_land_value' => 'required_if:is_holding_land,Yes|nullable|numeric',
+
+
             'avaerage_monthly_income' => 'required|numeric|min:0',
 
             'ex_defence_personal' => 'required|in:Yes,No',
@@ -78,7 +123,10 @@ class PolicyUserDataRequest extends FormRequest
 
             'comment' => 'nullable|string|max:500',
 
-            // ===== Physical Info =====
+            // Occupation end
+
+
+            // ===== Health Info start =====
             'height_cm' => 'required|numeric|min:0',
             'height_ft' => 'nullable|numeric|min:0',
 
@@ -95,6 +143,14 @@ class PolicyUserDataRequest extends FormRequest
             'weight_gain_kg' => 'nullable|numeric|min:0',
 
             'weight_increase_reason' => 'nullable|string|max:255',
+            
+            'daily_consumption' => 'required|string|max:255',
+            'physical_impairments' => 'required|string|max:255',
+            'last_illness_injury' => 'required|string|max:255',
+            'medical_investigations' => 'required|string|max:255',
+            'medical_history' => 'required|string|max:255',
+
+          // ===== Health Info end =====
 
             // ===== Others =====
             // 'profession' => 'required|integer',
@@ -110,19 +166,83 @@ class PolicyUserDataRequest extends FormRequest
             'sum_assured' => 'required',
             'is_nd_applied' => 'required',
             'payment_mode' => 'required',
-            'automatic_paid_up' => 'required',
-            'automatic_premium_loan' => 'required',
-            'aib_rider' => 'required',
+            // remove fields by statelife 
+            // 'automatic_paid_up' => 'required',
+            // 'automatic_premium_loan' => 'required',
+            // 'aib_rider' => 'required',
             'adb_rider' => 'required',
             'tir_rider' => 'required',
             'fib_rider' => 'required',
 
-             // ===== Family History =====
+            // ===== Family History =====
             'father_age' => 'required',
             'mother_age' => 'required',
             'mother_health' => 'required',
             'father_health' => 'required',
             'premium_paid' => 'required',
+
+
+
+
+            //    female section
+
+
+            'date_of_last_delivery' => 'nullable|string|max:255',
+            'miscarriage_dates' => 'nullable|string|max:255',
+            'is_pregnant' => 'nullable|string|max:255',
+            'caesarean_details' => 'nullable|string|max:255',
+            'lmp_date' => 'nullable|string|max:255',
+            'female_disease_history' => 'nullable|string|max:255',
+            'self_monthly_income' => 'nullable|string|max:255',
+            'husband_monthly_income' => 'nullable|string|max:255',
+            'qualification' => 'nullable|string|max:255',
+            'pays_tax_land_revenue' => 'nullable|string|max:255',
+            'husband_policy_no' => 'nullable|string|max:255',
+            'husband_zone_company' => 'nullable|string|max:255',
+            'husband_sum_assured' => 'nullable|string|max:255',
+
+
+
+            // nominee section
+           'nominee_name' => 'required|string|max:255',
+           'nominee_cnic' => 'required|string|max:255',
+           'nominee_age' => 'required|string|max:255',
+           'nominee_relationship' => 'required|string|max:255',
+           'appointee_name' => 'required|string|max:255',
+           'appointee_relationship' => 'required|string|max:255',
+           'appointee_cnic' => 'required|string|max:255',
+
+
+
+        //    documents
+
+        'proposer_cnic_front' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+        'proposer_cnic_back' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+        'nominee_document' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+        'proposer_photo' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+        'income_proof' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        'medical_reports' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+
+
+
+            
+            
+            
+            
+            
+            
+            
+
+
+
+
+
+
+
+
+
+
+
 
 
         ];
@@ -192,7 +312,14 @@ class PolicyUserDataRequest extends FormRequest
             'aib_rider.required' => 'Please select Accidental Death & Indemnity Benefit Option.',
             'adb_rider.required' => 'Please select Accidental Death Benefit (ADB) Option.',
             'tir_rider.required' => 'Please select Term Insurance Rider (TIR) Option.',
-            'fib_rider.required' => 'Please select Family Income Benefit (FIB) Option.'
+            'fib_rider.required' => 'Please select Family Income Benefit (FIB) Option.',
+
+
+            // 'cnic_image.required' => 'Please upload your CNIC copy.',
+            // 'cnic_image.image'    => 'The uploaded file must be an image.',
+            // 'cnic_image.mimes'    => 'Only JPG, JPEG and PNG images are allowed.',
+            // 'cnic_image.max'      => 'The CNIC image size must not exceed 2 MB.',
+
         ];
     }
 }

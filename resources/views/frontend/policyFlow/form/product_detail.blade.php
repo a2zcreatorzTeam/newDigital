@@ -65,9 +65,11 @@
                                 <select required name="payment_mode" class="form-control jbl-dynamic-input" id="payment_mode">
                                     <option value="">Select Mode</option>
                                     <option value="Yearly">Yearly (سالانہ)</option>
+                                    @if($id!=2)
                                     <option value="Half Yearly">Half Yearly (ششماہی)</option>
                                     <option value="Quarterly">Quarterly (سہ ماہی)</option>
                                     <option value="Monthly">Monthly (ماہانہ)</option>
+                                    @endif
                                 </select>
                             </div>
                         </div>
@@ -108,7 +110,7 @@
 
 
 
-            <div class="col-md-6 px-0 px-sm-3">
+            {{-- <div class="col-md-6 px-0 px-sm-3">
                 <div>
                     <div>
                         <div><label>Automatic Paid-Up (خودکار منجمد کی سہولت)<span class="requi">*</span></label>
@@ -123,6 +125,7 @@
                     </div>
                 </div>
             </div>
+          
 
             <div class="col-md-6 px-0 px-sm-3">
                 <div>
@@ -139,8 +142,9 @@
                     </div>
                 </div>
             </div>
+              --}}
 
-            <div class="col-md-6 px-0 px-sm-3">
+            {{-- <div class="col-md-6 px-0 px-sm-3">
                 <div>
                     <div>
                         <div><label>Accidental Death & Indemnity Benefit (AIB) (حادثاتی موت اور تلافی کے معاوضہ کا ضمنی معاہدہ)<span class="requi">*</span></label>
@@ -155,6 +159,7 @@
                     </div>
                 </div>
             </div>
+            --}}
 
             <div class="col-md-6 px-0 px-sm-3">
                 <div>
@@ -205,6 +210,11 @@
             </div>
             <input type="hidden" value="{{$product->id}}" id="product_id">
         </div>
+        <div class="col-12 d-flex justify-content-between mt-4">
+            <button type="button" class="btn btn-secondary ib-prev-btn">Previous</button>
+            <button type="button" class="btn btn-primary ib-next-btn">Next</button>
+        </div>
+
     </div>
 </div>
 @push('js')
@@ -216,7 +226,6 @@
             let product_id = $('#product_id').val();
             let age_birth = $('#age_birth').val();
             if (!product_id || !age_birth) {
-                console.log("Missing product_id or age");
                 return;
             }
             $.ajax({
@@ -233,7 +242,6 @@
                     $('#term').html('<option>Loading...</option>');
                 },
                 success: function(res) {
-                    console.log(res);
                     let options = '<option value="">Select Option</option>';
 
                     if (res.surrender_values && res.surrender_values.length > 0) {
@@ -253,7 +261,6 @@
                     $('#term').html(options);
                 },
                 error: function(err) {
-                    console.log(err);
                     $('#term').html('<option value="">Error loading data</option>');
                 }
             });
@@ -298,7 +305,6 @@
                 },
                 error: function(err) {
                     Swal.close();
-                    console.log(err);
                     alert('Error occurred');
                 }
             });
@@ -370,13 +376,11 @@
                     success: function(res) {
                         Swal.close();
                         $('#showPolicyCalculation').html(res);
-                        console.log(res);
 
                         // $('#sum_assured').val(res);
                     },
                     error: function(err) {
                         Swal.close();
-                        console.log(err);
                         alert('Error occurred');
                     }
                 });

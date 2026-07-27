@@ -1,3 +1,4 @@
+
 <form class="signin-form" id="signinForm">
     <h3>Sign In</h3>
     <p class="mb-20">Please Sign in to Continue</p>
@@ -24,8 +25,20 @@
     <div class="form-group mb-20">
         <label>Verify you are human</label>
         <div class="d-flex align-items-center mb-10" style="gap: 10px;">
-            <div id="captchaBox" style="background: #f0f0f0; padding: 8px 15px; font-weight: bold; font-style: italic; letter-spacing: 5px; border: 1px dashed #ccc; font-size: 20px; user-select: none; text-decoration: line-through;"></div>
-            <button type="button" class="btn btn-sm btn-outline-secondary" id="refreshCaptcha"><i class="fa fa-refresh"></i> Refresh</button>
+            <div id="captchaBox"
+                style="
+        background:#f8f9fa;
+        padding:10px 18px;
+        font-weight:700;
+        letter-spacing:4px;
+        border:1px solid #ddd;
+        border-radius:6px;
+        font-size:24px;
+        color:#333;
+        user-select:none;
+        min-width:120px;
+        text-align:center;">
+            </div> <button type="button" class="btn btn-sm btn-outline-secondary" id="refreshCaptcha"><i class="fa fa-refresh"></i> Refresh</button>
         </div>
         <input type="text" id="captchaInput" class="form-control" placeholder="Enter the code above" required>
     </div>
@@ -40,15 +53,20 @@
         let generatedCaptcha = "";
 
         // ✅ Function to generate frontend CAPTCHA
+        // function generateCaptcha() {
+        //     const chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        //     let result = "";
+        //     for (let i = 0; i < 6; i++) { // 6-character captcha
+        //         result += chars.charAt(Math.floor(Math.random() * chars.length));
+        //     }
+        //     generatedCaptcha = result;
+        //     $('#captchaBox').text(generatedCaptcha);
+        //     $('#captchaInput').val(''); // Clear old input
+        // }
         function generateCaptcha() {
-            const chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            let result = "";
-            for (let i = 0; i < 6; i++) { // 6-character captcha
-                result += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
-            generatedCaptcha = result;
+            generatedCaptcha = Math.floor(100000 + Math.random() * 900000).toString(); // 6-digit number
             $('#captchaBox').text(generatedCaptcha);
-            $('#captchaInput').val(''); // Clear old input
+            $('#captchaInput').val('');
         }
 
         // Initialize CAPTCHA on load
