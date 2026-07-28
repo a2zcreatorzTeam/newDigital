@@ -53,7 +53,7 @@
           
           @can('userPolicy-list')
           <div class="nav-item" data-target="manager">
-              <a href="{{route('user.policy.list')}}">
+              <a href="{{route('user.policy.filter')}}">
                  <i class="fa-solid fa-scale-balanced"></i> User Policies
               </a>
           </div>

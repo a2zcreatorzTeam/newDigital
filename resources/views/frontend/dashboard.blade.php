@@ -48,27 +48,7 @@
         <div class="container">
             <div class="row my-pol">
                 <form id="msform">
-                    <!-- progressbar -->
-                    <!-- <ul id="progressbar"> -->
-                    <!-- <li class="active fa-regular fa-file">
-                            <p class="foorm-font">Upload <br>Information</p>
-                        </li> -->
-                    <!-- <li class="fa-brands fa-codepen">
-                            <p class="foorm-font">Choose <br>Product</p>
-                        </li> -->
-
-                    <!-- <li class="fa-regular fa-file">
-                            <p class="foorm-font">Payment</p>
-                        </li> -->
-
-                    <!-- <li class="fa-regular fa-credit-card">
-                            <p class="foorm-font">Make <br>Payment</p>
-                        </li>
-
-                        <li class="fa-regular fa-square-check">
-                            <p class="foorm-font">Summary <br>Details</p>
-                        </li> -->
-                    <!-- </ul> -->
+               
                     <div class="">
                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
                     </div> <br> <!-- fieldsets -->

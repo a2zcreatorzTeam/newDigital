@@ -184,7 +184,27 @@
             </div>
 
             <div class="row">
-
+                <div class="col-md-3 mb-3">
+                    <div class="detail-box">
+                        <div class="detail-label">Policy Status</div>
+                        <div class="detail-value ">
+                            <!-- Status Badge -->
+                            <span style="
+                                padding:4px 11px;
+                                border-radius:30px;
+                                font-size:11px;
+                                font-weight:600;
+                                letter-spacing:0.5px;
+                                background-color:
+                                            {{ $data->status == 'Approved' ? '#95f0b8' : 
+                                            ($data->status == 'Pending' ? '#cdeaff' : 
+                                            ($data->status == 'Rejected' ? '#f1c2c7' :
+                                            ($data->status == 'InCart' ? '#f6ca90' : '#edf19e'))) }};">
+                                {{ $data->status ?? '---' }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
                 <div class="col-md-4 mb-3">
                     <div class="detail-box">
                         <div class="detail-label">Life Proposed Full Name </div>
@@ -1192,7 +1212,46 @@
     </div>
 
 
-    
+
+    {{-- Change Status --}}
+    <div class="section-title">
+        Decision Management
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 mb-3">
+            @if(in_array($data->status, ['Approved', 'Rejected']))
+            <div class="alert alert-warning">
+                <strong>Decision Locked!</strong><br>
+                This policy has already been <strong>{{ $data->status }}</strong>. No further decision can be taken.
+            </div>
+
+            @else
+            <form action="{{ route('user.policy.update.status') }}" method="POST">
+                @csrf
+
+                <input type="hidden" name="id" value="{{ $data->id }}">
+
+                <select name="status" class="form-control">
+                    <option value="">Select Option</option>
+                    <option value="Approved">Approved</option>
+                    <option value="Rejected">Rejected</option>
+                </select>
+
+                <textarea name="comment"
+                    class="form-control my-2"
+                    rows="4"
+                    placeholder="Enter comment"></textarea>
+
+                <input type="submit" value="Submit" class="btn btn-success btn-sm">
+            </form>
+
+            @endif
+
+        </div>
+    </div>
+
+
 
 
 
@@ -1201,5 +1260,32 @@
     </div>
 
 </section>
+@push('msncript')
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+@if ($errors->any())
+<script>
+    Swal.fire({
+        icon: 'error',
+        title: 'Validation Error',
+        html: `{!! implode('<br>', $errors->all()) !!}`,
+        confirmButtonText: 'OK'
+    });
+</script>
+@endif
+@if (session('success'))
+<script>
+    Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: "{{ session('success') }}",
+        confirmButtonText: 'OK'
+    });
+</script>
+@endif
+@endpush
+
 
 @endsection

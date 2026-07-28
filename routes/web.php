@@ -60,11 +60,13 @@ Route::group(['middleware' => ['user.role']], function () {
                 Route::get('/toggleStatus/{id}', 'toggleStatus')->name('toggleStatus');
         });
         Route::prefix('admin/dashboard/userPolicy')->name('user.policy.')->controller(UserPolicyController::class)->group(function () {
-                Route::get('/list', 'allUserPolicyList')->name('list');
+                Route::post('/list', 'list')->name('list');
+                Route::get('/filter', 'filter')->name('filter');
                 Route::get('/policyDetail/{id}', 'policy_detail')->name('policyDetail');
                 // Route::get('/profile/{id}/download-pdf', 'downloadPolicyUserPdf')
                 // ->name('download.pdf');
-                Route::get('/export', 'export')->name('export');
+                Route::post('/export', 'export')->name('export');
+                Route::post('/update/status', 'updateStatus')->name('update.status');
         });
 });
 
@@ -145,6 +147,8 @@ Route::prefix('/')->name('frontend.')->controller(PolicyController::class)
         ->group(function () {
                 Route::get('/self-policy', 'self_policy')->name('self-policy');
                 Route::get('/self-policy-detail/{id}', 'policy_detail')->name('policyDetail');
+                Route::get('/self-policy-edit/{id}', 'policyDetailEdit')->name('policyDetail.edit');
+                Route::post('/self-policy-update/{id}', 'policyDetailEdit')->name('policyDetail.update');
         });
 
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {

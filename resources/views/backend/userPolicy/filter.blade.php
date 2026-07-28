@@ -1,89 +1,94 @@
+@extends('backend.layout.master')
+@section('content')
+<style>
+    label {
+        display: flex;
 
-<div class="bg-light text-center rounded p-4">
-    <div class="row">
-        <div class="pdmadatalist">
-            <!--Toolbar-->
-            <div class="toolbar">
-                <div class="filters-toolbar-wrapper">
-                    <div class="row g-3">
+    }
+</style>
+<section id="section-dashboard">
+    <div class="bg-light text-center rounded p-4">
+        <div class="row">
+            <div class="pdmadatalist">
+                <!--Toolbar-->
+                <div class="toolbar">
+                    <div class="filters-toolbar-wrapper">
+                        <div class="row g-3">
 
-                        <div class="col-md-4">
-                            <label>Policy Category</label>
-                            <select name="" id="plan" class="form-control">
-                                <option value="">Select Category</option>
-                                @foreach ($Classes as $item)
-                                <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                @endforeach
+                            <div class="col-md-4">
+                                <label>Policy Category</label>
+                                <select name="" id="plan" class="form-control">
+                                    <option value="">Select Category</option>
+                                    @foreach ($Classes as $item)
+                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                    @endforeach
 
-                            </select>
-                        </div>
-                        <div class="col-md-4">
-                            <label>Policy Number</label>
-                            <input type="text" id="policy_number" class="form-control" placeholder="Policy Number">
-                        </div>
-                        <div class="col-md-4">
-                            <label>User Search</label>
-                            <input type="text" id="user_detail_search" class="form-control" placeholder="Name, Email, Mobile, CNIC">
-                        </div>
-                        <div class="col-md-3">
-                            <label for="Sorting">Status</label>
-                            <select name="status" id="status" class="form-control">
-                                <option value="">Select status</option>
-                                <option value="Approved">Approved</option>
-                                <option value="Pending">Pending</option>
-                                <option value="Rejected">Rejected</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3">
-                            <label for="Sorting">Sort By</label>
-                            <select name="sorting" id="sorting" class="form-control">
-                                <option value="id">ID</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3">
-                            <label for="Sorting">Direction</label>
-                            <select name="direction" id="direction" class="form-control">
-                                <option value="asc">ASC</option>
-                                <option value="desc" selected>DESC</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3">
-                            <label for="Sorting">Qty</label>
-                            <select name="qty" id="qty" class="form-control">
-                                <option value="10" selected>10</option>
-                                <option value="25">25</option>
-                                <option value="50">50</option>
-                            </select>
-                        </div>
-                        @if($dataCount > 0)
-                        <div class="col-md-12" style="text-align: right;">
-                        <a href="javascript:void(0)"
-                            id="exportCsv"
-                            class="btn"
-                            style="background: #b7b5b1;">
-                                <i class="fa-solid fa-file-csv"></i> Export CSV
-                        </a>
-                        </div>
-                        @endif
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label>Policy Number</label>
+                                <input type="text" id="policy_number" class="form-control" placeholder="Policy Number">
+                            </div>
+                            <div class="col-md-4">
+                                <label>User Search</label>
+                                <input type="text" id="user_detail_search" class="form-control" placeholder="Name, Email, Mobile, CNIC">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="Sorting">Status</label>
+                                <select name="status" id="status" class="form-control">
+                                    <option value="">Select status</option>
+                                    <option value="Approved">Approved</option>
+                                    <option value="Pending">Pending</option>
+                                    <option value="Rejected">Rejected</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="Sorting">Sort By</label>
+                                <select name="sorting" id="sorting" class="form-control">
+                                    <option value="id">ID</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="Sorting">Direction</label>
+                                <select name="direction" id="direction" class="form-control">
+                                    <option value="asc">ASC</option>
+                                    <option value="desc" selected>DESC</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="Sorting">Qty</label>
+                                <select name="qty" id="qty" class="form-control">
+                                    <option value="10" selected>10</option>
+                                    <option value="25">25</option>
+                                    <option value="500">500</option>
+                                    <option value="1000">1000</option>
+                                    <option value="5000">5000</option>
+                                    <option value="25000">25000</option>
+                                </select>
+                            </div>
+
+                         
 
 
 
+
+                        </div>
                     </div>
                 </div>
             </div>
+<div id="policy_list_data"></div>
         </div>
-
     </div>
-</div>
-
+</section>
+@push('msncript')
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 <script>
-    
     $(document).ready(function() {
         $('.select2').select2();
+
         function filter_data(currentpage) {
-            $('.policy_list').html('<div id="loading"></div>');
+            $('#policy_list_data').html('<div id="loading"></div>');
             var action = 'fetch_data';
             var sorting = $("#sorting").val();
             var direction = $("#direction").val();
@@ -96,7 +101,7 @@
 
             $.ajax({
                 url: "{{ route('user.policy.list') }}",
-                type: 'GET',
+                type: 'POST',
                 data: {
                     action: action,
                     policy_number: policy_number,
@@ -105,39 +110,41 @@
                     direction: direction,
                     qty: qty,
                     plan: plan,
-                    status:status,
+                    status: status,
                     page: page,
+                     _token: '{{csrf_token()}}'
                 },
 
-                beforeSend: function () {
-                    $('#policy_list').html(`
+                beforeSend: function() {
+                    $('#policy_list_data').html(`
                         <tr>
                             <td colspan="7" class="text-center">Loading...</td>
                         </tr>
                     `);
                 },
                 success: function(data) {
+                    console.log(data);
 
-                    $('#policy_list').html(data);
+                    $('#policy_list_data').html(data);
                 },
-                error: function(data) {
-                }
+                error: function(data) {}
             });
         }
-        $('body').on('change', '#sorting, #direction, #qty, #plan,#status', function () {
+        filter_data();
+        $('body').on('change', '#sorting, #direction, #qty, #plan,#status', function() {
             filter_data();
         });
 
-        $('body').on('keyup', '#policy_number, #user_detail_search', function () {
+        $('body').on('keyup', '#policy_number, #user_detail_search', function() {
             filter_data();
         });
-        $('body').on('click', '.pagination a', function (e) {
+        $('body').on('click', '.pagination a', function(e) {
             e.preventDefault();
             var page = $(this).attr('href').split('page=')[1];
             filter_data(page);
         });
     });
-    $('#exportCsv').on('click', function () {
+    $('#exportCsv').on('click', function() {
 
         let params = {
             plan: $("#plan").val(),
@@ -154,6 +161,8 @@
         let url = "{{ url('/admin/dashboard/userPolicy/export') }}" + '?' + query;
 
         window.location.href = url;
-        });
+    });
+ 
 </script>
-
+@endpush
+@endsection
