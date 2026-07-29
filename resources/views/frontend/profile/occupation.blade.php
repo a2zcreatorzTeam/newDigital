@@ -1,4 +1,4 @@
- <form action="#" id='occupationForm'>
+<form action="#" id='occupationForm'>
      @csrf
      <h2 class="profile-section-title">Occupation & Income</h2>
      <div class="box-form-login">
@@ -14,6 +14,8 @@
                  </div>
              </div>
 
+             <div id="employment_fields" class="row"></div>
+
              <!-- Is Businessman? -->
              <div class="col-6">
                  <div class="form-group">
@@ -26,6 +28,8 @@
                  </div>
              </div>
 
+             <div id="business_fields" class="row"></div>
+
              <!-- If holding Land? -->
              <div class="col-6">
                  <div class="form-group">
@@ -37,6 +41,8 @@
                      </select>
                  </div>
              </div>
+
+             <div id="land_fields" class="row"></div>
 
              <!-- Monthly Income -->
              <div class="col-6">
@@ -269,16 +275,144 @@
              $(this).val(newVal.substring(0, 12));
          });
 
+         // ===================== Occupation / Business / Land dynamic fields =====================
 
+         function toggleOccupationFields() {
 
+             let employment = $('select[name="is_emaployemnt"]').val();
+             let business = $('select[name="is_business"]').val();
 
+             // Employment Fields
+             if (employment === 'Yes') {
+                 $('#employment_fields').html(`
+                    <div class="col-md-6 px-0 px-sm-3">
+                        <label>
+                            Designation / Job Title
+                            <span class="requi">*</span>
+                        </label>
+                        <input type="text"
+                               name="employment_designation"
+                               value="{{ $user->occupation->employment_designation ?? '' }}"
+                               class="form-control jbl-dynamic-input">
+                    </div>
 
+                    <div class="col-md-6 px-0 px-sm-3">
+                        <label>
+                            Company Name
+                            <span class="requi">*</span>
+                        </label>
+                        <input type="text"
+                               name="employment_company_name"
+                               value="{{ $user->occupation->employment_company_name ?? '' }}"
+                               class="form-control jbl-dynamic-input">
+                    </div>
+                `);
+             } else {
+                 $('#employment_fields').html('');
+             }
 
+             // Business Fields
+             if (business === 'Yes') {
+                 $('#business_fields').html(`
+                    <div class="col-md-6 px-0 px-sm-3">
+                        <label>
+                            Business Name
+                            <span class="requi">*</span>
+                        </label>
+                        <input type="text"
+                               name="business_name"
+                               value="{{ $user->occupation->business_name ?? '' }}"
+                               class="form-control jbl-dynamic-input">
+                    </div>
 
+                    <div class="col-md-6 px-0 px-sm-3">
+                        <label>
+                            Nature of Business
+                            <span class="requi">*</span>
+                        </label>
+                        <input type="text"
+                               name="nature_of_business"
+                               value="{{ $user->occupation->nature_of_business ?? '' }}"
+                               class="form-control jbl-dynamic-input"
+                               placeholder="e.g. Pharmacy, Electronics, Construction">
+                    </div>
+                `);
+             } else {
+                 $('#business_fields').html('');
+             }
+         }
 
+         // Page Load
+         toggleOccupationFields();
 
+         // Change Events
+         $('select[name="is_emaployemnt"]').on('change', toggleOccupationFields);
+         $('select[name="is_business"]').on('change', toggleOccupationFields);
 
+         function toggleLandFields() {
 
+             let holdingLand = $('select[name="is_holding_land"]').val();
+
+             if (holdingLand === 'Yes') {
+                 $('#land_fields').html(`
+                    <div class="col-md-6 px-0 px-sm-3">
+                        <label>
+                            Total Acreage Owned
+                            <span class="requi">*</span>
+                        </label>
+                        <input type="number" step="0.01"
+                               name="total_acreage"
+                               value="{{ $user->occupation->total_acreage ?? '' }}"
+                               class="form-control jbl-dynamic-input">
+                    </div>
+
+                    <div class="col-md-6 px-0 px-sm-3">
+                        <label>
+                            Land Location
+                            <span class="requi">*</span>
+                        </label>
+                        <input type="text"
+                               name="land_location"
+                               value="{{ $user->occupation->land_location ?? '' }}"
+                               class="form-control jbl-dynamic-input">
+                    </div>
+
+                    <div class="col-md-6 px-0 px-sm-3">
+                        <label>
+                            Land Type
+                            <span class="requi">*</span>
+                        </label>
+                        <select name="land_type" class="form-control jbl-dynamic-input">
+                            <option value="">Select Type</option>
+                            <option value="Agricultural" {{ ($user->occupation->land_type ?? '') == 'Agricultural' ? 'selected' : '' }}>Agricultural</option>
+                            <option value="Commercial" {{ ($user->occupation->land_type ?? '') == 'Commercial' ? 'selected' : '' }}>Commercial</option>
+                            <option value="Residential" {{ ($user->occupation->land_type ?? '') == 'Residential' ? 'selected' : '' }}>Residential</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6 px-0 px-sm-3">
+                        <label>
+                            Estimated Land Value
+                            <span class="requi">*</span>
+                        </label>
+                        <input type="number" step="0.01"
+                               name="estimated_land_value"
+                               value="{{ $user->occupation->estimated_land_value ?? '' }}"
+                               class="form-control jbl-dynamic-input">
+                    </div>
+                `);
+             } else {
+                 $('#land_fields').html('');
+             }
+         }
+
+         // Page Load
+         toggleLandFields();
+
+         // Change Event
+         $(document).on('change', 'select[name="is_holding_land"]', function() {
+             toggleLandFields();
+         });
 
      });
  </script>

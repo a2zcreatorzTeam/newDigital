@@ -40,17 +40,28 @@ class BasicDetailRequest extends FormRequest
             'husband_name' => 'nullable|string|max:255',
             'religion' => 'nullable|string|max:100',
             'email' => 'required|email|max:255',
-            'age_proof' => 'nullable|string|max:255',
+            // 'age_proof' => 'nullable|string|max:255',
             'phone_number_office' => 'nullable|digits_between:7,15',
             'phone_number_residente' => 'nullable|digits_between:7,15',
             'fax_number' => 'nullable|digits_between:7,15',
-            'is_client_dual_national' => 'required',
-            'primary_nationality' => 'required|string|max:100',
-            'dual_nationality' => 'nullable|string|max:100',
-            'birth_placed' => 'nullable|string|max:255',
-            'is_same_person' => 'required',
-        ];
 
+
+
+            'is_client_dual_national' => 'required|in:Yes,No',
+            'primary_nationality' => 'required_if:is_client_dual_national,Yes|nullable|string|max:100',
+            'dual_nationality' => 'required_if:is_client_dual_national,Yes|nullable|string|max:100',
+            'dual_nationality_country' => 'required_if:is_client_dual_national,Yes|nullable|string|max:100',
+            'dual_passport_number' => 'required_if:is_client_dual_national,Yes|nullable|string|max:100',
+
+
+
+            'birth_placed' => 'nullable|string|max:255',
+            'is_same_person' => 'required|in:Yes,No',
+            'life_proposed_name' => 'required_if:is_same_person,No|string|max:255',
+            'life_proposed_cnic' => 'required_if:is_same_person,No|string|max:25',
+            'life_proposed_dob' => 'required_if:is_same_person,No|date',
+            'life_proposed_relationship' => 'required_if:is_same_person,No|string|max:100',
+        ];
     }
 
     /**

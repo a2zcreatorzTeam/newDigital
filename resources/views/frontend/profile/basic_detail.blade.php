@@ -1,6 +1,6 @@
 <form action="#" method="POST" id="basicDetailsForm">
     @csrf
-    
+
     <h2 class="profile-section-title">Basic Details</h2>
     <div class="box-form-login">
         <div class="row">
@@ -17,7 +17,7 @@
             </div>
             <div class="col-6">
                 <div class="form-group">
-                    <label for="">Mobile Number Personal (ذاتی موبائل نمبر)<span class="text-danger"> *</span><span class="text-danger"> *</span></label>
+                    <label for="">Mobile Number Personal (ذاتی موبائل نمبر)<span class="text-danger"> *</span></label>
                     <input type="text" value="{{$user->basicDetail->mobile_number ?? ''}}" name="mobile_number" class="form-control account" placeholder="0322-9847785" required>
                 </div>
             </div>
@@ -116,92 +116,79 @@
             </div>
 
             <!-- Age Proof -->
-            <div class="col-6">
+            {{-- <div class="col-6">
                 <div class="form-group">
                     <label>Age Proof (عمر کا ثبوت)<span class="text-danger"> *</span></label>
                     <input type="text" name='age_proof' required class="form-control account" value="{{ $user->basicDetail->age_proof ?? '' }}">
-                </div>
-            </div>
-
-            <!-- Office Phone -->
-            <div class="col-6">
-                <div class="form-group">
-                    <label>Phone Number Office (آفس فون نمبر)</label>
-                    <input type="text" name='phone_number_office' class="form-control account" value="{{ $user->basicDetail->phone_number_office ?? '' }}">
-                </div>
-            </div>
-
-            <!-- Residential Phone -->
-            <div class="col-6">
-                <div class="form-group">
-                    <label>Phone Number Residential (رہائشی فون نمبر)</label>
-                    <input type="text" name='phone_number_residente' class="form-control account" value="{{ $user->basicDetail->phone_number_residente ?? '' }}">
-                </div>
-            </div>
-
-            <!-- Fax -->
-            <div class="col-6">
-                <div class="form-group">
-                    <label>Fax No (فیکس نمبر)<span class="text-danger"> *</span></label>
-                    <input type="text" required value="{{ $user->basicDetail->fax_number ?? '' }}" name='fax_number' class="form-control account">
-                </div>
-            </div>
-
-            <!-- Dual National -->
-            <div class="col-6">
-                <div class="form-group">
-                    <label>Dual National? (کیا سائل ڈوئل قومیت رکھتا ہے؟)<span class="text-danger"> *</span></label>
-                    <select name="is_client_dual_national" required class="form-control" id="is_client_dual_national">
-                        <option value="">Select Option</option>
-                        <option value="Yes" {{ ($user->basicDetail->is_client_dual_national ?? '') == 'Yes' ? 'selected' : '' }}>Yes</option>
-                        <option value="No" {{ ($user->basicDetail->is_client_dual_national ?? '') == 'No' ? 'selected' : '' }}>No</option>
-                    </select>
-
-                </div>
-            </div>
-
-
-
-            <!-- Primary Nationality -->
-            <div class="col-6">
-                <div class="form-group">
-                    <label>Primary Nationality (قومیت)<span class="text-danger"> *</span></label>
-                    <input type="text" required value="{{ $user->basicDetail->primary_nationality ?? '' }}" name='primary_nationality' class="form-control account">
-                </div>
-            </div>
-
-            <!-- Dual Nationality -->
-            <div class="col-6">
-                <div class="form-group">
-                    <label>Dual Nationality (دوہری قومیت)<span class="text-danger"> *</span></label>
-                    <input type="text" value="{{ $user->basicDetail->dual_nationality ?? '' }}" name='dual_nationality' class="form-control account">
-                </div>
-            </div>
-
-            <!-- Birth Place -->
-            <div class="col-6">
-                <div class="form-group">
-                    <label>Birth Place (مقامِ پیدائش)<span class="text-danger"> *</span></label>
-                    <input type="text" required value="{{ $user->basicDetail->birth_placed ?? '' }}" name='birth_placed' class="form-control account">
-                </div>
-            </div>
-
-            <!-- Proposer & Life Proposed Same -->
-            <div class="col-6">
-                <div class="form-group">
-                    <label>Proposer & Life Proposed are same?<span class="text-danger"> *</span></label>
-                    <select name="is_same_person" required class="form-control">
-                        <option value="">Select Option</option>
-                        <option value="Yes" {{ ($user->basicDetail->is_same_person ?? '') == 'Yes' ? 'selected' : '' }}>Yes</option>
-                        <option value="No" {{ ($user->basicDetail->is_same_person ?? '') == 'No' ? 'selected' : '' }}>No</option>
-                    </select>
-                </div>
-            </div>
-            <!-- ... (Other Basic Fields) ... -->
         </div>
-        <div class="update-btn-container">
-            <button type="submit" class="btn-update">Update Basic Details</button>
+    </div>
+    --}}
+
+    <!-- Office Phone -->
+    <div class="col-6">
+        <div class="form-group">
+            <label>Phone Number Office (آفس فون نمبر)</label>
+            <input type="text" name='phone_number_office' class="form-control account" value="{{ $user->basicDetail->phone_number_office ?? '' }}">
         </div>
+    </div>
+
+    <!-- Residential Phone -->
+    <div class="col-6">
+        <div class="form-group">
+            <label>Phone Number Residential (رہائشی فون نمبر)</label>
+            <input type="text" name='phone_number_residente' class="form-control account" value="{{ $user->basicDetail->phone_number_residente ?? '' }}">
+        </div>
+    </div>
+
+    <!-- Fax -->
+    <div class="col-6">
+        <div class="form-group">
+            <label>Fax No (فیکس نمبر)</label>
+            <input type="text" required value="{{ $user->basicDetail->fax_number ?? '' }}" name='fax_number' class="form-control account">
+        </div>
+    </div>
+
+    <!-- Dual National -->
+    <div class="col-6">
+        <div class="form-group">
+            <label>Dual National? (کیا سائل ڈوئل قومیت رکھتا ہے؟)<span class="text-danger"> *</span></label>
+            <select name="is_client_dual_national" required class="form-control" id="is_client_dual_national">
+                <option value="">Select Option</option>
+                <option value="Yes" {{ ($user->basicDetail->is_client_dual_national ?? '') == 'Yes' ? 'selected' : '' }}>Yes</option>
+                <option value="No" {{ ($user->basicDetail->is_client_dual_national ?? '') == 'No' ? 'selected' : '' }}>No</option>
+            </select>
+
+        </div>
+    </div>
+
+    {{-- Dual nationality fields are injected dynamically by toggleDualNationalityFields() below --}}
+    <div id="dual_natunality_fields" class="row"></div>
+
+    <!-- Birth Place -->
+    <div class="col-6">
+        <div class="form-group">
+            <label>Birth Place (مقامِ پیدائش)<span class="text-danger"> *</span></label>
+            <input type="text" required value="{{ $user->basicDetail->birth_placed ?? '' }}" name='birth_placed' class="form-control account">
+        </div>
+    </div>
+
+    <!-- Proposer & Life Proposed Same -->
+    <div class="col-6">
+        <div class="form-group">
+            <label>Proposer & Life Proposed are same?<span class="text-danger"> *</span></label>
+            <select name="is_same_person" required class="form-control" id="is_same_person">
+                <option value="">Select Option</option>
+                <option value="Yes" {{ ($user->basicDetail->is_same_person ?? '') == 'Yes' ? 'selected' : '' }}>Yes</option>
+                <option value="No" {{ ($user->basicDetail->is_same_person ?? '') == 'No' ? 'selected' : '' }}>No</option>
+            </select>
+        </div>
+    </div>
+    <div id="same_person_fields" class="row"></div>
+    <!-- ... (Other Basic Fields) ... -->
+    </div>
+    <div class="update-btn-container">
+        <button type="submit" class="btn-update">Update Basic Details</button>
+    </div>
     </div>
 </form>
 
@@ -373,16 +360,104 @@
             $(this).val(newVal.substring(0, 12));
         });
 
+        // ===== Dual Nationality Toggle (dynamic field injection) =====
+        function toggleDualNationalityFields() {
 
+            let dual_option = $('#is_client_dual_national').val();
 
+            if (dual_option === 'Yes') {
 
+                $('#dual_natunality_fields').html(`
+            <div class="col-md-6 px-0 px-sm-3">
+                <label>
+                    Primary Nationality (قومیت)
+                    <span class="requi">*</span>
+                </label>
+                <input type="text"
+                       value="{{ $user->basicDetail->primary_nationality ?? '' }}"
+                       name="primary_nationality"
+                       class="form-control account">
+            </div>
 
+            <div class="col-md-6 px-0 px-sm-3">
+                <label>
+                    Dual Nationality (دوہری قومیت)
+                    <span class="requi">*</span>
+                </label>
+                <input type="text"
+                       value="{{ $user->basicDetail->dual_nationality ?? '' }}"
+                       name="dual_nationality"
+                       class="form-control account">
+            </div>
 
+            <div class="col-md-6 px-0 px-sm-3 mt-3">
+                <label>
+                    Dual Nationality Country
+                    <span class="requi">*</span>
+                </label>
+                <input type="text"
+                       value="{{ $user->basicDetail->dual_nationality_country ?? '' }}"
+                       name="dual_nationality_country"
+                       class="form-control account">
+            </div>
 
+            <div class="col-md-6 px-0 px-sm-3 mt-3">
+                <label>
+                    Passport Number
+                    <span class="requi">*</span>
+                </label>
+                <input type="text"
+                       value="{{ $user->basicDetail->dual_passport_number ?? '' }}"
+                       name="dual_passport_number"
+                       class="form-control account">
+            </div>
+        `);
 
+            } else {
+                $('#dual_natunality_fields').html('');
+            }
+        }
 
+        // Page load par
+        toggleDualNationalityFields();
+        $('#is_client_dual_national').on('change', toggleDualNationalityFields);
 
-
+        // ===== Proposer & Life Proposed Same Toggle =====
+        function toggleSamePersonFields() {
+            if ($('#is_same_person').val() === 'No') {
+                $('#same_person_fields').html(`
+            <div class="col-6">
+                <div class="form-group">
+                    <label>Proposer Full Name<span class="text-danger"> *</span></label>
+                    <input type="text" value="{{ $user->basicDetail->life_proposed_name ?? '' }}" name="life_proposed_name" class="form-control account" required>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label>Proposer CNIC<span class="text-danger"> *</span></label>
+                    <input type="text" value="{{ $user->basicDetail->life_proposed_cnic ?? '' }}" name="life_proposed_cnic" class="form-control account" required>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label>Proposer DOB<span class="text-danger"> *</span></label>
+                    <input type="date" value="{{ $user->basicDetail->life_proposed_dob ?? '' }}" name="life_proposed_dob" class="form-control account" required>
+                </div>
+            </div>
+            
+            <div class="col-6">
+                <div class="form-group">
+                    <label>Relationship with Life Proposed<span class="text-danger"> *</span></label>
+                    <input type="text" value="{{ $user->basicDetail->life_proposed_relationship ?? '' }}" name="life_proposed_relationship" class="form-control account" required>
+                </div>
+            </div>
+        `);
+            } else {
+                $('#same_person_fields').empty();
+            }
+        }
+        toggleSamePersonFields();
+        $('#is_same_person').on('change', toggleSamePersonFields);
 
     });
 </script>

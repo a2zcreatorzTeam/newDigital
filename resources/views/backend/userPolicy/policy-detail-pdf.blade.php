@@ -512,7 +512,17 @@
                         <div class="detail-label">Employment</div>
                         <div class="detail-value">{{ $data->is_emaployemnt ?? '---' }}</div>
                     </td>
+                    <td>
+                        <div class="detail-label">Employment Designation</div>
+                        <div class="detail-value">{{ $data->employment_designation ?? '---' }}</div>
+                    </td>
+                </tr>
 
+                <tr>
+                    <td>
+                        <div class="detail-label">Company Name</div>
+                        <div class="detail-value">{{ $data->employment_company_name ?? '---' }}</div>
+                    </td>
                     <td>
                         <div class="detail-label">Businessman</div>
                         <div class="detail-value">{{ $data->is_business ?? '---' }}</div>
@@ -521,10 +531,42 @@
 
                 <tr>
                     <td>
+                        <div class="detail-label">Business Name</div>
+                        <div class="detail-value">{{ $data->business_name ?? '---' }}</div>
+                    </td>
+                    <td>
+                        <div class="detail-label">Nature Of Business</div>
+                        <div class="detail-value">{{ $data->nature_of_business ?? '---' }}</div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
                         <div class="detail-label">Holding Land</div>
                         <div class="detail-value">{{ $data->is_holding_land ?? '---' }}</div>
                     </td>
+                    <td>
+                        <div class="detail-label">Total Acreage Owned</div>
+                        <div class="detail-value">{{ $data->total_acreage ?? '---' }}</div>
+                    </td>
+                </tr>
 
+                <tr>
+                    <td>
+                        <div class="detail-label">Land Location</div>
+                        <div class="detail-value">{{ $data->land_location ?? '---' }}</div>
+                    </td>
+                    <td>
+                        <div class="detail-label">Land Type</div>
+                        <div class="detail-value">{{ $data->land_type ?? '---' }}</div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <div class="detail-label">Estimated Land Value</div>
+                        <div class="detail-value">{{ $data->estimated_land_value ?? '---' }}</div>
+                    </td>
                     <td>
                         <div class="detail-label">Average Monthly Income</div>
                         <div class="detail-value">PKR {{ $data->avaerage_monthly_income ?? '---' }}</div>
@@ -533,22 +575,26 @@
 
                 <tr>
                     <td>
-                        <div class="detail-label">If Defence or Ex-Defence Personal, commercial Airline Flight Crew or plant protection pilot</div>
+                        <div class="detail-label">
+                            If Defence or Ex-Defence Personnel, Commercial Airline Flight Crew or Plant Protection Pilot
+                        </div>
                         <div class="detail-value">{{ $data->ex_defence_personal ?? '---' }}</div>
                     </td>
-
                     <td>
-                        <div class="detail-label">Have you ever been discharged on medical grounds from service / employeement</div>
+                        <div class="detail-label">
+                            Have you ever been discharged on medical grounds from service / employment
+                        </div>
                         <div class="detail-value">{{ $data->discharged_on_medical ?? '---' }}</div>
                     </td>
                 </tr>
 
                 <tr>
                     <td>
-                        <div class="detail-label">Are you presently engaged or intent to engage in any hazardous occupation or pastime</div>
+                        <div class="detail-label">
+                            Are you presently engaged or intend to engage in any hazardous occupation or pastime?
+                        </div>
                         <div class="detail-value">{{ $data->hazardous_occupation ?? '---' }}</div>
                     </td>
-
                     <td>
                         <div class="detail-label">Comments</div>
                         <div class="detail-value">{{ $data->comment ?? '---' }}</div>
@@ -867,7 +913,7 @@
                     </td>
 
                     <td>
-                        <div class="detail-label">Medical Reports</div>
+                        <div class="detail-label">Medical Report</div>
                         <div class="detail-value">
                             @if($data->medical_reports)
                             <img src="{{ public_path('uploads/policy_documents/'.$data->medical_reports) }}"

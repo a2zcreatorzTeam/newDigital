@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PolicyUserDataRequest extends FormRequest
+class PolicyUserDataUpdate extends FormRequest
 {
     /**
      * Authorize user
@@ -84,10 +84,10 @@ class PolicyUserDataRequest extends FormRequest
 
             // ===== is_same_person =====
             'is_same_person' => 'required|in:Yes,No',
-            'life_proposed_name' => 'required_if:is_same_person,No|string|max:255',
-            'life_proposed_cnic' => 'required_if:is_same_person,No|string|max:25',
-            'life_proposed_dob' => 'required_if:is_same_person,No|date',
-            'life_proposed_relationship' => 'required_if:is_same_person,No|string|max:100',
+            'life_proposed_name' => 'required_if:is_same_person,No|nullable|string|max:255',
+            'life_proposed_cnic' => 'required_if:is_same_person,No|nullable|string|max:25',
+            'life_proposed_dob' => 'required_if:is_same_person,No|nullable|date',
+            'life_proposed_relationship' => 'required_if:is_same_person,No|nullable|string|max:100',
 
            
            
@@ -97,14 +97,14 @@ class PolicyUserDataRequest extends FormRequest
             // Occupation start
 
             'is_emaployemnt' => 'required|in:Yes,No',
-            'employment_designation' => 'required_if:is_emaployemnt,Yes|string|max:255',
-            'employment_company_name' => 'required_if:is_emaployemnt,Yes|string|max:255',
+            'employment_designation' => 'required_if:is_emaployemnt,Yes|nullable|string|max:255',
+            'employment_company_name' => 'required_if:is_emaployemnt,Yes|nullable|string|max:255',
 
 
 
             'is_business' => 'required|in:Yes,No',
-            'business_name' => 'required_if:is_business,Yes|string|max:255',
-            'nature_of_business' => 'required_if:is_business,Yes|string|max:255',
+            'business_name' => 'required_if:is_business,Yes|nullable|string|max:255',
+            'nature_of_business' => 'required_if:is_business,Yes|nullable|string|max:255',
 
 
             // ===== Holding Land =====
@@ -129,7 +129,6 @@ class PolicyUserDataRequest extends FormRequest
             // ===== Health Info start =====
             'height_cm' => 'required|numeric|min:0',
             'height_ft' => 'required|numeric|min:0',
-
             'weight_kg' => 'required|numeric|min:0',
             'chest_insp_cm' => 'required|numeric',
             'chest_exp_cm' => 'required|numeric',
@@ -160,26 +159,26 @@ class PolicyUserDataRequest extends FormRequest
 
             // ===== Product Details =====
 
-            'plan' => 'required',
-            'table_no' => 'required',
-            'term' => 'required',
-            'sum_assured' => 'required',
-            'is_nd_applied' => 'required',
-            'payment_mode' => 'required',
+            // 'plan' => 'required',
+            // 'table_no' => 'required',
+            // 'term' => 'required',
+            // 'sum_assured' => 'required',
+            // 'is_nd_applied' => 'required',
+            // 'payment_mode' => 'required',
             // remove fields by statelife 
             // 'automatic_paid_up' => 'required',
             // 'automatic_premium_loan' => 'required',
             // 'aib_rider' => 'required',
-            'adb_rider' => 'required',
-            'tir_rider' => 'required',
-            'fib_rider' => 'required',
+            // 'adb_rider' => 'required',
+            // 'tir_rider' => 'required',
+            // 'fib_rider' => 'required',
 
             // ===== Family History =====
             'father_age' => 'required',
             'mother_age' => 'required',
             'mother_health' => 'required',
             'father_health' => 'required',
-            'premium_paid' => 'required',
+            // 'premium_paid' => 'required',
 
 
 
@@ -216,12 +215,12 @@ class PolicyUserDataRequest extends FormRequest
 
         //    documents
 
-        'proposer_cnic_front' => 'required|image|mimes:jpg,jpeg,png|max:2048',
-        'proposer_cnic_back' => 'required|image|mimes:jpg,jpeg,png|max:2048',
-        'nominee_document' => 'required|image|mimes:jpg,jpeg,png|max:2048',
-        'proposer_photo' => 'required|image|mimes:jpg,jpeg,png|max:2048',
-        'income_proof' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-        'medical_reports' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        // 'proposer_cnic_front' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+        // 'proposer_cnic_back' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+        // 'nominee_document' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+        // 'proposer_photo' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+        // 'income_proof' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        // 'medical_reports' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
 
 
 

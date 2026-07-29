@@ -80,15 +80,7 @@ class UserPolicyController extends Controller
         return view('backend.userPolicy.policy_detail', compact('data'));
     }
 
-    // public function downloadPolicyUserPdf($id)
-    // {
-    //     $data = UserPolicyData::with('voucher','family_history')->where('id', $id)->first();
-    //     $pdf = Pdf::loadView('backend.userPolicy.policy-detail-pdf', compact('data'))
-    //         ->setPaper('a4', 'portrait');
-
-    //     return $pdf->download('policy-' . $data->policy_id . '.pdf');
-    // }
-
+  
     public function downloadPolicyUserPdf($id)
     {
         $data = UserPolicyData::with('voucher', 'family_history')

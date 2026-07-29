@@ -47,7 +47,7 @@
                                 
                                  <li><a href="{{route('frontend.self-policy')}}">Self Policy</a>
                                         </li>
-                                        <!-- <li class="menu-item-has-children"><a href="#">Policies</a>
+                                      {{-- <li class="menu-item-has-children"><a href="#">Policies</a>
                                             <ul class="sub-menu">
                                                 <li class="mega"><a href="#">Policy Listing</a>
                                                     <ul class="sub-sub-menu">
@@ -57,7 +57,7 @@
                                                 </li>
                                                 <li><a href="policyservicing.php">Policy Servicing</a></li>
                                             </ul>
-                                        </li> -->
+                                        </li> 
                                  <li class="menu-item-has-children"><a href="#">Claims</a>
                                      <ul class="sub-menu">
                                          <li class="mega"><a href="#">Claims Listing</a>
@@ -85,9 +85,11 @@
                                          </li>
                                      </ul>
                                  </li>
-                                 <li><a href="{{route('frontend.contact')}}">Contact Us</a></li>
                                  <li><a href="complaint-feedback.php">Complaints & Feedback</a></li>
-                             </ul>
+--}}
+                                 <li><a href="{{route('frontend.contact')}}">Contact Us</a></li>
+
+                                </ul>
                          </div>
                          <div class="tgmenu__action d-none d-md-block">
                              <ul class="list-wrap">

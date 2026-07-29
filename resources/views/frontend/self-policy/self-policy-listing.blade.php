@@ -105,10 +105,11 @@
                                     <a href="{{ route('frontend.policyDetail', $encryptedId) }}" class="badge bg-success text-decoration-none" style="color:white;">
                                         Show
                                     </a>
-
+                                   @if($row['status'] == 'Rejected')
                                     <a href="{{ route('frontend.policyDetail.edit', $encryptedId) }}" class="badge bg-danger text-decoration-none" style="color:white;">
                                         Edit
                                     </a>
+                                    @endif
                                 </div>
                             </td>
                         </tr>

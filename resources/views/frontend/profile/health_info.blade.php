@@ -1,5 +1,3 @@
-
-
 <form action="#" id="health_info">
     @csrf
 
@@ -8,10 +6,33 @@
     <div class="box-form-login">
         <div class="row">
 
+            <!-- Auto Calculation Note -->
+            <div class="col-12 mb-3">
+                <div class="alert alert-primary border-start border-5 shadow-sm">
+                    <h6 class="mb-2">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Automatic Measurement Conversion
+                    </h6>
+
+                    <p class="mb-0 text-dark">
+                        Please enter values in <strong>Centimeters (cm)</strong> and
+                        <strong>Kilograms (kg)</strong> where applicable.
+                        For measurement fields such as
+                        <strong>Height</strong>,
+                        <strong>Chest</strong>, and
+                        <strong>Abdomen</strong>,
+                        the system will automatically calculate and populate the corresponding values in
+                        <strong>Feet</strong> and
+                        <strong>Inches</strong>.
+                        These auto-calculated fields are <strong>read-only</strong> to maintain data accuracy.
+                    </p>
+                </div>
+            </div>
+
             <div class="col-6">
                 <div class="form-group">
                     <label>Height (In cm) (قد سینٹی میٹر میں)<span class="text-danger"> *</span></label>
-                    <input type="number" class="form-control" name="height_cm"
+                    <input type="number" class="form-control" id="height_cm" name="height_cm"
                         value="{{ $user->health->height_cm ?? '' }}">
                 </div>
             </div>
@@ -19,8 +40,8 @@
             <div class="col-6">
                 <div class="form-group">
                     <label>Height (In Feet)<span class="text-danger"> *</span></label>
-                    <input type="number" class="form-control" name="height_ft"
-                        value="{{ $user->health->height_ft ?? '' }}">
+                    <input type="text" class="form-control bg-light" id="height_ft" name="height_ft"
+                        value="{{ $user->health->height_ft ?? '' }}" readonly>
                 </div>
             </div>
 
@@ -35,7 +56,7 @@
             <div class="col-6">
                 <div class="form-group">
                     <label>Chest Insp (cm)<span class="text-danger"> *</span></label>
-                    <input type="number" class="form-control" name="chest_insp_cm"
+                    <input type="number" class="form-control" id="chest_insp_cm" name="chest_insp_cm"
                         value="{{ $user->health->chest_insp_cm ?? '' }}">
                 </div>
             </div>
@@ -43,15 +64,15 @@
             <div class="col-6">
                 <div class="form-group">
                     <label>Chest Insp (Inches)<span class="text-danger"> *</span></label>
-                    <input type="number" class="form-control" name="chest_insp_inches"
-                        value="{{ $user->health->chest_insp_inches ?? '' }}">
+                    <input type="text" class="form-control bg-light" id="chest_insp_inches" name="chest_insp_inches"
+                        value="{{ $user->health->chest_insp_inches ?? '' }}" readonly>
                 </div>
             </div>
 
             <div class="col-6">
                 <div class="form-group">
                     <label>Chest Exp (cm)<span class="text-danger"> *</span></label>
-                    <input type="number" class="form-control" name="chest_exp_cm"
+                    <input type="number" class="form-control" id="chest_exp_cm" name="chest_exp_cm"
                         value="{{ $user->health->chest_exp_cm ?? '' }}">
                 </div>
             </div>
@@ -59,15 +80,15 @@
             <div class="col-6">
                 <div class="form-group">
                     <label>Chest Exp (Inches)<span class="text-danger"> *</span></label>
-                    <input type="number" class="form-control" name="chest_exp_inches"
-                        value="{{ $user->health->chest_exp_inches ?? '' }}">
+                    <input type="text" class="form-control bg-light" id="chest_exp_inches" name="chest_exp_inches"
+                        value="{{ $user->health->chest_exp_inches ?? '' }}" readonly>
                 </div>
             </div>
 
             <div class="col-6">
                 <div class="form-group">
                     <label>Abdomen (cm)<span class="text-danger"> *</span></label>
-                    <input type="number" class="form-control" name="abdomen_cm"
+                    <input type="number" class="form-control" id="abdomen_cm" name="abdomen_cm"
                         value="{{ $user->health->abdomen_cm ?? '' }}">
                 </div>
             </div>
@@ -75,8 +96,8 @@
             <div class="col-6">
                 <div class="form-group">
                     <label>Abdomen (Inches)<span class="text-danger"> *</span></label>
-                    <input type="number" class="form-control" name="abdomen_inches"
-                        value="{{ $user->health->abdomen_inches ?? '' }}">
+                    <input type="text" class="form-control bg-light" id="abdomen_inches" name="abdomen_inches"
+                        value="{{ $user->health->abdomen_inches ?? '' }}" readonly>
                 </div>
             </div>
 
@@ -96,10 +117,54 @@
                 </div>
             </div>
 
+            <div class="col-12">
+                <div class="form-group">
+                    <label>Reason for Weight Gain or Weight Loss<span class="text-danger"> *</span></label>
+                    <textarea class="form-control" name="weight_increase_reason" rows="3">{{ $user->health->weight_increase_reason ?? '' }}</textarea>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="form-group">
+                    <label>State average daily consumption of Tobacco, Pan/Niswar, Alcohol, Drugs<span class="text-danger"> *</span></label>
+                    <input type="text" class="form-control" name="daily_consumption"
+                        value="{{ $user->health->daily_consumption ?? '' }}"
+                        placeholder="e.g. Tobacco, Pan/Niswar, Alcohol, Drugs">
+                </div>
+            </div>
+
             <div class="col-6">
                 <div class="form-group">
-                    <label>Reason of Increase Weight<span class="text-danger"> *</span></label>
-                    <textarea class="form-control" name="weight_increase_reason" rows="3">{{ $user->health->weight_increase_reason ?? '' }}</textarea>
+                    <label>State Physical Impairments (if any)<span class="text-danger"> *</span></label>
+                    <input type="text" class="form-control" name="physical_impairments"
+                        value="{{ $user->health->physical_impairments ?? '' }}"
+                        placeholder="e.g. Defective eyesight, hearing loss, etc.">
+                </div>
+            </div>
+
+            <div class="col-6">
+                <div class="form-group">
+                    <label>When did illness or injury last keep you away from work?<span class="text-danger"> *</span></label>
+                    <input type="text" class="form-control" name="last_illness_injury"
+                        value="{{ $user->health->last_illness_injury ?? '' }}"
+                        placeholder="State dates and describe illness or injury">
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="form-group">
+                    <label>Medical Investigations History<span class="text-danger"> *</span></label>
+                    <input type="text" class="form-control" name="medical_investigations"
+                        value="{{ $user->health->medical_investigations ?? '' }}"
+                        placeholder="State dates and result of blood, urine, X-ray, ECGs, etc.">
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="form-group">
+                    <label>Heart Disease, Diabetes, BP, TB, Jaundice, Cancer, Asthma, etc.<span class="text-danger"> *</span></label>
+                    <textarea class="form-control" name="medical_history" rows="5"
+                        placeholder="Do you now or have you had any of these diseases? If so specify with dates">{{ $user->health->medical_history ?? '' }}</textarea>
                 </div>
             </div>
 
@@ -199,7 +264,58 @@
               });
           });
 
+          // ===================== cm -> ft / inches auto conversion =====================
 
+          function cmToFeet(cm) {
+              if (cm == "" || isNaN(cm)) {
+                  return "";
+              }
+
+              return (parseFloat(cm) / 30.48).toFixed(2);
+          }
+
+          function cmToInches(cm) {
+              if (cm == "" || isNaN(cm)) {
+                  return "";
+              }
+
+              return (parseFloat(cm) / 2.54).toFixed(2);
+          }
+
+          function bindConverter(inputSelector, outputSelector, type) {
+
+              function calculate() {
+
+                  let value = $(inputSelector).val();
+
+                  if (value == "") {
+                      $(outputSelector).val("");
+                      return;
+                  }
+
+                  if (type == "feet") {
+                      $(outputSelector).val(cmToFeet(value));
+                  } else {
+                      $(outputSelector).val(cmToInches(value));
+                  }
+              }
+
+              calculate();
+
+              $(document).on("input", inputSelector, calculate);
+          }
+
+          // Height
+          bindConverter("#height_cm", "#height_ft", "feet");
+
+          // Chest Inspiration
+          bindConverter("#chest_insp_cm", "#chest_insp_inches", "inch");
+
+          // Chest Expansion
+          bindConverter("#chest_exp_cm", "#chest_exp_inches", "inch");
+
+          // Abdomen
+          bindConverter("#abdomen_cm", "#abdomen_inches", "inch");
 
       });
   </script>

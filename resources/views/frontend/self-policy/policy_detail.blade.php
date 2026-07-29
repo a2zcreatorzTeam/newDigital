@@ -329,6 +329,8 @@
                             <div class="detail-value">{{ $data->is_client_dual_national ?? '---' }}</div>
                         </div>
                     </div>
+
+                    @if( $data->is_client_dual_national=='Yes')
                     <div class="col-md-3 mb-3">
                         <div class="detail-box">
                             <div class="detail-label">Primary Nationality</div>
@@ -353,6 +355,7 @@
                             <div class="detail-value">{{ $data->dual_passport_number ?? '---' }}</div>
                         </div>
                     </div>
+                    @endif
                     <div class="col-md-3 mb-3">
                         <div class="detail-box">
                             <div class="detail-label">Birth Place</div>
@@ -365,6 +368,7 @@
                             <div class="detail-value">{{ $data->is_same_person ?? '---' }}</div>
                         </div>
                     </div>
+                    @if($data->is_same_person=='No')
                     <div class="col-md-3 mb-3">
                         <div class="detail-box">
                             <div class="detail-label">Life Proposed Name</div>
@@ -389,6 +393,7 @@
                             <div class="detail-value">{{ $data->life_proposed_relationship ?? '---' }}</div>
                         </div>
                     </div>
+                    @endif
 
 
 
@@ -649,19 +654,70 @@
             </div>
             <div class="col-md-4 mb-3">
                 <div class="detail-box">
+                    <div class="detail-label">Employment Designation</div>
+                    <div class="detail-value">{{ $data->employment_designation ?? '---' }}</div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <div class="detail-box">
+                    <div class="detail-label">Company Name</div>
+                    <div class="detail-value">{{ $data->employment_company_name ?? '---' }}</div>
+                </div>
+            </div>
+
+
+
+
+            <div class="col-md-4 mb-3">
+                <div class="detail-box">
                     <div class="detail-label">Is Businessman</div>
                     <div class="detail-value">{{ $data->is_business ?? '---' }}</div>
                 </div>
             </div>
+            @if($data->is_business=='Yes')
+            <div class="col-md-4 mb-3">
+                <div class="detail-box">
+                    <div class="detail-label">Business Name</div>
+                    <div class="detail-value">{{ $data->business_name ?? '---' }}</div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="detail-box">
+                    <div class="detail-label">Nature Of Business</div>
+                    <div class="detail-value">{{ $data->nature_of_business ?? '---' }}</div>
+                </div>
+            </div>
+            @endif
+
             <div class="col-md-4 mb-3">
                 <div class="detail-box">
                     <div class="detail-label">If holding Land?</div>
                     <div class="detail-value">{{ $data->is_holding_land ?? '---' }}</div>
                 </div>
             </div>
+            @if($data->is_holding_land=='Yes')
+            <div class="col-md-4 mb-3">
+                <div class="detail-box">
+                    <div class="detail-label">Total Acreage Owned</div>
+                    <div class="detail-value">{{ $data->total_acreage ?? '---' }}</div>
+                </div>
+            </div>
 
+            <div class="col-md-4 mb-3">
+                <div class="detail-box">
+                    <div class="detail-label">Land Location</div>
+                    <div class="detail-value">{{ $data->land_location ?? '---' }}</div>
+                </div>
+            </div>
 
-
+            <div class="col-md-4 mb-3">
+                <div class="detail-box">
+                    <div class="detail-label">Land Type</div>
+                    <div class="detail-value">{{ $data->land_type ?? '---' }}</div>
+                </div>
+            </div>
+            @endif
             <div class="col-md-4 mb-3">
                 <div class="detail-box">
                     <div class="detail-label">Average monthly income </div>
