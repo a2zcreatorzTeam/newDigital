@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Voucher;
+use App\Models\GoldenEndowmentPlanTir;
+use App\Models\PlatinumPlusTIR;
 use App\Models\PlanAgeMaturity;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -19,10 +21,40 @@ class PolicyCalculatorController extends Controller
         $term = $request->term;
         $gender = $request->gender;
         $policy_product_id = $request->policy_product_id;
+
         $age = $request->age_birth;
-        // dump($policy_product_id);
-        $policy_data = PlanAgeMaturity::with('product')->where('plan_id', $policy_product_id)->where('age',$age)->where('term',$term)->first();
-        // dump($policy_data);    
+
+        $policy_data = PlanAgeMaturity::with('product')->where('plan_id', $policy_product_id)->where('age', $age)->where('term', $term)->first();
+
+        $adb_rider = 0;
+        $tir_rider = 0;
+        if ($policy_product_id == 2) {
+            if ($request->tir_rider == 'Yes') {
+                $goldenEndowment = GoldenEndowmentPlanTir::where('age', $age)->first();
+                if ($goldenEndowment) {
+                    $tir_rider = ($sum_assured / 1000) * (float) $goldenEndowment->tir_value;
+                }
+            }
+
+
+            if ($request->adb_rider == 'Yes') {
+                $adb_rider = ($sum_assured / 1000) * 2.78;
+            }
+        } else {
+
+
+            if ($request->tir_rider == 'Yes') {
+                $goldenEndowment = PlatinumPlusTIR::where('age', $age)->first();
+                if ($goldenEndowment) {
+                    $tir_rider = ($sum_assured / 1000) * (float) $goldenEndowment->tir_value;
+                }
+            }
+
+
+            if ($request->adb_rider == 'Yes') {
+                $adb_rider = ($sum_assured / 1000) * 2.5;
+            }
+        }
 
 
 
@@ -56,6 +88,8 @@ class PolicyCalculatorController extends Controller
                 'payment_mode' => $payment_mode,
                 'term' => $term,
                 'premium_paid' => $premium_paid,
+                'adb_rider' => $adb_rider,
+                'tir_rider' => $tir_rider,
             ]
         );
     }

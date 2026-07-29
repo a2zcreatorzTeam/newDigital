@@ -182,7 +182,7 @@
                 
 
                 <div class="d-flex align-items-center gap-2 flex-wrap">
-                    <a href="{{ route('frontend.policyDetail.edit', encrypt($data->id)) }}"
+                    <a href="{{ route('frontend.self-policy', encrypt($data->id)) }}"
                         class="btn btn-sm px-3 py-2" style="background:#6c757d; color:#fff;">
                         <i class="fa-solid fa-arrow-left me-1"></i> Back to View
                     </a>

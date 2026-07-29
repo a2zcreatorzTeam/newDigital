@@ -1248,6 +1248,45 @@
     </div>
 
 
+     {{-- Change Status --}}
+    <div class="section-title">
+        Decision Management
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 mb-3">
+            @if(in_array($data->status, ['Approved', 'Rejected']))
+            <div class="alert alert-warning">
+                <strong>Decision Locked!</strong><br>
+                This policy has already been <strong>{{ $data->status }}</strong>. No further decision can be taken.
+            </div>
+
+            @else
+            <form action="{{ route('user.policy.update.status') }}" method="POST">
+                @csrf
+
+                <input type="hidden" name="id" value="{{ $data->id }}">
+
+                <select name="status" class="form-control">
+                    <option value="">Select Option</option>
+                    <option value="Approved">Approved</option>
+                    <option value="Rejected">Rejected</option>
+                </select>
+
+                <textarea name="comment"
+                    class="form-control my-2"
+                    rows="4"
+                    placeholder="Enter comment"></textarea>
+
+                <input type="submit" value="Submit" class="btn btn-success btn-sm">
+            </form>
+
+            @endif
+
+        </div>
+    </div>
+
+
 
 
     </div>

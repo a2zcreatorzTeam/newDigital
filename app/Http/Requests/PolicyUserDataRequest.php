@@ -172,7 +172,7 @@ class PolicyUserDataRequest extends FormRequest
             // 'aib_rider' => 'required',
             'adb_rider' => 'required',
             'tir_rider' => 'required',
-            'fib_rider' => 'required',
+            // 'fib_rider' => 'required',
 
             // ===== Family History =====
             'father_age' => 'required',

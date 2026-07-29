@@ -36,6 +36,7 @@ class PolicyController extends Controller
                 'status',
                 'created_at'
             )->where('user_id', Auth::user()->id)->latest()->get();
+ 
         return view('frontend.self-policy.self-policy-listing', compact('policies'));
     }
     public function policy_detail($id)

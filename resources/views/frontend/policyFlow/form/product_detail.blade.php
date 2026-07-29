@@ -2,20 +2,7 @@
     <div class="w-75 mx-auto pt-5">
         <div class="row">
 
-            {{--
-                         <div class="col-md-6 px-0 px-sm-3">
-                             <div>
-                                 <div>
-                                     <div><label>Plan (منصوبہ)<span class="requi">*</span></label>
-                                         <div class="jbl-field">
---}}
-            <input required type="hidden" value="{{$id}}" name="plan" class="jbl-dynamic-input">
-            {{--</div>
-                                     </div>
-                                 </div>
-                             </div>
-                         </div>
---}}
+
 
             <div class="col-md-6 px-0 px-sm-3">
                 <div>
@@ -76,27 +63,14 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-12 px-0 px-sm-3">
-                <div>
-                    <div>
-                        <div>
-                            <a class="btn btn-danger btn-sm" id="calcultae_policy">Calculate</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <div id="showPolicyCalculation"></div>
-
-            <br>
-            <br>
 
             <div class="col-md-6 px-0 px-sm-3" style="margin-top: 20px;">
                 <div>
                     <div>
                         <div><label>IS ND APPLIED? (YES/NO)<span class="requi">*</span></label>
                             <div class="jbl-field">
-                                <select required name="is_nd_applied" class="form-control jbl-dynamic-input">
+                                <select required name="is_nd_applied" id="is_nd_applied" class="form-control jbl-dynamic-input">
                                     <option value="">Select Option</option>
                                     <option value="Yes">Yes</option>
                                     <option value="No">No</option>
@@ -106,6 +80,73 @@
                     </div>
                 </div>
             </div>
+            <div class="col-md-6 px-0 px-sm-3">
+                <div>
+                    <div>
+                        <div><label>Accidental Death Benefit (ADB) (حادثاتی موت کے فوائد کا ضمنی معاہدہ)<span class="requi">*</span></label>
+                            <div class="jbl-field">
+                                <select required name="adb_rider" id="adb_rider" class="form-control jbl-dynamic-input">
+                                    <option value="">Select Option</option>
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 px-0 px-sm-3">
+                <div>
+                    <div>
+                        <div><label>Term Insurance Rider (TIR) (ٹرم انشورنس رائڈر)<span class="requi">*</span></label>
+                            <div class="jbl-field">
+                                <select required name="tir_rider" id="tir_rider" class="form-control jbl-dynamic-input">
+                                    <option value="">Select Option</option>
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{--
+            <div class="col-md-6 px-0 px-sm-3">
+                <div>
+                    <div>
+                        <div><label>Family Income Benefit (FIB) (خاندانی آمدنی کا ضمنی معاہدہ)<span class="requi">*</span></label>
+                            <div class="jbl-field">
+                                <select required name="fib_rider" id="fib_rider" class="form-control jbl-dynamic-input">
+                                    <option value="">Select Option</option>
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            --}}
+
+
+            <div class="col-md-12 px-0 px-sm-3">
+                <div>
+                    <div>
+                        <div>
+                            <a class="btn btn-danger btn-sm my-4" id="calcultae_policy">Calculate</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div id="showPolicyCalculation"></div>
+
+            <br>
+            <br>
+
+
 
 
 
@@ -161,53 +202,7 @@
             </div>
             --}}
 
-            <div class="col-md-6 px-0 px-sm-3">
-                <div>
-                    <div>
-                        <div><label>Accidental Death Benefit (ADB) (حادثاتی موت کے فوائد کا ضمنی معاہدہ)<span class="requi">*</span></label>
-                            <div class="jbl-field">
-                                <select required name="adb_rider" class="form-control jbl-dynamic-input">
-                                    <option value="">Select Option</option>
-                                    <option value="Yes">Yes</option>
-                                    <option value="No">No</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <div class="col-md-6 px-0 px-sm-3">
-                <div>
-                    <div>
-                        <div><label>Term Insurance Rider (TIR) (ٹرم انشورنس رائڈر)<span class="requi">*</span></label>
-                            <div class="jbl-field">
-                                <select required name="tir_rider" class="form-control jbl-dynamic-input">
-                                    <option value="">Select Option</option>
-                                    <option value="Yes">Yes</option>
-                                    <option value="No">No</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-6 px-0 px-sm-3">
-                <div>
-                    <div>
-                        <div><label>Family Income Benefit (FIB) (خاندانی آمدنی کا ضمنی معاہدہ)<span class="requi">*</span></label>
-                            <div class="jbl-field">
-                                <select required name="fib_rider" class="form-control jbl-dynamic-input">
-                                    <option value="">Select Option</option>
-                                    <option value="Yes">Yes</option>
-                                    <option value="No">No</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <input type="hidden" value="{{$product->id}}" id="product_id">
         </div>
         <div class="col-12 d-flex justify-content-between mt-4">
@@ -332,8 +327,15 @@
             let policy_product_id = $('#policy_product_id').val();
             let age_birth = $('#age_birth').val();
 
+            let adb_rider = $('#adb_rider').val();
+            console.log(adb_rider);
+            
+            let tir_rider = $('#tir_rider').val();
+            console.log(tir_rider);
+
+
             // check empty fields
-            if (!sum_assured || !payment_mode || !term || !gender || !policy_product_id || !age_birth) {
+            if (!sum_assured || !tir_rider || !adb_rider || !payment_mode || !term || !gender || !policy_product_id || !age_birth) {
                 Swal.fire({
                     toast: true,
                     position: 'top-end',
@@ -358,7 +360,9 @@
                         term: term,
                         gender: gender,
                         policy_product_id: policy_product_id,
-                        age_birth: age_birth
+                        age_birth: age_birth,
+                        adb_rider: adb_rider,
+                        tir_rider: tir_rider
                     },
                     headers: {
                         'X-CSRF-TOKEN': '{{ csrf_token() }}'

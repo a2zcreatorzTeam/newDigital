@@ -96,17 +96,16 @@ class UserController extends Controller
             'password' => 'required|same:confirm-password',
             'roles' => 'required'
         ]);
+     
 
 
         $input = $request->all();
         $input['password'] = Hash::make($input['password']);
         $input['user_type'] = intval($input['user_type']);
         $input['email_verified_at'] = now();
-
-
+        $input['user_type'] = 2;
         $user = User::create($input);
         $user->assignRole($request->input('roles'));
-
         return redirect()->route('users.index')
             ->with('success', 'User created successfully');
     }
@@ -163,6 +162,7 @@ class UserController extends Controller
         }
 
         $user = User::find($id);
+        $input['user_type'] = 2;
         $user->update($input);
         DB::table('model_has_roles')->where('model_id', $id)->delete();
 

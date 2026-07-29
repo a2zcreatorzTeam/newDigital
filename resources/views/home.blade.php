@@ -25,21 +25,21 @@
         <div class="card kpi-card">
             <div class="kpi-icon" style="background: #fef3c7; color: var(--warning);"><i class="fa-solid fa-coins"></i></div>
             <div>
-                <div class="text-muted">Total Premium</div>
-                <div class="kpi-value" id="kpi-premium">0</div>
+                <div class="text-muted">Total User Policies</div>
+                <div class="kpi-value" id="kpi-premium">{{ $total_user_policies }}</div>
             </div>
         </div>
         <div class="card kpi-card">
             <div class="kpi-icon" style="background: #e0f2fe; color: #0284c7;"><i class="fa-solid fa-chart-line"></i></div>
             <div>
-                <div class="text-muted">Total Users Policies</div>
-                <div class="kpi-value" id="kpi-avg">0</div>
+                <div class="text-muted">Total Approved Users Policies</div>
+                <div class="kpi-value" id="kpi-avg">{{ $total_approved_user_policies }}</div>
             </div>
         </div>
     </div>
 
 
-
+   {{--
     <div class="widgets-grid">
         <div class="card">
             <h3 class="font-semibold mb-4 text-dark" style="font-size: 1.1rem;"><i class="fa-solid fa-trophy text-warning"></i> Top Policy Holders</h3>
@@ -61,7 +61,7 @@
             <div id="activity-feed"></div>
         </div>
     </div>
-    {{--
+ 
         <div class="card">
             <div class="flex justify-between items-center mb-4">
                 <h3 class="font-semibold text-dark" style="font-size: 1.1rem;">Recent Policies</h3>

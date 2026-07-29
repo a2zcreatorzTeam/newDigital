@@ -31,6 +31,14 @@
             <td>{{ $payment_mode }}</td>
         </tr>
         <tr>
+            <th>Accidental Death Benefit (ADB):</th>
+            <td>Rs. {{ number_format($adb_rider) }} /-</td>
+        </tr>
+        <tr>
+            <th>Term Insurance Rider(TIR):</th>
+            <td>Rs. {{ number_format($tir_rider) }} /-</td>
+        </tr>
+        <tr>
             <th>Premium to be paid:</th>
             <td><strong>Rs. {{ number_format($premium_paid) }}/-</strong></td>
         </tr>

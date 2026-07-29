@@ -62,6 +62,28 @@
         </div>
     </div>
 
+    <!-- CAPTCHA -->
+    <div class="form-group mb-20">
+        <label>Verify you are human</label>
+        <div class="d-flex align-items-center mb-10" style="gap: 10px;">
+            <div id="captchaBoxSignup"
+                style="
+        background:#f8f9fa;
+        padding:10px 18px;
+        font-weight:700;
+        letter-spacing:4px;
+        border:1px solid #ddd;
+        border-radius:6px;
+        font-size:24px;
+        color:#333;
+        user-select:none;
+        min-width:120px;
+        text-align:center;">
+            </div> <button type="button" class="btn btn-sm btn-outline-secondary" id="refreshCaptchaSignup"><i class="fa fa-refresh"></i> Refresh</button>
+        </div>
+        <input type="text" id="captchaInputSignup" class="form-control" placeholder="Enter the code above" required>
+    </div>
+
     <button type="submit" class="btn btn-primary">Sign Up</button>
     <p>Already a User? Please <a id="signin" style="cursor: pointer;">Sign In</a></p>
 
@@ -73,6 +95,23 @@
 <script>
     $(document).ready(function() {
 
+        let generatedCaptchaSignup = "";
+
+        // ✅ Generate signup CAPTCHA
+        function generateCaptchaSignup() {
+            generatedCaptchaSignup = Math.floor(100000 + Math.random() * 900000).toString(); // 6-digit number
+            $('#captchaBoxSignup').text(generatedCaptchaSignup);
+            $('#captchaInputSignup').val('');
+        }
+
+        // Initialize CAPTCHA on load
+        generateCaptchaSignup();
+
+        // Refresh click event
+        $('#refreshCaptchaSignup').click(function() {
+            generateCaptchaSignup();
+        });
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -81,6 +120,19 @@
 
         $('#signupForm').submit(function(e) {
             e.preventDefault();
+
+            // ✅ FRONTEND CAPTCHA VALIDATION
+            let userEnteredCaptchaSignup = $('#captchaInputSignup').val().trim();
+
+            if (userEnteredCaptchaSignup !== generatedCaptchaSignup) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'CAPTCHA Failed',
+                    text: 'The verification code does not match. Please try again.',
+                });
+                generateCaptchaSignup(); // Change code on failure
+                return false; // Stop form from submitting via AJAX
+            }
 
             let formData = $(this).serialize();
 
@@ -108,9 +160,15 @@
                     $('#otp_user_id').val(response.user_id);
 
                     $('#signupForm')[0].reset();
+
+                    // ✅ Regenerate CAPTCHA after success
+                    generateCaptchaSignup();
                 },
 
                 error: function(xhr) {
+                    // ✅ Regenerate CAPTCHA on error
+                    generateCaptchaSignup();
+
                     if (xhr.status === 422) {
                         let errors = xhr.responseJSON.errors;
                         let errorMsg = '';
@@ -190,10 +248,5 @@
     });
 
 
-    
 </script>
-
-
-
-
 @endpush
