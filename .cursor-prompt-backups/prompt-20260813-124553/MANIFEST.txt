@@ -1,0 +1,12 @@
+timestamp=20260813-124553
+purpose=health measurements redesign one value+unit gain XOR loss
+app\Support\Concerns\PreparesHealthMeasurements.php
+resources\views\frontend\partials\health_measurements.blade.php
+resources\views\frontend\policyFlow\form\health_info.blade.php
+resources\views\frontend\profile\health_info.blade.php
+resources\views\frontend\self-policy\edit.blade.php
+resources\views\frontend\policyFlow\form.blade.php
+app\Http\Requests\UserHealthRequest.php
+app\Http\Requests\PolicyUserDataRequest.php
+app\Http\Requests\PolicyUserDataUpdate.php
+app\Http\Controllers\Frontend\PolicyController.php

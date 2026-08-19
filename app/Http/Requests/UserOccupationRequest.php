@@ -2,16 +2,25 @@
 
 namespace App\Http\Requests;
 
+use App\Support\Concerns\PreparesFilerStatus;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class UserOccupationRequest extends FormRequest
 {
+    use PreparesFilerStatus;
+
     /**
      * Authorize user
      */
     public function authorize(): bool
     {
-        return true; // agar auth check chahiye ho to yahan laga sakte ho
+        return Auth::check() && (int) Auth::user()->user_type === 1;
+    }
+
+    protected function prepareForValidation(): void
+    {
+        $this->mergeFilerStatusDefaults();
     }
 
     /**
@@ -28,7 +37,10 @@ class UserOccupationRequest extends FormRequest
             'business_name' => 'required_if:is_business,Yes|nullable|string|max:255',
             'nature_of_business' => 'required_if:is_business,Yes|nullable|string|max:255',
 
+            ...$this->filerStatusRules(),
+
             'is_holding_land' => 'required|in:Yes,No',
+            'land_unit' => 'required_if:is_holding_land,Yes|nullable|in:Marla,Kanal,Acre,Square Yard,Square Feet,Hectare',
             'total_acreage' => 'required_if:is_holding_land,Yes|nullable|numeric',
             'land_location' => 'required_if:is_holding_land,Yes|nullable|string|max:255',
             'land_type' => 'required_if:is_holding_land,Yes|nullable|in:Agricultural,Commercial,Residential',
@@ -48,6 +60,6 @@ class UserOccupationRequest extends FormRequest
      */
     public function messages(): array
     {
-        return [];
+        return $this->filerStatusMessages();
     }
 }

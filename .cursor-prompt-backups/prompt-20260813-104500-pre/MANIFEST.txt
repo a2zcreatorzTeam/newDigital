@@ -1,0 +1,8 @@
+NEW: database/migrations/2026_08_13_104000_create_cnic_mobile_links_table.php
+NEW: app/Models/CnicMobileLink.php
+NEW: app/Services/CnicMobileLinkService.php
+NEW: app/Rules/MobileLinkedToCnic.php
+NEW: app/Exceptions/CnicMobileConflictException.php
+NEW: app/Observers/CnicMobileLinkObserver.php
+NEW: app/Console/Commands/SyncCnicMobileLinks.php
+NOTE: revert restores modified files only; drop table cnic_mobile_links manually if needed

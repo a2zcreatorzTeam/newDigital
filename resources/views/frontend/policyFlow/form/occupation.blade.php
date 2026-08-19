@@ -1,27 +1,57 @@
 <div id="occupation" role="tabpanel" aria-labelledby="occupation-tab" class="tab-pane fade">
     <div class="w-75 mx-auto pt-5">
         <div class="row">
+            @php
+                $empFlag = $user->occupation->is_emaployemnt ?? '';
+                $bizFlag = $user->occupation->is_business ?? '';
+                if ($empFlag === 'Yes' && $bizFlag === 'Yes') {
+                    $occupationType = 'Both';
+                } elseif ($empFlag === 'Yes') {
+                    $occupationType = 'Employment';
+                } elseif ($bizFlag === 'Yes') {
+                    $occupationType = 'Businessman';
+                } else {
+                    $occupationType = '';
+                }
+            @endphp
             <div class="col-md-12 px-0 px-sm-3">
-                <label>Is Employment? (کام/پیشہ کی نوعیت (مکمل تفصیلات کے ساتھ))<span class="requi">*</span></label>
-                <select name="is_emaployemnt" id="is_emaployemnt" required class="form-control jbl-dynamic-input" required>
+                <label>Occupation Type (پیشہ کی نوعیت)<span class="requi">*</span></label>
+                <select id="occupation_type" required class="form-control jbl-dynamic-input">
                     <option value="">Select Option</option>
-                    <option value="Yes" {{ ($user->occupation->is_emaployemnt ?? '') == 'Yes' ? 'selected' : '' }}>Yes</option>
-                    <option value="No" {{ ($user->occupation->is_emaployemnt ?? '') == 'No' ? 'selected' : '' }}>No</option>
+                    <option value="Employment" {{ $occupationType === 'Employment' ? 'selected' : '' }}>Employment</option>
+                    <option value="Businessman" {{ $occupationType === 'Businessman' ? 'selected' : '' }}>Businessman</option>
+                    <option value="Both" {{ $occupationType === 'Both' ? 'selected' : '' }}>Both</option>
                 </select>
+                <input type="hidden" name="is_emaployemnt" id="is_emaployemnt" value="{{ $empFlag }}">
+                <input type="hidden" name="is_business" id="is_business" value="{{ $bizFlag }}">
             </div>
             <div class="col-12">
                 <div id="employment_fields" class="row"></div>
             </div>
-            <div class="col-md-12 px-0 px-sm-3">
-                <label>Is Businessman? (کیا کاروبار ہے؟ (مکمل تفصیلات کے ساتھ))<span class="requi">*</span></label>
-                <select name="is_business" required class="form-control jbl-dynamic-input" required>
-                    <option value="">Select Option</option>
-                    <option value="Yes" {{ ($user->occupation->is_business ?? '') == 'Yes' ? 'selected' : '' }}>Yes</option>
-                    <option value="No" {{ ($user->occupation->is_business ?? '') == 'No' ? 'selected' : '' }}>No</option>
-                </select>
-            </div>
             <div class="col-12">
                 <div id="business_fields" class="row"></div>
+            </div>
+
+            @php
+                $filerStatus = old('filer_status', $user->occupation->filer_status ?? '');
+                $ntnNumber = old('ntn_number', $user->occupation->ntn_number ?? '');
+            @endphp
+            <div class="col-md-6 px-0 px-sm-3">
+                <label>Filer Status (فائلر کی حیثیت)<span class="requi">*</span></label>
+                <select name="filer_status" class="form-control jbl-dynamic-input" required>
+                    <option value="">Select Option</option>
+                    <option value="Filer" {{ $filerStatus === 'Filer' ? 'selected' : '' }}>Filer</option>
+                    <option value="Non-Filer" {{ $filerStatus === 'Non-Filer' ? 'selected' : '' }}>Non-Filer</option>
+                </select>
+            </div>
+            <div class="col-md-6 px-0 px-sm-3 js-ntn-wrap">
+                <label>NTN Number (این ٹی این نمبر)<span class="requi">*</span></label>
+                <input type="text"
+                    name="ntn_number"
+                    value="{{ $ntnNumber }}"
+                    class="form-control jbl-dynamic-input"
+                    maxlength="20"
+                    placeholder="Enter NTN Number">
             </div>
 
             <div class="col-md-12 px-0 px-sm-3">

@@ -1,3 +1,203 @@
+(function (global) {
+    function jq() {
+        return global.jQuery;
+    }
+
+    function digitsOnly(value) {
+        return String(value == null ? '' : value).replace(/\D/g, '');
+    }
+
+    function isValidPhoneNumber(phoneNumber) {
+        return /^\d{11}$/.test(digitsOnly(phoneNumber));
+    }
+
+    function isValidCNIC(cnic) {
+        return /^\d{13}$/.test(digitsOnly(cnic));
+    }
+
+    function isValidEmail(email) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email == null ? '' : email));
+    }
+
+    function isHiddenType($el) {
+        var type = ($el.attr('type') || '').toLowerCase();
+        return type === 'hidden' || type === 'button' || type === 'submit' || type === 'reset';
+    }
+
+    function isFieldApplicable($el, $container) {
+        var el = $el[0];
+        if (!el || el.disabled || isHiddenType($el)) {
+            return false;
+        }
+
+        // Walk parents so Select2-hidden <select>s still validate, while
+        // skipping fields inside hidden conditional wrappers.
+        var node = el.parentElement;
+        var containerEl = $container[0];
+        while (node && node !== containerEl) {
+            var style = global.getComputedStyle(node);
+            if (style.display === 'none' || style.visibility === 'hidden') {
+                return false;
+            }
+            node = node.parentElement;
+        }
+
+        return true;
+    }
+
+    function errorAnchor($el) {
+        var $s2 = $el.next('.select2-container');
+        return $s2.length ? $s2 : $el;
+    }
+
+    function markInvalid($el, message) {
+        var $anchor = errorAnchor($el);
+        $anchor.after('<p class="error-message">' + message + '</p>');
+        $el.addClass('error-border');
+        $anchor.addClass('error-border');
+    }
+
+    function radioGroupChecked($container, name) {
+        var found = false;
+        $container.find('input[type="radio"]').each(function () {
+            if (this.name === name && this.checked) {
+                found = true;
+                return false;
+            }
+        });
+        return found;
+    }
+
+    function isEmptyRequired($el, $container) {
+        if ($el.is(':checkbox')) {
+            return !$el.is(':checked');
+        }
+        if ($el.is(':radio')) {
+            return !radioGroupChecked($container, $el.attr('name'));
+        }
+        if (($el.attr('type') || '').toLowerCase() === 'file') {
+            return !(elFiles($el).length);
+        }
+        if ($el.is('select')) {
+            var selected = $el.val();
+            if (selected === null || selected === undefined) {
+                return true;
+            }
+            if (Array.isArray(selected)) {
+                return selected.length === 0 || selected.every(function (item) {
+                    return String(item).trim() === '';
+                });
+            }
+            return String(selected).trim() === '';
+        }
+        var val = $el.val();
+        if (val === null || val === undefined) {
+            return true;
+        }
+        return String(val).trim() === '';
+    }
+
+    function elFiles($el) {
+        var el = $el[0];
+        return (el && el.files) ? el.files : [];
+    }
+
+    function fieldName($el) {
+        return $el.attr('name') || '';
+    }
+
+    function isPhoneField(name) {
+        return name === 'phno' || name === 'mobile_number' || name === 'appointee_mobile';
+    }
+
+    function isCnicField(name) {
+        return name === 'cnic' || name === 'cnic_number' || name === 'appointee_cnic';
+    }
+
+    function isEmailField(name) {
+        return name === 'email' || name === 'user_email' || name === 'life_proposed_email';
+    }
+
+    function validatePolicyStepFields(container) {
+        var $ = jq();
+        if (!$ || !container) {
+            return true;
+        }
+
+        var $container = container.jquery ? container : $(container);
+        if (!$container.length) {
+            return true;
+        }
+
+        $container.find('.error-message').remove();
+        $container.find('.error-border').removeClass('error-border');
+
+        var isValid = true;
+        var processedRadios = {};
+
+        $container.find('select[required], input[required], textarea[required]').each(function () {
+            var $el = $(this);
+            if (!isFieldApplicable($el, $container)) {
+                return;
+            }
+
+            var name = fieldName($el);
+            if ($el.is(':radio')) {
+                if (!name || processedRadios[name]) {
+                    return;
+                }
+                processedRadios[name] = true;
+            }
+
+            if (isEmptyRequired($el, $container)) {
+                markInvalid($el, 'This field is required.');
+                isValid = false;
+                return;
+            }
+
+            if (isPhoneField(name) && !isValidPhoneNumber($el.val())) {
+                markInvalid($el, 'Invalid phone number. Please enter 11 digits.');
+                isValid = false;
+                return;
+            }
+
+            if (isCnicField(name) && !isValidCNIC($el.val())) {
+                markInvalid($el, 'Invalid CNIC. Please enter 13 digits.');
+                isValid = false;
+                return;
+            }
+
+            if (isEmailField(name) && !isValidEmail($el.val())) {
+                markInvalid($el, 'Invalid email address. Please enter a valid email.');
+                isValid = false;
+                return;
+            }
+
+            if (name === 'age_nearest_date') {
+                var ageVal = parseInt($el.val(), 10);
+                if (!isNaN(ageVal) && ageVal < 18) {
+                    markInvalid($el, 'Proposer must be 18 years or older.');
+                    isValid = false;
+                    return;
+                }
+            }
+
+            var el = $el[0];
+            if (el && typeof el.checkValidity === 'function' && !el.checkValidity()) {
+                markInvalid($el, el.validationMessage || 'This field is required.');
+                isValid = false;
+            }
+        });
+
+        return isValid;
+    }
+
+    global.validatePolicyStepFields = validatePolicyStepFields;
+    global.isValidPhoneNumber = isValidPhoneNumber;
+    global.isValidCNIC = isValidCNIC;
+    global.isValidEmail = isValidEmail;
+})(window);
+
 $(document).ready(function () {
 
     var current_fs, next_fs, previous_fs; //fieldsets
@@ -103,62 +303,10 @@ $(document).ready(function () {
     }
 
     function validateFields(current_fs) {
-        // Remove previous error messages and red borders
-        current_fs.find(".error-message").remove();
-        current_fs.find(".error-border").removeClass("error-border");
-
-        // Add your validation logic here
-        var isValid = true;
-
-        current_fs.find("select[required], input[required]").each(function () {
-            if ($(this).is('select') && $(this).val() === null) {
-                // Handle select elements differently
-                $(this).after('<p class="error-message">This field is required.</p>');
-                $(this).addClass("error-border");
-                isValid = false;
-            } else if ($(this).val().trim() === "") {
-                // Show error for empty field
-                $(this).after('<p class="error-message">This field is required.</p>');
-                $(this).addClass("error-border");
-                isValid = false;
-            } else if ($(this).attr('name') === 'phno' && !isValidPhoneNumber($(this).val())) {
-                // Show error for invalid phone number
-                $(this).after('<p class="error-message">Invalid phone number. Please enter 11 digits.</p>');
-                $(this).addClass("error-border");
-                isValid = false;
-            } else if ($(this).attr('name') === 'cnic' && !isValidCNIC($(this).val())) {
-                // Show error for invalid CNIC
-                $(this).after('<p class="error-message">Invalid CNIC. Please enter 13 digits.</p>');
-                $(this).addClass("error-border");
-                isValid = false;
-            } else if ($(this).attr('name') === 'email' && !isValidEmail($(this).val())) {
-                // Show error for invalid email
-                $(this).after('<p class="error-message">Invalid email address. Please enter a valid email.</p>');
-                $(this).addClass("error-border");
-                isValid = false;
-            } else if ($(this).attr('name') === 'DOB' && !isValidAge($(this).val(), 18, 60)) {
-                // Show error for age less than 18 or 60+
-                $(this).after('<p class="error-message">You must be 18 years or older and less than 60 years to proceed.</p>');
-                $(this).addClass("error-border");
-                isValid = false;
-            }
-        });
-
-        return isValid;
-    }
-
-    function isValidPhoneNumber(phoneNumber) {
-        // Check if the phone number contains 11 digits
-        return /^\d{11}$/.test(phoneNumber);
-    }
-
-    function isValidCNIC(cnic) {
-        // Check if the CNIC contains 13 digits
-        return /^\d{13}$/.test(cnic);
-    }
-    function isValidEmail(email) {
-        // Use a simple regular expression to check for a valid email format
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        if (typeof window.validatePolicyStepFields === 'function') {
+            return window.validatePolicyStepFields(current_fs);
+        }
+        return true;
     }
     function isValidAge(dateOfBirth, lowerLimit, upperLimit) {
         var today = new Date();

@@ -2,16 +2,56 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\MobileLinkedToCnic;
+use App\Support\Concerns\PreparesAgeNearestBirthday;
+use App\Support\Concerns\PreparesAppointee;
+use App\Support\Concerns\PreparesDualNationality;
+use App\Support\Concerns\PreparesFemaleDiseaseHistory;
+use App\Support\Concerns\PreparesFilerStatus;
+use App\Support\Concerns\PreparesHealthMeasurements;
+use App\Support\Concerns\PreparesLifeProposed;
+use App\Support\Concerns\PreparesMiscarriageDates;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class PolicyUserDataRequest extends FormRequest
 {
+    use PreparesAgeNearestBirthday;
+    use PreparesAppointee;
+    use PreparesDualNationality;
+    use PreparesFemaleDiseaseHistory;
+    use PreparesFilerStatus;
+    use PreparesHealthMeasurements;
+    use PreparesLifeProposed;
+    use PreparesMiscarriageDates;
+
     /**
      * Authorize user
      */
     public function authorize(): bool
     {
-        return true;
+        return Auth::check() && (int) Auth::user()->user_type === 1;
+    }
+
+    public function validated($key = null, $default = null)
+    {
+        $data = parent::validated($key, $default);
+        $data = $this->applyFemaleDiseaseValidated($data, $key);
+
+        return $this->exceptHealthMeasurementUiKeys($data, $key);
+    }
+
+    protected function prepareForValidation(): void
+    {
+        $this->mergeAgeNearestBirthday();
+        $this->mergeDualNationalityDefaults();
+        $this->mergeFilerStatusDefaults();
+        $this->mergeFemaleDiseaseDefaults();
+        $this->mergeMiscarriageDates();
+        $this->mergeAppointeeDefaults();
+        $this->mergeLifeProposedDefaults();
+        $this->mergeConvertedHealthMeasurements();
     }
 
     /**
@@ -49,18 +89,35 @@ class PolicyUserDataRequest extends FormRequest
 
             // ===== Personal Info =====
             'life_proposed_full_name' => 'required|string|max:100',
-            'mobile_number' => 'required|string|max:20',
+            'mobile_number' => ['required', 'string', 'max:20', new MobileLinkedToCnic('cnic_number')],
             'cnic_number' => 'required|string|max:20',
             'cnic_issue_date' => 'nullable|date',
             'cnic_expiry_date' => 'nullable|date|after:cnic_issue_date',
-            'date_of_birth' => 'required',
+            'date_of_birth' => [
+                'required',
+                'date',
+                'before:today',
+                'before_or_equal:' . now('Asia/Karachi')->subYears(18)->toDateString(),
+            ],
 
-            'age_nearest_date' => 'required|integer|min:0|max:120',
-            'gender' => 'required',
+            'age_nearest_date' => 'required|integer|min:18|max:120',
+            'gender' => 'required|in:Male,Female,Other',
+            'marital_status' => 'required|in:Married,Unmarried',
 
             'mother_maiden_name' => 'required|string|max:100',
             'father_name' => 'required|string|max:100',
-            'husband_name' => 'nullable|string|max:100',
+            'husband_name' => [
+                Rule::requiredIf(fn () => $this->input('gender') === 'Female' && $this->input('marital_status') === 'Married'),
+                'nullable',
+                'string',
+                'max:100',
+            ],
+            'wife_name' => [
+                Rule::requiredIf(fn () => $this->input('gender') === 'Male' && $this->input('marital_status') === 'Married'),
+                'nullable',
+                'string',
+                'max:100',
+            ],
 
             'religion' => 'required|string|max:50',
             'user_email' => 'required|email',
@@ -71,23 +128,14 @@ class PolicyUserDataRequest extends FormRequest
             // ===== Contact =====
             'phone_number_office' => 'nullable|string|max:20',
             'phone_number_residente' => 'nullable|string|max:20',
-            'fax_number' => 'nullable|string|max:20',
 
             // ===== Nationality =====
-            'is_client_dual_national' => 'required|in:Yes,No',
-            'primary_nationality' => 'required_if:is_client_dual_national,Yes|nullable|string|max:100',
-            'dual_nationality' => 'required_if:is_client_dual_national,Yes|nullable|string|max:100',
-            'dual_nationality_country' => 'required_if:is_client_dual_national,Yes|nullable|string|max:100',
-            'dual_passport_number' => 'required_if:is_client_dual_national,Yes|nullable|string|max:100',
+            ...$this->dualNationalityRules(),
 
-            'birth_placed' => 'required|string|max:100',
+            'birth_place_city_id' => 'required|integer|exists:cities,id',
+            'birth_placed' => 'nullable|string|max:100',
 
-            // ===== is_same_person =====
-            'is_same_person' => 'required|in:Yes,No',
-            'life_proposed_name' => 'required_if:is_same_person,No|string|max:255',
-            'life_proposed_cnic' => 'required_if:is_same_person,No|string|max:25',
-            'life_proposed_dob' => 'required_if:is_same_person,No|date',
-            'life_proposed_relationship' => 'required_if:is_same_person,No|string|max:100',
+            ...$this->lifeProposedRules(),
 
            
            
@@ -97,18 +145,20 @@ class PolicyUserDataRequest extends FormRequest
             // Occupation start
 
             'is_emaployemnt' => 'required|in:Yes,No',
-            'employment_designation' => 'required_if:is_emaployemnt,Yes|string|max:255',
-            'employment_company_name' => 'required_if:is_emaployemnt,Yes|string|max:255',
+            'employment_designation' => 'required_if:is_emaployemnt,Yes|nullable|string|max:255',
+            'employment_company_name' => 'required_if:is_emaployemnt,Yes|nullable|string|max:255',
 
 
 
             'is_business' => 'required|in:Yes,No',
-            'business_name' => 'required_if:is_business,Yes|string|max:255',
-            'nature_of_business' => 'required_if:is_business,Yes|string|max:255',
+            'business_name' => 'required_if:is_business,Yes|nullable|string|max:255',
+            'nature_of_business' => 'required_if:is_business,Yes|nullable|string|max:255',
 
+            ...$this->filerStatusRules(),
 
             // ===== Holding Land =====
             'is_holding_land' => 'required|in:Yes,No',
+            'land_unit' => 'required_if:is_holding_land,Yes|nullable|in:Marla,Kanal,Acre,Square Yard,Square Feet,Hectare',
             'total_acreage' => 'required_if:is_holding_land,Yes|nullable|numeric',
             'land_location' => 'required_if:is_holding_land,Yes|nullable|string|max:255',
             'land_type' => 'required_if:is_holding_land,Yes|nullable|in:Agricultural,Commercial,Residential',
@@ -127,23 +177,9 @@ class PolicyUserDataRequest extends FormRequest
 
 
             // ===== Health Info start =====
-            'height_cm' => 'required|numeric|min:0',
-            'height_ft' => 'required|numeric|min:0',
+            ...$this->healthMeasurementUiRules(),
+            ...$this->healthMeasurementDbRules(),
 
-            'weight_kg' => 'required|numeric|min:0',
-            'chest_insp_cm' => 'required|numeric',
-            'chest_exp_cm' => 'required|numeric',
-            'chest_exp_inches' => 'required|numeric',
-            'abdomen_inches' => 'required|numeric',
-            'chest_insp_inches' => 'required|numeric',
-
-            'abdomen_cm' => 'required|numeric',
-
-            'weight_loss_kg' => 'nullable|numeric|min:0',
-            'weight_gain_kg' => 'nullable|numeric|min:0',
-
-            'weight_increase_reason' => 'nullable|string|max:255',
-            
             'daily_consumption' => 'required|string|max:255',
             'physical_impairments' => 'nullable|string|max:255',
             'last_illness_injury' => 'required|string|max:255',
@@ -179,7 +215,7 @@ class PolicyUserDataRequest extends FormRequest
             'mother_age' => 'required',
             'mother_health' => 'required',
             'father_health' => 'required',
-            'premium_paid' => 'required',
+            'premium_paid' => 'nullable',
 
 
 
@@ -192,7 +228,7 @@ class PolicyUserDataRequest extends FormRequest
             'is_pregnant' => 'nullable|string|max:255',
             'caesarean_details' => 'nullable|string|max:255',
             'lmp_date' => 'nullable|string|max:255',
-            'female_disease_history' => 'nullable|string|max:255',
+            ...$this->femaleDiseaseRules(),
             'self_monthly_income' => 'nullable|string|max:255',
             'husband_monthly_income' => 'nullable|string|max:255',
             'qualification' => 'nullable|string|max:255',
@@ -203,25 +239,34 @@ class PolicyUserDataRequest extends FormRequest
 
 
 
-            // nominee section
-           'nominee_name' => 'required|string|max:255',
-           'nominee_cnic' => 'required|string|max:255',
-           'nominee_age' => 'required|string|max:255',
-           'nominee_relationship' => 'required|string|max:255',
-           'appointee_name' => 'required|string|max:255',
-           'appointee_relationship' => 'required|string|max:255',
-           'appointee_cnic' => 'required|string|max:255',
-
-
+            ...$this->appointeeRules(),
 
         //    documents
 
-        'proposer_cnic_front' => 'required|image|mimes:jpg,jpeg,png|max:2048',
-        'proposer_cnic_back' => 'required|image|mimes:jpg,jpeg,png|max:2048',
-        'nominee_document' => 'required|image|mimes:jpg,jpeg,png|max:2048',
-        'proposer_photo' => 'required|image|mimes:jpg,jpeg,png|max:2048',
-        'income_proof' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-        'medical_reports' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        'proposer_cnic_front' => 'required|file|mimes:jpg,jpeg,png,pdf|max:4096',
+        'proposer_cnic_back' => 'required|file|mimes:jpg,jpeg,png,pdf|max:4096',
+        ...$this->lifeProposedDocumentRules(true),
+        'nominee_document' => 'required|file|mimes:jpg,jpeg,png,pdf|max:4096',
+        'proposer_photo' => 'required|file|mimes:jpg,jpeg,png|max:4096',
+        'income_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:4096',
+
+        // Medical documents (optional)
+        'medical_doc_referred_opd' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:4096',
+        'medical_doc_previous_opd' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:4096',
+        'medical_doc_summary_reports' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:4096',
+        'medical_doc_present_history' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:4096',
+        'medical_doc_death_mlc' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:4096',
+        'medical_doc_medicolegal' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:4096',
+        'medical_extra_docs' => 'nullable|array|max:5',
+        'medical_extra_docs.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:4096',
+        'medical_extra_labels' => 'nullable|array|max:5',
+        'medical_extra_labels.*' => 'nullable|string|max:255',
+
+        // Other documents (optional, max 5)
+        'other_docs' => 'nullable|array|max:5',
+        'other_docs.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:4096',
+        'other_doc_labels' => 'nullable|array|max:5',
+        'other_doc_labels.*' => 'nullable|string|max:255',
 
 
 
@@ -274,10 +319,14 @@ class PolicyUserDataRequest extends FormRequest
             // Personal Info
             'life_proposed_full_name.required' => 'Full name is required.',
             'mobile_number.required' => 'Mobile number is required.',
+            'birth_place_city_id.required' => 'Birth place is required.',
+            'birth_place_city_id.exists' => 'Please select a valid city from the list.',
 
             'cnic_expiry_date.after' => 'CNIC expiry date must be after issue date.',
 
+            'date_of_birth.before_or_equal' => 'Proposer must be 18 years or older.',
             'age_nearest_date.required' => 'Age is required and must be valid.',
+            'age_nearest_date.min' => 'Proposer must be 18 years or older.',
 
             // Gender
             'gender.required' => 'Please select gender.',
@@ -288,6 +337,13 @@ class PolicyUserDataRequest extends FormRequest
 
             // Yes/No fields
             'is_client_dual_national.required' => 'Please select dual nationality option.',
+            'primary_nationality.required' => 'Primary nationality is required.',
+            'primary_nationality.in' => 'Primary nationality must be Pakistani when dual nationality is No.',
+            ...$this->dualNationalityMessages(),
+            ...$this->filerStatusMessages(),
+            ...$this->femaleDiseaseMessages(),
+            ...$this->appointeeMessages(),
+            ...$this->lifeProposedMessages(),
             'is_emaployemnt.required' => 'Employment status is required.',
             'is_business.required' => 'Business status is required.',
 

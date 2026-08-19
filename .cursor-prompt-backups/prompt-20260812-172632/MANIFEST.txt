@@ -1,0 +1,9 @@
+﻿timestamp=20260812-172632
+branch=main
+purpose=pre-prompt backup before dashboard tabs UI/UX improvement
+revert_note=To revert: copy files from this folder back over the repo paths listed below.
+files:
+- resources/views/frontend/policyFlow/form.blade.php
+- resources/views/frontend/policyFlow/form/Personal_Details.blade.php
+- public/frontend/css/dashboard.css
+- public/frontend/css/di-form.css

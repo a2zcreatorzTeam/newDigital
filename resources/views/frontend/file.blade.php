@@ -585,6 +585,7 @@
                                                                 <select id="" name="gender" class="form-control select2-hidden-accessible" tabindex="-1" aria-hidden="true" data-select2-id="2533" required>
                                                                         <option value="8441" data-select2-id="2535">Male</option>
                                                                         <option value="8442" data-select2-id="2536">Female</option>
+                                                                        <option value="8443" data-select2-id="2537">Other</option>
                                                                     </select>
                                                                     <span class="select2 select2-container select2-container--default" dir="ltr" data-select2-id="2534" style="width: 470.812px;">
                                                                     <span class="selection">

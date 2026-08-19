@@ -2,50 +2,54 @@
 
 namespace App\Http\Requests;
 
+use App\Support\Concerns\PreparesHealthMeasurements;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class UserHealthRequest extends FormRequest
 {
-    /**
-     * Authorize user
-     */
+    use PreparesHealthMeasurements;
+
     public function authorize(): bool
     {
-        return true; // agar auth check chahiye ho to yahan laga sakte ho
+        return Auth::check() && (int) Auth::user()->user_type === 1;
     }
 
-    /**
-     * Validation Rules
-     */
+    public function validated($key = null, $default = null)
+    {
+        return $this->exceptHealthMeasurementUiKeys(parent::validated($key, $default), $key);
+    }
+
+    protected function prepareForValidation(): void
+    {
+        $this->mergeConvertedHealthMeasurements();
+    }
+
     public function rules(): array
     {
-        return [
-            'height_cm'                => 'required|numeric|max:300',
-            'height_ft'                => 'required|numeric', // e.g., 5'11"
-            'weight_kg'                => 'required|numeric|min:2|max:500',
-            'chest_insp_cm'            => 'required|numeric',
-            'chest_insp_inches'        => 'required|numeric',
-            'chest_exp_cm'             => 'required|numeric',
-            'chest_exp_inches'         => 'required|numeric',
-            'abdomen_cm'               => 'required|numeric',
-            'abdomen_inches'           => 'required|numeric',
-            'weight_loss_kg'           => 'nullable|numeric|min:0',
-            'weight_gain_kg'           => 'nullable|numeric|min:0',
-            'weight_increase_reason'   => 'nullable|string|max:1000',
-            'daily_consumption' => 'required|string|max:255',
-            'physical_impairments' => 'nullable|string|max:255',
-            'last_illness_injury' => 'required|string|max:255',
-            'medical_investigations' => 'required|string|max:255',
-            'medical_history' => 'required|string|max:255',
-
-        ];
+        return array_merge(
+            $this->healthMeasurementUiRules(),
+            $this->healthMeasurementDbRules(),
+            [
+                'daily_consumption' => 'required|string|max:255',
+                'physical_impairments' => 'nullable|string|max:255',
+                'last_illness_injury' => 'required|string|max:255',
+                'medical_investigations' => 'required|string|max:255',
+                'medical_history' => 'required|string|max:255',
+            ]
+        );
     }
 
-    /**
-     * Custom Messages
-     */
     public function messages(): array
     {
-        return [];
+        return [
+            'height_value.required' => 'Height is required.',
+            'height_unit.required' => 'Height unit is required.',
+            'weight_value.required' => 'Weight is required.',
+            'weight_unit.required' => 'Weight unit is required.',
+            'weight_change_type.required' => 'Please select Weight Gain or Weight Loss.',
+            'weight_change_value.required' => 'Weight change value is required.',
+            'weight_increase_reason.required' => 'Reason for weight change is required.',
+        ];
     }
 }

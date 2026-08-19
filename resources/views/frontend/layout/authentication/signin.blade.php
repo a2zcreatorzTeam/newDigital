@@ -1,5 +1,6 @@
 
 <form class="signin-form" id="signinForm">
+    @csrf
     <h3>Sign In</h3>
     <p class="mb-20">Please Sign in to Continue</p>
 
@@ -43,10 +44,11 @@
         <input type="text" id="captchaInput" class="form-control" placeholder="Enter the code above" required>
     </div>
 
-    <button class="btn btn-primary mb-10">Sign In</button>
+    <button type="submit" class="btn btn-primary mb-10" id="signinSubmitBtn">Sign In</button>
     <br>
-    <p>Not a User? Please <a id="signup" style="cursor: pointer;">Sign Up</a></p>
+    <p>Not a User? Please <a id="signup" class="js-show-signup" style="cursor: pointer;">Sign Up</a></p>
 </form>
+C:\Users\ShoaibPc\Herd\newdigital\resources\views\frontend\layout\authentication\signin.blade.php
 @push('js')
 <script>
     $(document).ready(function() {
@@ -87,6 +89,10 @@
         $('#signinForm').submit(function(e) {
             e.preventDefault();
 
+            if ($('#signinForm').data('submitting')) {
+                return false;
+            }
+
             // ✅ FRONTEND CAPTCHA VALIDATION
             let userEnteredCaptcha = $('#captchaInput').val().trim();
 
@@ -96,83 +102,92 @@
                     title: 'CAPTCHA Failed',
                     text: 'The verification code does not match. Please try again.',
                 });
-                generateCaptcha(); // Change code on failure
-                return false; // Stop form from submitting via AJAX
+                generateCaptcha();
+                return false;
             }
 
             let formData = $(this).serialize();
+            let $submitBtn = $('#signinSubmitBtn');
+
+            $('#signinForm').data('submitting', true);
+            $submitBtn.prop('disabled', true);
 
             $.ajax({
                 url: "{{ route('frontend.signin') }}",
                 type: "POST",
                 data: formData,
+                dataType: 'json',
                 beforeSend: function() {
                     $('#loader_data').show();
                 },
 
                 success: function(response) {
+                    var userName = (response && response.data && response.data.name) ? response.data.name : '';
+                    if (userName) {
+                        $("#profile_name").text(userName);
+                    }
                     $('#authNavbar').show();
                     $('#guestNavbar').hide();
-                    $("#profile_name").text(response.data.name);
 
                     Swal.fire({
                         toast: true,
                         position: 'top-end',
                         icon: 'success',
-                        title: response.message,
+                        title: (response && response.message) ? response.message : 'Login successful',
                         showConfirmButton: false,
                         timer: 3000,
                         timerProgressBar: true
                     });
+
                     $('.offcanvas-close').trigger('click');
                     $('#signinForm')[0].reset();
-
-                    // ✅ Regenerate CAPTCHA after a successful sign-in
                     generateCaptcha();
                 },
 
                 error: function(xhr) {
-                    // ✅ Regenerate CAPTCHA on backend error
                     generateCaptcha();
 
-                    // Validation Errors (422)
+                    let errorTitle = 'Error';
+                    let errorMsg = 'Something went wrong. Please try again.';
+                    let payload = xhr.responseJSON || {};
+
                     if (xhr.status === 422) {
-                        let errors = xhr.responseJSON.errors;
-                        let errorMsg = '';
-
-                        $.each(errors, function(key, value) {
-                            errorMsg += value[0] + '\n';
+                        errorTitle = 'Validation Error';
+                        errorMsg = '';
+                        $.each(payload.errors || {}, function(key, value) {
+                            errorMsg += (value[0] || value) + '\n';
                         });
-
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Validation Error',
-                            text: errorMsg,
-                        });
-                    }
-                    // EMAIL NOT VERIFIED
-                    else if (xhr.status === 403 && xhr.responseJSON.verification_required) {
+                        if (!errorMsg) {
+                            errorMsg = payload.message || 'Please check the form and try again.';
+                        }
+                    } else if (xhr.status === 403 && payload.verification_required) {
                         Swal.fire({
                             icon: 'warning',
                             title: 'Email Verification Required',
-                            text: xhr.responseJSON.message,
+                            text: payload.message,
                         });
 
                         $('#signinForm').hide();
                         $('#otpForm').show();
-                        $('#otp_user_id').val(xhr.responseJSON.user_id);
+                        $('#otp_user_id').val(payload.user_id);
+                        return;
+                    } else if (xhr.status === 401 || xhr.status === 404) {
+                        errorTitle = 'Login Failed';
+                        errorMsg = payload.message || 'Invalid email or password.';
+                    } else if (payload.message) {
+                        errorMsg = payload.message;
                     }
-                    // Other Errors (500, etc.)
-                    else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: 'Something went wrong. Please try again.',
-                        });
-                    }
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: errorTitle,
+                        text: errorMsg,
+                    });
                 },
                 complete: function() {
                     $('#loader_data').hide();
+                    $('#signinForm').data('submitting', false);
+                    $submitBtn.prop('disabled', false);
                 }
             });
         });

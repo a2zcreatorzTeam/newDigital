@@ -1,13 +1,19 @@
 <div id="nav-Personal_Details" role="tabpanel" aria-labelledby="nav-Personal_Details-tab" class="tab-pane fade active show">
     <div class="container">
         <div class="row">
-            <h3 class="col-12 ib-form-subheading">Personal Details</h3>
+            <div class="col-12 d-flex justify-content-between align-items-center flex-wrap">
+                <h3 class="ib-form-subheading mb-0">Address Details (پتے کی تفصیلات)</h3>
+                <button type="button" id="copyPermanentAddressBtn" class="btn btn-primary btn-sm copy-permanent-address-btn" style="display: none;">
+                    Use Same Address
+                </button>
+            </div>
+
             <!-- Permanent Address -->
             <h5 class="col-12 ib-form-subheading-second">Permanent Address (مستقل پتہ)</h5>
 
             <div class="col-md-4 px-0 px-sm-3">
                 <label>Province (صوبہ)<span class="requi">*</span></label>
-                <select name="permanent_province_id" id="permanent_province_id" required class="form-control jbl-dynamic-input">
+                <select name="permanent_province_id" id="permanent_province_id" required class="form-control jbl-dynamic-input permanent-address-field">
                     <option value="">Select Province</option>
                     @foreach ($provinces as $item)
                     <option value="{{ $item->id }}" {{ ($user->AddressInfo->permanent_province_id ?? '') == $item->id ? 'selected' : '' }}>
@@ -19,21 +25,21 @@
 
             <div class="col-md-4 px-0 px-sm-3">
                 <label>City (شہر)<span class="requi">*</span></label>
-                <select name="permanent_city_id" id="permanent_city_id" required class="form-control jbl-dynamic-input">
+                <select name="permanent_city_id" id="permanent_city_id" required class="form-control jbl-dynamic-input permanent-address-field">
                     <option value="">Select City</option>
                 </select>
             </div>
 
             <div class="col-md-4 px-0 px-sm-3">
                 <label>District (ضلع)<span class="requi">*</span></label>
-                <select name="permanent_district_id" id="permanent_district_id" required class="form-control jbl-dynamic-input">
+                <select name="permanent_district_id" id="permanent_district_id" required class="form-control jbl-dynamic-input permanent-address-field">
                     <option value="">Select District</option>
                 </select>
             </div>
 
             <div class="col-md-12 px-0 px-sm-3">
                 <label>Address Line<span class="requi">*</span></label>
-                <input type="text" name="permanent_address" required class="form-control jbl-dynamic-input"
+                <input type="text" name="permanent_address" id="permanent_address" required class="form-control jbl-dynamic-input permanent-address-field"
                     value="{{$user->AddressInfo->permanent_address ?? ''}}">
             </div>
 
@@ -43,7 +49,7 @@
 
             <div class="col-md-4 px-0 px-sm-3">
                 <label>Province<span class="requi">*</span></label>
-                <select name="corres_province_id" required id="corres_province_id" class="form-control jbl-dynamic-input">
+                <select name="corres_province_id" required id="corres_province_id" class="form-control jbl-dynamic-input dependent-address-field">
                     <option value="">Select Province</option>
                     @foreach ($provinces as $item)
                     <option value="{{ $item->id }}" {{ ($user->AddressInfo->corres_province_id ?? '') == $item->id ? 'selected' : '' }}>
@@ -55,21 +61,21 @@
 
             <div class="col-md-4 px-0 px-sm-3">
                 <label>City<span class="requi">*</span></label>
-                <select name="corres_city_id" id="corres_city_id" required class="form-control jbl-dynamic-input">
+                <select name="corres_city_id" id="corres_city_id" required class="form-control jbl-dynamic-input dependent-address-field">
                     <option value="">Select City</option>
                 </select>
             </div>
 
             <div class="col-md-4 px-0 px-sm-3">
                 <label>District<span class="requi">*</span></label>
-                <select name="corres_district_id" id="corres_district_id" required class="form-control jbl-dynamic-input">
+                <select name="corres_district_id" id="corres_district_id" required class="form-control jbl-dynamic-input dependent-address-field">
                     <option value="">Select District</option>
                 </select>
             </div>
 
             <div class="col-md-12 px-0 px-sm-3">
                 <label>Address Line<span class="requi">*</span></label>
-                <input type="text" name="corres_address" required class="form-control jbl-dynamic-input"
+                <input type="text" name="corres_address" id="corres_address" required class="form-control jbl-dynamic-input dependent-address-field"
                     value="{{$user->AddressInfo->corres_address ?? ''}}">
             </div>
 
@@ -79,7 +85,7 @@
 
             <div class="col-md-4 px-0 px-sm-3">
                 <label>Province<span class="requi">*</span></label>
-                <select name="temp_province_id" id="temp_province_id" required class="form-control jbl-dynamic-input">
+                <select name="temp_province_id" id="temp_province_id" required class="form-control jbl-dynamic-input dependent-address-field">
                     <option value="">Select Province</option>
                     @foreach ($provinces as $item)
                     <option value="{{ $item->id }}" {{ ($user->AddressInfo->temp_province_id ?? '') == $item->id ? 'selected' : '' }}>
@@ -91,21 +97,21 @@
 
             <div class="col-md-4 px-0 px-sm-3">
                 <label>City<span class="requi">*</span></label>
-                <select name="temp_city_id" id="temp_city_id" required class="form-control jbl-dynamic-input">
+                <select name="temp_city_id" id="temp_city_id" required class="form-control jbl-dynamic-input dependent-address-field">
                     <option value="">Select City</option>
                 </select>
             </div>
 
             <div class="col-md-4 px-0 px-sm-3">
                 <label>District<span class="requi">*</span></label>
-                <select name="temp_district_id" id="temp_district_id" required class="form-control jbl-dynamic-input">
+                <select name="temp_district_id" id="temp_district_id" required class="form-control jbl-dynamic-input dependent-address-field">
                     <option value="">Select District</option>
                 </select>
             </div>
 
             <div class="col-md-12 px-0 px-sm-3">
                 <label>Address Line<span class="requi">*</span></label>
-                <input type="text" name="temp_address" required class="form-control jbl-dynamic-input"
+                <input type="text" name="temp_address" id="temp_address" required class="form-control jbl-dynamic-input dependent-address-field"
                     value="{{$user->AddressInfo->temp_address ?? ''}}">
             </div>
 
@@ -117,6 +123,19 @@
 </div>
 
 
+
+<style>
+    .copy-permanent-address-btn {
+        white-space: nowrap;
+        margin: 0.9375rem 0;
+    }
+
+    .dependent-address-field:disabled {
+        background-color: #e9ecef;
+        cursor: not-allowed;
+        opacity: 0.75;
+    }
+</style>
 
 @push('js')
 <script>
@@ -132,7 +151,48 @@
     let tempCity = "{{ $user->AddressInfo->temp_city_id ?? '' }}";
     let tempDistrict = "{{ $user->AddressInfo->temp_district_id ?? '' }}";
 
+    function isPermanentAddressComplete() {
+        let province = $('#permanent_province_id').val();
+        let city = $('#permanent_city_id').val();
+        let district = $('#permanent_district_id').val();
+        let address = ($('#permanent_address').val() || '').trim();
 
+        return !!(province && city && district && address);
+    }
+
+    // Task 1: show/hide copy button when permanent address is filled
+    function updateCopyPermanentAddressButton() {
+        if (isPermanentAddressComplete()) {
+            $('#copyPermanentAddressBtn').show();
+        } else {
+            $('#copyPermanentAddressBtn').hide();
+        }
+    }
+
+    // Task 2: lock correspondence & temporary until permanent is complete
+    function updateDependentAddressLock() {
+        let unlocked = isPermanentAddressComplete();
+        $('.dependent-address-field').prop('disabled', !unlocked);
+    }
+
+    function refreshAddressUiState() {
+        updateCopyPermanentAddressButton();
+        updateDependentAddressLock();
+    }
+
+    function copyAddressToTarget(targetPrefix, addressFieldId) {
+        let province = $('#permanent_province_id').val();
+        let city = $('#permanent_city_id').val();
+        let district = $('#permanent_district_id').val();
+        let address = $('#permanent_address').val();
+
+        $('#' + targetPrefix + '_province_id').val(province);
+        $('#' + addressFieldId).val(address);
+
+        loadCities(province, '#' + targetPrefix + '_city_id', city, function() {
+            loadDistricts(city, '#' + targetPrefix + '_district_id', district);
+        });
+    }
 
     function loadCities(provinceId, citySelector, selectedCity = null, callback = null) {
         if (!provinceId) return;
@@ -158,7 +218,7 @@
         });
     }
 
-    function loadDistricts(cityId, districtSelector, selectedDistrict = null) {
+    function loadDistricts(cityId, districtSelector, selectedDistrict = null, callback = null) {
         if (!cityId) return;
 
         $.ajax({
@@ -176,16 +236,29 @@
                     let selected = (selectedDistrict == d.id) ? 'selected' : '';
                     districtDropdown.append(`<option value="${d.id}" ${selected}>${d.name}</option>`);
                 });
+
+                if (callback) callback();
             }
         });
     }
     // Permanent
     $('#permanent_province_id').change(function() {
         loadCities(this.value, '#permanent_city_id');
+        $('#permanent_district_id').html('<option value="">Select District</option>');
+        refreshAddressUiState();
     });
 
     $('#permanent_city_id').change(function() {
-        loadDistricts(this.value, '#permanent_district_id');
+        loadDistricts(this.value, '#permanent_district_id', null, refreshAddressUiState);
+        refreshAddressUiState();
+    });
+
+    $('#permanent_district_id').change(function() {
+        refreshAddressUiState();
+    });
+
+    $('#permanent_address').on('input change', function() {
+        refreshAddressUiState();
     });
 
 
@@ -208,16 +281,47 @@
         loadDistricts(this.value, '#temp_district_id');
     });
 
+    // Task 1: copy permanent -> correspondence + temporary
+    $('#copyPermanentAddressBtn').on('click', function() {
+        if (!isPermanentAddressComplete()) {
+            Swal.fire('Info', 'Please complete all Permanent Address fields first.', 'info');
+            return;
+        }
 
+        // Ensure targets are editable before writing values
+        $('.dependent-address-field').prop('disabled', false);
+
+        copyAddressToTarget('corres', 'corres_address');
+        copyAddressToTarget('temp', 'temp_address');
+
+        refreshAddressUiState();
+
+        Swal.fire({
+            title: 'Copied!',
+            text: 'Permanent address copied to Correspondence and Temporary address.',
+            icon: 'success',
+            timer: 1800,
+            showConfirmButton: false
+        });
+    });
+
+    // Disabled fields are skipped by FormData — re-enable right before submit
+    $(document).on('click', '#user_details_submited', function() {
+        $('.dependent-address-field').prop('disabled', false);
+    });
 
     $(document).ready(function() {
+        // Lock dependent fields immediately on load (Task 2)
+        refreshAddressUiState();
 
         // PERMANENT
         if (permanentProvince) {
             $('#permanent_province_id').val(permanentProvince);
 
             loadCities(permanentProvince, '#permanent_city_id', permanentCity, function() {
-                loadDistricts(permanentCity, '#permanent_district_id', permanentDistrict);
+                loadDistricts(permanentCity, '#permanent_district_id', permanentDistrict, function() {
+                    refreshAddressUiState();
+                });
             });
         }
 
@@ -226,7 +330,9 @@
             $('#corres_province_id').val(corresProvince);
 
             loadCities(corresProvince, '#corres_city_id', corresCity, function() {
-                loadDistricts(corresCity, '#corres_district_id', corresDistrict);
+                loadDistricts(corresCity, '#corres_district_id', corresDistrict, function() {
+                    refreshAddressUiState();
+                });
             });
         }
 
@@ -235,7 +341,9 @@
             $('#temp_province_id').val(tempProvince);
 
             loadCities(tempProvince, '#temp_city_id', tempCity, function() {
-                loadDistricts(tempCity, '#temp_district_id', tempDistrict);
+                loadDistricts(tempCity, '#temp_district_id', tempDistrict, function() {
+                    refreshAddressUiState();
+                });
             });
         }
 
@@ -352,50 +460,6 @@
         });
 
 
-        // Jab Date of Birth change ho
-        $('input[name="date_of_birth"]').on('change', function() {
-            let dobValue = $(this).val();
-
-            if (dobValue) {
-                let dob = new Date(dobValue);
-                let today = new Date();
-
-                // Age calculate karein
-                let age = today.getFullYear() - dob.getFullYear();
-                let monthDiff = today.getMonth() - dob.getMonth();
-                let dayDiff = today.getDate() - dob.getDate();
-
-                // Agar birthday is saal abhi tak nahi aaya, to ek saal kam karein
-                if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
-                    age--;
-                }
-
-                // "Nearest Birthday" ka logic (Pakistan Insurance standard):
-                // Agar agle birthday mein 6 mahine se kam rehte hain, to age + 1 kar dete hain
-                let nextBirthday = new Date(dob);
-                nextBirthday.setFullYear(today.getFullYear());
-
-                // Agar birthday guzar gaya hai to agle saal ka set karein
-                if (today > nextBirthday) {
-                    nextBirthday.setFullYear(today.getFullYear() + 1);
-                }
-
-                let diffTime = Math.abs(nextBirthday - today);
-                let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-                // Insurance rules ke mutabiq: agar 6 mahine (182 days) se kam rehte hain agle bday mein
-                if (diffDays <= 182) {
-                    age++;
-                }
-
-                // Age field mein value set karein
-                $('input[name="age_nearest_date"]').val(age);
-            }
-        });
-
-
-
-
         $('input[name="mobile_number"]').on('input', function() {
             // Sirf digits allow karein
             let val = $(this).val().replace(/\D/g, '');
@@ -442,6 +506,7 @@
                             `<option value="${city.id}">${city.name}</option>`
                         );
                     });
+                    refreshAddressUiState();
                 },
                 error: function(xhr) {
                     if (xhr.status === 422) {
@@ -481,12 +546,13 @@
                 },
                 success: function(response) {
                     DistrictDropdown.empty(); // clear loading
-                    DistrictDropdown.append('<option value="">Select City</option>');
+                    DistrictDropdown.append('<option value="">Select District</option>');
                     $.each(response, function(index, city) {
                         DistrictDropdown.append(
                             `<option value="${city.id}">${city.name}</option>`
                         );
                     });
+                    refreshAddressUiState();
                 },
                 error: function(xhr) {
                     if (xhr.status === 422) {

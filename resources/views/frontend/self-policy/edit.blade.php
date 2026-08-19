@@ -227,7 +227,7 @@
 </div>
 @endif
 
-                <form action="{{route('frontend.policyDetail.update',[$id])}}" method="POST" enctype="multipart/form-data" id="policyEditForm">
+                <form action="{{route('frontend.policyDetail.update',[$encryptedId])}}" method="POST" enctype="multipart/form-data" id="policyEditForm">
                     @csrf
                     @method('PUT')
 
@@ -274,7 +274,7 @@
                         <div class="col-md-4 mb-3">
                             <div class="detail-box">
                                 <label class="detail-label">Date Of Birth <span class="required-asterisk">*</span></label>
-                                <input type="date" name="date_of_birth" class="form-control" value="{{ old('date_of_birth', $data->date_of_birth) }}">
+                                <input type="date" name="date_of_birth" class="form-control" value="{{ old('date_of_birth', $data->date_of_birth) }}" max="{{ now('Asia/Karachi')->subYears(18)->toDateString() }}">
                             </div>
                         </div>
 
@@ -288,12 +288,38 @@
                         <div class="col-md-4 mb-3">
                             <div class="detail-box">
                                 <label class="detail-label">Gender/Sex <span class="required-asterisk">*</span></label>
-                                <select name="gender" class="form-select">
+                                <select name="gender" id="gender" class="form-select">
                                     <option value="">-- Select --</option>
                                     @foreach(['Male','Female','Other'] as $g)
                                     <option value="{{ $g }}" @selected(old('gender', $data->gender) == $g)>{{ $g }}</option>
                                     @endforeach
                                 </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <div class="detail-box">
+                                <label class="detail-label">Marital Status <span class="required-asterisk">*</span></label>
+                                <select name="marital_status" id="marital_status" class="form-select">
+                                    <option value="">-- Select --</option>
+                                    @foreach(['Married','Unmarried'] as $ms)
+                                    <option value="{{ $ms }}" @selected(old('marital_status', $data->marital_status) == $ms)>{{ $ms }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 mb-3" id="wife_name_wrap" style="display: none;">
+                            <div class="detail-box">
+                                <label class="detail-label">Wife Name of Life Proposed <span class="required-asterisk">*</span></label>
+                                <input type="text" name="wife_name" id="wife_name" class="form-control" value="{{ old('wife_name', $data->wife_name) }}">
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 mb-3" id="husband_name_wrap" style="display: none;">
+                            <div class="detail-box">
+                                <label class="detail-label">Husband Name of Life Proposed <span class="required-asterisk">*</span></label>
+                                <input type="text" name="husband_name" id="husband_name" class="form-control" value="{{ old('husband_name', $data->husband_name) }}">
                             </div>
                         </div>
 
@@ -308,13 +334,6 @@
                             <div class="detail-box">
                                 <label class="detail-label">Father's Name of Life Proposed <span class="required-asterisk">*</span></label>
                                 <input type="text" name="father_name" class="form-control" value="{{ old('father_name', $data->father_name) }}">
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <div class="detail-box">
-                                <label class="detail-label">Husband Name of Life Proposed</label>
-                                <input type="text" name="husband_name" class="form-control" value="{{ old('husband_name', $data->husband_name) }}">
                             </div>
                         </div>
 
@@ -348,13 +367,6 @@
 
                         <div class="col-md-3 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Fax No</label>
-                                <input type="text" name="fax_number" class="form-control" value="{{ old('fax_number', $data->fax_number) }}">
-                            </div>
-                        </div>
-
-                        <div class="col-md-3 mb-3">
-                            <div class="detail-box">
                                 <label class="detail-label">Is Client Dual National? <span class="required-asterisk">*</span></label>
                                 <select name="is_client_dual_national" id="isClientDualNationalSelect" class="form-select">
                                     <option value="">-- Select --</option>
@@ -364,26 +376,58 @@
                             </div>
                         </div>
 
-                        <div id="dualNationalityWrapper" class="row m-0 w-100">
-
                         <div class="col-md-3 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Primary Nationality <span class="required-asterisk">*</span></label>
-                                <input type="text" name="primary_nationality" id="primary_nationality" class="form-control" value="{{ old('primary_nationality', $data->primary_nationality) }}">
+                                @include('frontend.partials.country_select', [
+                                    'countries' => $countries ?? collect(),
+                                    'fieldName' => 'primary_nationality_country_id',
+                                    'countrySelectId' => 'primary_nationality_country_id',
+                                    'selectedCountryId' => old('primary_nationality_country_id', $data->primary_nationality_country_id ?? null),
+                                    'selectedCountryName' => old('primary_nationality', $data->primary_nationality ?? null),
+                                    'selectedNameField' => 'primary_nationality',
+                                    'countryRequired' => false,
+                                    'countrySelectClass' => 'form-select',
+                                    'countryLabel' => 'Primary Nationality',
+                                    'countryLabelClass' => 'detail-label',
+                                ])
                             </div>
                         </div>
 
                         <div class="col-md-3 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Dual Nationality <span class="required-asterisk">*</span></label>
-                                <input type="text" name="dual_nationality" id="dual_nationality" class="form-control" value="{{ old('dual_nationality', $data->dual_nationality) }}">
+                                @include('frontend.partials.country_select', [
+                                    'countries' => $countries ?? collect(),
+                                    'fieldName' => 'dual_nationality_country_id',
+                                    'countrySelectId' => 'dual_nationality_country_id',
+                                    'selectedCountryId' => old('dual_nationality_country_id', $data->dual_nationality_country_id ?? null),
+                                    'selectedCountryName' => old('dual_nationality_country', $data->dual_nationality_country ?? null),
+                                    'selectedNameField' => 'dual_nationality_country',
+                                    'countryRequired' => false,
+                                    'countrySelectClass' => 'form-select',
+                                    'countryLabel' => 'Dual Nationality Country',
+                                    'countryLabelClass' => 'detail-label',
+                                ])
                             </div>
                         </div>
 
                         <div class="col-md-3 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Dual Nationality Country <span class="required-asterisk">*</span></label>
-                                <input type="text" name="dual_nationality_country" id="dual_nationality_country" class="form-control" value="{{ old('dual_nationality_country', $data->dual_nationality_country) }}">
+                                <label class="detail-label">Tax/TIN Number <span class="required-asterisk">*</span></label>
+                                <input type="text" name="dual_tax_tin_number" id="dual_tax_tin_number" class="form-control" value="{{ old('dual_tax_tin_number', $data->dual_tax_tin_number) }}">
+                            </div>
+                        </div>
+
+                        <div class="col-md-3 mb-3">
+                            <div class="detail-box">
+                                <label class="detail-label">Mobile Number <span class="required-asterisk">*</span></label>
+                                <input type="text" name="dual_mobile_number" id="dual_mobile_number" class="form-control" value="{{ old('dual_mobile_number', $data->dual_mobile_number) }}">
+                            </div>
+                        </div>
+
+                        <div class="col-md-3 mb-3">
+                            <div class="detail-box">
+                                <label class="detail-label">Address <span class="required-asterisk">*</span></label>
+                                <textarea name="dual_address" id="dual_address" class="form-control" rows="2">{{ old('dual_address', $data->dual_address) }}</textarea>
                             </div>
                         </div>
 
@@ -394,12 +438,25 @@
                             </div>
                         </div>
 
-                        </div><!-- /#dualNationalityWrapper -->
-
                         <div class="col-md-3 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Birth Place <span class="required-asterisk">*</span></label>
-                                <input type="text" name="birth_placed" class="form-control" value="{{ old('birth_placed', $data->birth_placed) }}">
+                                @php
+                                    $selectedBirthCityId = old(
+                                        'birth_place_city_id',
+                                        $data->birth_place_city_id
+                                            ?? optional(($cities ?? collect())->first(
+                                                fn ($c) => strcasecmp($c->name, (string) ($data->birth_placed ?? '')) === 0
+                                            ))->id
+                                    );
+                                @endphp
+                                @include('frontend.partials.birth_place_select', [
+                                    'cities' => $cities ?? collect(),
+                                    'selectedBirthCityId' => $selectedBirthCityId,
+                                    'birthPlaceRequired' => true,
+                                    'birthPlaceClass' => 'form-select birth-place-city-select',
+                                    'birthPlaceLabel' => 'Birth Place',
+                                    'birthPlaceLabelClass' => 'detail-label',
+                                ])
                             </div>
                         </div>
 
@@ -414,44 +471,21 @@
                             </div>
                         </div>
 
-                        <div id="lifeProposedWrapper" class="row m-0 w-100">
-
-                        <div class="col-md-3 mb-3">
-                            <div class="detail-box">
-                                <label class="detail-label">Life Proposed Name <span class="required-asterisk">*</span></label>
-                                <input type="text" name="life_proposed_name" id="life_proposed_name" class="form-control" value="{{ old('life_proposed_name', $data->life_proposed_name) }}">
-                            </div>
-                        </div>
-
-                        <div class="col-md-3 mb-3">
-                            <div class="detail-box">
-                                <label class="detail-label">Life Proposed CNIC <span class="required-asterisk">*</span></label>
-                                <input type="text" name="life_proposed_cnic" id="life_proposed_cnic" class="form-control" value="{{ old('life_proposed_cnic', $data->life_proposed_cnic) }}">
-                            </div>
-                        </div>
-
-                        <div class="col-md-3 mb-3">
-                            <div class="detail-box">
-                                <label class="detail-label">Life Proposed DOB <span class="required-asterisk">*</span></label>
-                                <input type="date" name="life_proposed_dob" id="life_proposed_dob" class="form-control" value="{{ old('life_proposed_dob', $data->life_proposed_dob) }}">
-                            </div>
-                        </div>
-
-                        <div class="col-md-3 mb-3">
-                            <div class="detail-box">
-                                <label class="detail-label">Life Proposed RelationShip <span class="required-asterisk">*</span></label>
-                                <input type="text" name="life_proposed_relationship" id="life_proposed_relationship" class="form-control" value="{{ old('life_proposed_relationship', $data->life_proposed_relationship) }}">
-                            </div>
-                        </div>
-
+                        <div id="lifeProposedWrapper" class="col-12 px-0" @if(old('is_same_person', $data->is_same_person) !== 'No') style="display:none;" @endif>
+                            @include('frontend.partials.life_proposed_fields', [
+                                'variant' => 'edit',
+                                'lp' => \App\Support\LifeProposedProfile::values($data),
+                                'cities' => $cities ?? collect(),
+                                'countries' => $countries ?? collect(),
+                            ])
                         </div><!-- /#lifeProposedWrapper -->
 
                     </div>
 
                     <div class="custom-divider"></div>
 
-                    {{-- Address Information --}}
-                    <div class="section-title">Address Information</div>
+                    {{-- Address Details --}}
+                    <div class="section-title">Address Details</div>
 
                     {{-- NOTE: $provinces is passed from the controller (Provinces::get()).
                          City and District options are loaded dynamically via AJAX (see script below),
@@ -587,14 +621,30 @@
 
                     <div class="row">
 
+                        @php
+                            $empFlag = old('is_emaployemnt', $data->is_emaployemnt ?? '');
+                            $bizFlag = old('is_business', $data->is_business ?? '');
+                            if ($empFlag === 'Yes' && $bizFlag === 'Yes') {
+                                $occupationType = 'Both';
+                            } elseif ($empFlag === 'Yes') {
+                                $occupationType = 'Employment';
+                            } elseif ($bizFlag === 'Yes') {
+                                $occupationType = 'Businessman';
+                            } else {
+                                $occupationType = old('occupation_type', '');
+                            }
+                        @endphp
                         <div class="col-md-4 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Is Employment? <span class="required-asterisk">*</span></label>
-                                <select name="is_emaployemnt" id="is_emaployemnt" class="form-select">
+                                <label class="detail-label">Occupation Type <span class="required-asterisk">*</span></label>
+                                <select id="occupation_type" class="form-select" required>
                                     <option value="">-- Select --</option>
-                                    <option value="Yes" @selected(old('is_emaployemnt', $data->is_emaployemnt) == 'Yes')>Yes</option>
-                                    <option value="No" @selected(old('is_emaployemnt', $data->is_emaployemnt) == 'No')>No</option>
+                                    <option value="Employment" @selected($occupationType === 'Employment')>Employment</option>
+                                    <option value="Businessman" @selected($occupationType === 'Businessman')>Businessman</option>
+                                    <option value="Both" @selected($occupationType === 'Both')>Both</option>
                                 </select>
+                                <input type="hidden" name="is_emaployemnt" id="is_emaployemnt" value="{{ $empFlag }}">
+                                <input type="hidden" name="is_business" id="is_business" value="{{ $bizFlag }}">
                             </div>
                         </div>
 
@@ -602,19 +652,29 @@
                             <div id="employment_fields" class="row"></div>
                         </div>
 
+                        <div class="col-12">
+                            <div id="business_fields" class="row"></div>
+                        </div>
+
+                        @php
+                            $filerStatus = old('filer_status', $data->filer_status ?? '');
+                            $ntnNumber = old('ntn_number', $data->ntn_number ?? '');
+                        @endphp
                         <div class="col-md-4 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Is Businessman <span class="required-asterisk">*</span></label>
-                                <select name="is_business" id="is_business" class="form-select">
+                                <label class="detail-label">Filer Status <span class="required-asterisk">*</span></label>
+                                <select name="filer_status" class="form-select" required>
                                     <option value="">-- Select --</option>
-                                    <option value="Yes" @selected(old('is_business', $data->is_business) == 'Yes')>Yes</option>
-                                    <option value="No" @selected(old('is_business', $data->is_business) == 'No')>No</option>
+                                    <option value="Filer" @selected($filerStatus === 'Filer')>Filer</option>
+                                    <option value="Non-Filer" @selected($filerStatus === 'Non-Filer')>Non-Filer</option>
                                 </select>
                             </div>
                         </div>
-
-                        <div class="col-12">
-                            <div id="business_fields" class="row"></div>
+                        <div class="col-md-4 mb-3 js-ntn-wrap">
+                            <div class="detail-box">
+                                <label class="detail-label">NTN Number <span class="required-asterisk">*</span></label>
+                                <input type="text" name="ntn_number" class="form-control" value="{{ $ntnNumber }}" maxlength="20" placeholder="Enter NTN Number">
+                            </div>
                         </div>
 
 
@@ -678,10 +738,14 @@
                     @php
                         $father = $data->family_history->firstWhere('memner_flag', 'father');
                         $mother = $data->family_history->firstWhere('memner_flag', 'mother');
+                        $spouse = $data->family_history->firstWhere('memner_flag', 'spouse');
                         $brothers = $data->family_history->where('memner_flag', 'brother')->values();
                         $sisters = $data->family_history->where('memner_flag', 'sister')->values();
                         $sons = $data->family_history->where('memner_flag', 'son')->values();
                         $daughters = $data->family_history->where('memner_flag', 'daughter')->values();
+                        $memberIsDeceased = function ($member) {
+                            return $member && ($member->year_of_death || $member->age_of_death || $member->cause_of_death);
+                        };
                     @endphp
 
                     <div class="row">
@@ -701,6 +765,15 @@
                             <div class="detail-box">
                                 <label class="detail-label">State Of Health <span class="required-asterisk">*</span></label>
                                 <input type="text" name="father_health" class="form-control" value="{{ old('father_health', $father->state_of_health ?? '') }}">
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="detail-box">
+                                <label class="detail-label">Is the member alive?</label>
+                                <select name="father_is_alive" class="form-control">
+                                    <option value="Yes" @selected(old('father_is_alive', $memberIsDeceased($father) ? 'No' : 'Yes') === 'Yes')>Yes</option>
+                                    <option value="No" @selected(old('father_is_alive', $memberIsDeceased($father) ? 'No' : 'Yes') === 'No')>No</option>
+                                </select>
                             </div>
                         </div>
                         <div class="col-md-4 mb-3">
@@ -743,6 +816,15 @@
                         </div>
                         <div class="col-md-4 mb-3">
                             <div class="detail-box">
+                                <label class="detail-label">Is the member alive?</label>
+                                <select name="mother_is_alive" class="form-control">
+                                    <option value="Yes" @selected(old('mother_is_alive', $memberIsDeceased($mother) ? 'No' : 'Yes') === 'Yes')>Yes</option>
+                                    <option value="No" @selected(old('mother_is_alive', $memberIsDeceased($mother) ? 'No' : 'Yes') === 'No')>No</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="detail-box">
                                 <label class="detail-label">Year Of Death</label>
                                 <input type="text" name="mother_year_of_death" class="form-control jbl-year-format" placeholder="YYYY" inputmode="numeric" maxlength="4" pattern="[0-9]{4}" value="{{ old('mother_year_of_death', $mother->year_of_death ?? '') }}">
                             </div>
@@ -757,6 +839,53 @@
                             <div class="detail-box">
                                 <label class="detail-label">Cause Of Death</label>
                                 <textarea name="mother_cause_of_death" class="form-control" rows="2" placeholder="Enter cause of death details...">{{ old('mother_cause_of_death', $mother->cause_of_death ?? '') }}</textarea>
+                            </div>
+                        </div>
+
+                        <div class="col-12"><hr class="my-3"></div>
+
+                        {{-- Spouse --}}
+                        <h6 class="col-12 text-primary">Spouse</h6>
+                        <input type="hidden" name="spouse_id" value="{{ $spouse->id ?? '' }}">
+                        <input type="hidden" name="spouse_flag" value="spouse">
+
+                        <div class="col-md-4 mb-3">
+                            <div class="detail-box">
+                                <label class="detail-label">Age</label>
+                                <input type="text" name="spouse_age" class="form-control" value="{{ old('spouse_age', $spouse->age ?? '') }}">
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="detail-box">
+                                <label class="detail-label">State Of Health</label>
+                                <input type="text" name="spouse_health" class="form-control" value="{{ old('spouse_health', $spouse->state_of_health ?? '') }}">
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="detail-box">
+                                <label class="detail-label">Is the member alive?</label>
+                                <select name="spouse_is_alive" class="form-control">
+                                    <option value="Yes" @selected(old('spouse_is_alive', $memberIsDeceased($spouse) ? 'No' : 'Yes') === 'Yes')>Yes</option>
+                                    <option value="No" @selected(old('spouse_is_alive', $memberIsDeceased($spouse) ? 'No' : 'Yes') === 'No')>No</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="detail-box">
+                                <label class="detail-label">Year Of Death</label>
+                                <input type="text" name="spouse_year_of_death" class="form-control jbl-year-format" placeholder="YYYY" inputmode="numeric" maxlength="4" pattern="[0-9]{4}" value="{{ old('spouse_year_of_death', $spouse->year_of_death ?? '') }}">
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="detail-box">
+                                <label class="detail-label">Age Of Death</label>
+                                <input type="number" name="spouse_age_of_death" class="form-control" value="{{ old('spouse_age_of_death', $spouse->age_of_death ?? '') }}">
+                            </div>
+                        </div>
+                        <div class="col-md-8 mb-3">
+                            <div class="detail-box">
+                                <label class="detail-label">Cause Of Death</label>
+                                <textarea name="spouse_cause_of_death" class="form-control" rows="2" placeholder="Enter cause of death details...">{{ old('spouse_cause_of_death', $spouse->cause_of_death ?? '') }}</textarea>
                             </div>
                         </div>
 
@@ -779,6 +908,13 @@
                                 <div class="col-md-4 mb-2 px-1">
                                     <label class="detail-label">State Of Health</label>
                                     <input type="text" name="brother_health[]" class="form-control" value="{{ $b->state_of_health }}">
+                                </div>
+                                <div class="col-md-4 mb-2 px-1">
+                                    <label class="detail-label">Is the member alive?</label>
+                                    <select name="brother_is_alive[]" class="form-control">
+                                        <option value="Yes" @selected(!$memberIsDeceased($b))>Yes</option>
+                                        <option value="No" @selected($memberIsDeceased($b))>No</option>
+                                    </select>
                                 </div>
                                 <div class="col-md-4 mb-2 px-1">
                                     <label class="detail-label">Year Of Death</label>
@@ -820,6 +956,13 @@
                                     <input type="text" name="sister_health[]" class="form-control" value="{{ $s->state_of_health }}">
                                 </div>
                                 <div class="col-md-4 mb-2 px-1">
+                                    <label class="detail-label">Is the member alive?</label>
+                                    <select name="sister_is_alive[]" class="form-control">
+                                        <option value="Yes" @selected(!$memberIsDeceased($s))>Yes</option>
+                                        <option value="No" @selected($memberIsDeceased($s))>No</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4 mb-2 px-1">
                                     <label class="detail-label">Year Of Death</label>
                                     <input type="text" name="sister_year_of_death[]" class="form-control jbl-year-format" placeholder="YYYY" inputmode="numeric" maxlength="4" pattern="[0-9]{4}" value="{{ $s->year_of_death }}">
                                 </div>
@@ -857,6 +1000,13 @@
                                 <div class="col-md-4 mb-2 px-1">
                                     <label class="detail-label">State Of Health</label>
                                     <input type="text" name="son_health[]" class="form-control" value="{{ $s->state_of_health }}">
+                                </div>
+                                <div class="col-md-4 mb-2 px-1">
+                                    <label class="detail-label">Is the member alive?</label>
+                                    <select name="son_is_alive[]" class="form-control">
+                                        <option value="Yes" @selected(!$memberIsDeceased($s))>Yes</option>
+                                        <option value="No" @selected($memberIsDeceased($s))>No</option>
+                                    </select>
                                 </div>
                                 <div class="col-md-4 mb-2 px-1">
                                     <label class="detail-label">Year Of Death</label>
@@ -898,6 +1048,13 @@
                                     <input type="text" name="daughter_health[]" class="form-control" value="{{ $d->state_of_health }}">
                                 </div>
                                 <div class="col-md-4 mb-2 px-1">
+                                    <label class="detail-label">Is the member alive?</label>
+                                    <select name="daughter_is_alive[]" class="form-control">
+                                        <option value="Yes" @selected(!$memberIsDeceased($d))>Yes</option>
+                                        <option value="No" @selected($memberIsDeceased($d))>No</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4 mb-2 px-1">
                                     <label class="detail-label">Year Of Death</label>
                                     <input type="text" name="daughter_year_of_death[]" class="form-control jbl-year-format" placeholder="YYYY" inputmode="numeric" maxlength="4" pattern="[0-9]{4}" value="{{ $d->year_of_death }}">
                                 </div>
@@ -935,7 +1092,18 @@
                         <div class="col-md-3 mb-3">
                             <div class="detail-box">
                                 <label class="detail-label">Miscarriage Dates</label>
-                                <input type="text" name="miscarriage_dates" class="form-control" value="{{ old('miscarriage_dates', $data->miscarriage_dates) }}">
+                                <div id="miscarriage_dates_list">
+                                    @php
+                                        $miscarriageDates = \App\Support\MiscarriageDates::split(old('miscarriage_dates', $data->miscarriage_dates));
+                                    @endphp
+                                    @foreach($miscarriageDates as $index => $miscarriageDate)
+                                        <div class="miscarriage-date-row d-flex align-items-center mb-2" style="gap:8px;">
+                                            <input type="date" name="miscarriage_dates[]" class="form-control miscarriage-date-input" value="{{ $miscarriageDate }}">
+                                            <button type="button" class="btn btn-sm btn-primary miscarriage-date-add" title="Add date">+</button>
+                                            <button type="button" class="btn btn-sm btn-secondary miscarriage-date-remove" title="Remove date" @disabled($index === 0 && count($miscarriageDates) === 1)>-</button>
+                                        </div>
+                                    @endforeach
+                                </div>
                             </div>
                         </div>
 
@@ -967,7 +1135,31 @@
                         <div class="col-md-3 mb-3">
                             <div class="detail-box">
                                 <label class="detail-label">Female Disease History</label>
-                                <input type="text" name="female_disease_history" class="form-control" value="{{ old('female_disease_history', $data->female_disease_history) }}">
+                                @php
+                                    $femaleDiseaseUnpacked = \App\Support\FemaleDiseases::unpack($data->female_disease_name);
+                                    $femaleDiseaseHistory = old('female_disease_history', $data->female_disease_history);
+                                    $femaleDiseaseName = old('female_disease_name', $femaleDiseaseUnpacked['name']);
+                                    $femaleDiseaseDetails = old('female_disease_details', $femaleDiseaseUnpacked['details']);
+                                    $showFemaleDiseaseExtras = $femaleDiseaseHistory === 'Yes';
+                                @endphp
+                                <select name="female_disease_history" id="female_disease_history" class="form-select">
+                                    <option value="">-- Select --</option>
+                                    <option value="Yes" @selected($femaleDiseaseHistory === 'Yes')>Yes</option>
+                                    <option value="No" @selected($femaleDiseaseHistory === 'No')>No</option>
+                                </select>
+                                <div class="js-female-disease-wrap mt-2" @unless($showFemaleDiseaseExtras) style="display:none;" @endunless>
+                                    <label class="detail-label">Female Disease</label>
+                                    <select name="female_disease_name" class="form-select">
+                                        <option value="">-- Select --</option>
+                                        @foreach(\App\Support\FemaleDiseases::options() as $value => $label)
+                                            <option value="{{ $value }}" @selected($femaleDiseaseName === $value)>{{ $label }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="js-female-disease-wrap mt-2" @unless($showFemaleDiseaseExtras) style="display:none;" @endunless>
+                                    <label class="detail-label">Description</label>
+                                    <input type="text" name="female_disease_details" class="form-control" maxlength="500" value="{{ $femaleDiseaseDetails }}">
+                                </div>
                             </div>
                         </div>
 
@@ -1046,7 +1238,7 @@
                         <div class="col-md-3 mb-3">
                             <div class="detail-box">
                                 <label class="detail-label">Nominee Age <span class="required-asterisk">*</span></label>
-                                <input type="number" name="nominee_age" class="form-control" value="{{ old('nominee_age', $data->nominee_age) }}">
+                                <input type="number" name="nominee_age" id="nominee_age" class="form-control" min="0" max="120" value="{{ old('nominee_age', $data->nominee_age) }}">
                             </div>
                         </div>
 
@@ -1057,24 +1249,35 @@
                             </div>
                         </div>
 
-                        <div class="col-md-3 mb-3">
+                        @php
+                            $nomineeAgeValue = old('nominee_age', $data->nominee_age);
+                            $isMinorNominee = $nomineeAgeValue !== null && $nomineeAgeValue !== '' && (int) $nomineeAgeValue < 18;
+                        @endphp
+                        <div class="col-md-3 mb-3 js-appointee-wrap js-appointee-section" @unless($isMinorNominee) style="display:none;" @endunless>
                             <div class="detail-box">
                                 <label class="detail-label">Appointee Name <span class="required-asterisk">*</span></label>
                                 <input type="text" name="appointee_name" class="form-control" value="{{ old('appointee_name', $data->appointee_name) }}">
                             </div>
                         </div>
 
-                        <div class="col-md-3 mb-3">
+                        <div class="col-md-3 mb-3 js-appointee-wrap js-appointee-section" @unless($isMinorNominee) style="display:none;" @endunless>
                             <div class="detail-box">
                                 <label class="detail-label">Appointee Relationship <span class="required-asterisk">*</span></label>
                                 <input type="text" name="appointee_relationship" class="form-control" value="{{ old('appointee_relationship', $data->appointee_relationship) }}">
                             </div>
                         </div>
 
-                        <div class="col-md-3 mb-3">
+                        <div class="col-md-3 mb-3 js-appointee-wrap js-appointee-section" @unless($isMinorNominee) style="display:none;" @endunless>
                             <div class="detail-box">
                                 <label class="detail-label">Appointee CNIC <span class="required-asterisk">*</span></label>
-                                <input type="text" name="appointee_cnic" class="form-control" value="{{ old('appointee_cnic', $data->appointee_cnic) }}">
+                                <input type="text" name="appointee_cnic" class="form-control jbl-cnic-format" placeholder="42101-1234567-1" maxlength="15" inputmode="numeric" pattern="[0-9]{5}-[0-9]{7}-[0-9]{1}" value="{{ old('appointee_cnic', $data->appointee_cnic) }}">
+                            </div>
+                        </div>
+
+                        <div class="col-md-3 mb-3 js-appointee-wrap js-appointee-section" @unless($isMinorNominee) style="display:none;" @endunless>
+                            <div class="detail-box">
+                                <label class="detail-label">Appointee Mobile <span class="required-asterisk">*</span></label>
+                                <input type="text" name="appointee_mobile" class="form-control jbl-mobile-format" placeholder="0300-1234567" maxlength="12" inputmode="numeric" pattern="03[0-9]{2}-[0-9]{7}" value="{{ old('appointee_mobile', $data->appointee_mobile) }}">
                             </div>
                         </div>
 
@@ -1091,17 +1294,17 @@
                         $documentFields = [
                             'proposer_cnic_front'  => 'Proposer CNIC Front',
                             'proposer_cnic_back'   => 'Proposer CNIC Back',
+                            'life_proposed_document' => 'Life Proposed CNIC / B-Form',
                             'nominee_document'     => 'Nominee Document',
                             'proposer_photo'       => 'Proposer Photo',
                             'income_proof'         => 'Income Proof',
-                            'medical_reports'      => 'Medical Reports',
                         ];
                         @endphp
 
                         @foreach($documentFields as $field => $label)
-                        <div class="col-md-3 mb-3">
+                        <div class="col-md-3 mb-3 @if($field === 'life_proposed_document') js-life-proposed-doc-wrap @endif" @if($field === 'life_proposed_document' && old('is_same_person', $data->is_same_person) !== 'No') style="display:none;" @endif>
                             <div class="detail-box">
-                                <label class="detail-label">{{ $label }}</label>
+                                <label class="detail-label @if($field === 'life_proposed_document') js-life-proposed-doc-label @endif">{{ $label }}</label>
                                 <div class="img-preview-box" data-preview="{{ $field }}_preview">
                                     @if($data->$field)
                                     <img id="{{ $field }}_preview" src="{{ asset('uploads/policy_documents/'.$data->$field) }}" alt="{{ $label }}">
@@ -1111,6 +1314,7 @@
                                     @endif
                                     <input type="file" name="{{ $field }}" accept="image/*,application/pdf"
                                         class="form-control form-control-sm mt-1"
+                                        @if($field === 'life_proposed_document' && $data->$field) data-has-existing="1" @endif
                                         onchange="previewImage(event, '{{ $field }}_preview')">
                                     @if($data->$field)
                                     <input type="hidden" name="{{ $field }}_old" value="{{ $data->$field }}">
@@ -1128,85 +1332,16 @@
                     <div class="section-title">Health Information</div>
 
                     <div class="row">
+                        @include('frontend.partials.health_measurements', [
+                            'health' => $data,
+                            'fieldClass' => 'form-control',
+                            'selectClass' => 'form-select',
+                            'labelClass' => 'detail-label',
+                            'colClass' => 'col-md-6 mb-3',
+                            'useDetailBox' => true,
+                        ])
 
-                        <div class="col-md-3 mb-3">
-                            <div class="detail-box">
-                                <label class="detail-label">Height In cm <span class="required-asterisk">*</span></label>
-                                <input type="number" step="0.01" name="height_cm" id="height_cm" class="form-control" value="{{ old('height_cm', $data->height_cm) }}">
-                            </div>
-                        </div>
-
-                        <div class="col-md-3 mb-3">
-                            <div class="detail-box">
-                                <label class="detail-label">Height In ft <span class="required-asterisk">*</span></label>
-                                <input type="text" name="height_ft" id="height_ft" class="form-control" value="{{ old('height_ft', $data->height_ft) }}">
-                            </div>
-                        </div>
-
-                        <div class="col-md-3 mb-3">
-                            <div class="detail-box">
-                                <label class="detail-label">Weight In Kg <span class="required-asterisk">*</span></label>
-                                <input type="number" step="0.01" name="weight_kg" class="form-control" value="{{ old('weight_kg', $data->weight_kg) }}">
-                            </div>
-                        </div>
-
-                        <div class="col-md-3 mb-3">
-                            <div class="detail-box">
-                                <label class="detail-label">Chest Insp (cm)<span class="required-asterisk">*</span></label>
-                                <input type="number" step="0.01" name="chest_insp_cm" id="chest_insp_cm" class="form-control" value="{{ old('chest_insp_cm', $data->chest_insp_cm) }}">
-                            </div>
-                        </div>
-
-                        <div class="col-md-3 mb-3">
-                            <div class="detail-box">
-                                <label class="detail-label">Chest Insp (Inches)<span class="required-asterisk">*</span></label>
-                                <input type="number" step="0.01" name="chest_insp_inches" id="chest_insp_inches" class="form-control" value="{{ old('chest_insp_inches', $data->chest_insp_inches) }}">
-                            </div>
-                        </div>
-
-                        <div class="col-md-3 mb-3">
-                            <div class="detail-box">
-                                <label class="detail-label">Chest Exp (cm)<span class="required-asterisk">*</span></label>
-                                <input type="number" step="0.01" name="chest_exp_cm" id="chest_exp_cm" class="form-control" value="{{ old('chest_exp_cm', $data->chest_exp_cm) }}">
-                            </div>
-                        </div>
-
-                        <div class="col-md-3 mb-3">
-                            <div class="detail-box">
-                                <label class="detail-label">Chest Exp (Inches)<span class="required-asterisk">*</span></label>
-                                <input type="number" step="0.01" name="chest_exp_inches" id="chest_exp_inches" class="form-control" value="{{ old('chest_exp_inches', $data->chest_exp_inches) }}">
-                            </div>
-                        </div>
-
-                        <div class="col-md-3 mb-3">
-                            <div class="detail-box">
-                                <label class="detail-label">Abdomen (cm)<span class="required-asterisk">*</span></label>
-                                <input type="number" step="0.01" name="abdomen_cm" id="abdomen_cm" class="form-control" value="{{ old('abdomen_cm', $data->abdomen_cm) }}">
-                            </div>
-                        </div>
-
-                        <div class="col-md-3 mb-3">
-                            <div class="detail-box">
-                                <label class="detail-label">Abdomen (Inches)<span class="required-asterisk">*</span></label>
-                                <input type="number" step="0.01" name="abdomen_inches" id="abdomen_inches" class="form-control" value="{{ old('abdomen_inches', $data->abdomen_inches) }}">
-                            </div>
-                        </div>
-
-                        <div class="col-md-3 mb-3">
-                            <div class="detail-box">
-                                <label class="detail-label">Weight Loss (Kg)</label>
-                                <input type="number" step="0.01" name="weight_loss_kg" class="form-control" value="{{ old('weight_loss_kg', $data->weight_loss_kg) }}">
-                            </div>
-                        </div>
-
-                        <div class="col-md-3 mb-3">
-                            <div class="detail-box">
-                                <label class="detail-label">Weight Gain (Kg)</label>
-                                <input type="number" step="0.01" name="weight_gain_kg" class="form-control" value="{{ old('weight_gain_kg', $data->weight_gain_kg) }}">
-                            </div>
-                        </div>
-
-                        <div class="col-md-3 mb-3">
+                        <div class="col-md-6 mb-3">
                             <div class="detail-box">
                                 <label class="detail-label">State average daily consumption of Tobacco, Pan/Niswar, Alcohol, Drugs <span class="required-asterisk">*</span></label>
                                 <input type="text" name="daily_consumption" class="form-control" value="{{ old('daily_consumption', $data->daily_consumption) }}">
@@ -1238,13 +1373,6 @@
                             <div class="detail-box">
                                 <label class="detail-label">Medical History <span class="required-asterisk">*</span></label>
                                 <textarea name="medical_history" class="form-control" rows="4">{{ old('medical_history', $data->medical_history) }}</textarea>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <div class="detail-box">
-                                <label class="detail-label">Reason for Weight Gain or Weight Loss</label>
-                                <textarea name="weight_increase_reason" class="form-control" rows="4">{{ old('weight_increase_reason', $data->weight_increase_reason) }}</textarea>
                             </div>
                         </div>
 
@@ -1308,25 +1436,16 @@
             }
         }
 
-        select.addEventListener('change', toggleLifeProposed);
-        toggleLifeProposed(); // run on load to respect existing value
-    })();
-
-    // Toggle: Dual Nationality fields (hide only, keep values intact when Is Client Dual National? = "No")
-    (function () {
-        const select = document.getElementById('isClientDualNationalSelect');
-        const wrapper = document.getElementById('dualNationalityWrapper');
-
-        function toggleDualNationality() {
-            if (select.value === 'No') {
-                wrapper.style.display = 'none';
-            } else {
-                wrapper.style.display = '';
+        select.addEventListener('change', function () {
+            toggleLifeProposed();
+            if (typeof window.applyLifeProposedLogic === 'function') {
+                window.applyLifeProposedLogic(select.value === 'Yes');
             }
+        });
+        toggleLifeProposed(); // run on load to respect existing value
+        if (typeof window.applyLifeProposedLogic === 'function') {
+            window.applyLifeProposedLogic(false);
         }
-
-        select.addEventListener('change', toggleDualNationality);
-        toggleDualNationality(); // run on load to respect existing value
     })();
 
     // ================= Field format validations =================
@@ -1382,9 +1501,21 @@
 
         // ================= Occupation toggle logic =================
         function toggleOccupationFields() {
+            let type = $('#occupation_type').val();
+            let employment = 'No';
+            let business = 'No';
 
-            let employment = $('select[name="is_emaployemnt"]').val();
-            let business = $('select[name="is_business"]').val();
+            if (type === 'Employment') {
+                employment = 'Yes';
+            } else if (type === 'Businessman') {
+                business = 'Yes';
+            } else if (type === 'Both') {
+                employment = 'Yes';
+                business = 'Yes';
+            }
+
+            $('#is_emaployemnt').val(employment);
+            $('#is_business').val(business);
 
             // Employment Fields
             if (employment === 'Yes') {
@@ -1394,7 +1525,7 @@
                             <label class="detail-label">Designation / Job Title <span class="required-asterisk">*</span></label>
                             <input type="text" name="employment_designation"
                                 value="{{ old('employment_designation', $data->employment_designation ?? '') }}"
-                                class="form-control">
+                                class="form-control" required>
                         </div>
                     </div>
                     <div class="col-md-6 mb-3">
@@ -1402,7 +1533,7 @@
                             <label class="detail-label">Company Name <span class="required-asterisk">*</span></label>
                             <input type="text" name="employment_company_name"
                                 value="{{ old('employment_company_name', $data->employment_company_name ?? '') }}"
-                                class="form-control">
+                                class="form-control" required>
                         </div>
                     </div>
                 `);
@@ -1418,7 +1549,7 @@
                             <label class="detail-label">Business Name <span class="required-asterisk">*</span></label>
                             <input type="text" name="business_name"
                                 value="{{ old('business_name', $data->business_name ?? '') }}"
-                                class="form-control">
+                                class="form-control" required>
                         </div>
                     </div>
                     <div class="col-md-6 mb-3">
@@ -1427,7 +1558,7 @@
                             <input type="text" name="nature_of_business"
                                 value="{{ old('nature_of_business', $data->nature_of_business ?? '') }}"
                                 class="form-control"
-                                placeholder="e.g. Pharmacy, Electronics, Construction">
+                                placeholder="e.g. Pharmacy, Electronics, Construction" required>
                         </div>
                     </div>
                 `);
@@ -1440,8 +1571,7 @@
         toggleOccupationFields();
 
         // Change Events
-        $('select[name="is_emaployemnt"]').on('change', toggleOccupationFields);
-        $('select[name="is_business"]').on('change', toggleOccupationFields);
+        $('#occupation_type').on('change', toggleOccupationFields);
 
         // ================= Land Holding toggle logic =================
         function toggleLandFields() {
@@ -1452,10 +1582,24 @@
                 $('#land_fields').html(`
                     <div class="col-md-6 mb-3">
                         <div class="detail-box">
-                            <label class="detail-label">Total Acreage Owned <span class="required-asterisk">*</span></label>
-                            <input type="number" step="0.01" name="total_acreage"
+                            <label class="detail-label">Land Unit <span class="required-asterisk">*</span></label>
+                            <select name="land_unit" class="form-select" required>
+                                <option value="">Select Unit</option>
+                                <option value="Marla" {{ old('land_unit', $data->land_unit ?? '') == 'Marla' ? 'selected' : '' }}>Marla</option>
+                                <option value="Kanal" {{ old('land_unit', $data->land_unit ?? '') == 'Kanal' ? 'selected' : '' }}>Kanal</option>
+                                <option value="Acre" {{ old('land_unit', $data->land_unit ?? '') == 'Acre' ? 'selected' : '' }}>Acre</option>
+                                <option value="Square Yard" {{ old('land_unit', $data->land_unit ?? '') == 'Square Yard' ? 'selected' : '' }}>Square Yard / Gaz</option>
+                                <option value="Square Feet" {{ old('land_unit', $data->land_unit ?? '') == 'Square Feet' ? 'selected' : '' }}>Square Feet</option>
+                                <option value="Hectare" {{ old('land_unit', $data->land_unit ?? '') == 'Hectare' ? 'selected' : '' }}>Hectare</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="detail-box">
+                            <label class="detail-label">Total Area <span class="required-asterisk">*</span></label>
+                            <input type="number" step="0.01" min="0" name="total_acreage"
                                 value="{{ old('total_acreage', $data->total_acreage ?? '') }}"
-                                class="form-control">
+                                class="form-control" placeholder="Enter value in selected unit" required>
                         </div>
                     </div>
                     <div class="col-md-6 mb-3">
@@ -1463,13 +1607,13 @@
                             <label class="detail-label">Land Location <span class="required-asterisk">*</span></label>
                             <input type="text" name="land_location"
                                 value="{{ old('land_location', $data->land_location ?? '') }}"
-                                class="form-control">
+                                class="form-control" required>
                         </div>
                     </div>
                     <div class="col-md-6 mb-3">
                         <div class="detail-box">
                             <label class="detail-label">Land Type <span class="required-asterisk">*</span></label>
-                            <select name="land_type" class="form-select">
+                            <select name="land_type" class="form-select" required>
                                 <option value="">Select Type</option>
                                 <option value="Agricultural" {{ old('land_type', $data->land_type ?? '') == 'Agricultural' ? 'selected' : '' }}>Agricultural</option>
                                 <option value="Commercial" {{ old('land_type', $data->land_type ?? '') == 'Commercial' ? 'selected' : '' }}>Commercial</option>
@@ -1482,7 +1626,7 @@
                             <label class="detail-label">Estimated Land Value <span class="required-asterisk">*</span></label>
                             <input type="number" step="0.01" name="estimated_land_value"
                                 value="{{ old('estimated_land_value', $data->estimated_land_value ?? '') }}"
-                                class="form-control">
+                                class="form-control" required>
                         </div>
                     </div>
                 `);
@@ -1519,6 +1663,13 @@
                 <div class="col-md-4 mb-2 px-1">
                     <label class="detail-label">State Of Health</label>
                     <input type="text" name="${type}_health[]" class="form-control">
+                </div>
+                <div class="col-md-4 mb-2 px-1">
+                    <label class="detail-label">Is the member alive?</label>
+                    <select name="${type}_is_alive[]" class="form-control">
+                        <option value="Yes" selected>Yes</option>
+                        <option value="No">No</option>
+                    </select>
                 </div>
                 <div class="col-md-4 mb-2 px-1">
                     <label class="detail-label">Year Of Death</label>
@@ -1687,64 +1838,34 @@
 </script>
 @endpush
 
-{{-- Height / Chest / Abdomen: auto cm -> ft / inches conversion --}}
 @push('js')
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
+        function toggleSpouseNameFields() {
+            let gender = ($('#gender').val() || '').trim();
+            let marital = ($('#marital_status').val() || '').trim();
 
-        function cmToFeet(cm) {
-            if (cm == "" || isNaN(cm)) {
-                return "";
+            $('#wife_name_wrap, #husband_name_wrap').hide();
+            $('#wife_name, #husband_name').prop('required', false);
+
+            if (marital === 'Married' && gender === 'Male') {
+                $('#wife_name_wrap').show();
+                $('#wife_name').prop('required', true);
+                $('#husband_name').val('');
+            } else if (marital === 'Married' && gender === 'Female') {
+                $('#husband_name_wrap').show();
+                $('#husband_name').prop('required', true);
+                $('#wife_name').val('');
+            } else if (marital === 'Unmarried') {
+                $('#wife_name, #husband_name').val('');
             }
-
-            return (parseFloat(cm) / 30.48).toFixed(2);
         }
 
-        function cmToInches(cm) {
-            if (cm == "" || isNaN(cm)) {
-                return "";
-            }
-
-            return (parseFloat(cm) / 2.54).toFixed(2);
-        }
-
-        function bindConverter(inputSelector, outputSelector, type) {
-
-            function calculate() {
-
-                let value = $(inputSelector).val();
-
-                if (value == "") {
-                    $(outputSelector).val("");
-                    return;
-                }
-
-                if (type == "feet") {
-                    $(outputSelector).val(cmToFeet(value));
-                } else {
-                    $(outputSelector).val(cmToInches(value));
-                }
-            }
-
-            calculate();
-
-            $(document).on("input", inputSelector, calculate);
-        }
-
-        // Height
-        bindConverter("#height_cm", "#height_ft", "feet");
-
-        // Chest Inspiration
-        bindConverter("#chest_insp_cm", "#chest_insp_inches", "inch");
-
-        // Chest Expansion
-        bindConverter("#chest_exp_cm", "#chest_exp_inches", "inch");
-
-        // Abdomen
-        bindConverter("#abdomen_cm", "#abdomen_inches", "inch");
-
+        $('#gender, #marital_status').on('change', toggleSpouseNameFields);
+        toggleSpouseNameFields();
     });
 </script>
 @endpush
+
 
 @endsection

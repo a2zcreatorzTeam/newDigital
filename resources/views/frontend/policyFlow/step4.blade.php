@@ -40,7 +40,7 @@
                             </div>
                             <nav>
                                 <div id="nav-tab" role="tablist" class="nav nav-tabs ib-acq-navtab">
-                                    <a id="nav-Personal_Details-tab" data-toggle="tab" href="#nav-Personal_Details" role="tab" aria-controls="nav-Personal_Details" aria-selected="true" class="nav-item nav-link acq-nav-btn active">Personal Details</a>
+                                    <a id="nav-Personal_Details-tab" data-toggle="tab" href="#nav-Personal_Details" role="tab" aria-controls="nav-Personal_Details" aria-selected="true" class="nav-item nav-link acq-nav-btn active">Address Details</a>
                                     <a id="nav-Contact_Details-tab" data-toggle="tab" href="#nav-Contact_Details" role="tab" aria-controls="nav-Contact_Details" aria-selected="true" class="nav-item nav-link acq-nav-btn">Contact Details</a>
                                     <a id="nav-beneficiary-tab" data-toggle="tab" href="#nav-beneficiary" role="tab" aria-controls="nav-beneficiary" aria-selected="false" class="nav-item nav-link acq-nav-btn" contenteditable="false" style="cursor: pointer;">Beneficiary Detail</a>
                                 </div>
@@ -50,7 +50,7 @@
                                 <div id="nav-Personal_Details" role="tabpanel" aria-labelledby="nav-Personal_Details-tab" class="tab-pane fade active show">
                                     <div class="container">
                                         <div class="row">
-                                            <h3 class="col-12 ib-form-subheading">Personal Details</h3>
+                                            <h3 class="col-12 ib-form-subheading">Address Details (پتے کی تفصیلات)</h3>
                                             <div class="col-md-6 px-0 px-sm-3">
                                                 <div>
                                                     <div><label>DOB<span class="requi">*</span></label>
@@ -103,6 +103,7 @@
                                                                 <select id="" name="gender" class="form-control select2-hidden-accessible" tabindex="-1" aria-hidden="true" data-select2-id="2533" required>
                                                                     <option value="8441" data-select2-id="2535">Male</option>
                                                                     <option value="8442" data-select2-id="2536">Female</option>
+                                                                    <option value="8443" data-select2-id="2537">Other</option>
                                                                 </select>
                                                                 <span class="select2 select2-container select2-container--default" dir="ltr" data-select2-id="2534" style="width: 470.812px;">
                                                                     <span class="selection">

@@ -6,31 +6,31 @@
 <main class="fix">
     <input type="hidden" id="csrf_token" value="{{ csrf_token() }}">
     <!-- banner-area -->
-    <section class="banner-area banner-bg" data-background="{{asset('frontend/images/Bd-1.jpg')}}">
+    <section class="banner-area banner-bg" data-background="{{asset('frontend/images/hero-img.webp')}}">
         <div class="container">
             <div class="row">
-                <div class="col-lg-6">
+                <div class="col-lg-7">
                     <div class="banner-content">
-                        <span class="sub-title" data-aos="fade-up" data-aos-delay="0">We Are Expert In This Field</span>
-                        <h2 class="title" data-aos="fade-up" data-aos-delay="200">PROTECTION <br>In Your Hands</h2>
-                        <p data-aos="fade-up" data-aos-delay="400">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
-                        <a href="#scroll" class="btn" data-aos="fade-up" data-aos-delay="600">Read More</a>
+                        <span class="sub-title" data-aos="fade-up" data-aos-delay="0">STATE LIFE INSURANCE CORPORATION OF PAKISTAN</span>
+                        <h2 class="title" data-aos="fade-up" data-aos-delay="200">INSURANCE MADE SIMPLE, <br>SECURE, AND DIGITAL</h2>
+                        <p data-aos="fade-up" data-aos-delay="400">Your One-Stop Portal For Policy Management, Claims, And Benefits Anytime, Anywhere. Experience Seamless Access, Faster Processing, And Complete Transparency. sparency</p>
+                        <a href="#scroll" class="btn" data-aos="fade-up" data-aos-delay="600">GET STARTED TODAY</a>
                     </div>
-                    <div class="banner-shape">
-                        <img src="{{asset('frontend/images/banner_shape01.png')}}" alt="" class="rightToLeft">
-                        <img src="{{asset('frontend/images/banner_shape02.png')}}" alt="" class="ribbonRotate">
-                    </div>
+                    <!--<div class="banner-shape">-->
+                    <!--    <img src="{{asset('frontend/images/banner_shape01.png')}}" alt="" class="rightToLeft">-->
+                    <!--    <img src="{{asset('frontend/images/banner_shape02.png')}}" alt="" class="ribbonRotate">-->
+                    <!--</div>-->
                 </div>
             </div>
-            <div class="banner-social">
-                <h5 class="title">Follow us</h5>
-                <ul class="list-wrap">
-                    <li><a href="javascript:void(0)"><i class="fab fa-facebook-f"></i></a></li>
-                    <li><a href="javascript:void(0)"><i class="fab fa-twitter"></i></a></li>
-                    <li><a href="javascript:void(0)"><i class="fab fa-instagram"></i></a></li>
-                    <li><a href="javascript:void(0)"><i class="fab fa-linkedin-in"></i></a></li>
-                </ul>
-            </div>
+            <!--<div class="banner-social">-->
+            <!--    <h5 class="title">Follow us</h5>-->
+            <!--    <ul class="list-wrap">-->
+            <!--        <li><a href="javascript:void(0)"><i class="fab fa-facebook-f"></i></a></li>-->
+            <!--        <li><a href="javascript:void(0)"><i class="fab fa-twitter"></i></a></li>-->
+            <!--        <li><a href="javascript:void(0)"><i class="fab fa-instagram"></i></a></li>-->
+            <!--        <li><a href="javascript:void(0)"><i class="fab fa-linkedin-in"></i></a></li>-->
+            <!--    </ul>-->
+            <!--</div>-->
             <div class="banner-scroll">
                 <a href="#scroll">Scroll Down <span><i class="fas fa-arrow-right"></i></span></a>
             </div>
@@ -88,22 +88,24 @@
 
 
     <!-- request-area -->
-    <section class="request-area request-bg" data-background="{{asset('frontend/images/request_bg.jpg')}}">
+    
+    <section class="request-area request-bg" data-background="https://laravel11.wpstaging.a2zcreatorz.com/statelife/public/frontend/images/request-bg.webp" style="background-image: url(&quot;https://laravel11.wpstaging.a2zcreatorz.com/statelife/public/frontend/images/request-bg.webp&quot;);padding: 100px 0 100px;">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-8">
                     <div class="request-content text-center tg-heading-subheading animation-style3">
-                        <h2 class="title tg-element-title">Protect Your Life <br>You Care</h2>
+                         <span class="sub-title-white">STATELIFE INSURANCE CORPORATION OF PAKISTAN</span>
+                        <h2 class="title tg-element-title" style="perspective: 400px;"><div class="split-line" style="display: block; text-align: center; position: relative;"><div style="position:relative;display:inline-block;"><div style="position: relative; display: inline-block; opacity: 1; transform: translate(0px, 0px);">P</div><div style="position: relative; display: inline-block; opacity: 1; transform: translate(0px, 0px);">A</div><div style="position: relative; display: inline-block; opacity: 1; transform: translate(0px, 0px);">K</div><div style="position: relative; display: inline-block; opacity: 1; transform: translate(0px, 0px);">I</div><div style="position: relative; display: inline-block; opacity: 1; transform: translate(0px, 0px);">S</div><div style="position: relative; display: inline-block; opacity: 1; transform: translate(0px, 0px);">T</div><div style="position: relative; display: inline-block; opacity: 1; transform: translate(0px, 0px);">A</div><div style="position: relative; display: inline-block; opacity: 1; transform: translate(0px, 0px);">N</div><div style="position: relative; display: inline-block; opacity: 1; transform: translate(0px, 0px);">'</div><div style="position: relative; display: inline-block; opacity: 1; transform: translate(0px, 0px);">S</div></div> <div style="position:relative;display:inline-block;"><div style="position: relative; display: inline-block; opacity: 1; transform: translate(0px, 0px);">L</div><div style="position: relative; display: inline-block; opacity: 1; transform: translate(0px, 0px);">A</div><div style="position: relative; display: inline-block; opacity: 1; transform: translate(0px, 0px);">R</div><div style="position: relative; display: inline-block; opacity: 1; transform: translate(0px, 0px);">G</div><div style="position: relative; display: inline-block; opacity: 1; transform: translate(0px, 0px);">E</div><div style="position: relative; display: inline-block; opacity: 1; transform: translate(0px, 0px);">S</div><div style="position: relative; display: inline-block; opacity: 1; transform: translate(0px, 0px);">T</div></div> </div><div class="split-line" style="display: block; text-align: center; position: relative;"><div style="position:relative;display:inline-block;"><div style="position: relative; display: inline-block; opacity: 1; transform: translate(0px, 0px);">L</div><div style="position: relative; display: inline-block; opacity: 1; transform: translate(0px, 0px);">I</div><div style="position: relative; display: inline-block; opacity: 1; transform: translate(0px, 0px);">F</div><div style="position: relative; display: inline-block; opacity: 1; transform: translate(0px, 0px);">E</div></div> <div style="position:relative;display:inline-block;"><div style="position: relative; display: inline-block; opacity: 1; transform: translate(0px, 0px);">A</div><div style="position: relative; display: inline-block; opacity: 1; transform: translate(0px, 0px);">N</div><div style="position: relative; display: inline-block; opacity: 1; transform: translate(0px, 0px);">D</div></div> <div style="position:relative;display:inline-block;"><div style="position: relative; display: inline-block; opacity: 1; transform: translate(0px, 0px);">H</div><div style="position: relative; display: inline-block; opacity: 1; transform: translate(0px, 0px);">E</div><div style="position: relative; display: inline-block; opacity: 1; transform: translate(0px, 0px);">A</div><div style="position: relative; display: inline-block; opacity: 1; transform: translate(0px, 0px);">L</div><div style="position: relative; display: inline-block; opacity: 1; transform: translate(0px, 0px);">T</div><div style="position: relative; display: inline-block; opacity: 1; transform: translate(0px, 0px);">H</div></div> <div style="position:relative;display:inline-block;"><div style="position: relative; display: inline-block; opacity: 1; transform: translate(0px, 0px);">I</div><div style="position: relative; display: inline-block; opacity: 1; transform: translate(0px, 0px);">N</div><div style="position: relative; display: inline-block; opacity: 1; transform: translate(0px, 0px);">S</div><div style="position: relative; display: inline-block; opacity: 1; transform: translate(0px, 0px);">U</div><div style="position: relative; display: inline-block; opacity: 1; transform: translate(0px, 0px);">R</div><div style="position: relative; display: inline-block; opacity: 1; transform: translate(0px, 0px);">E</div></div></div></h2>
                         <div class="content-bottom">
-                            <a href="tel:0123456789" class="btn">Request a Free Call</a>
+                            <a href="tel:0123456789" class="btn">MORE DETAILS</a>
                             <div class="content-right">
-                                <div class="icon">
-                                    <i class="flaticon-phone-call"></i>
-                                </div>
-                                <div class="content">
-                                    <span>Toll Free Call</span>
-                                    <a href="tel:0123456789">+ 88 ( 9600 ) 6002</a>
-                                </div>
+                                <!--<div class="icon">-->
+                                <!--    <i class="flaticon-phone-call"></i>-->
+                                <!--</div>-->
+                                <!--<div class="content">-->
+                                <!--    <span>Toll Free Call</span>-->
+                                <!--    <a href="tel:0123456789">+ 88 ( 9600 ) 6002</a>-->
+                                <!--</div>-->
                             </div>
                         </div>
                     </div>
@@ -111,8 +113,8 @@
             </div>
         </div>
         <div class="request-shape">
-            <img src="{{asset('frontend/images/request_shape01.png')}}" alt="" data-aos="fade-right" data-aos-delay="400">
-            <img src="{{asset('frontend/images/request_shape02.png')}}" alt="" data-aos="fade-left" data-aos-delay="400">
+            <!--<img src="https://laravel11.wpstaging.a2zcreatorz.com/statelife/public/frontend/images/request_shape01.png" alt="" data-aos="fade-right" data-aos-delay="400">-->
+            <!--<img src="https://laravel11.wpstaging.a2zcreatorz.com/statelife/public/frontend/images/request_shape02.png" alt="" data-aos="fade-left" data-aos-delay="400">-->
         </div>
     </section>
     <!-- request-area-end -->

@@ -1,0 +1,14 @@
+timestamp=20260813-163926
+purpose=pre-change backup policy form queue feature
+resources\views\frontend\layout\navbars\auth-navbar.blade.php
+resources\views\frontend\layout\navbars\without-auth-navbar.blade.php
+resources\views\frontend\dashboard.blade.php
+resources\views\frontend\policyFlow\form.blade.php
+app\Http\Controllers\Frontend\FrontendController.php
+routes\web.php
+app\Http\Controllers\Frontend\PolicyQueueController.php
+app\Services\PolicyFormDraftService.php
+app\Models\PolicyFormDraft.php
+database\migrations\2026_08_13_164000_create_policy_form_drafts_table.php
+resources\views\frontend\queue\index.blade.php
+resources\views\frontend\policyFlow\form\queue_autosave.blade.php

@@ -19,6 +19,7 @@
                     <th>Policy Plan</th>
                     <th>User</th>
                     <th>User Detail</th>
+                    <th>Submitted Date</th>
                     <th>Status</th>
                     <th>Action</th>
                 </tr>
@@ -54,6 +55,16 @@
                         </div>
                     </td>
                     <td>
+                        @if($row->created_at)
+                            <div class="d-flex flex-column">
+                                <span>{{ $row->created_at->timezone('Asia/Karachi')->format('d-m-Y') }}</span>
+                                <span>{{ $row->created_at->timezone('Asia/Karachi')->format('h:i A') }}</span>
+                            </div>
+                        @else
+                            -
+                        @endif
+                    </td>
+                    <td>
                         <span style="
                             display:inline-block;
                             padding:4px 11px;
@@ -77,7 +88,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="7" class="text-center text-muted">No policy available</td>
+                    <td colspan="8" class="text-center text-muted">No policy available</td>
                 </tr>
                 @endforelse
             </tbody>

@@ -1,0 +1,144 @@
+button.ib-btn-dashed.ib-btn-hover.ib-inline-flex:hover {
+    color: #fff !important;
+    background-color: #1f93d1 !important;
+    border: 0.125rem solid transparent !important;
+}
+
+.edit-delete-box {
+    margin: 0.3125rem 0 1rem;
+    padding: 0.6875rem;
+    border-radius: 0.3125rem;
+    font-family: Avenir Medium;
+    font-size: 1rem;
+    font-weight: 500;
+    text-align: left;
+    color: #1f93d1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 0.0625rem solid #e8e8e8;
+    background-color: #fff;
+}
+a.ib-edit-btn {
+    color: #1f93d1;
+}
+a.ib-delete-btn {
+    color: #de6244;
+}
+.documents-heading {
+    font-size: 20px !important;
+    font-weight: 500;
+    text-align: left;
+    color: #1f93d1;
+    text-transform: capitalize;
+}
+.add-beneficiary .ib-btn-primary {
+    margin: 0.875rem 0;
+    padding: 0.7125rem 1.5625rem!important;
+    border-radius: 0.625rem;
+    background-color: #1f93d1;
+    text-decoration: none;
+    font-size: .875rem!important;
+    font-weight: 500;
+    text-align: center;
+    color: #fff;
+    transition: all .2s ease-in;
+    border: 0.0625rem solid #1f93d1!important;
+}
+.add-beneficiary .ib-btn-outline {
+    background-color: transparent!important;
+    border-radius: 0.625rem;
+    border: 0.0625rem solid #1f93d1!important;
+    color: #1f93d1 !important;
+    padding: 0.625rem 1.25rem!important;
+    font-family: Avenir Medium!important;
+    margin: 0.875rem 0;
+    transition: all .2s ease-in;
+}
+.add-beneficiary .modal-body {
+    padding: 20px 50px;
+}
+.add-beneficiary .floating-select {
+    height: 3.0625rem;
+    display: flex;
+    flex-flow: column-reverse;
+    border-radius: 0.4375rem;
+    border: 0.0625rem solid #e5e5e5;
+    background-color: #ECEFF1;
+    padding: 0.9375rem 0.6rem 0.7rem;
+    color: #7c8993;
+}
+#msform .step-sign {
+    width: 50%;
+    background: #004fb6;
+    font-weight: bold;
+    color: white;
+    border: 0 none;
+    border-radius: 40px 0px 20px 0px !important;
+    cursor: pointer;
+    padding: 10px 5px;
+    margin: 10px 0px 10px 5px;
+    float: right;
+}
+p.error-message {
+    color: red !important;
+}
+.summary-box-banner {
+    width: 100%;
+    height: 3.75rem;
+    padding: 0.625rem;
+    border-radius: 0.625rem;
+    background-color: #1f93d1;
+}
+.summary-left-box {
+    padding: 1.5625rem 0.9375rem;
+    border-radius: 1.25rem;
+    box-shadow: 0 0 1.5625rem 0 rgba(0,0,0,.04);
+    border: 0.0625rem solid #eaeaea;
+    background-color: #fff;
+}
+.jbl-summary-section .ib-form-subheading:before {
+    content: "";
+    display: block;
+    width: 1.5625rem;
+    height: 1.5625rem;
+    background: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyOCIgaGVpZ2h0PSIyOCI+PGcgZGF0YS1uYW1lPSJHcm91cCAyNDgyMyIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTM1MiAtNjAzKSI+PGNpcmNsZSBkYXRhLW5hbWU9IkVsbGlwc2UgOTMzIiBjeD0iMTQiIGN5PSIxNCIgcj0iMTQiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDM1MiA2MDMpIiBmaWxsPSIjZWRlZGVkIi8+PGNpcmNsZSBkYXRhLW5hbWU9IkVsbGlwc2UgOTM0IiBjeD0iNSIgY3k9IjUiIHI9IjUiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDM2MSA2MTIpIiBmaWxsPSIjNWI2NzcwIi8+PC9nPjwvc3ZnPg==);
+    background-repeat: no-repeat;
+    position: absolute;
+    left: 35px;
+    background-size: 100%;
+}
+.summary-section {
+    width: 100%;
+    padding-bottom: 0.9375rem;
+    margin-bottom: 1.5625rem;
+    border-bottom: 0.125rem dashed #c4c4c4;
+}
+.ib-action-btns {
+    text-align: center;
+    margin-top: 2rem;
+}
+.ib-btn-outline {
+    background-color: transparent!important;
+    border-radius: 0.625rem;
+    border: 0.0625rem solid #1f93d1 !important;
+    color: #1f93d1 !important;
+    padding: 0.625rem 1.25rem!important;
+    margin: 0.875rem 0;
+}
+.ib-btn-outline:hover {
+    background-color: #1f93d1 !important;
+    color: white !important;
+}
+.summary-left-line.in-pre-line {
+    height: 86%!important;
+}
+.summary-left-line {
+    width: 0;
+    border-left: 0.125rem dashed #c6c5c5;
+    margin-top: 1.5625rem;
+}
+.summary-box-banner h2.summary-banner-title {
+    color: white;
+    text-align: center;
+}

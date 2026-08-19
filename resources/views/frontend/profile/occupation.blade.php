@@ -3,32 +3,56 @@
      <h2 class="profile-section-title">Occupation & Income</h2>
      <div class="box-form-login">
          <div class="row">
-             <div class="col-6">
+             @php
+                 $empFlag = $user->occupation->is_emaployemnt ?? '';
+                 $bizFlag = $user->occupation->is_business ?? '';
+                 if ($empFlag === 'Yes' && $bizFlag === 'Yes') {
+                     $occupationType = 'Both';
+                 } elseif ($empFlag === 'Yes') {
+                     $occupationType = 'Employment';
+                 } elseif ($bizFlag === 'Yes') {
+                     $occupationType = 'Businessman';
+                 } else {
+                     $occupationType = '';
+                 }
+             @endphp
+             <div class="col-12">
                  <div class="form-group">
-                     <label>Is Employment? ((کام/پیشہ کی نوعیت (مکمل تفصیلات کے ساتھ)*</label>
-                     <select class="form-control account" name="is_emaployemnt">
+                     <label>Occupation Type (پیشہ کی نوعیت)<span class="text-danger">*</span></label>
+                     <select class="form-control account" id="occupation_type" required>
                          <option value="">Select Option</option>
-                         <option value="Yes" {{ ($user->occupation->is_emaployemnt ?? '') == 'Yes' ? 'selected' : '' }}>Yes</option>
-                         <option value="No" {{ ($user->occupation->is_emaployemnt ?? '') == 'No' ? 'selected' : '' }}>No</option>
+                         <option value="Employment" {{ $occupationType === 'Employment' ? 'selected' : '' }}>Employment</option>
+                         <option value="Businessman" {{ $occupationType === 'Businessman' ? 'selected' : '' }}>Businessman</option>
+                         <option value="Both" {{ $occupationType === 'Both' ? 'selected' : '' }}>Both</option>
                      </select>
+                     <input type="hidden" name="is_emaployemnt" id="is_emaployemnt" value="{{ $empFlag }}">
+                     <input type="hidden" name="is_business" id="is_business" value="{{ $bizFlag }}">
                  </div>
              </div>
 
              <div id="employment_fields" class="row"></div>
+             <div id="business_fields" class="row"></div>
 
-             <!-- Is Businessman? -->
+             @php
+                 $filerStatus = old('filer_status', $user->occupation->filer_status ?? '');
+                 $ntnNumber = old('ntn_number', $user->occupation->ntn_number ?? '');
+             @endphp
              <div class="col-6">
                  <div class="form-group">
-                     <label>Is Businessman? ((کیا کاروبار ہے؟ (مکمل تفصیلات کے ساتھ)*</label>
-                     <select class="form-control account" name="is_business">
+                     <label>Filer Status (فائلر کی حیثیت)<span class="text-danger">*</span></label>
+                     <select class="form-control account" name="filer_status" required>
                          <option value="">Select Option</option>
-                         <option value="Yes" {{ ($user->occupation->is_business ?? '') == 'Yes' ? 'selected' : '' }}>Yes</option>
-                         <option value="No" {{ ($user->occupation->is_business ?? '') == 'No' ? 'selected' : '' }}>No</option>
+                         <option value="Filer" {{ $filerStatus === 'Filer' ? 'selected' : '' }}>Filer</option>
+                         <option value="Non-Filer" {{ $filerStatus === 'Non-Filer' ? 'selected' : '' }}>Non-Filer</option>
                      </select>
                  </div>
              </div>
-
-             <div id="business_fields" class="row"></div>
+             <div class="col-6 js-ntn-wrap">
+                 <div class="form-group">
+                     <label>NTN Number (این ٹی این نمبر)<span class="text-danger">*</span></label>
+                     <input type="text" class="form-control account" name="ntn_number" value="{{ $ntnNumber }}" maxlength="20" placeholder="Enter NTN Number">
+                 </div>
+             </div>
 
              <!-- If holding Land? -->
              <div class="col-6">
@@ -118,8 +142,12 @@
 
              // Simple Validation: Check if required fields are empty
              $(this).find('.form-control').each(function() {
+                 if ($(this).prop('disabled') || !$(this).is(':visible')) {
+                     return;
+                 }
+
                  let fieldName = $(this).attr('name');
-                 let fieldValue = $(this).val().trim();
+                 let fieldValue = ($(this).val() || '').toString().trim();
 
                  // In fields ko skip karna hai (Optional fields)
                  let optionalFields = [];
@@ -213,50 +241,6 @@
          });
 
 
-         // Jab Date of Birth change ho
-         $('input[name="date_of_birth"]').on('change', function() {
-             let dobValue = $(this).val();
-
-             if (dobValue) {
-                 let dob = new Date(dobValue);
-                 let today = new Date();
-
-                 // Age calculate karein
-                 let age = today.getFullYear() - dob.getFullYear();
-                 let monthDiff = today.getMonth() - dob.getMonth();
-                 let dayDiff = today.getDate() - dob.getDate();
-
-                 // Agar birthday is saal abhi tak nahi aaya, to ek saal kam karein
-                 if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
-                     age--;
-                 }
-
-                 // "Nearest Birthday" ka logic (Pakistan Insurance standard):
-                 // Agar agle birthday mein 6 mahine se kam rehte hain, to age + 1 kar dete hain
-                 let nextBirthday = new Date(dob);
-                 nextBirthday.setFullYear(today.getFullYear());
-
-                 // Agar birthday guzar gaya hai to agle saal ka set karein
-                 if (today > nextBirthday) {
-                     nextBirthday.setFullYear(today.getFullYear() + 1);
-                 }
-
-                 let diffTime = Math.abs(nextBirthday - today);
-                 let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-                 // Insurance rules ke mutabiq: agar 6 mahine (182 days) se kam rehte hain agle bday mein
-                 if (diffDays <= 182) {
-                     age++;
-                 }
-
-                 // Age field mein value set karein
-                 $('input[name="age_nearest_date"]').val(age);
-             }
-         });
-
-
-
-
          $('input[name="mobile_number"]').on('input', function() {
              // Sirf digits allow karein
              let val = $(this).val().replace(/\D/g, '');
@@ -278,9 +262,21 @@
          // ===================== Occupation / Business / Land dynamic fields =====================
 
          function toggleOccupationFields() {
+             let type = $('#occupation_type').val();
+             let employment = 'No';
+             let business = 'No';
 
-             let employment = $('select[name="is_emaployemnt"]').val();
-             let business = $('select[name="is_business"]').val();
+             if (type === 'Employment') {
+                 employment = 'Yes';
+             } else if (type === 'Businessman') {
+                 business = 'Yes';
+             } else if (type === 'Both') {
+                 employment = 'Yes';
+                 business = 'Yes';
+             }
+
+             $('#is_emaployemnt').val(employment);
+             $('#is_business').val(business);
 
              // Employment Fields
              if (employment === 'Yes') {
@@ -293,7 +289,8 @@
                         <input type="text"
                                name="employment_designation"
                                value="{{ $user->occupation->employment_designation ?? '' }}"
-                               class="form-control jbl-dynamic-input">
+                               class="form-control jbl-dynamic-input"
+                               required>
                     </div>
 
                     <div class="col-md-6 px-0 px-sm-3">
@@ -304,7 +301,8 @@
                         <input type="text"
                                name="employment_company_name"
                                value="{{ $user->occupation->employment_company_name ?? '' }}"
-                               class="form-control jbl-dynamic-input">
+                               class="form-control jbl-dynamic-input"
+                               required>
                     </div>
                 `);
              } else {
@@ -322,7 +320,8 @@
                         <input type="text"
                                name="business_name"
                                value="{{ $user->occupation->business_name ?? '' }}"
-                               class="form-control jbl-dynamic-input">
+                               class="form-control jbl-dynamic-input"
+                               required>
                     </div>
 
                     <div class="col-md-6 px-0 px-sm-3">
@@ -334,7 +333,8 @@
                                name="nature_of_business"
                                value="{{ $user->occupation->nature_of_business ?? '' }}"
                                class="form-control jbl-dynamic-input"
-                               placeholder="e.g. Pharmacy, Electronics, Construction">
+                               placeholder="e.g. Pharmacy, Electronics, Construction"
+                               required>
                     </div>
                 `);
              } else {
@@ -346,8 +346,7 @@
          toggleOccupationFields();
 
          // Change Events
-         $('select[name="is_emaployemnt"]').on('change', toggleOccupationFields);
-         $('select[name="is_business"]').on('change', toggleOccupationFields);
+         $('#occupation_type').on('change', toggleOccupationFields);
 
          function toggleLandFields() {
 
@@ -357,13 +356,31 @@
                  $('#land_fields').html(`
                     <div class="col-md-6 px-0 px-sm-3">
                         <label>
-                            Total Acreage Owned
+                            Land Unit (زمین کی اکائی)
                             <span class="requi">*</span>
                         </label>
-                        <input type="number" step="0.01"
+                        <select name="land_unit" class="form-control jbl-dynamic-input" required>
+                            <option value="">Select Unit</option>
+                            <option value="Marla" {{ ($user->occupation->land_unit ?? '') == 'Marla' ? 'selected' : '' }}>Marla (مرلہ)</option>
+                            <option value="Kanal" {{ ($user->occupation->land_unit ?? '') == 'Kanal' ? 'selected' : '' }}>Kanal (کنال)</option>
+                            <option value="Acre" {{ ($user->occupation->land_unit ?? '') == 'Acre' ? 'selected' : '' }}>Acre (ایکڑ)</option>
+                            <option value="Square Yard" {{ ($user->occupation->land_unit ?? '') == 'Square Yard' ? 'selected' : '' }}>Square Yard / Gaz (گز)</option>
+                            <option value="Square Feet" {{ ($user->occupation->land_unit ?? '') == 'Square Feet' ? 'selected' : '' }}>Square Feet (مربع فٹ)</option>
+                            <option value="Hectare" {{ ($user->occupation->land_unit ?? '') == 'Hectare' ? 'selected' : '' }}>Hectare (ہیکٹر)</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6 px-0 px-sm-3">
+                        <label>
+                            Total Area (کل رقبہ)
+                            <span class="requi">*</span>
+                        </label>
+                        <input type="number" step="0.01" min="0"
                                name="total_acreage"
                                value="{{ $user->occupation->total_acreage ?? '' }}"
-                               class="form-control jbl-dynamic-input">
+                               class="form-control jbl-dynamic-input"
+                               placeholder="Enter value in selected unit"
+                               required>
                     </div>
 
                     <div class="col-md-6 px-0 px-sm-3">
@@ -374,7 +391,8 @@
                         <input type="text"
                                name="land_location"
                                value="{{ $user->occupation->land_location ?? '' }}"
-                               class="form-control jbl-dynamic-input">
+                               class="form-control jbl-dynamic-input"
+                               required>
                     </div>
 
                     <div class="col-md-6 px-0 px-sm-3">
@@ -382,7 +400,7 @@
                             Land Type
                             <span class="requi">*</span>
                         </label>
-                        <select name="land_type" class="form-control jbl-dynamic-input">
+                        <select name="land_type" class="form-control jbl-dynamic-input" required>
                             <option value="">Select Type</option>
                             <option value="Agricultural" {{ ($user->occupation->land_type ?? '') == 'Agricultural' ? 'selected' : '' }}>Agricultural</option>
                             <option value="Commercial" {{ ($user->occupation->land_type ?? '') == 'Commercial' ? 'selected' : '' }}>Commercial</option>
@@ -398,7 +416,8 @@
                         <input type="number" step="0.01"
                                name="estimated_land_value"
                                value="{{ $user->occupation->estimated_land_value ?? '' }}"
-                               class="form-control jbl-dynamic-input">
+                               class="form-control jbl-dynamic-input"
+                               required>
                     </div>
                 `);
              } else {

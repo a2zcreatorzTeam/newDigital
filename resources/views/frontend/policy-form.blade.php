@@ -73,7 +73,7 @@
                             <div class="accordion-body">
 
                                 <!-- ADDRESS SECTION -->
-                                <h5 class="mb-3">Address Information</h5>
+                                <h5 class="mb-3">Address Details (پتے کی تفصیلات)</h5>
 
                                 <div class="row">
 

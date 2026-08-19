@@ -16,13 +16,17 @@ class FrontUser
      */
     public function handle($request, Closure $next)
     {
-        
-            if (Auth::check() && Auth::user()->user_type == 1) {
-                return $next($request);
-            } else {
-                return redirect()->route('frontend.index')->with('info', 'You must log in first before proceeding');
-            }
-        
+        if (Auth::check() && Auth::user()->user_type == 1) {
+            return $next($request);
+        }
 
+        if ($request->expectsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'You must log in first before proceeding',
+            ], 401);
+        }
+
+        return redirect()->route('frontend.index')->with('info', 'You must log in first before proceeding');
     }
 }

@@ -1,0 +1,6 @@
+timestamp=20260813-162553
+purpose=Urdu encoding fix UTF-8 mojibake decode + utf8mb4
+resources\views\frontend\policyFlow\form.blade.php
+resources\views\frontend\layout\header.blade.php
+config\database.php
+public\frontend\css\dashboard.css

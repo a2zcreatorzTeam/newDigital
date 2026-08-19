@@ -12,26 +12,37 @@ use Illuminate\Support\Facades\Log;
 
 class KuickpayController extends Controller
 {
-    // Credentials jo Kuickpay ke headers ko verify karne ke liye use honge 
-    private $apiUser = "Kuickpaytest"; // Replace with Live Username 
-    private $apiPass = "Kuickpay@test12"; // Replace with Live Password 
-
     /**
-     * Auth Middleware check alternative (Manual Verification) 
+     * Auth Middleware check alternative (Manual Verification)
      */
     private function isAuthorized(Request $request)
     {
-        return $request->header('username') === $this->apiUser &&
-            $request->header('password') === $this->apiPass;
+        $apiUser = (string) config('services.kuickpay.username');
+        $apiPass = (string) config('services.kuickpay.password');
+
+        if ($apiUser === '' || $apiPass === '') {
+            return false;
+        }
+
+        return $request->header('username') === $apiUser &&
+            $request->header('password') === $apiPass;
     }
 
+    private function bankMnemonicIsValid(Request $request): bool
+    {
+        $expected = config('services.kuickpay.bank_mnemonic');
+        if ($expected === null || $expected === '') {
+            return true;
+        }
 
- 
+        return (string) $request->input('bank_mnemonic') === (string) $expected;
+    }
+
 
 
     /**
  * @OA\Post(
- *     path="/api/bill-inquiry",
+ *     path="/api/v1/BillInquiry",
  *     tags={"Kuickpay"},
  *     summary="Bill Inquiry API",
  *     description="Fetch voucher/bill details using consumer number",
@@ -82,12 +93,12 @@ class KuickpayController extends Controller
             return response()->json(['response_Code' => '04', 'message' => 'Invalid Data/Credentials'], 400); // [cite: 85, 140]
         }
 
-        // if ($request->bank_mnemonic != 'KPY') {
-        //     return response()->json([
-        //         'response_Code' => '04',
-        //         'message' => 'Invalid Data'
-        //     ]);
-        // }
+        if (!$this->bankMnemonicIsValid($request)) {
+            return response()->json([
+                'response_Code' => '04',
+                'message' => 'Invalid Data'
+            ], 400);
+        }
 
         $consumerNumber = $request->input('consumer_number'); // [cite: 40]
 
@@ -132,7 +143,7 @@ class KuickpayController extends Controller
             'contact_number'        => $voucher->contact_number ?? '923000000000', // [cite: 95]
             'billing_month'         => $voucher->billing_month, // [cite: 95]
             'date_paid'             => $voucher->status === 'P' ? Carbon::parse($voucher->date_paid)->format('Ymd') : '', // [cite: 95]
-            'amount_paid'           => $voucher->status === 'P' ? Voucher::formatKuickpayAmount($voucher->amount_within_due_date, false) : '', // [cite: 95]
+            'amount_paid'           => $voucher->status === 'P' ? Voucher::formatKuickpayAmount($voucher->amount_within_due_date) : '', // [cite: 95]
             'tran_auth_Id'          => $voucher->tran_auth_id ?? '', // [cite: 95]
             'reserved'              => $request->input('reserved', '') // [cite: 42]
         ];
@@ -140,13 +151,13 @@ class KuickpayController extends Controller
         return response()->json($response);
     }
 
-   
+
 
 
 
 /**
  * @OA\Post(
- *     path="/api/bill-payment",
+ *     path="/api/v1/BillPayment",
  *     tags={"Kuickpay"},
  *     summary="Bill Payment API",
  *     description="Process bill payment and update voucher status",
@@ -170,7 +181,7 @@ class KuickpayController extends Controller
  *         @OA\JsonContent(
  *             required={"consumer_number", "tran_auth_id", "transaction_amount", "bank_mnemonic"},
  *             @OA\Property(property="consumer_number", type="string", example="0152001123456"),
- *             @OA\Property(property="tran_auth_id", type="string", example="TXN123456"),
+ *             @OA\Property(property="tran_auth_id", type="string", example="123456"),
  *             @OA\Property(property="transaction_amount", type="number", example=5000),
  *             @OA\Property(property="bank_mnemonic", type="string", example="KPY"),
  *             @OA\Property(property="reserved", type="string", example="")
@@ -204,51 +215,51 @@ class KuickpayController extends Controller
             ], 400);
         }
 
+        if (!$this->bankMnemonicIsValid($request)) {
+            return response()->json([
+                'response_Code' => '04',
+                'message' => 'Invalid Data'
+            ], 400);
+        }
+
         // 2. Fetch input parameters
         $consumerNumber = $request->input('consumer_number');
         $tranAuthId     = $request->input('tran_auth_id');
         $amountPaid     = $request->input('transaction_amount');
-        $bankMnemonic   = $request->input('bank_mnemonic') ?? null;  
-        
-        
-        
-        
-        if (!preg_match('/^\d{6}$/', $tranAuthId)) {
+        $bankMnemonic   = $request->input('bank_mnemonic') ?? null;
+
+
+
+
+        if (!preg_match('/^\d{6}$/', (string) $tranAuthId)) {
             return response()->json([
                 'response_Code' => '04',
                 'message' => 'tran_auth_id should be limited to 6 numeric digits only.'
             ], 400);
         }
-        
-        // if (!preg_match('/^\d{1,12}(\.\d{1,2})?$/', $amountPaid)) {
-        //     return response()->json([
-        //         'response_Code' => '04',
-        //         'message' => 'transaction_amount should support up to 12 digits with 2 decimal places.'
-        //     ], 400);
-        // }
-        
-        
+
+        $normalizedAmount = Voucher::normalizeTransactionAmount($amountPaid);
+        if ($normalizedAmount === null) {
+            return response()->json([
+                'response_Code' => '04',
+                'message' => 'transaction_amount should support up to 12 digits with 2 decimal places.'
+            ], 400);
+        }
+
+
 
         // Start monitoring operations
         DB::beginTransaction();
 
         try {
             // 3. Voucher search karna
-            $voucher = Voucher::where('consumer_number', $consumerNumber)->first();
+            $voucher = Voucher::where('consumer_number', $consumerNumber)->lockForUpdate()->first();
 
             // '01' - Voucher number does not exist
             if (!$voucher) {
                 DB::rollBack();
                 return response()->json(['response_Code' => '01']);
             }
-
-            // if ($request->bank_mnemonic != 'KPY') {
-            //     DB::rollBack();
-            //     return response()->json(['Invalid Data' => '04']);
-            // }
-
-
-
 
             // '02' - Blocked / Dormant / Inactive (Example condition, adapt to your schema)
             if (isset($voucher->status) && $voucher->status === 'B') {
@@ -260,6 +271,14 @@ class KuickpayController extends Controller
             if ($voucher->status === 'P') {
                 DB::rollBack();
                 return response()->json(['response_Code' => '03']);
+            }
+
+            if (!$voucher->paymentAmountMatches($amountPaid)) {
+                DB::rollBack();
+                return response()->json([
+                    'response_Code' => '04',
+                    'message' => 'Invalid Data'
+                ], 400);
             }
 
             // 4. Business Logic: Database Update

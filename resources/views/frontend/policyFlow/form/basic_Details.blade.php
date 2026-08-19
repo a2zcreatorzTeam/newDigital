@@ -30,7 +30,7 @@
 
             <div class="col-md-6 px-0 px-sm-3">
                 <label>Date Of Birth (تاریخِ پیدائش)<span class="requi">*</span></label>
-                <input required type="date" id="date_of_birth" value="{{$user->basicDetail->date_of_birth ?? ''}}" name="date_of_birth" class="form-control account">
+                <input required type="date" id="date_of_birth" value="{{$user->basicDetail->date_of_birth ?? ''}}" name="date_of_birth" class="form-control account" max="{{ now('Asia/Karachi')->subYears(18)->toDateString() }}">
             </div>
 
             <div class="col-md-6 px-0 px-sm-3">
@@ -44,7 +44,27 @@
                     <option value="">Select Gender</option>
                     <option value="Male" {{ ($user->basicDetail->gender ?? '') == 'Male' ? 'selected' : '' }}>Male</option>
                     <option value="Female" {{ ($user->basicDetail->gender ?? '') == 'Female' ? 'selected' : '' }}>Female</option>
+                    <option value="Other" {{ ($user->basicDetail->gender ?? '') == 'Other' ? 'selected' : '' }}>Other</option>
                 </select>
+            </div>
+
+            <div class="col-md-6 px-0 px-sm-3">
+                <label>Marital Status (ازدواجی حیثیت)<span class="requi">*</span></label>
+                <select name="marital_status" id="marital_status" required class="form-control">
+                    <option value="">Select Marital Status</option>
+                    <option value="Married" {{ ($user->basicDetail->marital_status ?? '') == 'Married' ? 'selected' : '' }}>Married</option>
+                    <option value="Unmarried" {{ ($user->basicDetail->marital_status ?? '') == 'Unmarried' ? 'selected' : '' }}>Unmarried</option>
+                </select>
+            </div>
+
+            <div class="col-md-6 px-0 px-sm-3" id="wife_name_wrap" style="display: none;">
+                <label>Wife Name of Life Proposed (بیمہ کنندہ کی بیوی کا نام)<span class="requi">*</span></label>
+                <input type="text" id="wife_name" value="{{ $user->basicDetail->wife_name ?? '' }}" name="wife_name" class="form-control account">
+            </div>
+
+            <div class="col-md-6 px-0 px-sm-3" id="husband_name_wrap" style="display: none;">
+                <label>Husband Name of Life Proposed (بیمہ کنندہ کے شوہر کا نام)<span class="requi">*</span></label>
+                <input type="text" id="husband_name" value="{{ $user->basicDetail->husband_name ?? '' }}" name="husband_name" class="form-control account">
             </div>
 
             <div class="col-md-6 px-0 px-sm-3">
@@ -55,11 +75,6 @@
             <div class="col-md-6 px-0 px-sm-3">
                 <label>Father’s Name of Life Proposed (مجوزہ بیمہ کے والد کا نام)<span class="requi">*</span></label>
                 <input required type="text" value="{{ $user->basicDetail->father_name ?? '' }}" name="father_name" class="form-control account">
-            </div>
-
-            <div class="col-md-6 px-0 px-sm-3">
-                <label>Husband Name of Life Proposed (بیمہ کنندہ کے شوہر کا نام)</label>
-                <input type="text" value="{{ $user->basicDetail->husband_name ?? '' }}" name="husband_name" class="form-control account">
             </div>
 
             <div class="col-md-6 px-0 px-sm-3">
@@ -89,11 +104,6 @@
             </div>
 
             <div class="col-md-6 px-0 px-sm-3">
-                <label>Fax No (فیکس نمبر)</label>
-                <input type="text" value="{{ $user->basicDetail->fax_number ?? '' }}" name="fax_number" class="form-control account">
-            </div>
-
-            <div class="col-md-6 px-0 px-sm-3">
                 <label>Is Client Dual National? (کیا سائل دوہری قومیت رکھتا ہے؟)<span class="requi">*</span></label>
                 <select required name="is_client_dual_national" id="is_client_dual_national" class="form-control">
                     <option value="">Select Option</option>
@@ -101,22 +111,65 @@
                     <option value="No" {{ ($user->basicDetail->is_client_dual_national ?? '') == 'No' ? 'selected' : '' }}>No</option>
                 </select>
             </div>
-            <div id='dual_natunality_fields' class="row">
-                @if($user->basicDetail->is_client_dual_national=='Yes')
-                <div class="col-md-6 px-0 px-sm-3">
-                    <label>Primary Nationality (قومیت)<span class="requi">*</span></label>
-                    <input type="text" value="{{ $user->basicDetail->primary_nationality ?? '' }}" name="primary_nationality" class="form-control account">
-                </div>
-
-                <div class="col-md-6 px-0 px-sm-3">
-                    <label>Dual Nationality (دوہری قومیت)<span class="requi">*</span></label>
-                    <input type="text" value="{{ $user->basicDetail->dual_nationality ?? '' }}" name="dual_nationality" class="form-control account">
-                </div>
-                @endif
+            <div class="col-md-6 px-0 px-sm-3">
+                @include('frontend.partials.country_select', [
+                    'countries' => $countries ?? collect(),
+                    'fieldName' => 'primary_nationality_country_id',
+                    'countrySelectId' => 'primary_nationality_country_id',
+                    'selectedCountryId' => $user->basicDetail->primary_nationality_country_id ?? null,
+                    'selectedCountryName' => $user->basicDetail->primary_nationality ?? null,
+                    'selectedNameField' => 'primary_nationality',
+                    'countryRequired' => false,
+                    'countrySelectClass' => 'form-control account',
+                    'countryLabel' => 'Primary Nationality (قومیت)',
+                ])
             </div>
             <div class="col-md-6 px-0 px-sm-3">
-                <label>Birth Place (مقامِ پیدائش)<span class="requi">*</span></label>
-                <input required type="text" value="{{ $user->basicDetail->birth_placed ?? '' }}" name="birth_placed" class="form-control account">
+                @include('frontend.partials.country_select', [
+                    'countries' => $countries ?? collect(),
+                    'fieldName' => 'dual_nationality_country_id',
+                    'countrySelectId' => 'dual_nationality_country_id',
+                    'selectedCountryId' => $user->basicDetail->dual_nationality_country_id ?? null,
+                    'selectedCountryName' => $user->basicDetail->dual_nationality_country ?? null,
+                    'selectedNameField' => 'dual_nationality_country',
+                    'countryRequired' => false,
+                    'countrySelectClass' => 'form-control account',
+                    'countryLabel' => 'Dual Nationality Country',
+                ])
+            </div>
+            <div class="col-md-6 px-0 px-sm-3">
+                <label>Tax/TIN Number<span class="requi">*</span></label>
+                <input type="text" value="{{ $user->basicDetail->dual_tax_tin_number ?? '' }}" name="dual_tax_tin_number" class="form-control account">
+            </div>
+            <div class="col-md-6 px-0 px-sm-3">
+                <label>Mobile Number<span class="requi">*</span></label>
+                <input type="text" value="{{ $user->basicDetail->dual_mobile_number ?? '' }}" name="dual_mobile_number" class="form-control account">
+            </div>
+            <div class="col-md-6 px-0 px-sm-3">
+                <label>Address<span class="requi">*</span></label>
+                <textarea name="dual_address" class="form-control account" rows="2">{{ $user->basicDetail->dual_address ?? '' }}</textarea>
+            </div>
+            <div class="col-md-6 px-0 px-sm-3">
+                <label>Passport Number<span class="requi">*</span></label>
+                <input type="text" value="{{ $user->basicDetail->dual_passport_number ?? '' }}" name="dual_passport_number" class="form-control account">
+            </div>
+            <div class="col-md-6 px-0 px-sm-3">
+                @php
+                    $selectedBirthCityId = old(
+                        'birth_place_city_id',
+                        $user->basicDetail->birth_place_city_id
+                            ?? optional(($cities ?? collect())->first(
+                                fn ($c) => strcasecmp($c->name, (string) ($user->basicDetail->birth_placed ?? '')) === 0
+                            ))->id
+                    );
+                @endphp
+                @include('frontend.partials.birth_place_select', [
+                    'cities' => $cities ?? collect(),
+                    'selectedBirthCityId' => $selectedBirthCityId,
+                    'birthPlaceRequired' => true,
+                    'birthPlaceClass' => 'form-control account',
+                    'birthPlaceLabel' => 'Birth Place (مقامِ پیدائش)',
+                ])
             </div>
             <div class="col-md-12 px-0 px-sm-3">
                 <label>Proposer & Life Proposed are same?<span class="requi">*</span></label>
@@ -126,7 +179,14 @@
                     <option value="No" {{ ($user->basicDetail->is_same_person ?? '') == 'No' ? 'selected' : '' }}>No</option>
                 </select>
             </div>
-            <div id="same_person_fields" class="row"></div>
+            <div id="same_person_fields" class="col-12 px-0" @if(($user->basicDetail->is_same_person ?? '') !== 'No') style="display:none;" @endif>
+                @include('frontend.partials.life_proposed_fields', [
+                    'variant' => 'form',
+                    'lp' => \App\Support\LifeProposedProfile::values($user->basicDetail ?? null),
+                    'cities' => $cities ?? collect(),
+                    'countries' => $countries ?? collect(),
+                ])
+            </div>
 
         </div>
         <div class="col-12 d-flex justify-content-between mt-4">
@@ -160,6 +220,12 @@
             $(this).val(newVal.substring(0, 15)); // Max length 15 characters
         });
         $(document).on('input', 'input[name="life_proposed_cnic"]', function() {
+            var dob = $('input[name="life_proposed_dob"]').val();
+            var age = (typeof window.ageNearestBirthday === 'function') ? window.ageNearestBirthday(dob) : '';
+            if (age !== '' && age < 18) {
+                return;
+            }
+
             let val = $(this).val().replace(/\D/g, '');
             let newVal = '';
 
@@ -175,50 +241,6 @@
 
             $(this).val(newVal.substring(0, 15));
         });
-
-
-        // Jab Date of Birth change ho
-        $('input[name="date_of_birth"]').on('change', function() {
-            let dobValue = $(this).val();
-
-            if (dobValue) {
-                let dob = new Date(dobValue);
-                let today = new Date();
-
-                // Age calculate karein
-                let age = today.getFullYear() - dob.getFullYear();
-                let monthDiff = today.getMonth() - dob.getMonth();
-                let dayDiff = today.getDate() - dob.getDate();
-
-                // Agar birthday is saal abhi tak nahi aaya, to ek saal kam karein
-                if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
-                    age--;
-                }
-
-                // "Nearest Birthday" ka logic (Pakistan Insurance standard):
-                // Agar agle birthday mein 6 mahine se kam rehte hain, to age + 1 kar dete hain
-                let nextBirthday = new Date(dob);
-                nextBirthday.setFullYear(today.getFullYear());
-
-                // Agar birthday guzar gaya hai to agle saal ka set karein
-                if (today > nextBirthday) {
-                    nextBirthday.setFullYear(today.getFullYear() + 1);
-                }
-
-                let diffTime = Math.abs(nextBirthday - today);
-                let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-                // Insurance rules ke mutabiq: agar 6 mahine (182 days) se kam rehte hain agle bday mein
-                if (diffDays <= 182) {
-                    age++;
-                }
-
-                // Age field mein value set karein
-                $('input[name="age_nearest_date"]').val(age);
-            }
-        });
-
-
 
 
         $('input[name="mobile_number"]').on('input', function() {
@@ -238,6 +260,32 @@
             // Final value set karein (Total length 12: 4 digits + 1 dash + 7 digits)
             $(this).val(newVal.substring(0, 12));
         });
+
+        function toggleSpouseNameFields() {
+            let gender = ($('#gender').val() || '').trim();
+            let marital = ($('#marital_status').val() || '').trim();
+
+            $('#wife_name_wrap, #husband_name_wrap').hide();
+            $('#wife_name, #husband_name').prop('required', false);
+
+            if (marital === 'Married' && gender === 'Male') {
+                $('#wife_name_wrap').show();
+                $('#wife_name').prop('required', true);
+                $('#husband_name').val('');
+            } else if (marital === 'Married' && gender === 'Female') {
+                $('#husband_name_wrap').show();
+                $('#husband_name').prop('required', true);
+                $('#wife_name').val('');
+            } else {
+                // Unmarried / incomplete selection — clear both spouse fields
+                if (marital === 'Unmarried') {
+                    $('#wife_name, #husband_name').val('');
+                }
+            }
+        }
+
+        $('#gender, #marital_status').on('change', toggleSpouseNameFields);
+        toggleSpouseNameFields();
 
 
 

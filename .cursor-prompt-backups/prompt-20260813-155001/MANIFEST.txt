@@ -1,0 +1,7 @@
+timestamp=20260813-155001
+purpose=pre-fix backup Urdu encoding mojibake
+resources\views\frontend\policyFlow\form.blade.php
+resources\views\frontend\profile\occupation.blade.php
+resources\views\frontend\layout\header.blade.php
+config\database.php
+app\Providers\AppServiceProvider.php

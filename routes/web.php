@@ -13,10 +13,10 @@ use App\Http\Controllers\Frontend\FrontendController;
 use App\Http\Controllers\Frontend\PolicyController;
 use App\Http\Controllers\Frontend\VoucheController;
 use App\Http\Controllers\Frontend\PolicyCalculatorController;
+use App\Http\Controllers\Frontend\PolicyQueueController;
 use App\Models\User;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 
@@ -46,7 +46,7 @@ Route::group(['middleware' => ['user.role']], function () {
                 Route::get('/edit/{id}', 'edit')->name('edit');
                 Route::put('/update/{id}', 'update')->name('update');
                 Route::delete('/destroy/{id}', 'destroy')->name('destroy');
-                Route::get('/toggleStatus/{id}', 'toggleStatus')->name('toggleStatus');
+                Route::post('/toggleStatus/{id}', 'toggleStatus')->name('toggleStatus');
         });
         Route::prefix('admin/dashboard/subclass')->name('subclass.')->controller(SubClassController::class)->group(function () {
                 Route::get('/index', 'index')->name('index');
@@ -57,13 +57,14 @@ Route::group(['middleware' => ['user.role']], function () {
                 Route::get('/edit/{id}', 'edit')->name('edit');
                 Route::put('/update/{id}', 'update')->name('update');
                 Route::delete('/destroy/{id}', 'destroy')->name('destroy');
-                Route::get('/toggleStatus/{id}', 'toggleStatus')->name('toggleStatus');
+                Route::post('/toggleStatus/{id}', 'toggleStatus')->name('toggleStatus');
         });
         Route::prefix('admin/dashboard/userPolicy')->name('user.policy.')->controller(UserPolicyController::class)->group(function () {
                 Route::post('/list', 'list')->name('list');
                 Route::get('/filter', 'filter')->name('filter');
                 Route::get('/policyDetail/{id}', 'policy_detail')->name('policyDetail');
-              
+                Route::get('/profile/{id}/download-pdf', 'downloadPolicyUserPdf')->name('download.pdf');
+
                 Route::post('/export', 'export')->name('export');
                 Route::post('/update/status', 'updateStatus')->name('update.status');
         });
@@ -74,11 +75,6 @@ Route::prefix('admin')->name('admin.')->controller(AuthController::class)->group
         Route::get('login/', 'loginPage')->name('login');
         Route::post('user/login', 'login')->name('login.user');
         Route::get('user/logout', 'logout')->name('logout.user');
-});
-
-
-Route::prefix('admin/dashboard/userPolicy')->name('user.policy.')->controller(UserPolicyController::class)->group(function () {
-        Route::get('/profile/{id}/download-pdf', 'downloadPolicyUserPdf')->name('download.pdf');
 });
 
 
@@ -94,50 +90,44 @@ Route::prefix('/')->name('frontend.')->controller(FrontendController::class)->gr
         Route::post('/forgot-password', 'forgotPassword')->name('forgot.password');
         Route::post('/get-policies', 'getPolicies')->name('getPolicies');
         Route::get('/policy-form', 'policyForm')->name('policyForm');
-        Route::get('/dashboard/{id}', 'dashboard')->name('dashboard');
-        Route::get('/profile-form', 'profileForm')->name('profileForm');
-        Route::post('/updateBasicDetails', 'updateBasicDetails')->name('updateBasicDetails');
-        Route::post('/updateAddressInfo', 'updateAddressInfo')->name('updateAddressInfo');
-        Route::post('/updateOccupation', 'updateOccupation')->name('updateOccupation');
-        Route::post('/updateHealth', 'updateHealth')->name('updateHealth');
-        Route::post('policy/user/data/save', 'policyDataSave')->name('policyUserDataSave');
-        Route::post('get/plan/data', 'getPlanData')->name('getPlanData');
-        Route::post('get/sum/aasured', 'getSumAssured')->name('getSumAssured');
-        Route::get('payment/success', 'successPayment')->name('successPayment');
-
         Route::post('/get/city/data', 'getcityData')->name('getcityData');
         Route::post('/get/district/data', 'getDistrictData')->name('getDistrictData');
-        Route::post('/updateProfile', 'updateProfile')->name('updateProfile');
         Route::get('/logout', 'logout')->name('logout');
-        Route::post('/verify-otp', 'verifyOtp')->name('verify.otp');
-        Route::post('/resend-otp', 'resendOtp')->name('resend.otp');
+        Route::post('/verify-otp', 'verifyOtp')->name('verify.otp')->middleware('throttle:otp-verify');
+        Route::post('/resend-otp', 'resendOtp')->name('resend.otp')->middleware('throttle:otp-resend');
 });
-
-Route::prefix('/voucher')->name('voucher.')->controller(VoucheController::class)->middleware('prevent-back-history')->group(function () {
-        Route::get('/{id}', 'voucher')->name('voucher');
-});
-
-Route::prefix('/policy-calculator')->name('PolicyCalculator.')->controller(PolicyCalculatorController::class)->group(function () {
-        Route::post('/', 'policy_calculation')->name('policy_calculation');
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 Route::prefix('/')->name('frontend.')->controller(FrontendController::class)
         ->middleware('front.role')
         ->group(function () {
+                Route::get('/dashboard/{id}', 'dashboard')->name('dashboard');
+                Route::get('/profile-form', 'profileForm')->name('profileForm');
                 Route::get('/profile', 'profile')->name('profile');
+                Route::post('/updateBasicDetails', 'updateBasicDetails')->name('updateBasicDetails');
+                Route::post('/updateAddressInfo', 'updateAddressInfo')->name('updateAddressInfo');
+                Route::post('/updateOccupation', 'updateOccupation')->name('updateOccupation');
+                Route::post('/updateHealth', 'updateHealth')->name('updateHealth');
+                Route::post('policy/user/data/save', 'policyDataSave')->name('policyUserDataSave');
+                Route::post('get/plan/data', 'getPlanData')->name('getPlanData');
+                Route::post('get/sum/aasured', 'getSumAssured')->name('getSumAssured');
+                Route::get('payment/success', 'successPayment')->name('successPayment');
+        });
+
+Route::prefix('/')->name('frontend.')->middleware('front.role')->group(function () {
+        Route::get('/queue', [PolicyQueueController::class, 'index'])->name('queue');
+        Route::post('/queue/save', [PolicyQueueController::class, 'save'])->name('queue.save');
+        Route::get('/queue/resume/{id}', [PolicyQueueController::class, 'resume'])->name('queue.resume');
+        Route::delete('/queue/{id}', [PolicyQueueController::class, 'destroy'])->name('queue.destroy');
+});
+
+Route::prefix('/voucher')->name('voucher.')->controller(VoucheController::class)->middleware(['auth', 'prevent-back-history'])->group(function () {
+        Route::get('/{id}', 'voucher')->name('voucher');
+});
+
+Route::prefix('/policy-calculator')->name('PolicyCalculator.')->controller(PolicyCalculatorController::class)
+        ->middleware('front.role')
+        ->group(function () {
+                Route::post('/', 'policy_calculation')->name('policy_calculation');
         });
 
 //self policy listing
@@ -147,6 +137,7 @@ Route::prefix('/')->name('frontend.')->controller(PolicyController::class)
                 Route::get('/self-policy', 'self_policy')->name('self-policy');
                 Route::get('/self-policy-detail/{id}', 'policy_detail')->name('policyDetail');
                 Route::get('/self-policy-edit/{id}', 'policyDetailEdit')->name('policyDetail.edit');
+                Route::get('/self-policy/{id}/download-pdf', 'downloadPdf')->name('policyDetail.pdf');
 
                 Route::PUT('/self-policy-update/{id}', 'policyupdate')->name('policyDetail.update');
         });
@@ -159,17 +150,3 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
         $request->fulfill();
         return redirect()->route('frontend.index');
 })->middleware(['auth', 'signed'])->name('verification.verify');
-
-
-
-Route::get('/test-email', function () {
-
-        $toEmail = "shoaibnasir315@gmail.com";
-
-        Mail::raw('This is a test email from Laravel web route.', function ($message) use ($toEmail) {
-                $message->to($toEmail)
-                        ->subject('Test Email');
-        });
-
-        return "Test email sent successfully!";
-});

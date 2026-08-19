@@ -85,7 +85,7 @@
     </div>
 
     <button type="submit" class="btn btn-primary">Sign Up</button>
-    <p>Already a User? Please <a id="signin" style="cursor: pointer;">Sign In</a></p>
+    <p>Already a User? Please <a id="signin" class="js-show-signin" style="cursor: pointer;">Sign In</a></p>
 
 </form>
 

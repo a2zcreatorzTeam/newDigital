@@ -151,6 +151,22 @@
                         <div class="summary-value">{{ $data->term ?? '---' }} Years</div>
                     </td>
                 </tr>
+                <tr>
+                    <td>
+                        <div class="summary-title">Submitted Date</div>
+                        <div class="summary-value">
+                            @if($data->created_at)
+                                {{ $data->created_at->timezone('Asia/Karachi')->format('d-m-Y h:i A') }}
+                            @else
+                                ---
+                            @endif
+                        </div>
+                    </td>
+                    <td>
+                        <div class="summary-title">Premium Paid</div>
+                        <div class="summary-value">{{ $data->premium_paid !== null && $data->premium_paid !== '' ? number_format((float) $data->premium_paid) : '---' }}</div>
+                    </td>
+                </tr>
 
             </table>
 
@@ -202,7 +218,6 @@
                         <div class="detail-label">Age Nearest Birth-date</div>
                         <div class="detail-value">{{ $data->age_nearest_date ?? '---' }}</div>
                     </td>
-
                     <td>
                         <div class="detail-label">Gender</div>
                         <div class="detail-value">{{ $data->gender ?? '---' }}</div>
@@ -211,37 +226,46 @@
 
                 <tr>
                     <td>
+                        <div class="detail-label">Marital Status</div>
+                        <div class="detail-value">{{ $data->marital_status ?? '---' }}</div>
+                    </td>
+                    <td>
                         <div class="detail-label">Mother Maiden Name</div>
                         <div class="detail-value">{{ $data->mother_maiden_name ?? '---' }}</div>
                     </td>
+                </tr>
 
+                <tr>
                     <td>
                         <div class="detail-label">Father's Name of Life Proposed</div>
                         <div class="detail-value">{{ $data->father_name ?? '---' }}</div>
                     </td>
-                </tr>
-
-                <tr>
+                    @if(($data->marital_status ?? '') === 'Married' && ($data->gender ?? '') === 'Male')
+                    <td>
+                        <div class="detail-label">Wife Name of Life Proposed</div>
+                        <div class="detail-value">{{ $data->wife_name ?? '---' }}</div>
+                    </td>
+                    @elseif(($data->marital_status ?? '') === 'Married' && ($data->gender ?? '') === 'Female')
                     <td>
                         <div class="detail-label">Husband Name of Life Proposed</div>
                         <div class="detail-value">{{ $data->husband_name ?? '---' }}</div>
                     </td>
-
+                    @else
                     <td>
-                        <div class="detail-label">Religion</div>
-                        <div class="detail-value">{{ $data->religion ?? '---' }}</div>
+                        <div class="detail-label">Spouse Name</div>
+                        <div class="detail-value">---</div>
                     </td>
+                    @endif
                 </tr>
 
                 <tr>
                     <td>
+                        <div class="detail-label">Religion</div>
+                        <div class="detail-value">{{ $data->religion ?? '---' }}</div>
+                    </td>
+                    <td>
                         <div class="detail-label">Email Address</div>
                         <div class="detail-value">{{ $data->user_email ?? '---' }}</div>
-                    </td>
-
-                    <td>
-                        <div class="detail-label">Age Proof</div>
-                        <div class="detail-value">{{ $data->age_proof ?? '---' }}</div>
                     </td>
                 </tr>
 
@@ -250,7 +274,6 @@
                         <div class="detail-label">Phone Number Office</div>
                         <div class="detail-value">{{ $data->phone_number_office ?? '---' }}</div>
                     </td>
-
                     <td>
                         <div class="detail-label">Phone Number Residential</div>
                         <div class="detail-value">{{ $data->phone_number_residente ?? '---' }}</div>
@@ -259,39 +282,44 @@
 
                 <tr>
                     <td>
-                        <div class="detail-label">Fax No</div>
-                        <div class="detail-value">{{ $data->fax_number ?? '---' }}</div>
-                    </td>
-
-                    <td>
                         <div class="detail-label">Is Client Dual National?</div>
                         <div class="detail-value">{{ $data->is_client_dual_national ?? '---' }}</div>
                     </td>
-                </tr>
-
-                <tr>
                     <td>
                         <div class="detail-label">Primary Nationality</div>
-                        <div class="detail-value">{{ $data->primary_nationality ?? '---' }}</div>
-                    </td>
-
-                    <td>
-                        <div class="detail-label">Dual Nationality</div>
-                        <div class="detail-value">{{ $data->dual_nationality ?? '---' }}</div>
+                        <div class="detail-value">{{ $data->is_client_dual_national == 'No' ? 'Pakistani' : ($data->primary_nationality ?? '---') }}</div>
                     </td>
                 </tr>
 
+                @if($data->is_client_dual_national == 'Yes')
                 <tr>
                     <td>
                         <div class="detail-label">Dual Nationality Country</div>
-                        <div class="detail-value">{{ $data->dual_nationality_country ?? '---' }}</div>
+                        <div class="detail-value">{{ optional($data->dualNationalityCountry)->name ?? $data->dual_nationality_country ?? '---' }}</div>
                     </td>
-
+                    <td>
+                        <div class="detail-label">Tax/TIN Number</div>
+                        <div class="detail-value">{{ $data->dual_tax_tin_number ?? '---' }}</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="detail-label">Mobile Number</div>
+                        <div class="detail-value">{{ $data->dual_mobile_number ?? '---' }}</div>
+                    </td>
+                    <td>
+                        <div class="detail-label">Address</div>
+                        <div class="detail-value">{{ $data->dual_address ?? '---' }}</div>
+                    </td>
+                </tr>
+                <tr>
                     <td>
                         <div class="detail-label">Dual Nationality Passport Number</div>
                         <div class="detail-value">{{ $data->dual_passport_number ?? '---' }}</div>
                     </td>
+                    <td></td>
                 </tr>
+                @endif
 
                 <tr>
                     <td>
@@ -305,29 +333,118 @@
                     </td>
                 </tr>
 
+                @php $lp = \App\Support\LifeProposedProfile::values($data); @endphp
+                @if(($data->is_same_person ?? '') === 'No')
                 <tr>
                     <td>
                         <div class="detail-label">Life Proposed Name</div>
-                        <div class="detail-value">{{ $data->life_proposed_name ?? '---' }}</div>
+                        <div class="detail-value">{{ $lp['name'] ?? '---' }}</div>
                     </td>
-
                     <td>
-                        <div class="detail-label">Life Proposed CNIC</div>
-                        <div class="detail-value">{{ $data->life_proposed_cnic ?? '---' }}</div>
+                        <div class="detail-label">Life Proposed Mobile</div>
+                        <div class="detail-value">{{ $lp['mobile'] ?? '---' }}</div>
                     </td>
                 </tr>
-
                 <tr>
                     <td>
-                        <div class="detail-label">Life Proposed DOB</div>
-                        <div class="detail-value">{{ $data->life_proposed_dob ?? '---' }}</div>
+                        <div class="detail-label">Life Proposed CNIC / B-Form</div>
+                        <div class="detail-value">{{ $lp['cnic'] ?? '---' }}</div>
                     </td>
-
                     <td>
-                        <div class="detail-label">Life Proposed RelationShip</div>
-                        <div class="detail-value">{{ $data->life_proposed_relationship ?? '---' }}</div>
+                        <div class="detail-label">Life Proposed DOB / Age</div>
+                        <div class="detail-value">{{ ($lp['dob'] ?? '---') }} / {{ ($lp['age'] ?? '---') }}</div>
                     </td>
                 </tr>
+                <tr>
+                    <td>
+                        <div class="detail-label">Life Proposed Gender / Marital</div>
+                        <div class="detail-value">{{ ($lp['gender'] ?? '---') }} / {{ ($lp['marital_status'] ?? '---') }}</div>
+                    </td>
+                    <td>
+                        <div class="detail-label">Relationship with Proposer</div>
+                        <div class="detail-value">{{ $lp['relationship'] ?? '---' }}</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="detail-label">Life Proposed Father / Mother</div>
+                        <div class="detail-value">{{ ($lp['father_name'] ?? '---') }} / {{ ($lp['mother_maiden_name'] ?? '---') }}</div>
+                    </td>
+                    <td>
+                        <div class="detail-label">Life Proposed Email</div>
+                        <div class="detail-value">{{ $lp['email'] ?? '---' }}</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="detail-label">Life Proposed Birth Place</div>
+                        <div class="detail-value">{{ $lp['birth_placed'] ?? '---' }}</div>
+                    </td>
+                    <td>
+                        <div class="detail-label">Life Proposed Religion</div>
+                        <div class="detail-value">{{ $lp['religion'] ?? '---' }}</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="detail-label">Life Proposed CNIC Issue Date</div>
+                        <div class="detail-value">{{ $lp['cnic_issue_date'] ?? '---' }}</div>
+                    </td>
+                    <td>
+                        <div class="detail-label">Life Proposed CNIC Expiry Date</div>
+                        <div class="detail-value">{{ $lp['cnic_expiry_date'] ?? '---' }}</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="detail-label">Life Proposed Wife / Husband</div>
+                        <div class="detail-value">{{ ($lp['wife_name'] ?? '---') }} / {{ ($lp['husband_name'] ?? '---') }}</div>
+                    </td>
+                    <td>
+                        <div class="detail-label">Life Proposed Office / Residential Phone</div>
+                        <div class="detail-value">{{ ($lp['phone_office'] ?? '---') }} / {{ ($lp['phone_residential'] ?? '---') }}</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="detail-label">Life Proposed Dual National?</div>
+                        <div class="detail-value">{{ $lp['is_client_dual_national'] ?? '---' }}</div>
+                    </td>
+                    <td>
+                        <div class="detail-label">Life Proposed Primary Nationality</div>
+                        <div class="detail-value">{{ $lp['primary_nationality'] ?? '---' }}</div>
+                    </td>
+                </tr>
+                @if(($lp['is_client_dual_national'] ?? '') === 'Yes')
+                <tr>
+                    <td>
+                        <div class="detail-label">Life Proposed Dual Nationality Country</div>
+                        <div class="detail-value">{{ $lp['dual_nationality_country'] ?? '---' }}</div>
+                    </td>
+                    <td>
+                        <div class="detail-label">Life Proposed Tax/TIN</div>
+                        <div class="detail-value">{{ $lp['dual_tax_tin_number'] ?? '---' }}</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="detail-label">Life Proposed Dual Mobile</div>
+                        <div class="detail-value">{{ $lp['dual_mobile_number'] ?? '---' }}</div>
+                    </td>
+                    <td>
+                        <div class="detail-label">Life Proposed Dual Address</div>
+                        <div class="detail-value">{{ $lp['dual_address'] ?? '---' }}</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="detail-label">Life Proposed Passport Number</div>
+                        <div class="detail-value">{{ $lp['dual_passport_number'] ?? '---' }}</div>
+                    </td>
+                    <td></td>
+                </tr>
+                @endif
+                @endif
 
             </table>
 
@@ -389,6 +506,16 @@
                         <div class="detail-value">{{ $data->payment_mode ?? '---' }}</div>
                     </td>
                 </tr>
+                <tr>
+                    <td>
+                        <div class="detail-label">Premium Paid</div>
+                        <div class="detail-value">{{ $data->premium_paid !== null && $data->premium_paid !== '' ? number_format((float) $data->premium_paid) : '---' }}</div>
+                    </td>
+                    <td>
+                        <div class="detail-label">Age Proof</div>
+                        <div class="detail-value">{{ $data->age_proof ?? '---' }}</div>
+                    </td>
+                </tr>
 
                 <tr>
                     <td>
@@ -413,9 +540,9 @@
 
             </table>
 
-            {{-- ADDRESS INFORMATION --}}
+            {{-- ADDRESS DETAILS --}}
             <div class="section-title">
-                Address Information
+                Address Details
             </div>
 
             <table>
@@ -542,60 +669,78 @@
 
                 <tr>
                     <td>
+                        <div class="detail-label">Filer Status</div>
+                        <div class="detail-value">{{ $data->filer_status ?? '---' }}</div>
+                    </td>
+                    <td>
+                        <div class="detail-label">NTN Number</div>
+                        <div class="detail-value">{{ ($data->filer_status ?? '') === 'Filer' ? ($data->ntn_number ?? '---') : '---' }}</div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
                         <div class="detail-label">Holding Land</div>
                         <div class="detail-value">{{ $data->is_holding_land ?? '---' }}</div>
                     </td>
                     <td>
-                        <div class="detail-label">Total Acreage Owned</div>
-                        <div class="detail-value">{{ $data->total_acreage ?? '---' }}</div>
+                        <div class="detail-label">Land Unit</div>
+                        <div class="detail-value">{{ $data->land_unit ?? '---' }}</div>
                     </td>
                 </tr>
 
                 <tr>
+                    <td>
+                        <div class="detail-label">Total Area</div>
+                        <div class="detail-value">{{ $data->total_acreage ?? '---' }}{{ !empty($data->land_unit) ? ' ' . $data->land_unit : '' }}</div>
+                    </td>
                     <td>
                         <div class="detail-label">Land Location</div>
                         <div class="detail-value">{{ $data->land_location ?? '---' }}</div>
                     </td>
+                </tr>
+
+                <tr>
                     <td>
                         <div class="detail-label">Land Type</div>
                         <div class="detail-value">{{ $data->land_type ?? '---' }}</div>
                     </td>
-                </tr>
-
-                <tr>
                     <td>
                         <div class="detail-label">Estimated Land Value</div>
                         <div class="detail-value">{{ $data->estimated_land_value ?? '---' }}</div>
                     </td>
+                </tr>
+
+                <tr>
                     <td>
                         <div class="detail-label">Average Monthly Income</div>
                         <div class="detail-value">PKR {{ $data->avaerage_monthly_income ?? '---' }}</div>
                     </td>
-                </tr>
-
-                <tr>
                     <td>
                         <div class="detail-label">
                             If Defence or Ex-Defence Personnel, Commercial Airline Flight Crew or Plant Protection Pilot
                         </div>
                         <div class="detail-value">{{ $data->ex_defence_personal ?? '---' }}</div>
                     </td>
+                </tr>
+
+                <tr>
                     <td>
                         <div class="detail-label">
                             Have you ever been discharged on medical grounds from service / employment
                         </div>
                         <div class="detail-value">{{ $data->discharged_on_medical ?? '---' }}</div>
                     </td>
-                </tr>
-
-                <tr>
                     <td>
                         <div class="detail-label">
                             Are you presently engaged or intend to engage in any hazardous occupation or pastime?
                         </div>
                         <div class="detail-value">{{ $data->hazardous_occupation ?? '---' }}</div>
                     </td>
-                    <td>
+                </tr>
+
+                <tr>
+                    <td colspan="2">
                         <div class="detail-label">Comments</div>
                         <div class="detail-value">{{ $data->comment ?? '---' }}</div>
                     </td>
@@ -660,12 +805,17 @@
                         <div class="detail-value">{{ $member->state_of_health ?? '---' }}</div>
                     </td>
                 </tr>
-
                 <tr>
+                    <td>
+                        <div class="detail-label">Is Alive?</div>
+                        <div class="detail-value">{{ filled($member->year_of_death) ? 'No' : 'Yes' }}</div>
+                    </td>
                     <td>
                         <div class="detail-label">Year of Death</div>
                         <div class="detail-value">{{ $member->year_of_death ?? '---' }}</div>
                     </td>
+                </tr>
+                <tr>
                     <td>
                         <div class="detail-label">Age of Death</div>
                         <div class="detail-value">{{ $member->age_of_death ?? '---' }}</div>
@@ -706,7 +856,7 @@
 
                     <td>
                         <div class="detail-label">Miscarriage Dates</div>
-                        <div class="detail-value">{{ $data->miscarriage_dates ?? '---' }}</div>
+                        <div class="detail-value">{{ \App\Support\MiscarriageDates::display($data->miscarriage_dates ?? null) }}</div>
                     </td>
                 </tr>
 
@@ -733,6 +883,19 @@
                         <div class="detail-value">{{ $data->female_disease_history ?? '---' }}</div>
                     </td>
                 </tr>
+
+                @if(($data->female_disease_history ?? '') === 'Yes')
+                <tr>
+                    <td>
+                        <div class="detail-label">Female Disease</div>
+                        <div class="detail-value">{{ \App\Support\FemaleDiseases::name($data->female_disease_name) ?? '---' }}</div>
+                    </td>
+                    <td>
+                        <div class="detail-label">Female Disease Description</div>
+                        <div class="detail-value">{{ \App\Support\FemaleDiseases::details($data->female_disease_name) ?? '---' }}</div>
+                    </td>
+                </tr>
+                @endif
 
                 <tr>
                     <td>
@@ -812,6 +975,10 @@
                     </td>
                 </tr>
 
+                @php
+                    $isMinorNominee = filled($data->nominee_age) && (int) $data->nominee_age < 18;
+                @endphp
+                @if($isMinorNominee)
                 <tr>
                     <td>
                         <div class="detail-label">Appointee Name</div>
@@ -829,9 +996,12 @@
                         <div class="detail-label">Appointee CNIC</div>
                         <div class="detail-value">{{ $data->appointee_cnic ?? '---' }}</div>
                     </td>
-
-                    <td></td>
+                    <td>
+                        <div class="detail-label">Appointee Mobile</div>
+                        <div class="detail-value">{{ $data->appointee_mobile ?? '---' }}</div>
+                    </td>
                 </tr>
+                @endif
 
             </table>
 
@@ -869,6 +1039,24 @@
                         </div>
                     </td>
                 </tr>
+
+                @if(($data->is_same_person ?? '') === 'No')
+                <tr>
+                    <td>
+                        <div class="detail-label">Life Proposed CNIC / B-Form</div>
+                        <div class="detail-value">
+                            @if($data->life_proposed_document)
+                            <img src="{{ public_path('uploads/policy_documents/'.$data->life_proposed_document) }}"
+                                alt="Life Proposed Document"
+                                class="doc-image">
+                            @else
+                            ---
+                            @endif
+                        </div>
+                    </td>
+                    <td></td>
+                </tr>
+                @endif
 
                 <tr>
                     <td>
@@ -911,24 +1099,19 @@
                             @endif
                         </div>
                     </td>
-
-                    <td>
-                        <div class="detail-label">Medical Report</div>
-                        <div class="detail-value">
-                            @if($data->medical_reports)
-                            <img src="{{ public_path('uploads/policy_documents/'.$data->medical_reports) }}"
-                                alt="Medical Reports"
-                                class="doc-image">
-                            @else
-                            ---
-                            @endif
-                        </div>
-                    </td>
+                    <td></td>
                 </tr>
 
-            </table>
+                @include('backend.userPolicy.partials.stored-documents', [
+                    'docs' => \App\Support\PolicyStoredDocuments::medical($data->medical_documents ?? null),
+                    'usePublicPath' => true,
+                ])
+                @include('backend.userPolicy.partials.stored-documents', [
+                    'docs' => \App\Support\PolicyStoredDocuments::others($data->other_documents ?? null),
+                    'usePublicPath' => true,
+                ])
 
-            {{-- HEALTH INFORMATION --}}
+            </table>
             <div class="section-title">
                 Health Information
             </div>

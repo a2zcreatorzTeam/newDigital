@@ -28,6 +28,9 @@ class AuthController extends Controller
         $user = User::where('email', $request->email)->first();
 
         if ($user && Hash::check($request->password, $user->password)) {
+            if ((int) $user->user_type !== 2) {
+                return back()->with('error', 'Invalid credentials');
+            }
             Auth::login($user);
             return redirect()->route('admin.dashboard')->with('success', 'Login successful');
         }

@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class AddressInfoRequest extends FormRequest
 {
@@ -11,7 +12,7 @@ class AddressInfoRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true; // agar auth check chahiye ho to yahan laga sakte ho
+        return Auth::check() && (int) Auth::user()->user_type === 1;
     }
 
     /**

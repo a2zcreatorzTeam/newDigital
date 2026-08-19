@@ -1,0 +1,818 @@
+<div id="nav-Personal_Details" role="tabpanel" aria-labelledby="nav-Personal_Details-tab" class="tab-pane fade active show">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 d-flex justify-content-between align-items-center flex-wrap">
+                <h3 class="ib-form-subheading mb-0">Personal Details</h3>
+                <button type="button" id="copyPermanentAddressBtn" class="btn btn-primary btn-sm copy-permanent-address-btn" style="display: none;">
+                    Copy Permanent Address
+                </button>
+            </div>
+
+            <!-- Permanent Address -->
+            <h5 class="col-12 ib-form-subheading-second">Permanent Address (مستقل پتہ)</h5>
+
+            <div class="col-md-4 px-0 px-sm-3">
+                <label>Province (صوبہ)<span class="requi">*</span></label>
+                <select name="permanent_province_id" id="permanent_province_id" required class="form-control jbl-dynamic-input permanent-address-field">
+                    <option value="">Select Province</option>
+                    @foreach ($provinces as $item)
+                    <option value="{{ $item->id }}" {{ ($user->AddressInfo->permanent_province_id ?? '') == $item->id ? 'selected' : '' }}>
+                        {{ $item->name }}
+                    </option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="col-md-4 px-0 px-sm-3">
+                <label>City (شہر)<span class="requi">*</span></label>
+                <select name="permanent_city_id" id="permanent_city_id" required class="form-control jbl-dynamic-input permanent-address-field">
+                    <option value="">Select City</option>
+                </select>
+            </div>
+
+            <div class="col-md-4 px-0 px-sm-3">
+                <label>District (ضلع)<span class="requi">*</span></label>
+                <select name="permanent_district_id" id="permanent_district_id" required class="form-control jbl-dynamic-input permanent-address-field">
+                    <option value="">Select District</option>
+                </select>
+            </div>
+
+            <div class="col-md-12 px-0 px-sm-3">
+                <label>Address Line<span class="requi">*</span></label>
+                <input type="text" name="permanent_address" id="permanent_address" required class="form-control jbl-dynamic-input permanent-address-field"
+                    value="{{$user->AddressInfo->permanent_address ?? ''}}">
+            </div>
+
+
+            <!-- Correspondence Address -->
+            <h5 class="col-12 ib-form-subheading-second">Correspondence Address (رابطے کا پتہ)</h5>
+
+            <div class="col-md-4 px-0 px-sm-3">
+                <label>Province<span class="requi">*</span></label>
+                <select name="corres_province_id" required id="corres_province_id" class="form-control jbl-dynamic-input dependent-address-field">
+                    <option value="">Select Province</option>
+                    @foreach ($provinces as $item)
+                    <option value="{{ $item->id }}" {{ ($user->AddressInfo->corres_province_id ?? '') == $item->id ? 'selected' : '' }}>
+                        {{ $item->name }}
+                    </option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="col-md-4 px-0 px-sm-3">
+                <label>City<span class="requi">*</span></label>
+                <select name="corres_city_id" id="corres_city_id" required class="form-control jbl-dynamic-input dependent-address-field">
+                    <option value="">Select City</option>
+                </select>
+            </div>
+
+            <div class="col-md-4 px-0 px-sm-3">
+                <label>District<span class="requi">*</span></label>
+                <select name="corres_district_id" id="corres_district_id" required class="form-control jbl-dynamic-input dependent-address-field">
+                    <option value="">Select District</option>
+                </select>
+            </div>
+
+            <div class="col-md-12 px-0 px-sm-3">
+                <label>Address Line<span class="requi">*</span></label>
+                <input type="text" name="corres_address" id="corres_address" required class="form-control jbl-dynamic-input dependent-address-field"
+                    value="{{$user->AddressInfo->corres_address ?? ''}}">
+            </div>
+
+
+            <!-- Temporary Address -->
+            <h5 class="col-12 ib-form-subheading-second">Temporary Address (عارضی پتہ)</h5>
+
+            <div class="col-md-4 px-0 px-sm-3">
+                <label>Province<span class="requi">*</span></label>
+                <select name="temp_province_id" id="temp_province_id" required class="form-control jbl-dynamic-input dependent-address-field">
+                    <option value="">Select Province</option>
+                    @foreach ($provinces as $item)
+                    <option value="{{ $item->id }}" {{ ($user->AddressInfo->temp_province_id ?? '') == $item->id ? 'selected' : '' }}>
+                        {{ $item->name }}
+                    </option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="col-md-4 px-0 px-sm-3">
+                <label>City<span class="requi">*</span></label>
+                <select name="temp_city_id" id="temp_city_id" required class="form-control jbl-dynamic-input dependent-address-field">
+                    <option value="">Select City</option>
+                </select>
+            </div>
+
+            <div class="col-md-4 px-0 px-sm-3">
+                <label>District<span class="requi">*</span></label>
+                <select name="temp_district_id" id="temp_district_id" required class="form-control jbl-dynamic-input dependent-address-field">
+                    <option value="">Select District</option>
+                </select>
+            </div>
+
+            <div class="col-md-12 px-0 px-sm-3">
+                <label>Address Line<span class="requi">*</span></label>
+                <input type="text" name="temp_address" id="temp_address" required class="form-control jbl-dynamic-input dependent-address-field"
+                    value="{{$user->AddressInfo->temp_address ?? ''}}">
+            </div>
+
+        </div>
+        <div class="col-12 d-flex justify-content-between mt-4">
+            <button type="button" class="btn btn-primary ib-next-btn">Next</button>
+        </div>
+    </div>
+</div>
+
+
+
+<style>
+    .copy-permanent-address-btn {
+        white-space: nowrap;
+        margin: 0.9375rem 0;
+    }
+
+    .dependent-address-field:disabled {
+        background-color: #e9ecef;
+        cursor: not-allowed;
+        opacity: 0.75;
+    }
+</style>
+
+@push('js')
+<script>
+    let permanentProvince = "{{ $user->AddressInfo->permanent_province_id ?? '' }}";
+    let permanentCity = "{{ $user->AddressInfo->permanent_city_id ?? '' }}";
+    let permanentDistrict = "{{ $user->AddressInfo->permanent_district_id ?? '' }}";
+
+    let corresProvince = "{{ $user->AddressInfo->corres_province_id ?? '' }}";
+    let corresCity = "{{ $user->AddressInfo->corres_city_id ?? '' }}";
+    let corresDistrict = "{{ $user->AddressInfo->corres_district_id ?? '' }}";
+
+    let tempProvince = "{{ $user->AddressInfo->temp_province_id ?? '' }}";
+    let tempCity = "{{ $user->AddressInfo->temp_city_id ?? '' }}";
+    let tempDistrict = "{{ $user->AddressInfo->temp_district_id ?? '' }}";
+
+    function isPermanentAddressComplete() {
+        let province = $('#permanent_province_id').val();
+        let city = $('#permanent_city_id').val();
+        let district = $('#permanent_district_id').val();
+        let address = ($('#permanent_address').val() || '').trim();
+
+        return !!(province && city && district && address);
+    }
+
+    // Task 1: show/hide copy button when permanent address is filled
+    function updateCopyPermanentAddressButton() {
+        if (isPermanentAddressComplete()) {
+            $('#copyPermanentAddressBtn').show();
+        } else {
+            $('#copyPermanentAddressBtn').hide();
+        }
+    }
+
+    // Task 2: lock correspondence & temporary until permanent is complete
+    function updateDependentAddressLock() {
+        let unlocked = isPermanentAddressComplete();
+        $('.dependent-address-field').prop('disabled', !unlocked);
+    }
+
+    function refreshAddressUiState() {
+        updateCopyPermanentAddressButton();
+        updateDependentAddressLock();
+    }
+
+    function copyAddressToTarget(targetPrefix, addressFieldId) {
+        let province = $('#permanent_province_id').val();
+        let city = $('#permanent_city_id').val();
+        let district = $('#permanent_district_id').val();
+        let address = $('#permanent_address').val();
+
+        $('#' + targetPrefix + '_province_id').val(province);
+        $('#' + addressFieldId).val(address);
+
+        loadCities(province, '#' + targetPrefix + '_city_id', city, function() {
+            loadDistricts(city, '#' + targetPrefix + '_district_id', district);
+        });
+    }
+
+    function loadCities(provinceId, citySelector, selectedCity = null, callback = null) {
+        if (!provinceId) return;
+
+        $.ajax({
+            method: 'POST',
+            url: '{{ route("frontend.getcityData") }}',
+            data: {
+                province_id: provinceId,
+                _token: '{{ csrf_token() }}'
+            },
+            success: function(res) {
+                let cityDropdown = $(citySelector);
+                cityDropdown.html('<option value="">Select City</option>');
+
+                $.each(res, function(i, city) {
+                    let selected = (selectedCity == city.id) ? 'selected' : '';
+                    cityDropdown.append(`<option value="${city.id}" ${selected}>${city.name}</option>`);
+                });
+
+                if (callback) callback();
+            }
+        });
+    }
+
+    function loadDistricts(cityId, districtSelector, selectedDistrict = null, callback = null) {
+        if (!cityId) return;
+
+        $.ajax({
+            method: 'POST',
+            url: '{{ route("frontend.getDistrictData") }}',
+            data: {
+                city_id: cityId,
+                _token: '{{ csrf_token() }}'
+            },
+            success: function(res) {
+                let districtDropdown = $(districtSelector);
+                districtDropdown.html('<option value="">Select District</option>');
+
+                $.each(res, function(i, d) {
+                    let selected = (selectedDistrict == d.id) ? 'selected' : '';
+                    districtDropdown.append(`<option value="${d.id}" ${selected}>${d.name}</option>`);
+                });
+
+                if (callback) callback();
+            }
+        });
+    }
+    // Permanent
+    $('#permanent_province_id').change(function() {
+        loadCities(this.value, '#permanent_city_id');
+        $('#permanent_district_id').html('<option value="">Select District</option>');
+        refreshAddressUiState();
+    });
+
+    $('#permanent_city_id').change(function() {
+        loadDistricts(this.value, '#permanent_district_id', null, refreshAddressUiState);
+        refreshAddressUiState();
+    });
+
+    $('#permanent_district_id').change(function() {
+        refreshAddressUiState();
+    });
+
+    $('#permanent_address').on('input change', function() {
+        refreshAddressUiState();
+    });
+
+
+    // Correspondence
+    $('#corres_province_id').change(function() {
+        loadCities(this.value, '#corres_city_id');
+    });
+
+    $('#corres_city_id').change(function() {
+        loadDistricts(this.value, '#corres_district_id');
+    });
+
+
+    // Temporary
+    $('#temp_province_id').change(function() {
+        loadCities(this.value, '#temp_city_id');
+    });
+
+    $('#temp_city_id').change(function() {
+        loadDistricts(this.value, '#temp_district_id');
+    });
+
+    // Task 1: copy permanent -> correspondence + temporary
+    $('#copyPermanentAddressBtn').on('click', function() {
+        if (!isPermanentAddressComplete()) {
+            Swal.fire('Info', 'Please complete all Permanent Address fields first.', 'info');
+            return;
+        }
+
+        // Ensure targets are editable before writing values
+        $('.dependent-address-field').prop('disabled', false);
+
+        copyAddressToTarget('corres', 'corres_address');
+        copyAddressToTarget('temp', 'temp_address');
+
+        refreshAddressUiState();
+
+        Swal.fire({
+            title: 'Copied!',
+            text: 'Permanent address copied to Correspondence and Temporary address.',
+            icon: 'success',
+            timer: 1800,
+            showConfirmButton: false
+        });
+    });
+
+    // Disabled fields are skipped by FormData — re-enable right before submit
+    $(document).on('click', '#user_details_submited', function() {
+        $('.dependent-address-field').prop('disabled', false);
+    });
+
+    $(document).ready(function() {
+        // Lock dependent fields immediately on load (Task 2)
+        refreshAddressUiState();
+
+        // PERMANENT
+        if (permanentProvince) {
+            $('#permanent_province_id').val(permanentProvince);
+
+            loadCities(permanentProvince, '#permanent_city_id', permanentCity, function() {
+                loadDistricts(permanentCity, '#permanent_district_id', permanentDistrict, function() {
+                    refreshAddressUiState();
+                });
+            });
+        }
+
+        // CORRESPONDENCE
+        if (corresProvince) {
+            $('#corres_province_id').val(corresProvince);
+
+            loadCities(corresProvince, '#corres_city_id', corresCity, function() {
+                loadDistricts(corresCity, '#corres_district_id', corresDistrict, function() {
+                    refreshAddressUiState();
+                });
+            });
+        }
+
+        // TEMPORARY
+        if (tempProvince) {
+            $('#temp_province_id').val(tempProvince);
+
+            loadCities(tempProvince, '#temp_city_id', tempCity, function() {
+                loadDistricts(tempCity, '#temp_district_id', tempDistrict, function() {
+                    refreshAddressUiState();
+                });
+            });
+        }
+
+    });
+
+
+
+
+
+
+
+
+    $(document).ready(function() {
+        $('#addressForm').on('submit', function(e) {
+            e.preventDefault();
+
+            let formData = $(this).serialize();
+            let isValid = true;
+
+            // Simple Validation: Check if required fields are empty
+            $(this).find('.form-control').each(function() {
+                let fieldName = $(this).attr('name');
+                let fieldValue = $(this).val().trim();
+
+                // In fields ko skip karna hai (Optional fields)
+                let optionalFields = [];
+
+                // Agar field khali hai AUR wo optional list mein NAHI hai
+                if (fieldValue === "" && !optionalFields.includes(fieldName)) {
+                    $(this).css('border-color', 'red');
+                    isValid = false;
+                } else {
+                    $(this).css('border-color', ''); // Error khatam hone par border normal kar dein
+                }
+            });
+
+            if (!isValid) {
+                Swal.fire('Error', 'Please fill all required fields.', 'error');
+                return false;
+            }
+
+            // AJAX Call
+            $.ajax({
+                method: 'POST',
+                url: '{{ route("frontend.updateAddressInfo") }}', // Apna sahi route yahan likhein
+                data: formData,
+                beforeSend: function() {
+                    Swal.fire({
+                        title: 'Updating...',
+                        text: 'Please wait while we save your details',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+                },
+                success: function(response) {
+                    Swal.close();
+
+                    if (response.success) {
+                        Swal.fire({
+                            title: 'Success!',
+                            text: 'Profile updated successfully.',
+                            icon: 'success',
+                            timer: 2000
+                        });
+                    } else {
+                        Swal.fire('Error', response.message || 'Something went wrong', 'error');
+                    }
+                },
+                error: function(xhr) {
+                    Swal.close();
+
+                    if (xhr.status === 422) {
+                        // Laravel validation errors yahan hote hain: xhr.responseJSON.errors
+                        let errors = xhr.responseJSON.errors;
+                        let errorString = '';
+
+                        // Saare errors ko ek string mein jama karein
+                        $.each(errors, function(key, value) {
+                            errorString += value[0] + '<br>'; // value[0] mein actual message hota hai
+
+                            // Optional: Field ka border red karne ke liye
+                            $('[name="' + key + '"]').css('border-color', 'red');
+                        });
+
+                        Swal.fire({
+                            title: 'Validation Error',
+                            html: errorString, // html property use karein taake <br> kaam kare
+                            icon: 'error'
+                        });
+                    } else {
+                        Swal.fire('Error', 'Something went wrong on the server.', 'error');
+                    }
+                }
+            });
+        });
+
+        $('input[name="cnic_number"]').on('input', function() {
+            let val = $(this).val().replace(/\D/g, ''); // Sirf digits rakho
+            let newVal = '';
+
+            if (val.length > 0) {
+                newVal += val.substr(0, 5);
+            }
+            if (val.length > 5) {
+                newVal += '-' + val.substr(5, 7);
+            }
+            if (val.length > 12) {
+                newVal += '-' + val.substr(12, 1);
+            }
+
+            $(this).val(newVal.substring(0, 15)); // Max length 15 characters
+        });
+
+
+        // Jab Date of Birth change ho
+        $('input[name="date_of_birth"]').on('change', function() {
+            let dobValue = $(this).val();
+
+            if (dobValue) {
+                let dob = new Date(dobValue);
+                let today = new Date();
+
+                // Age calculate karein
+                let age = today.getFullYear() - dob.getFullYear();
+                let monthDiff = today.getMonth() - dob.getMonth();
+                let dayDiff = today.getDate() - dob.getDate();
+
+                // Agar birthday is saal abhi tak nahi aaya, to ek saal kam karein
+                if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+                    age--;
+                }
+
+                // "Nearest Birthday" ka logic (Pakistan Insurance standard):
+                // Agar agle birthday mein 6 mahine se kam rehte hain, to age + 1 kar dete hain
+                let nextBirthday = new Date(dob);
+                nextBirthday.setFullYear(today.getFullYear());
+
+                // Agar birthday guzar gaya hai to agle saal ka set karein
+                if (today > nextBirthday) {
+                    nextBirthday.setFullYear(today.getFullYear() + 1);
+                }
+
+                let diffTime = Math.abs(nextBirthday - today);
+                let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                // Insurance rules ke mutabiq: agar 6 mahine (182 days) se kam rehte hain agle bday mein
+                if (diffDays <= 182) {
+                    age++;
+                }
+
+                // Age field mein value set karein
+                $('input[name="age_nearest_date"]').val(age);
+            }
+        });
+
+
+
+
+        $('input[name="mobile_number"]').on('input', function() {
+            // Sirf digits allow karein
+            let val = $(this).val().replace(/\D/g, '');
+            let newVal = '';
+
+            if (val.length > 0) {
+                // Pehle 4 digits (e.g., 0321)
+                newVal += val.substr(0, 4);
+            }
+            if (val.length > 4) {
+                // Phir dash aur baki ke 7 digits
+                newVal += '-' + val.substr(4, 7);
+            }
+
+            // Final value set karein (Total length 12: 4 digits + 1 dash + 7 digits)
+            $(this).val(newVal.substring(0, 12));
+        });
+
+        //   for permannet
+
+        $('#permanent_province_id').change(function() {
+            var province_id = $(this).val();
+            if (!province_id) return;
+            let cityDropdown = $('#permanent_city_id');
+            $.ajax({
+                method: 'POST',
+                url: '{{ route("frontend.getcityData") }}',
+                data: {
+                    province_id: province_id,
+                    _token: '{{ csrf_token() }}'
+                },
+                beforeSend: function() {
+                    cityDropdown.empty();
+                    cityDropdown.append('<option value="">Loading .....</option>');
+                },
+                success: function(response) {
+
+                    cityDropdown.empty(); // clear loading
+
+                    cityDropdown.append('<option value="">Select City</option>');
+
+                    $.each(response, function(index, city) {
+                        cityDropdown.append(
+                            `<option value="${city.id}">${city.name}</option>`
+                        );
+                    });
+                    refreshAddressUiState();
+                },
+                error: function(xhr) {
+                    if (xhr.status === 422) {
+                        let errors = xhr.responseJSON.errors;
+                        let errorString = '';
+
+                        $.each(errors, function(key, value) {
+                            errorString += value[0] + '<br>';
+                            $('[name="' + key + '"]').css('border-color', 'red');
+                        });
+
+                        Swal.fire({
+                            title: 'Validation Error',
+                            html: errorString,
+                            icon: 'error'
+                        });
+                    } else {
+                        Swal.fire('Error', 'Something went wrong on the server.', 'error');
+                    }
+                }
+            });
+        });
+        $('#permanent_city_id').change(function() {
+            var city_id = $(this).val();
+            if (!city_id) return;
+            let DistrictDropdown = $('#permanent_district_id');
+            $.ajax({
+                method: 'POST',
+                url: '{{ route("frontend.getDistrictData") }}',
+                data: {
+                    city_id: city_id,
+                    _token: '{{ csrf_token() }}'
+                },
+                beforeSend: function() {
+                    DistrictDropdown.empty();
+                    DistrictDropdown.append('<option value="">Loading .....</option>');
+                },
+                success: function(response) {
+                    DistrictDropdown.empty(); // clear loading
+                    DistrictDropdown.append('<option value="">Select District</option>');
+                    $.each(response, function(index, city) {
+                        DistrictDropdown.append(
+                            `<option value="${city.id}">${city.name}</option>`
+                        );
+                    });
+                    refreshAddressUiState();
+                },
+                error: function(xhr) {
+                    if (xhr.status === 422) {
+                        let errors = xhr.responseJSON.errors;
+                        let errorString = '';
+
+                        $.each(errors, function(key, value) {
+                            errorString += value[0] + '<br>';
+                            $('[name="' + key + '"]').css('border-color', 'red');
+                        });
+
+                        Swal.fire({
+                            title: 'Validation Error',
+                            html: errorString,
+                            icon: 'error'
+                        });
+                    } else {
+                        Swal.fire('Error', 'Something went wrong on the server.', 'error');
+                    }
+                }
+            });
+        });
+
+        // for corres
+
+        $('#corres_province_id').change(function() {
+            var province_id = $(this).val();
+            if (!province_id) return;
+            let cityDropdown = $('#corres_city_id');
+            $.ajax({
+                method: 'POST',
+                url: '{{ route("frontend.getcityData") }}',
+                data: {
+                    province_id: province_id,
+                    _token: '{{ csrf_token() }}'
+                },
+                beforeSend: function() {
+                    cityDropdown.empty();
+                    cityDropdown.append('<option value="">Loading .....</option>');
+                },
+                success: function(response) {
+
+                    cityDropdown.empty(); // clear loading
+
+                    cityDropdown.append('<option value="">Select City</option>');
+
+                    $.each(response, function(index, city) {
+                        cityDropdown.append(
+                            `<option value="${city.id}">${city.name}</option>`
+                        );
+                    });
+                },
+                error: function(xhr) {
+                    if (xhr.status === 422) {
+                        let errors = xhr.responseJSON.errors;
+                        let errorString = '';
+
+                        $.each(errors, function(key, value) {
+                            errorString += value[0] + '<br>';
+                            $('[name="' + key + '"]').css('border-color', 'red');
+                        });
+
+                        Swal.fire({
+                            title: 'Validation Error',
+                            html: errorString,
+                            icon: 'error'
+                        });
+                    } else {
+                        Swal.fire('Error', 'Something went wrong on the server.', 'error');
+                    }
+                }
+            });
+        });
+        $('#corres_city_id').change(function() {
+            var city_id = $(this).val();
+            if (!city_id) return;
+            let DistrictDropdown = $('#corres_district_id');
+            $.ajax({
+                method: 'POST',
+                url: '{{ route("frontend.getDistrictData") }}',
+                data: {
+                    city_id: city_id,
+                    _token: '{{ csrf_token() }}'
+                },
+                beforeSend: function() {
+                    DistrictDropdown.empty();
+                    DistrictDropdown.append('<option value="">Loading .....</option>');
+                },
+                success: function(response) {
+                    DistrictDropdown.empty(); // clear loading
+                    DistrictDropdown.append('<option value="">Select City</option>');
+                    $.each(response, function(index, city) {
+                        DistrictDropdown.append(
+                            `<option value="${city.id}">${city.name}</option>`
+                        );
+                    });
+                },
+                error: function(xhr) {
+                    if (xhr.status === 422) {
+                        let errors = xhr.responseJSON.errors;
+                        let errorString = '';
+
+                        $.each(errors, function(key, value) {
+                            errorString += value[0] + '<br>';
+                            $('[name="' + key + '"]').css('border-color', 'red');
+                        });
+
+                        Swal.fire({
+                            title: 'Validation Error',
+                            html: errorString,
+                            icon: 'error'
+                        });
+                    } else {
+                        Swal.fire('Error', 'Something went wrong on the server.', 'error');
+                    }
+                }
+            });
+        });
+
+        // for temp
+
+        $('#temp_province_id').change(function() {
+            var province_id = $(this).val();
+            if (!province_id) return;
+            let cityDropdown = $('#temp_city_id');
+            $.ajax({
+                method: 'POST',
+                url: '{{ route("frontend.getcityData") }}',
+                data: {
+                    province_id: province_id,
+                    _token: '{{ csrf_token() }}'
+                },
+                beforeSend: function() {
+                    cityDropdown.empty();
+                    cityDropdown.append('<option value="">Loading .....</option>');
+                },
+                success: function(response) {
+
+                    cityDropdown.empty(); // clear loading
+
+                    cityDropdown.append('<option value="">Select City</option>');
+
+                    $.each(response, function(index, city) {
+                        cityDropdown.append(
+                            `<option value="${city.id}">${city.name}</option>`
+                        );
+                    });
+                },
+                error: function(xhr) {
+                    if (xhr.status === 422) {
+                        let errors = xhr.responseJSON.errors;
+                        let errorString = '';
+
+                        $.each(errors, function(key, value) {
+                            errorString += value[0] + '<br>';
+                            $('[name="' + key + '"]').css('border-color', 'red');
+                        });
+
+                        Swal.fire({
+                            title: 'Validation Error',
+                            html: errorString,
+                            icon: 'error'
+                        });
+                    } else {
+                        Swal.fire('Error', 'Something went wrong on the server.', 'error');
+                    }
+                }
+            });
+        });
+        $('#temp_city_id').change(function() {
+            var city_id = $(this).val();
+            if (!city_id) return;
+            let DistrictDropdown = $('#temp_district_id');
+            $.ajax({
+                method: 'POST',
+                url: '{{ route("frontend.getDistrictData") }}',
+                data: {
+                    city_id: city_id,
+                    _token: '{{ csrf_token() }}'
+                },
+                beforeSend: function() {
+                    DistrictDropdown.empty();
+                    DistrictDropdown.append('<option value="">Loading .....</option>');
+                },
+                success: function(response) {
+                    DistrictDropdown.empty(); // clear loading
+                    DistrictDropdown.append('<option value="">Select City</option>');
+                    $.each(response, function(index, city) {
+                        DistrictDropdown.append(
+                            `<option value="${city.id}">${city.name}</option>`
+                        );
+                    });
+                },
+                error: function(xhr) {
+                    if (xhr.status === 422) {
+                        let errors = xhr.responseJSON.errors;
+                        let errorString = '';
+
+                        $.each(errors, function(key, value) {
+                            errorString += value[0] + '<br>';
+                            $('[name="' + key + '"]').css('border-color', 'red');
+                        });
+
+                        Swal.fire({
+                            title: 'Validation Error',
+                            html: errorString,
+                            icon: 'error'
+                        });
+                    } else {
+                        Swal.fire('Error', 'Something went wrong on the server.', 'error');
+                    }
+                }
+            });
+        });
+
+
+    });
+</script>
+@endpush

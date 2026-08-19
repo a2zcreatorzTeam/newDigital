@@ -1,3 +1,17 @@
+window.showSignInAuthForm = function () {
+    $(".otp-form").hide();
+    $(".lost-password").hide();
+    $(".signup-form").hide();
+    $(".signin-form").show();
+};
+
+window.showSignUpAuthForm = function () {
+    $(".otp-form").hide();
+    $(".lost-password").hide();
+    $(".signin-form").hide();
+    $(".signup-form").show();
+};
+
 $(document).ready(function () {
     $("#show_hide_password a").on("click", function (event) {
         event.preventDefault();
@@ -30,15 +44,11 @@ $(document).ready(function () {
         }
     }
 
-    $("#signup").click(function () {
-        $(".signin-form").hide();
-        $(".lost-password").hide();
-        $(".signup-form").show();
+    $(document).on("click", ".js-show-signup", function () {
+        window.showSignUpAuthForm();
     });
-    $("#signin").click(function () {
-        $(".lost-password").hide();
-        $(".signup-form").hide();
-        $(".signin-form").show();
+    $(document).on("click", ".js-show-signin", function () {
+        window.showSignInAuthForm();
     });
     $("#lostPasswordLink").click(function () {
         $(".lost-password").show();

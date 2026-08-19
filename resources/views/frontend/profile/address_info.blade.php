@@ -1,6 +1,6 @@
     <form action="#" method="POST" id='addressForm'>
         @csrf
-        <h2 class="profile-section-title">Address Information</h2>
+        <h2 class="profile-section-title">Address Details (پتے کی تفصیلات)</h2>
         <div class="box-form-login">
             <h5 class="mb-4 text-primary"><i class="fas fa-map-marker-alt"></i> Permanent Address (مستقل پتہ)</h5>
             <div class="row">
@@ -358,50 +358,6 @@
 
                 $(this).val(newVal.substring(0, 15)); // Max length 15 characters
             });
-
-
-            // Jab Date of Birth change ho
-            $('input[name="date_of_birth"]').on('change', function() {
-                let dobValue = $(this).val();
-
-                if (dobValue) {
-                    let dob = new Date(dobValue);
-                    let today = new Date();
-
-                    // Age calculate karein
-                    let age = today.getFullYear() - dob.getFullYear();
-                    let monthDiff = today.getMonth() - dob.getMonth();
-                    let dayDiff = today.getDate() - dob.getDate();
-
-                    // Agar birthday is saal abhi tak nahi aaya, to ek saal kam karein
-                    if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
-                        age--;
-                    }
-
-                    // "Nearest Birthday" ka logic (Pakistan Insurance standard):
-                    // Agar agle birthday mein 6 mahine se kam rehte hain, to age + 1 kar dete hain
-                    let nextBirthday = new Date(dob);
-                    nextBirthday.setFullYear(today.getFullYear());
-
-                    // Agar birthday guzar gaya hai to agle saal ka set karein
-                    if (today > nextBirthday) {
-                        nextBirthday.setFullYear(today.getFullYear() + 1);
-                    }
-
-                    let diffTime = Math.abs(nextBirthday - today);
-                    let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-                    // Insurance rules ke mutabiq: agar 6 mahine (182 days) se kam rehte hain agle bday mein
-                    if (diffDays <= 182) {
-                        age++;
-                    }
-
-                    // Age field mein value set karein
-                    $('input[name="age_nearest_date"]').val(age);
-                }
-            });
-
-
 
 
             $('input[name="mobile_number"]').on('input', function() {

@@ -374,14 +374,20 @@
                             @forelse($policies as $row)
                             @php
                             $encryptedId = encrypt($row['id']);
+                            $planName = data_get($row, 'policyPlan.name')
+                                ?? (is_numeric($row['plan'] ?? null) ? null : ($row['plan'] ?? null))
+                                ?? 'N/A';
+                            $mainClassName = data_get($row, 'policyPlan.mainClass.name') ?? '';
                             @endphp
 
                             <tr>
 
                                 <td>
                                     <a href="{{ route('frontend.policyDetail',$encryptedId) }}">
-                                        <div class="claim-document-tittle">{{ $row['policyPlan']['name'] }}</div>
-                                        <div class="claim-document-small">{{ $row['policyPlan']['mainClass']['name'] }}</div>
+                                        <div class="claim-document-tittle">{{ $planName }}</div>
+                                        @if($mainClassName !== '')
+                                        <div class="claim-document-small">{{ $mainClassName }}</div>
+                                        @endif
                                     </a>
                                 </td>
                                 <td>

@@ -75,17 +75,28 @@ class UserPolicyController extends Controller
 
     public function policy_detail($id)
     {
-        $id = Crypt::decryptString($id);
-        $data = UserPolicyData::with('voucher', 'family_history')->where('id', $id)->first();
+        try {
+            $id = Crypt::decryptString($id);
+        } catch (\Throwable) {
+            abort(404);
+        }
+
+        $data = UserPolicyData::with('voucher', 'family_history', 'lifeProposedDetail')->where('id', $id)->firstOrFail();
         return view('backend.userPolicy.policy_detail', compact('data'));
     }
 
   
     public function downloadPolicyUserPdf($id)
     {
-        $data = UserPolicyData::with('voucher', 'family_history')
+        try {
+            $id = Crypt::decryptString($id);
+        } catch (\Throwable) {
+            abort(404);
+        }
+
+        $data = UserPolicyData::with('voucher', 'family_history', 'lifeProposedDetail')
             ->where('id', $id)
-            ->first();
+            ->firstOrFail();
 
         $pdf = Pdf::loadView('backend.userPolicy.policy-detail-pdf', compact('data'))
             ->setPaper('a4', 'portrait');
@@ -137,7 +148,24 @@ class UserPolicyController extends Controller
 
         $query = $this->filterPolicies($request);
 
-        $final_data = $query->get();
+        $final_data = $query->with([
+            'user',
+            'product',
+            'policyPlan.mainClass',
+            'dualNationalityCountry',
+            'lifeProposedDetail',
+            'voucher',
+            'family_history',
+            'get_permanent_province',
+            'get_permanent_city',
+            'get_permanent_district',
+            'get_corres_province',
+            'get_corres_city',
+            'get_corres_district',
+            'get_temp_province',
+            'get_temp_city',
+            'get_temp_district',
+        ])->get();
 
         return Excel::download(
             new UserPolicyExport($final_data),
@@ -187,10 +215,15 @@ class UserPolicyController extends Controller
         } elseif ($request->start_date) {
 
             $query->where('created_at', '>=', $request->start_date . ' 00:00:00');
-        } elseif ($request->end_date) {
+        } else        if ($request->end_date) {
 
             $query->where('created_at', '<=', $request->end_date . ' 23:59:59');
         }
+
+        $allowedSorts = ['id', 'created_at', 'policy_id', 'status'];
+        $sortBy = in_array($request->sorting, $allowedSorts, true) ? $request->sorting : 'id';
+        $direction = strtolower((string) $request->direction) === 'asc' ? 'asc' : 'desc';
+        $query->orderBy($sortBy, $direction);
 
         return $query;
     }

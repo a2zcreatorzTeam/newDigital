@@ -48,7 +48,7 @@
             <div class="col-6">
                 <div class="form-group">
                     <label for="">Date Of Birth (تاریخِ پیدائش)<span class="text-danger"> *</span></label>
-                    <input type="date" name="date_of_birth" class="form-control account" value="{{$user->basicDetail->date_of_birth ?? ''}}" required>
+                    <input type="date" name="date_of_birth" class="form-control account" value="{{$user->basicDetail->date_of_birth ?? ''}}" required max="{{ now('Asia/Karachi')->subYears(18)->toDateString() }}">
                 </div>
 
             </div>
@@ -66,11 +66,42 @@
             <div class="col-6">
                 <div class="form-group">
                     <label>Gender/Sex (جنس)<span class="text-danger"> *</span></label>
-                    <select name='gender' class="form-control" required>
+                    <select name='gender' id="gender" class="form-control" required>
                         <option value="">Select Gender</option>
                         <option value="Male" {{ ($user->basicDetail->gender ?? '') == 'Male' ? 'selected' : '' }}>Male</option>
                         <option value="Female" {{ ($user->basicDetail->gender ?? '') == 'Female' ? 'selected' : '' }}>Female</option>
+                        <option value="Other" {{ ($user->basicDetail->gender ?? '') == 'Other' ? 'selected' : '' }}>Other</option>
                     </select>
+                </div>
+            </div>
+
+            <!-- Marital Status -->
+            <div class="col-6">
+                <div class="form-group">
+                    <label>Marital Status (ازدواجی حیثیت)<span class="text-danger"> *</span></label>
+                    <select name="marital_status" id="marital_status" class="form-control" required>
+                        <option value="">Select Marital Status</option>
+                        <option value="Married" {{ ($user->basicDetail->marital_status ?? '') == 'Married' ? 'selected' : '' }}>Married</option>
+                        <option value="Unmarried" {{ ($user->basicDetail->marital_status ?? '') == 'Unmarried' ? 'selected' : '' }}>Unmarried</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Wife Name -->
+            <div class="col-6" id="wife_name_wrap" style="display: none;">
+                <div class="form-group">
+                    <label>Wife Name of Life Proposed (بیمہ کنندہ کی بیوی کا نام)<span class="text-danger"> *</span></label>
+                    <input type="text" id="wife_name" name="wife_name" class="form-control account"
+                        value="{{ $user->basicDetail->wife_name ?? '' }}">
+                </div>
+            </div>
+
+            <!-- Husband Name -->
+            <div class="col-6" id="husband_name_wrap" style="display: none;">
+                <div class="form-group">
+                    <label>Husband Name of Life Proposed (بیمہ کنندہ کے شوہر کا نام)<span class="text-danger"> *</span></label>
+                    <input type="text" id="husband_name" name="husband_name" class="form-control account"
+                        value="{{ $user->basicDetail->husband_name ?? '' }}">
                 </div>
             </div>
 
@@ -87,15 +118,6 @@
                 <div class="form-group">
                     <label>Father’s Name of Life Proposed (مجوزہ بیمہ کے والد کا نام)<span class="text-danger"> *</span></label>
                     <input required type="text" name='father_name' class="form-control account" value="{{ $user->basicDetail->father_name ?? '' }}">
-                </div>
-            </div>
-
-            <!-- Husband Name -->
-            <div class="col-6">
-                <div class="form-group">
-                    <label>Husband Name of Life Proposed (بیمہ کنندہ کے شوہر کا نام)<span class="text-danger"> *</span></label>
-                    <input type="text" required name="husband_name" class="form-control account"
-                        value="{{ $user->basicDetail->husband_name ?? '' }}">
                 </div>
             </div>
 
@@ -140,35 +162,97 @@
         </div>
     </div>
 
-    <!-- Fax -->
-    <div class="col-6">
-        <div class="form-group">
-            <label>Fax No (فیکس نمبر)</label>
-            <input type="text" required value="{{ $user->basicDetail->fax_number ?? '' }}" name='fax_number' class="form-control account">
-        </div>
-    </div>
-
     <!-- Dual National -->
     <div class="col-6">
         <div class="form-group">
-            <label>Dual National? (کیا سائل ڈوئل قومیت رکھتا ہے؟)<span class="text-danger"> *</span></label>
+            <label>Is Client Dual National? (کیا سائل دوہری قومیت رکھتا ہے؟)<span class="text-danger"> *</span></label>
             <select name="is_client_dual_national" required class="form-control" id="is_client_dual_national">
                 <option value="">Select Option</option>
                 <option value="Yes" {{ ($user->basicDetail->is_client_dual_national ?? '') == 'Yes' ? 'selected' : '' }}>Yes</option>
                 <option value="No" {{ ($user->basicDetail->is_client_dual_national ?? '') == 'No' ? 'selected' : '' }}>No</option>
             </select>
-
         </div>
     </div>
 
-    {{-- Dual nationality fields are injected dynamically by toggleDualNationalityFields() below --}}
-    <div id="dual_natunality_fields" class="row"></div>
+    <div class="col-6">
+        <div class="form-group">
+            @include('frontend.partials.country_select', [
+                'countries' => $countries ?? collect(),
+                'fieldName' => 'primary_nationality_country_id',
+                'countrySelectId' => 'primary_nationality_country_id',
+                'selectedCountryId' => $user->basicDetail->primary_nationality_country_id ?? null,
+                'selectedCountryName' => $user->basicDetail->primary_nationality ?? null,
+                'selectedNameField' => 'primary_nationality',
+                'countryRequired' => false,
+                'countrySelectClass' => 'form-control account',
+                'countryLabel' => 'Primary Nationality (قومیت)',
+            ])
+        </div>
+    </div>
+
+    <div class="col-6">
+        <div class="form-group">
+            @include('frontend.partials.country_select', [
+                'countries' => $countries ?? collect(),
+                'fieldName' => 'dual_nationality_country_id',
+                'countrySelectId' => 'dual_nationality_country_id',
+                'selectedCountryId' => $user->basicDetail->dual_nationality_country_id ?? null,
+                'selectedCountryName' => $user->basicDetail->dual_nationality_country ?? null,
+                'selectedNameField' => 'dual_nationality_country',
+                'countryRequired' => false,
+                'countrySelectClass' => 'form-control account',
+                'countryLabel' => 'Dual Nationality Country',
+            ])
+        </div>
+    </div>
+
+    <div class="col-6">
+        <div class="form-group">
+            <label>Tax/TIN Number<span class="text-danger"> *</span></label>
+            <input type="text" name="dual_tax_tin_number" class="form-control account" value="{{ $user->basicDetail->dual_tax_tin_number ?? '' }}">
+        </div>
+    </div>
+
+    <div class="col-6">
+        <div class="form-group">
+            <label>Mobile Number<span class="text-danger"> *</span></label>
+            <input type="text" name="dual_mobile_number" class="form-control account" value="{{ $user->basicDetail->dual_mobile_number ?? '' }}">
+        </div>
+    </div>
+
+    <div class="col-6">
+        <div class="form-group">
+            <label>Address<span class="text-danger"> *</span></label>
+            <textarea name="dual_address" class="form-control account" rows="2">{{ $user->basicDetail->dual_address ?? '' }}</textarea>
+        </div>
+    </div>
+
+    <div class="col-6">
+        <div class="form-group">
+            <label>Passport Number<span class="text-danger"> *</span></label>
+            <input type="text" name="dual_passport_number" class="form-control account" value="{{ $user->basicDetail->dual_passport_number ?? '' }}">
+        </div>
+    </div>
 
     <!-- Birth Place -->
     <div class="col-6">
         <div class="form-group">
-            <label>Birth Place (مقامِ پیدائش)<span class="text-danger"> *</span></label>
-            <input type="text" required value="{{ $user->basicDetail->birth_placed ?? '' }}" name='birth_placed' class="form-control account">
+            @php
+                $selectedBirthCityId = old(
+                    'birth_place_city_id',
+                    $user->basicDetail->birth_place_city_id
+                        ?? optional(($cities ?? collect())->first(
+                            fn ($c) => strcasecmp($c->name, (string) ($user->basicDetail->birth_placed ?? '')) === 0
+                        ))->id
+                );
+            @endphp
+            @include('frontend.partials.birth_place_select', [
+                'cities' => $cities ?? collect(),
+                'selectedBirthCityId' => $selectedBirthCityId,
+                'birthPlaceRequired' => true,
+                'birthPlaceClass' => 'form-control account',
+                'birthPlaceLabel' => 'Birth Place (مقامِ پیدائش)',
+            ])
         </div>
     </div>
 
@@ -183,7 +267,14 @@
             </select>
         </div>
     </div>
-    <div id="same_person_fields" class="row"></div>
+    <div id="same_person_fields" class="col-12" @if(($user->basicDetail->is_same_person ?? '') !== 'No') style="display:none;" @endif>
+        @include('frontend.partials.life_proposed_fields', [
+            'variant' => 'profile',
+            'lp' => \App\Support\LifeProposedProfile::values($user->basicDetail ?? null),
+            'cities' => $cities ?? collect(),
+            'countries' => $countries ?? collect(),
+        ])
+    </div>
     <!-- ... (Other Basic Fields) ... -->
     </div>
     <div class="update-btn-container">
@@ -202,15 +293,18 @@
             let isValid = true;
 
             // Simple Validation: Check if required fields are empty
-            $(this).find('.form-control').each(function() {
+            $(this).find('.form-control:visible').each(function() {
+                if ($(this).prop('disabled')) {
+                    return;
+                }
                 let fieldName = $(this).attr('name');
-                let fieldValue = $(this).val().trim();
+                let fieldValue = ($(this).val() || '').trim();
 
                 // In fields ko skip karna hai (Optional fields)
-                let optionalFields = ['fax_number', 'phone_number_office', 'phone_number_residente', 'mother_maiden_name', 'father_name', 'husband_name'];
+                let optionalFields = ['phone_number_office', 'phone_number_residente', 'mother_maiden_name', 'father_name', 'life_proposed_phone_office', 'life_proposed_phone_residential'];
 
                 // Agar field khali hai AUR wo optional list mein NAHI hai
-                if (fieldValue === "" && !optionalFields.includes(fieldName)) {
+                if (fieldValue === "" && fieldName && !optionalFields.includes(fieldName)) {
                     $(this).css('border-color', 'red');
                     isValid = false;
                 } else {
@@ -218,7 +312,38 @@
                 }
             });
 
+            var proposerAge = parseInt($('input[name="age_nearest_date"]').val(), 10);
+            if (!isNaN(proposerAge) && proposerAge < 18) {
+                $('input[name="age_nearest_date"], input[name="date_of_birth"]').css('border-color', 'red');
+                isValid = false;
+            }
+
+            function markCountry($select, valid) {
+                var $ui = $select.next('.select2-container').find('.select2-selection');
+                if (!valid) {
+                    isValid = false;
+                    if ($ui.length) {
+                        $ui.css('border-color', 'red');
+                    } else {
+                        $select.css('border-color', 'red');
+                    }
+                } else {
+                    $ui.css('border-color', '');
+                    $select.css('border-color', '');
+                }
+            }
+
+            if ($('#is_client_dual_national').val() === 'Yes') {
+                markCountry($(this).find('select[name="primary_nationality_country_id"]'), !!$(this).find('select[name="primary_nationality_country_id"]').val());
+                markCountry($(this).find('select[name="dual_nationality_country_id"]'), !!$(this).find('select[name="dual_nationality_country_id"]').val());
+            }
+
             if (!isValid) {
+                var proposerAge = parseInt($('input[name="age_nearest_date"]').val(), 10);
+                if (!isNaN(proposerAge) && proposerAge < 18) {
+                    Swal.fire('Error', 'Proposer must be 18 years or older.', 'error');
+                    return;
+                }
                 Swal.fire('Error', 'Please fill all required fields.', 'error');
                 return false;
             }
@@ -298,50 +423,6 @@
         });
 
 
-        // Jab Date of Birth change ho
-        $('input[name="date_of_birth"]').on('change', function() {
-            let dobValue = $(this).val();
-
-            if (dobValue) {
-                let dob = new Date(dobValue);
-                let today = new Date();
-
-                // Age calculate karein
-                let age = today.getFullYear() - dob.getFullYear();
-                let monthDiff = today.getMonth() - dob.getMonth();
-                let dayDiff = today.getDate() - dob.getDate();
-
-                // Agar birthday is saal abhi tak nahi aaya, to ek saal kam karein
-                if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
-                    age--;
-                }
-
-                // "Nearest Birthday" ka logic (Pakistan Insurance standard):
-                // Agar agle birthday mein 6 mahine se kam rehte hain, to age + 1 kar dete hain
-                let nextBirthday = new Date(dob);
-                nextBirthday.setFullYear(today.getFullYear());
-
-                // Agar birthday guzar gaya hai to agle saal ka set karein
-                if (today > nextBirthday) {
-                    nextBirthday.setFullYear(today.getFullYear() + 1);
-                }
-
-                let diffTime = Math.abs(nextBirthday - today);
-                let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-                // Insurance rules ke mutabiq: agar 6 mahine (182 days) se kam rehte hain agle bday mein
-                if (diffDays <= 182) {
-                    age++;
-                }
-
-                // Age field mein value set karein
-                $('input[name="age_nearest_date"]').val(age);
-            }
-        });
-
-
-
-
         $('input[name="mobile_number"]').on('input', function() {
             // Sirf digits allow karein
             let val = $(this).val().replace(/\D/g, '');
@@ -360,104 +441,37 @@
             $(this).val(newVal.substring(0, 12));
         });
 
-        // ===== Dual Nationality Toggle (dynamic field injection) =====
-        function toggleDualNationalityFields() {
+        function toggleSpouseNameFields() {
+            let gender = ($('#gender').val() || '').trim();
+            let marital = ($('#marital_status').val() || '').trim();
 
-            let dual_option = $('#is_client_dual_national').val();
+            $('#wife_name_wrap, #husband_name_wrap').hide();
+            $('#wife_name, #husband_name').prop('required', false);
 
-            if (dual_option === 'Yes') {
-
-                $('#dual_natunality_fields').html(`
-            <div class="col-md-6 px-0 px-sm-3">
-                <label>
-                    Primary Nationality (قومیت)
-                    <span class="requi">*</span>
-                </label>
-                <input type="text"
-                       value="{{ $user->basicDetail->primary_nationality ?? '' }}"
-                       name="primary_nationality"
-                       class="form-control account">
-            </div>
-
-            <div class="col-md-6 px-0 px-sm-3">
-                <label>
-                    Dual Nationality (دوہری قومیت)
-                    <span class="requi">*</span>
-                </label>
-                <input type="text"
-                       value="{{ $user->basicDetail->dual_nationality ?? '' }}"
-                       name="dual_nationality"
-                       class="form-control account">
-            </div>
-
-            <div class="col-md-6 px-0 px-sm-3 mt-3">
-                <label>
-                    Dual Nationality Country
-                    <span class="requi">*</span>
-                </label>
-                <input type="text"
-                       value="{{ $user->basicDetail->dual_nationality_country ?? '' }}"
-                       name="dual_nationality_country"
-                       class="form-control account">
-            </div>
-
-            <div class="col-md-6 px-0 px-sm-3 mt-3">
-                <label>
-                    Passport Number
-                    <span class="requi">*</span>
-                </label>
-                <input type="text"
-                       value="{{ $user->basicDetail->dual_passport_number ?? '' }}"
-                       name="dual_passport_number"
-                       class="form-control account">
-            </div>
-        `);
-
-            } else {
-                $('#dual_natunality_fields').html('');
+            if (marital === 'Married' && gender === 'Male') {
+                $('#wife_name_wrap').show();
+                $('#wife_name').prop('required', true);
+                $('#husband_name').val('');
+            } else if (marital === 'Married' && gender === 'Female') {
+                $('#husband_name_wrap').show();
+                $('#husband_name').prop('required', true);
+                $('#wife_name').val('');
+            } else if (marital === 'Unmarried') {
+                $('#wife_name, #husband_name').val('');
             }
         }
 
-        // Page load par
-        toggleDualNationalityFields();
-        $('#is_client_dual_national').on('change', toggleDualNationalityFields);
+        $('#gender, #marital_status').on('change', toggleSpouseNameFields);
+        toggleSpouseNameFields();
 
-        // ===== Proposer & Life Proposed Same Toggle =====
-        function toggleSamePersonFields() {
-            if ($('#is_same_person').val() === 'No') {
-                $('#same_person_fields').html(`
-            <div class="col-6">
-                <div class="form-group">
-                    <label>Proposer Full Name<span class="text-danger"> *</span></label>
-                    <input type="text" value="{{ $user->basicDetail->life_proposed_name ?? '' }}" name="life_proposed_name" class="form-control account" required>
-                </div>
-            </div>
-            <div class="col-6">
-                <div class="form-group">
-                    <label>Proposer CNIC<span class="text-danger"> *</span></label>
-                    <input type="text" value="{{ $user->basicDetail->life_proposed_cnic ?? '' }}" name="life_proposed_cnic" class="form-control account" required>
-                </div>
-            </div>
-            <div class="col-6">
-                <div class="form-group">
-                    <label>Proposer DOB<span class="text-danger"> *</span></label>
-                    <input type="date" value="{{ $user->basicDetail->life_proposed_dob ?? '' }}" name="life_proposed_dob" class="form-control account" required>
-                </div>
-            </div>
-            
-            <div class="col-6">
-                <div class="form-group">
-                    <label>Relationship with Life Proposed<span class="text-danger"> *</span></label>
-                    <input type="text" value="{{ $user->basicDetail->life_proposed_relationship ?? '' }}" name="life_proposed_relationship" class="form-control account" required>
-                </div>
-            </div>
-        `);
-            } else {
-                $('#same_person_fields').empty();
+        $('#is_same_person').on('change', function () {
+            if (typeof window.applyLifeProposedLogic === 'function') {
+                window.applyLifeProposedLogic($('#is_same_person').val() === 'Yes');
             }
+        });
+        if (typeof window.applyLifeProposedLogic === 'function') {
+            window.applyLifeProposedLogic(false);
         }
-        toggleSamePersonFields();
-        $('#is_same_person').on('change', toggleSamePersonFields);
 
     });
 </script>

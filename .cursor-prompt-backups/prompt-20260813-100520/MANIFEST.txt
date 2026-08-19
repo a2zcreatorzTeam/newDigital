@@ -1,0 +1,2 @@
+﻿timestamp=20260813-100520
+purpose=pre-prompt backup before self-policy-listing null policyPlan fix

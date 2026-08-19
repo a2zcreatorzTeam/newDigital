@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\LifeProposedDocument;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -10,7 +11,36 @@ class UserPolicyData extends Model
     use HasFactory;
 
     protected $table = 'user_personal_policy_data';
-    protected $guarded = ['id'];
+    protected $guarded = ['id', 'user_id'];
+
+    public const PROTECTED_ATTRIBUTES = [
+        'id',
+        'user_id',
+        'policy_id',
+        'status',
+        'comment',
+        'premium_paid',
+    ];
+
+    public static function withoutProtected(array $data): array
+    {
+        return collect($data)->except(self::PROTECTED_ATTRIBUTES)->all();
+    }
+
+    public function scopeOwnedBy($query, $userId)
+    {
+        return $query->where('user_id', $userId);
+    }
+
+    public function lifeProposedDetail()
+    {
+        return $this->hasOne(LifeProposedDetail::class, 'policy_data_id');
+    }
+
+    public function getLifeProposedDocumentAttribute(): ?string
+    {
+        return LifeProposedDocument::filename($this->attributes['other_documents'] ?? null);
+    }
 
        public function product()
     {
@@ -91,5 +121,15 @@ class UserPolicyData extends Model
      public function user()
      {
          return $this->belongsTo(User::class, 'user_id', 'id');
+     }
+
+     public function dualNationalityCountry()
+     {
+         return $this->belongsTo(Country::class, 'dual_nationality_country_id');
+     }
+
+     public function primaryNationalityCountry()
+     {
+         return $this->belongsTo(Country::class, 'primary_nationality_country_id');
      }
 }

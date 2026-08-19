@@ -48,9 +48,9 @@
   --tg-body-line-height: 1.5;
   --tg-heading-line-height: 1.2;
   --tg-body-color: #3E4073;
-  --tg-heading-color: #004fb6;
+  --tg-heading-color: #025bff;
   --tg-theme-primary: #1b95d0;
-  --tg-theme-secondary: #004fb6;
+  --tg-theme-secondary: #025bff;
   --tg-color-dark-blue: #004fb6;
   --tg-color-yellow-light: #FEF6E6;
   --tg-color-yellow-light-2: #FFFBF3;
@@ -62,6 +62,7 @@
   --tg-color-gray-5: #E2E3F1;
   --tg-color-gray-6: #F7F7F8;
   --tg-color-dark: #1C1A4A;
+  --tg-color-black: #000000;
   --tg-color-black-1: #004fb6;
   --tg-color-black-2: #004fb6;
   --tg-border-1: #CFDDE2;
@@ -494,8 +495,9 @@ textarea {
   -webkit-user-select: none;
   user-select: none;
   -moz-user-select: none;
-  background: var(--tg-theme-primary) none repeat scroll 0 0;
-  border: medium none;
+  background: var(--tg-theme-secondary) none repeat scroll 0 0;
+  /*border: medium none;*/
+  border: 4px solid white;
   border-radius: 10px;
   color: var(--tg-color-white-default);
   cursor: pointer;
@@ -532,15 +534,15 @@ textarea {
   z-index: -1;
 }
 
-.btn::after {
-  content: "\f10a";
-  font-family: flaticon;
-  font-weight: var(--tg-fw-bold);
-  margin-left: 8px;
-  font-size: 20px;
-  line-height: 0;
-  transition: all 0.3s ease-out 0s;
-}
+/*.btn::after {*/
+/*  content: "\f10a";*/
+/*  font-family: flaticon;*/
+/*  font-weight: var(--tg-fw-bold);*/
+/*  margin-left: 8px;*/
+/*  font-size: 20px;*/
+/*  line-height: 0;*/
+/*  transition: all 0.3s ease-out 0s;*/
+/*}*/
 
 .btn:hover,
 .btn:focus-visible {
@@ -613,7 +615,7 @@ textarea {
   transform: translate(-50%, -50%);
   width: 100px;
   height: 100px;
-  border-top: 3px solid var(--tg-theme-primary);
+  border-top: 7px solid var(--tg-theme-primary);
   border-radius: 50%;
   animation: loaderspin 1.8s infinite ease-in-out;
   -webkit-animation: loaderspin 1.8s infinite ease-in-out;
@@ -652,6 +654,8 @@ textarea {
     transform: scale(1.2);
   }
 }
+
+
 
 /*=============================
     - Background color
@@ -1112,6 +1116,15 @@ textarea {
   color: var(--tg-theme-primary);
   margin-bottom: 12px;
 }
+.sub-title-white {
+    display: block;
+    text-transform: uppercase;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: normal;
+    color: var(--tg-color-white-default);
+    margin-bottom: 12px;
+}
 
 .section-title .title {
   margin-bottom: 0;
@@ -1181,9 +1194,10 @@ textarea {
 }
 
 .tg-header__top-info {
-  display: flex;
-  align-items: center;
-  gap: 25px;
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    justify-content: flex-end;
 }
 
 @media (max-width: 1199.98px) {
@@ -1744,13 +1758,47 @@ textarea {
 .tgmenu__action ul .offCanvas-menu .menu-tigger {
   width: auto;
   height: 50px;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: var(--tg-color-white-default);
-  border-radius: 10px;
-  font-size: 14px;
-  box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.2);
+  gap: 10px;
+  padding: 20px 28px;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  color: #ffffff;
+  text-transform: math-auto;
+  
+  background: linear-gradient(135deg, #2A77FB 0%, #4CB2FE 100%);
+  border: none;
+  border-radius: 12px; 
+  /*box-shadow: 0 8px 24px rgba(42, 119, 251, 0.4); */
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+  
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.tgmenu__action ul .offCanvas-menu .menu-tigger::after {
+    content: "";
+
+    width: 20px;
+    height: 20px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: #fff;
+    border-radius: 50%;
+
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M5 12H19M19 12L13 6M19 12L13 18' stroke='%23237DF5' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 20px 20px;
+
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
 }
 
 .tgmenu__action ul .offCanvas-menu .menu-tigger svg {
@@ -2337,7 +2385,7 @@ textarea {
 ===============================*/
 .banner-bg {
   background-size: cover;
-  background-position: left;
+  background-position: right;
   min-height: 870px;
   display: flex;
   align-items: center;
@@ -2350,7 +2398,7 @@ textarea {
 @media (max-width: 1500px) {
   .banner-bg {
     min-height: 620px;
-    margin-top: 100px;
+    margin-top: 145px;
   }
 }
 
@@ -2461,18 +2509,18 @@ textarea {
 }
 
 .banner-content .sub-title {
-  font-size: 15px;
-  font-weight: 600;
+  font-size: 18px;
+  font-weight: 400;
   text-transform: uppercase;
   letter-spacing: 0.75px;
   display: block;
   line-height: 1;
-  color: var(--tg-theme-primary);
+  color: var(--tg-color-black);
   margin-bottom: 15px;
 }
 
 .banner-content .title {
-  font-size: 60px;
+  font-size: 45px;
   margin-bottom: 20px;
   line-height: 1.1;
   text-transform: capitalize;
@@ -2480,13 +2528,13 @@ textarea {
 
 @media (max-width: 1199.98px) {
   .banner-content .title {
-    font-size: 48px;
+    font-size: 35px;
   }
 }
 
 @media (max-width: 767.98px) {
   .banner-content .title {
-    font-size: 42px;
+    font-size: 30px;
   }
 }
 
@@ -8304,7 +8352,7 @@ textarea {
   bottom: 0;
   width: 100%;
   height: 100%;
-  background: #0B0C39;
+  /*background: #0B0C39;*/
   opacity: 0.5;
   z-index: -1;
 }
@@ -8379,6 +8427,7 @@ textarea {
 .request-content .btn {
   background: var(--tg-theme-secondary);
   color: var(--tg-color-white-default);
+  border: 4px solid white;
 }
 
 .request-content .btn::before {
@@ -12032,6 +12081,10 @@ blockquote p {
 /*=============================
     23. Footer
 ===============================*/
+.copyright-text {
+    display: flex;
+    justify-content: center;
+}
 .footer-area {
   position: relative;
   overflow: hidden;
@@ -12319,9 +12372,13 @@ blockquote p {
 }
 
 .footer-bottom {
-  background: var(--tg-color-gray-3);
+  /*background: var(--tg-color-gray-3);*/
   border-top: 1px solid var(--tg-border-1);
-  padding: 35px 0;
+  /*padding: 35px 0;*/
+}
+.footer-bottom {
+    background: #000000;
+    padding: 12px 0;
 }
 
 @media (max-width: 767.98px) {
@@ -13487,28 +13544,55 @@ ul.form-serach-ul {
 .top-menu .tgmenu__main-menu li.menu-item-has-children>a::after {
   color: white !important;
 }
-.payment-btn {
-        display: inline-block;
-        padding: 12px 30px;
-        background: linear-gradient(135deg, #4facfe, #00c6fb);
-        color: #000;
-        font-size: 16px;
-        font-weight: 600;
-        text-decoration: none;
-        border-radius: 10px;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 12px rgba(0, 198, 251, 0.3);
-        border: 1px solid rgba(255,255,255,0.2);
-    }
-
-    .payment-btn:hover {
-        background: linear-gradient(135deg, #00c6fb, #4facfe);
-        color: #111;
-        transform: translateY(-2px);
-        box-shadow: 0 6px 18px rgba(0, 198, 251, 0.5);
-    }
-
-    .payment-btn:active {
-        transform: scale(0.98);
-    }
 /* Complaints & Feedback End*/
+
+/* From Uiverse.io by dhruv465 */ 
+.loader {
+  /*position: relative;*/
+  width: 220px;
+  height: 220px;
+  margin: 0 auto; /* keep centered */
+}
+
+/* Spinning circle */
+.spinner {
+  border: 2px solid #f3f3f3;
+  border-top: 30px solid #3498db;
+  border-radius: 50%;
+  width: 100%;
+  height: 100%;
+  /*background: #;*/
+  animation: spin 1s linear infinite;
+  /*position: absolute;*/
+  top: 0;
+  left: 0;
+}
+
+/* Static centered image */
+.loader-img {
+  /*position: absolute;*/
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 130px;
+  height: 130px;
+  z-index: 2;
+  padding: 10px;  
+  box-shadow: 0 0 18px 0 #0095da;
+  border-radius: 50%;
+}
+
+/* Rotate only the spinner */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes glow {
+  from {
+    text-shadow: 0 0 10px #3498db, 0 0 20px #3498db;
+  }
+  to {
+    text-shadow: 0 0 20px #1abc9c, 0 0 40px #1abc9c;
+  }
+}

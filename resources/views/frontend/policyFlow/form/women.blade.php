@@ -26,8 +26,12 @@
                     <div>
                         <div>
                             <label>(II) Date (s) of any miscarriages (s) (اسقاط حمل (اگر کوئی ہے) کی تاریخ/تاریخیں)</label>
-                            <div class="jbl-field">
-                                <input type="text" name="miscarriage_dates" class="form-control jbl-dynamic-input" id="miscarriage_dates" placeholder="Enter dates / تاریخیں درج کریں">
+                            <div class="jbl-field" id="miscarriage_dates_list">
+                                <div class="miscarriage-date-row d-flex align-items-center mb-2" style="gap:8px;">
+                                    <input type="date" name="miscarriage_dates[]" class="form-control jbl-dynamic-input miscarriage-date-input">
+                                    <button type="button" class="btn btn-sm btn-primary miscarriage-date-add" title="Add date">+</button>
+                                    <button type="button" class="btn btn-sm btn-secondary miscarriage-date-remove" title="Remove date" disabled>-</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -92,6 +96,19 @@
                                     <option value="Yes">Yes (جی ہاں)</option>
                                     <option value="No">No (نہیں۔)</option>
                                 </select>
+                            </div>
+                            <div class="jbl-field js-female-disease-wrap mt-2" style="display:none;">
+                                <label>Female disease (نسوانی مرض)</label>
+                                <select name="female_disease_name" class="form-control jbl-dynamic-input" id="female_disease_name">
+                                    <option value="">Select disease</option>
+                                    @foreach(\App\Support\FemaleDiseases::options() as $value => $label)
+                                        <option value="{{ $value }}">{{ $label }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="jbl-field js-female-disease-wrap mt-2" style="display:none;">
+                                <label>Description (تفصیل)</label>
+                                <input type="text" name="female_disease_details" class="form-control jbl-dynamic-input" id="female_disease_details" maxlength="500" placeholder="Enter description / تفصیل درج کریں">
                             </div>
                         </div>
                     </div>

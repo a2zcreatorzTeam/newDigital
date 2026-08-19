@@ -1,0 +1,284 @@
+#progressbar {
+    display: flex;
+}
+#progressbar .active {
+    color: #004fb6;
+}
+.filters {
+    border-right: 1px dashed #1e95d07d;
+    padding: 10px;
+    height: 400px;
+}
+.filters h4 {
+    font-size: 18px;
+    font-weight: 600;
+}
+.filters input {
+    width: unset !important;
+    margin-top: 6px !important;
+}
+.filters label {
+    font-size: 14px;
+}
+.foorm-font {
+    font-family: "circular";
+}
+.pro-detail-box {
+    height: 310px;
+    border: 1px solid #7eb5dd;
+    padding: 10px;
+    border-radius: 0px 50px 20px 50px;
+    box-shadow:
+        0 4px 8px 0 rgb(0 0 0 / 5%),
+        0 6px 20px 0 rgb(0 0 0 / 5%);
+    text-align: center;
+}
+.my-ddtl p {
+    font-size: 14px;
+}
+.pro-detail-box span {
+    font-size: 19px;
+    font-weight: 600;
+}
+.pro-detail-box p {
+    margin-bottom: 5px;
+}
+.ib-totalcard-price {
+    margin: 1.875rem 0;
+    border-radius: 0.8125rem;
+    border: 0.125rem dashed #1f93d1;
+}
+.ib-totalcard-img {
+    border-radius: 50%;
+    overflow: hidden;
+    width: 4.6875rem;
+    height: 4.6875rem;
+    margin-left: 0.1875rem;
+    padding: 0.4375rem;
+}
+.ib-total-company {
+    margin: 0 0.625rem;
+    font-family: Avenir Heavy;
+    font-size: 1rem;
+    text-align: left;
+    color: #1f93d1;
+    position: relative;
+    top: 0.3125rem;
+}
+.ib-total-amount,
+.ib-total-plan,
+.ib-total-rupees {
+    margin: 0 0.625rem;
+    text-align: left;
+    color: #1f93d1;
+}
+.ib-card-plan {
+    font-size: 0.725rem !important;
+    background-color: #1f93d1;
+    color: #fff !important;
+    padding: 0.25rem 0.5rem;
+    width: fit-content;
+    border-radius: 0.3125rem;
+    letter-spacing: 0.0313rem;
+    display: block;
+}
+.ib-total-rupees {
+    font-size: 1.0625rem;
+}
+.ib-total-final {
+    color: white;
+    width: 7rem;
+    height: 5.25rem;
+    border-radius: 0.8125rem;
+    -webkit-backdrop-filter: blur(30px);
+    backdrop-filter: blur(30px);
+    background-color: #1f93d1;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+}
+.ib-acq-subheading {
+    margin: 1.5625rem 0;
+    font-size: 1.75rem !important;
+    font-weight: 500 !important;
+    text-align: left;
+    color: #1f93d1;
+}
+.jbl-modal-link {
+    text-align: center;
+    width: 100%;
+    min-height: 8.625rem;
+    padding: 0.625rem;
+    border-radius: 0.6875rem;
+    -webkit-box-shadow: 0 0.375rem 0.9375rem 0 rgba(0, 0, 0, 0.03);
+    box-shadow: 0 0.375rem 0.9375rem 0 rgba(0, 0, 0, 0.03);
+    border: 0.0625rem solid #e5e5e5;
+    background-color: #fff;
+    margin-bottom: 1.5rem !important;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: space-evenly;
+    -ms-flex-pack: space-evenly;
+    justify-content: space-evenly;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    cursor: pointer;
+}
+.summary-right-box {
+    width: 100%;
+    margin: 0.875rem 0;
+    padding: 1.125rem;
+    border-radius: 1.25rem;
+    -webkit-box-shadow: 0 0 1.5625rem 0 rgba(0, 0, 0, 0.04);
+    box-shadow: 0 0 1.5625rem 0 rgba(0, 0, 0, 0.04);
+    border: 0.125rem dashed #9d9d9d;
+    background-color: #fff;
+}
+.summary-right-box .td-left {
+    margin: 0.4375rem 0;
+    font-size: 1.125rem;
+    font-weight: 500;
+    text-align: left;
+    color: #7b7b7b;
+}
+.summary-right-box .td-right {
+    margin: 0.4375rem 0;
+    font-family: Avenir Heavy;
+    font-size: 1.125rem;
+    padding-left: 1.25rem;
+    letter-spacing: normal;
+    text-align: left;
+    color: #1f93d1;
+}
+.modal-backdrop {
+    display: none;
+}
+.nav-tabs {
+    border-bottom: 1px solid #dee2e6;
+}
+.nav {
+    display: -ms-flexbox;
+    display: -webkit-box;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    padding-left: 0;
+    margin-bottom: 0;
+    list-style: none;
+}
+.ib-acq-navtab,
+.ib-acq-navtab .acq-nav-btn {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    text-align: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    border: none !important;
+    border-radius: 1.9375rem !important;
+}
+.ib-acq-navtab {
+    max-width: -webkit-fit-content;
+    max-width: -moz-fit-content;
+    max-width: fit-content;
+    margin: 0 auto;
+    -webkit-box-orient: horizontal !important;
+    -webkit-box-direction: normal !important;
+    -ms-flex-flow: row !important;
+    flex-flow: row !important;
+    background-color: #f0f6fa;
+    height: 3.8125rem;
+    margin-bottom: 1rem !important;
+}
+.nav {
+    display: -ms-flexbox;
+    display: -webkit-box;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    padding-left: 0;
+    margin-bottom: 0;
+    list-style: none;
+}
+.ib-acq-navtab .acq-nav-btn.active,
+.ib-acq-navtab .acq-nav-btn:hover .ib-acq-navtab .acq-nav-btn:active {
+    background-color: #1f93d1 !important;
+    color: #fff !important;
+    border: none !important;
+    cursor: pointer !important;
+}
+.nav-link {
+    padding: 1.2rem 1rem;
+}
+.summary-right-box .total-box {
+    width: 100%;
+    height: 2.8125rem;
+    margin: 1.875rem 0 0;
+    border-radius: 0.3125rem;
+    background-color: #1f93d1;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+}
+.w-100.total-box span.td-left {
+    color: white !important;
+    margin-left: 10px;
+}
+
+.w-100.total-box span.td-right {
+    color: white;
+    margin-right: 10px;
+}
+.ib-form-subheading {
+    margin: 0.9375rem 0;
+    font-size: 1.3rem !important;
+    text-align: left;
+    color: #1f93d1;
+}
+.ib-form-subheading-second {
+    font-size: 18px !important;
+    color: #363232c7;
+}
+
+.family-image img {
+    margin-bottom: 3.875rem;
+    cursor: pointer;
+}
+.ib-btn-dashed {
+    width: 15rem;
+    height: 3.25rem;
+    border-radius: 0.625rem;
+    -webkit-backdrop-filter: blur(30px);
+    backdrop-filter: blur(30px);
+    border: 0.125rem dashed #1f93d1;
+    font-size: 0.875rem;
+    text-align: center;
+    color: #1f93d1;
+    font-family: Avenir Medium;
+}

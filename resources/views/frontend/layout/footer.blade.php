@@ -69,40 +69,40 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xl-3 col-lg-4 col-md-6">
-                        <div class="footer-widget">
-                            <h4 class="fw-title">Instagram Posts</h4>
-                            <div class="footer-instagram">
-                                <ul class="list-wrap">
-                                    <li><a href="javascript:void(0)"><img src="{{asset('frontend/images/footer_insta01.jpg')}}" alt=""></a></li>
-                                    <li><a href="javascript:void(0)"><img src="{{asset('frontend/images/footer_insta02.jpg')}}" alt=""></a></li>
-                                    <li><a href="javascript:void(0)"><img src="{{asset('frontend/images/footer_insta03.jpg')}}" alt=""></a></li>
-                                    <li><a href="javascript:void(0)"><img src="{{asset('frontend/images/footer_insta04.jpg')}}" alt=""></a></li>
-                                    <li><a href="javascript:void(0)"><img src="{{asset('frontend/images/footer_insta05.jpg')}}" alt=""></a></li>
-                                    <li><a href="javascript:void(0)"><img src="{{asset('frontend/images/footer_insta06.jpg')}}" alt=""></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
+                    <!--<div class="col-xl-3 col-lg-4 col-md-6">-->
+                    <!--    <div class="footer-widget">-->
+                    <!--        <h4 class="fw-title">Instagram Posts</h4>-->
+                    <!--        <div class="footer-instagram">-->
+                    <!--            <ul class="list-wrap">-->
+                    <!--                <li><a href="javascript:void(0)"><img src="{{asset('frontend/images/footer_insta01.jpg')}}" alt=""></a></li>-->
+                    <!--                <li><a href="javascript:void(0)"><img src="{{asset('frontend/images/footer_insta02.jpg')}}" alt=""></a></li>-->
+                    <!--                <li><a href="javascript:void(0)"><img src="{{asset('frontend/images/footer_insta03.jpg')}}" alt=""></a></li>-->
+                    <!--                <li><a href="javascript:void(0)"><img src="{{asset('frontend/images/footer_insta04.jpg')}}" alt=""></a></li>-->
+                    <!--                <li><a href="javascript:void(0)"><img src="{{asset('frontend/images/footer_insta05.jpg')}}" alt=""></a></li>-->
+                    <!--                <li><a href="javascript:void(0)"><img src="{{asset('frontend/images/footer_insta06.jpg')}}" alt=""></a></li>-->
+                    <!--            </ul>-->
+                    <!--        </div>-->
+                    <!--    </div>-->
+                    <!--</div>-->
                 </div>
             </div>
         </div>
         <div class="footer-bottom">
             <div class="container">
                 <div class="row align-items-center">
-                    <div class="col-lg-7 order-0 order-lg-2">
-                        <div class="footer-newsletter">
-                            <h4 class="title">Newsletter SignUp!</h4>
-                            <form action="#">
-                                <input type="text" placeholder="e-mail Type . . .">
-                                <button class="btn btn-two" type="submit">Subscribe</button>
-                            </form>
-                        </div>
-                    </div>
-                    <div class="col-lg-5">
+                    <!--<div class="col-lg-7 order-0 order-lg-2">-->
+                    <!--    <div class="footer-newsletter">-->
+                    <!--        <h4 class="title">Newsletter SignUp!</h4>-->
+                    <!--        <form action="#">-->
+                    <!--            <input type="text" placeholder="e-mail Type . . .">-->
+                    <!--            <button class="btn btn-two" type="submit">Subscribe</button>-->
+                    <!--        </form>-->
+                    <!--    </div>-->
+                    <!--</div>-->
+                    <div class="col-lg-12">
                         <div class="copyright-text">
                             <p>Copyright © 2024 <a href="index.html">Statelife</a> | All Right Reserved</p>
-                            Design & Developed By <a href="https://a2zcreatorz.com/" target="_blank">A2Z Creatorz</a>
+                            <!--Design & Developed By <a href="https://a2zcreatorz.com/" target="_blank">A2Z Creatorz</a>-->
                         </div>
                     </div>
                 </div>
@@ -121,6 +121,13 @@
 <!-- JS here -->
 <script data-cfasync="false" src="{{asset('frontend/js/email-decode.min.js')}}"></script>
 <script src="{{asset('frontend/js/jquery-3.6.0.min.js')}}"></script>
+<script src="{{asset('frontend/js/age-nearest.js')}}"></script>
+<script src="{{asset('frontend/js/life-proposed.js')}}"></script>
+<script src="{{asset('frontend/js/dual-nationality.js')}}"></script>
+<script src="{{asset('frontend/js/filer-status.js')}}"></script>
+<script src="{{asset('frontend/js/miscarriage-dates.js')}}"></script>
+<script src="{{asset('frontend/js/nominee-appointee.js')}}"></script>
+<script src="{{asset('frontend/js/female-disease.js')}}"></script>
 <script src="{{asset('frontend/js/bootstrap.bundle.min.js')}}"></script>
 <script src="{{asset('frontend/js/jquery.magnific-popup.min.js')}}"></script>
 <script src="{{asset('frontend/js/jquery.odometer.min.js')}}"></script>

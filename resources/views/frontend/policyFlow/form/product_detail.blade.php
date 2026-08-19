@@ -7,7 +7,7 @@
             <div class="col-md-6 px-0 px-sm-3">
                 <div>
                     <div>
-                        <div><label>Table (منصوبہ نمبر)<span class="requi">*</span></label>
+                        <div><label>Table (منصوبہ نمبر)</label>
                             <div class="jbl-field"><input required type="text" name="table_no" value="{{$product->table_no ?? '' }}" class="jbl-dynamic-input"></div>
                         </div>
                     </div>
@@ -17,9 +17,9 @@
             <div class="col-md-6 px-0 px-sm-3">
                 <div>
                     <div>
-                        <div><label>Term (میعاد)<span class="requi">*</span></label>
+                        <div><label>Term (میعاد)</label>
                             <div class="jbl-field">
-                                <input type="text" name="term" id="term" class="form-control" value="{{$policy_data->term}}" readonly>
+                                <input type="text" name="term" id="term" class="form-control" value="{{ $policy_data->term ?? '' }}" readonly>
                                 <!-- <select name="term" id="term" required class="form-control">
                                     <option value="">Select Option</option>
                                 </select> -->
@@ -43,6 +43,7 @@
             </div>
 
             <input type="hidden" name="policy_product_id" value="{{$product->id}}" id="policy_product_id">
+            <input type="hidden" name="plan" value="{{ $product->id }}">
 
             <div class="col-md-6 px-0 px-sm-3">
                 <div>
@@ -218,6 +219,12 @@
 
 
         function loadPlanData() {
+            let $term = $('#term');
+            // Term is a readonly input prefilled from the calculator — do not treat it as a <select>
+            if (!$term.length || !$term.is('select')) {
+                return;
+            }
+
             let product_id = $('#product_id').val();
             let age_birth = $('#age_birth').val();
             if (!product_id || !age_birth) {
@@ -234,7 +241,7 @@
                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
                 },
                 beforeSend: function() {
-                    $('#term').html('<option>Loading...</option>');
+                    $term.html('<option>Loading...</option>');
                 },
                 success: function(res) {
                     let options = '<option value="">Select Option</option>';
@@ -253,15 +260,15 @@
                         options = '<option value="">No Data Found</option>';
                     }
 
-                    $('#term').html(options);
+                    $term.html(options);
                 },
                 error: function(err) {
-                    $('#term').html('<option value="">Error loading data</option>');
+                    $term.html('<option value="">Error loading data</option>');
                 }
             });
         }
 
-        // initial load
+        // initial load (only applies when #term is a select)
         loadPlanData();
 
 
@@ -300,20 +307,21 @@
                 },
                 error: function(err) {
                     Swal.close();
-                    alert('Error occurred');
+                    Swal.fire('Error', 'Unable to load sum assured. Please try again.', 'error');
                 }
             });
         }
 
 
-        // optional: reload if inputs change
-        $('#product_id,#date_of_birth').on('change', function() {
+        // Reload plan terms only when product changes and term is a selectable field
+        $('#product_id').on('change', function() {
             loadPlanData();
-            alert("date change");
-
         });
 
         $('#term').on('change', function() {
+            if (!$(this).is('select')) {
+                return;
+            }
             let term_value = $(this).val();
             getsumassured(term_value);
         });
@@ -328,10 +336,7 @@
             let age_birth = $('#age_birth').val();
 
             let adb_rider = $('#adb_rider').val();
-            console.log(adb_rider);
-            
             let tir_rider = $('#tir_rider').val();
-            console.log(tir_rider);
 
 
             // check empty fields
@@ -385,7 +390,7 @@
                     },
                     error: function(err) {
                         Swal.close();
-                        alert('Error occurred');
+                        Swal.fire('Error', 'Unable to calculate premium. Please try again.', 'error');
                     }
                 });
 

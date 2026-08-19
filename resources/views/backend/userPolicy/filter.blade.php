@@ -43,9 +43,18 @@
                                 </select>
                             </div>
                             <div class="col-md-3">
+                                <label>From Date</label>
+                                <input type="date" id="start_date" class="form-control">
+                            </div>
+                            <div class="col-md-3">
+                                <label>To Date</label>
+                                <input type="date" id="end_date" class="form-control">
+                            </div>
+                            <div class="col-md-3">
                                 <label for="Sorting">Sort By</label>
                                 <select name="sorting" id="sorting" class="form-control">
                                     <option value="id">ID</option>
+                                    <option value="created_at">Submitted Date</option>
                                 </select>
                             </div>
                             <div class="col-md-3">
@@ -97,6 +106,8 @@
             var policy_number = $("#policy_number").val();
             var user_detail_search = $("#user_detail_search").val();
             var status = $("#status").val();
+            var start_date = $("#start_date").val();
+            var end_date = $("#end_date").val();
             var page = currentpage ?? 1;
 
             $.ajax({
@@ -111,6 +122,8 @@
                     qty: qty,
                     plan: plan,
                     status: status,
+                    start_date: start_date,
+                    end_date: end_date,
                     page: page,
                      _token: '{{csrf_token()}}'
                 },
@@ -118,7 +131,7 @@
                 beforeSend: function() {
                     $('#policy_list_data').html(`
                         <tr>
-                            <td colspan="7" class="text-center">Loading...</td>
+                            <td colspan="8" class="text-center">Loading...</td>
                         </tr>
                     `);
                 },
@@ -131,7 +144,7 @@
             });
         }
         filter_data();
-        $('body').on('change', '#sorting, #direction, #qty, #plan,#status', function() {
+        $('body').on('change', '#sorting, #direction, #qty, #plan,#status, #start_date, #end_date', function() {
             filter_data();
         });
 
@@ -151,6 +164,8 @@
             policy_number: $("#policy_number").val(),
             user_detail_search: $("#user_detail_search").val(),
             status: $("#status").val(),
+            start_date: $("#start_date").val(),
+            end_date: $("#end_date").val(),
             sorting: $("#sorting").val(),
             direction: $("#direction").val(),
             qty: $("#qty").val(),

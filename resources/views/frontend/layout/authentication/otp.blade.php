@@ -32,10 +32,40 @@
             Resend OTP
         </button>
     </div>
+
+    <p class="mt-3 mb-0">
+        Back to
+        <a href="javascript:void(0)" id="otpBackToSignin" class="js-show-signin">Sign In</a>
+        or
+        <a href="javascript:void(0)" id="otpBackToSignup" class="js-show-signup">Sign Up</a>
+    </p>
 </form>
 @push('js')
   <script>
       $(document).ready(function() {
+        function showSignInForm() {
+            $('.otp-form').hide();
+            $('.lost-password').hide();
+            $('.signup-form').hide();
+            $('.signin-form').show();
+        }
+
+        function showSignUpForm() {
+            $('.otp-form').hide();
+            $('.lost-password').hide();
+            $('.signin-form').hide();
+            $('.signup-form').show();
+        }
+
+        $(document).on('click', '#otpBackToSignin', function (e) {
+            e.preventDefault();
+            showSignInForm();
+        });
+
+        $(document).on('click', '#otpBackToSignup', function (e) {
+            e.preventDefault();
+            showSignUpForm();
+        });
           
         $('#otpForm').submit(function(e) {
 
