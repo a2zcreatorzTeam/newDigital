@@ -20,17 +20,17 @@
     #family_history .fh-member-card {
         width: 100%;
         background: var(--fh-card);
-        border: 1px solid var(--fh-blue-border);
-        border-radius: 1rem;
-        padding: 1.15rem 1.15rem 0.65rem;
+        border: 1px solid #cfd6e1;
+        border-radius: 10px;
+        padding: 1rem 1.1rem 0.65rem;
         margin-bottom: 1.25rem;
-        box-shadow: 0 8px 20px rgba(31, 147, 209, 0.06);
+        box-shadow: 0 1px 2px rgba(31, 45, 61, 0.04);
         transition: box-shadow 0.2s ease, border-color 0.2s ease;
     }
 
     #family_history .fh-member-card:hover {
-        border-color: rgba(31, 147, 209, 0.45);
-        box-shadow: 0 10px 24px rgba(31, 147, 209, 0.1);
+        border-color: #b8c2d1;
+        box-shadow: 0 2px 6px rgba(31, 45, 61, 0.06);
     }
 
     #family_history .fh-member-head {
@@ -38,9 +38,9 @@
         align-items: center;
         justify-content: space-between;
         gap: 0.75rem;
-        margin-bottom: 1rem;
-        padding-bottom: 0.75rem;
-        border-bottom: 1px dashed var(--fh-blue-border);
+        margin-bottom: 0.85rem;
+        padding-bottom: 0.55rem;
+        border-bottom: 1px solid #eef1f5;
     }
 
     #family_history .fh-member-title {
@@ -48,7 +48,7 @@
         align-items: center;
         gap: 0.65rem;
         margin: 0;
-        color: var(--fh-blue) !important;
+        color: #2f3b4a !important;
         font-size: 1.05rem !important;
         font-weight: 600;
     }
@@ -174,7 +174,7 @@
 <div id="family_history" role="tabpanel" aria-labelledby="nav-family-history-tab" class="tab-pane fade family-history-section">
     <div class="container">
         <div class="row">
-            <h3 class="col-12 ib-form-subheading mb-2">Family History</h3>
+            <h3 class="col-12 ib-form-subheading mb-2">{{ policy_label('family_history') }}</h3>
             <p class="col-12 fh-intro">Share health details for close family members. If a member is not alive, death details will appear after you select No.</p>
 
             {{-- Father --}}
@@ -183,31 +183,31 @@
                     <div class="fh-member-head">
                         <h5 class="fh-member-title ib-form-subheading-second">
                             <span class="fh-badge">F</span>
-                            Father
+                            {{ policy_label('father') }}
                         </h5>
                     </div>
                     <input type="hidden" name="memner_flag" value="father">
                     <div class="row">
                         <div class="col-md-4 mb-3 px-sm-3">
-                            <label>Age<span class="requi">*</span></label>
+                            <label>{{ policy_label('age') }}<span class="requi">*</span></label>
                             <input type="text" name="father_age" required class="form-control">
                         </div>
                         <div class="col-md-4 mb-3 px-sm-3">
-                            <label>State Of Health<span class="requi">*</span></label>
+                            <label>{{ policy_label('state_of_health') }}<span class="requi">*</span></label>
                             <input type="text" name="father_health" required class="form-control">
                         </div>
                         <div class="col-md-4 mb-3 px-sm-3">
-                            <label>Is the member alive?<span class="requi">*</span></label>
+                            <label>{{ policy_label('is_member_alive') }}<span class="requi">*</span></label>
                             <select name="father_is_alive" class="form-control fh-is-alive" required>
                                 <option value="">Select Option</option>
-                                <option value="Yes">Yes</option>
+                                <option value="Yes" selected>Yes</option>
                                 <option value="No">No</option>
                             </select>
                         </div>
                         <div class="fh-death-fields row mx-0">
                             <div class="fh-death-label">Deceased details</div>
                             <div class="col-md-4 mb-3 px-sm-3">
-                                <label>Year Of Death<span class="requi">*</span></label>
+                                <label>{{ policy_label('year_of_death') }}<span class="requi">*</span></label>
                                 <input type="number"
                                     name="father_year_of_death"
                                     class="form-control fh-death-input"
@@ -218,11 +218,11 @@
                                     onkeypress="if(this.value.length==4) return false;">
                             </div>
                             <div class="col-md-4 mb-3 px-sm-3">
-                                <label>Age Of Death<span class="requi">*</span></label>
+                                <label>{{ policy_label('age_of_death') }}<span class="requi">*</span></label>
                                 <input type="number" name="father_age_of_death" class="form-control fh-death-input">
                             </div>
                             <div class="col-md-4 mb-3 px-sm-3">
-                                <label>Cause Of Death<span class="requi">*</span></label>
+                                <label>{{ policy_label('cause_of_death') }}<span class="requi">*</span></label>
                                 <textarea name="father_cause_of_death" class="form-control fh-death-input" rows="3" placeholder="Enter cause of death details..."></textarea>
                             </div>
                         </div>
@@ -236,31 +236,31 @@
                     <div class="fh-member-head">
                         <h5 class="fh-member-title ib-form-subheading-second">
                             <span class="fh-badge">M</span>
-                            Mother
+                            {{ policy_label('mother') }}
                         </h5>
                     </div>
                     <input type="hidden" name="memner_flag" value="mother">
                     <div class="row">
                         <div class="col-md-4 mb-3 px-sm-3">
-                            <label>Age<span class="requi">*</span></label>
+                            <label>{{ policy_label('age') }}<span class="requi">*</span></label>
                             <input type="text" name="mother_age" required class="form-control">
                         </div>
                         <div class="col-md-4 mb-3 px-sm-3">
-                            <label>State Of Health<span class="requi">*</span></label>
+                            <label>{{ policy_label('state_of_health') }}<span class="requi">*</span></label>
                             <input type="text" name="mother_health" required class="form-control">
                         </div>
                         <div class="col-md-4 mb-3 px-sm-3">
-                            <label>Is the member alive?<span class="requi">*</span></label>
+                            <label>{{ policy_label('is_member_alive') }}<span class="requi">*</span></label>
                             <select name="mother_is_alive" class="form-control fh-is-alive" required>
                                 <option value="">Select Option</option>
-                                <option value="Yes">Yes</option>
+                                <option value="Yes" selected>Yes</option>
                                 <option value="No">No</option>
                             </select>
                         </div>
                         <div class="fh-death-fields row mx-0">
                             <div class="fh-death-label">Deceased details</div>
                             <div class="col-md-4 mb-3 px-sm-3">
-                                <label>Year Of Death<span class="requi">*</span></label>
+                                <label>{{ policy_label('year_of_death') }}<span class="requi">*</span></label>
                                 <input type="number"
                                     name="mother_year_of_death"
                                     class="form-control fh-death-input"
@@ -271,11 +271,11 @@
                                     onkeypress="if(this.value.length==4) return false;">
                             </div>
                             <div class="col-md-4 mb-3 px-sm-3">
-                                <label>Age Of Death<span class="requi">*</span></label>
+                                <label>{{ policy_label('age_of_death') }}<span class="requi">*</span></label>
                                 <input type="number" name="mother_age_of_death" class="form-control fh-death-input">
                             </div>
                             <div class="col-md-4 mb-3 px-sm-3">
-                                <label>Cause Of Death<span class="requi">*</span></label>
+                                <label>{{ policy_label('cause_of_death') }}<span class="requi">*</span></label>
                                 <textarea name="mother_cause_of_death" class="form-control fh-death-input" rows="3" placeholder="Enter cause of death details..."></textarea>
                             </div>
                         </div>
@@ -289,31 +289,31 @@
                     <div class="fh-member-head">
                         <h5 class="fh-member-title ib-form-subheading-second">
                             <span class="fh-badge">SP</span>
-                            Spouse
+                            {{ policy_label('spouse') }}
                         </h5>
                     </div>
                     <input type="hidden" name="memner_flag" value="spouse">
                     <div class="row">
                         <div class="col-md-4 mb-3 px-sm-3">
-                            <label>Age</label>
+                            <label>{{ policy_label('age') }}</label>
                             <input type="text" name="spouse_age" class="form-control">
                         </div>
                         <div class="col-md-4 mb-3 px-sm-3">
-                            <label>State Of Health</label>
+                            <label>{{ policy_label('state_of_health') }}</label>
                             <input type="text" name="spouse_health" class="form-control">
                         </div>
                         <div class="col-md-4 mb-3 px-sm-3">
-                            <label>Is the member alive?</label>
+                            <label>{{ policy_label('is_member_alive') }}</label>
                             <select name="spouse_is_alive" class="form-control fh-is-alive">
                                 <option value="">Select Option</option>
-                                <option value="Yes">Yes</option>
+                                <option value="Yes" selected>Yes</option>
                                 <option value="No">No</option>
                             </select>
                         </div>
                         <div class="fh-death-fields row mx-0">
                             <div class="fh-death-label">Deceased details</div>
                             <div class="col-md-4 mb-3 px-sm-3">
-                                <label>Year Of Death<span class="requi">*</span></label>
+                                <label>{{ policy_label('year_of_death') }}<span class="requi">*</span></label>
                                 <input type="number"
                                     name="spouse_year_of_death"
                                     class="form-control fh-death-input"
@@ -324,11 +324,11 @@
                                     onkeypress="if(this.value.length==4) return false;">
                             </div>
                             <div class="col-md-4 mb-3 px-sm-3">
-                                <label>Age Of Death<span class="requi">*</span></label>
+                                <label>{{ policy_label('age_of_death') }}<span class="requi">*</span></label>
                                 <input type="number" name="spouse_age_of_death" class="form-control fh-death-input">
                             </div>
                             <div class="col-md-4 mb-3 px-sm-3">
-                                <label>Cause Of Death<span class="requi">*</span></label>
+                                <label>{{ policy_label('cause_of_death') }}<span class="requi">*</span></label>
                                 <textarea name="spouse_cause_of_death" class="form-control fh-death-input" rows="3" placeholder="Enter cause of death details..."></textarea>
                             </div>
                         </div>
@@ -340,7 +340,7 @@
             <div class="col-12">
                 <div class="fh-section-head">
                     <h5 class="ib-form-subheading-second mb-0">
-                        <span class="fh-badge">B</span> Brothers Details
+                        <span class="fh-badge">B</span> {{ policy_label('brothers') }}
                     </h5>
                     <button type="button" class="btn btn-sm fh-add-btn add-member" data-type="brother">+ Add Brother</button>
                 </div>
@@ -352,7 +352,7 @@
             <div class="col-12 mt-2">
                 <div class="fh-section-head">
                     <h5 class="ib-form-subheading-second mb-0">
-                        <span class="fh-badge">S</span> Sisters Details
+                        <span class="fh-badge">S</span> {{ policy_label('sisters') }}
                     </h5>
                     <button type="button" class="btn btn-sm fh-add-btn add-member" data-type="sister">+ Add Sister</button>
                 </div>
@@ -364,7 +364,7 @@
             <div class="col-12 mt-2">
                 <div class="fh-section-head">
                     <h5 class="ib-form-subheading-second mb-0">
-                        <span class="fh-badge">SO</span> Sons Details
+                        <span class="fh-badge">SO</span> {{ policy_label('sons') }}
                     </h5>
                     <button type="button" class="btn btn-sm fh-add-btn add-member" data-type="son">+ Add Son</button>
                 </div>
@@ -376,7 +376,7 @@
             <div class="col-12 mt-2">
                 <div class="fh-section-head">
                     <h5 class="ib-form-subheading-second mb-0">
-                        <span class="fh-badge">D</span> Daughters Details
+                        <span class="fh-badge">D</span> {{ policy_label('daughters') }}
                     </h5>
                     <button type="button" class="btn btn-sm fh-add-btn add-member" data-type="daughter">+ Add Daughter</button>
                 </div>
@@ -419,7 +419,7 @@
             });
         }
 
-        function createMemberRow(type, labelPrefix) {
+        function createMemberRow(type, labelPrefix, ageLabel) {
             return `
             <div class="col-12">
                 <div class="fh-member-card dynamic-row" data-member-block="${type}">
@@ -433,25 +433,25 @@
                     <input type="hidden" name="memner_flag[]" value="${type}">
                     <div class="row">
                         <div class="col-md-4 mb-3 px-sm-3">
-                            <label>${labelPrefix} Age<span class="requi">*</span></label>
+                            <label>${ageLabel}<span class="requi">*</span></label>
                             <input type="text" name="${type}_age[]" class="form-control" required>
                         </div>
                         <div class="col-md-4 mb-3 px-sm-3">
-                            <label>State Of Health<span class="requi">*</span></label>
+                            <label>State Of Health (صحت کی حالت)<span class="requi">*</span></label>
                             <input type="text" name="${type}_health[]" class="form-control" required>
                         </div>
                         <div class="col-md-4 mb-3 px-sm-3">
-                            <label>Is the member alive?<span class="requi">*</span></label>
+                            <label>Is the member alive? (کیا رکن زندہ ہے؟)<span class="requi">*</span></label>
                             <select name="${type}_is_alive[]" class="form-control fh-is-alive" required>
                                 <option value="">Select Option</option>
-                                <option value="Yes">Yes</option>
+                                <option value="Yes" selected>Yes</option>
                                 <option value="No">No</option>
                             </select>
                         </div>
                         <div class="fh-death-fields row mx-0">
                             <div class="fh-death-label">Deceased details</div>
                             <div class="col-md-4 mb-3 px-sm-3">
-                                <label>Year Of Death<span class="requi">*</span></label>
+                                <label>Year Of Death (وفات کا سال)<span class="requi">*</span></label>
                                 <input type="number"
                                     name="${type}_year_of_death[]"
                                     class="form-control fh-death-input"
@@ -462,11 +462,11 @@
                                     onkeypress="if(this.value.length==4) return false;">
                             </div>
                             <div class="col-md-4 mb-3 px-sm-3">
-                                <label>Age Of Death<span class="requi">*</span></label>
+                                <label>Age Of Death (وفات کی عمر)<span class="requi">*</span></label>
                                 <input type="number" name="${type}_age_of_death[]" class="form-control fh-death-input">
                             </div>
                             <div class="col-md-4 mb-3 px-sm-3">
-                                <label>Cause Of Death<span class="requi">*</span></label>
+                                <label>Cause Of Death (وفات کی وجہ)<span class="requi">*</span></label>
                                 <textarea name="${type}_cause_of_death[]" class="form-control fh-death-input" rows="3" placeholder="Enter cause of death details..."></textarea>
                             </div>
                         </div>
@@ -477,10 +477,10 @@
         }
 
         const templates = {
-            brother: () => createMemberRow('brother', 'Brother'),
-            sister: () => createMemberRow('sister', 'Sister'),
-            son: () => createMemberRow('son', 'Son'),
-            daughter: () => createMemberRow('daughter', 'Daughter')
+            brother: () => createMemberRow('brother', 'Brother (بھائی)', 'Brother Age (بھائی کی عمر)'),
+            sister: () => createMemberRow('sister', 'Sister (بہن)', 'Sister Age (بہن کی عمر)'),
+            son: () => createMemberRow('son', 'Son (بیٹا)', 'Son Age (بیٹے کی عمر)'),
+            daughter: () => createMemberRow('daughter', 'Daughter (بیٹی)', 'Daughter Age (بیٹی کی عمر)')
         };
 
         // Initial state for father/mother

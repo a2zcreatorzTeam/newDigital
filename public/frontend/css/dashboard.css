@@ -151,6 +151,9 @@ p.error-message {
 
 /* ===== Dashboard policy form tabs (scoped) ===== */
 .dashboard-policy-tabs-wrap {
+    position: sticky;
+    top: 72px;
+    z-index: 40;
     width: 100%;
     margin-bottom: 1.25rem;
     overflow-x: auto;
@@ -158,6 +161,9 @@ p.error-message {
     -webkit-overflow-scrolling: touch;
     scrollbar-width: thin;
     scrollbar-color: #1f93d1 #e8f3fa;
+    background: transparent;
+    padding-top: 0.15rem;
+    padding-bottom: 0.15rem;
 }
 
 .dashboard-policy-tabs-wrap::-webkit-scrollbar {
@@ -212,6 +218,9 @@ p.error-message {
     white-space: nowrap;
     text-decoration: none;
     cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    pointer-events: auto;
     transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
 }
 
@@ -265,6 +274,10 @@ p.error-message {
 }
 
 @media (max-width: 991.98px) {
+    .dashboard-policy-tabs-wrap {
+        top: 60px;
+    }
+
     .form-card .dashboard-policy-tabs.ib-acq-navtab {
         border-radius: 1.25rem !important;
         padding: 0.4rem;
@@ -277,6 +290,10 @@ p.error-message {
 }
 
 @media (max-width: 575.98px) {
+    .dashboard-policy-tabs-wrap {
+        top: 56px;
+    }
+
     .form-card .dashboard-policy-tabs .acq-nav-btn .tab-label {
         max-width: 7.5rem;
         overflow: hidden;
@@ -565,4 +582,114 @@ span[dir="rtl"] {
     direction: rtl;
     unicode-bidi: embed;
     font-family: "Noto Nastaliq Urdu", "Jameel Noori Nastaleeq", "Pak Nastaleeq", "Segoe UI", Tahoma, sans-serif;
+}
+
+/* ===== Policy Buy / Edit — professional fieldset groups ===== */
+.policy-fieldset,
+.address-section-card {
+    border: 1px solid #cfd6e1;
+    border-radius: 10px;
+    background: #fff;
+    padding: 1rem 1.05rem 0.65rem;
+    margin: 0.85rem 0 1.25rem;
+    box-shadow: 0 1px 2px rgba(31, 45, 61, 0.03);
+}
+
+.policy-fieldset__header,
+.address-section-card__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.9rem;
+    padding-bottom: 0.55rem;
+    border-bottom: 1px solid #eef1f5;
+}
+
+.policy-fieldset__title,
+.address-section-card__title {
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    font-weight: 600;
+    font-size: 1.05rem !important;
+    color: #2f3b4a;
+    line-height: 1.4;
+}
+
+.policy-fieldset > .row,
+.address-section-card > .row {
+    margin-left: -0.5rem;
+    margin-right: -0.5rem;
+}
+
+#msform .policy-fieldset .ib-form-subheading,
+#msform .policy-fieldset .ib-form-subheading-second {
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+#msform .tab-pane > .container > .row > .ib-form-subheading,
+#msform .tab-pane > .w-75 > .row > .ib-form-subheading {
+    margin-bottom: 0.35rem;
+}
+
+#family_history .fh-member-card {
+    border: 1px solid #cfd6e1;
+    border-radius: 10px;
+    box-shadow: 0 1px 2px rgba(31, 45, 61, 0.03);
+}
+
+#family_history .fh-member-card:hover {
+    border-color: #b8c2d1;
+    box-shadow: 0 2px 6px rgba(31, 45, 61, 0.05);
+}
+
+#documents .doc-extra-panel {
+    border: 1px solid #cfd6e1;
+    border-radius: 10px;
+    background: #fff;
+    padding: 1rem 1.05rem 0.65rem;
+    margin: 0.85rem 0 1.25rem;
+    box-shadow: 0 1px 2px rgba(31, 45, 61, 0.03);
+}
+
+.profile-wrapper .policy-fieldset {
+    margin: 0 0 1.5rem;
+}
+
+.profile-wrapper .policy-fieldset .section-title,
+.profile-wrapper .policy-fieldset .policy-fieldset__title.section-title {
+    margin: 0 !important;
+    border-left: 0 !important;
+    padding-left: 0 !important;
+    font-size: 1.05rem !important;
+    color: #2f3b4a !important;
+}
+
+.profile-wrapper .policy-fieldset .custom-divider {
+    display: none;
+}
+
+@media (max-width: 575.98px) {
+    .policy-fieldset,
+    .address-section-card,
+    #documents .doc-extra-panel {
+        padding: 0.85rem 0.75rem 0.4rem;
+        margin: 0.65rem 0 1rem;
+        border-radius: 8px;
+    }
+
+    .policy-fieldset__header,
+    .address-section-card__header {
+        margin-bottom: 0.7rem;
+        padding-bottom: 0.45rem;
+    }
+
+    .policy-fieldset__title,
+    .address-section-card__title {
+        font-size: 0.98rem !important;
+    }
 }

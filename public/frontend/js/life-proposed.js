@@ -14,6 +14,8 @@
         'life_proposed_father_name',
         'life_proposed_religion',
         'life_proposed_email',
+        'life_proposed_country_of_residence_id',
+        'life_proposed_current_address',
         'life_proposed_is_client_dual_national',
         'life_proposed_birth_place_city_id',
         'life_proposed_relationship',

@@ -240,6 +240,9 @@
         $('select[name="is_holding_land"]').trigger('change');
         $('#is_same_person').trigger('change');
         $('#gender, #marital_status').trigger('change');
+        if (typeof window.toggleFemaleSectionVisibility === 'function') {
+            window.toggleFemaleSectionVisibility();
+        }
         $('#weight_change_type').trigger('change');
         $('#height_value').trigger('input');
 

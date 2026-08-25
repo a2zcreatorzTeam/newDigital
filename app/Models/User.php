@@ -16,7 +16,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 
-#[Fillable(['name', 'email', 'password', 'user_type', 'cnic', 'phone_no'])]
+#[Fillable(['name', 'email', 'password', 'user_type', 'cnic', 'phone_no', 'country_of_residence_id', 'current_address'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -40,6 +40,12 @@ class User extends Authenticatable
     {
         return $this->hasOne(BasicDetail::class, 'user_id', 'id');
     }
+
+    public function countryOfResidence()
+    {
+        return $this->belongsTo(Country::class, 'country_of_residence_id');
+    }
+
     public function AddressInfo()
     {
         return $this->hasOne(AddressInfo::class, 'user_id', 'id');

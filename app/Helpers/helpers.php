@@ -82,3 +82,13 @@ if (!function_exists('uploadFile')) {
         return $fileName;
     }
 }
+
+if (!function_exists('policy_label')) {
+    /**
+     * Canonical English + Urdu label for Policy forms and Policy view screens.
+     */
+    function policy_label(string $key, ?string $fallback = null): string
+    {
+        return \App\Support\PolicyLabels::get($key, $fallback);
+    }
+}

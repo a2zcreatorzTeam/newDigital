@@ -30,45 +30,58 @@
 
 <div class="js-life-proposed-section row w-100 m-0">
     @php $open(); @endphp
-        <label @if($labelClass) class="{{ $labelClass }}" @endif>Life Proposed Full Name {!! $star !!}</label>
+        <label @if($labelClass) class="{{ $labelClass }}" @endif>{{ policy_label('life_proposed_full_name') }} {!! $star !!}</label>
         <input type="text" name="life_proposed_name" value="{{ $val('name') }}" class="{{ $inputClass }}">
     @php $close(); @endphp
 
     @php $open(); @endphp
-        <label @if($labelClass) class="{{ $labelClass }}" @endif>Mobile Number Personal {!! $star !!}</label>
+        <label @if($labelClass) class="{{ $labelClass }}" @endif>{{ policy_label('mobile_number_personal') }} {!! $star !!}</label>
         <input type="text" name="life_proposed_mobile" value="{{ $val('mobile') }}" class="{{ $inputClass }} jbl-mobile-format" placeholder="0321-6905568">
     @php $close(); @endphp
 
     @php $open(); @endphp
         <label @if($labelClass) class="{{ $labelClass }}" @endif>
-            <span class="js-life-proposed-id-label">CNIC / B-Form No</span> {!! $star !!}
+            <span class="js-life-proposed-id-label">{{ policy_label('cnic_bform') }}</span> {!! $star !!}
         </label>
         <input type="text" name="life_proposed_cnic" id="life_proposed_cnic" value="{{ $val('cnic') }}" class="{{ $inputClass }}">
     @php $close(); @endphp
 
     @php $open('js-life-proposed-cnic-date'); @endphp
-        <label @if($labelClass) class="{{ $labelClass }}" @endif>CNIC Issue Date {!! $star !!}</label>
+        <label @if($labelClass) class="{{ $labelClass }}" @endif>{{ policy_label('cnic_issue_date') }} {!! $star !!}</label>
         <input type="date" name="life_proposed_cnic_issue_date" value="{{ $val('cnic_issue_date') }}" class="{{ $inputClass }}">
     @php $close(); @endphp
 
     @php $open('js-life-proposed-cnic-date'); @endphp
-        <label @if($labelClass) class="{{ $labelClass }}" @endif>CNIC Expiry Date {!! $star !!}</label>
+        <label @if($labelClass) class="{{ $labelClass }}" @endif>{{ policy_label('cnic_expiry_date') }} {!! $star !!}</label>
         <input type="date" name="life_proposed_cnic_expiry_date" value="{{ $val('cnic_expiry_date') }}" class="{{ $inputClass }}">
     @php $close(); @endphp
 
     @php $open(); @endphp
-        <label @if($labelClass) class="{{ $labelClass }}" @endif>Date Of Birth {!! $star !!}</label>
+        <label @if($labelClass) class="{{ $labelClass }}" @endif>{{ policy_label('date_of_birth') }} {!! $star !!}</label>
         <input type="date" name="life_proposed_dob" value="{{ $val('dob') }}" class="{{ $inputClass }}">
     @php $close(); @endphp
 
     @php $open(); @endphp
-        <label @if($labelClass) class="{{ $labelClass }}" @endif>Age Nearest Birth-date {!! $star !!}</label>
+        @include('frontend.partials.birth_place_select', [
+            'cities' => $cities ?? collect(),
+            'birthPlaceFieldName' => 'life_proposed_birth_place_city_id',
+            'birthPlaceSelectId' => 'life_proposed_birth_place_city_id',
+            'selectedBirthCityId' => $val('birth_place_city_id'),
+            'birthPlaceRequired' => true,
+            'birthPlaceClass' => $isEdit ? 'form-select birth-place-city-select' : $inputClass.' birth-place-city-select',
+            'birthPlaceLabel' => policy_label('place_of_birth'),
+            'birthPlaceLabelClass' => $labelClass,
+        ])
+    @php $close(); @endphp
+
+    @php $open(); @endphp
+        <label @if($labelClass) class="{{ $labelClass }}" @endif>{{ policy_label('age_nearest_birthdate') }} {!! $star !!}</label>
         <input type="text" name="life_proposed_age" value="{{ $val('age') }}" class="{{ $inputClass }}" readonly>
     @php $close(); @endphp
 
     @php $open(); @endphp
-        <label @if($labelClass) class="{{ $labelClass }}" @endif>Gender/Sex {!! $star !!}</label>
-        <select name="life_proposed_gender" class="{{ $selectClass }} js-lp-gender">
+        <label @if($labelClass) class="{{ $labelClass }}" @endif>{{ policy_label('gender') }} {!! $star !!}</label>
+        <select name="life_proposed_gender" id="life_proposed_gender" class="{{ $selectClass }} js-lp-gender">
             <option value="">Select Gender</option>
             @foreach(['Male','Female','Other'] as $g)
                 <option value="{{ $g }}" @selected($val('gender') == $g)>{{ $g }}</option>
@@ -77,7 +90,7 @@
     @php $close(); @endphp
 
     @php $open(); @endphp
-        <label @if($labelClass) class="{{ $labelClass }}" @endif>Marital Status {!! $star !!}</label>
+        <label @if($labelClass) class="{{ $labelClass }}" @endif>{{ policy_label('marital_status') }} {!! $star !!}</label>
         <select name="life_proposed_marital_status" class="{{ $selectClass }} js-lp-marital">
             <option value="">Select Marital Status</option>
             @foreach(['Married','Unmarried'] as $ms)
@@ -87,47 +100,66 @@
     @php $close(); @endphp
 
     @php $open('js-lp-wife-wrap'); @endphp
-        <label @if($labelClass) class="{{ $labelClass }}" @endif>Wife Name {!! $star !!}</label>
+        <label @if($labelClass) class="{{ $labelClass }}" @endif>{{ policy_label('wife_name') }} {!! $star !!}</label>
         <input type="text" name="life_proposed_wife_name" value="{{ $val('wife_name') }}" class="{{ $inputClass }}">
     @php $close(); @endphp
 
     @php $open('js-lp-husband-wrap'); @endphp
-        <label @if($labelClass) class="{{ $labelClass }}" @endif>Husband Name {!! $star !!}</label>
+        <label @if($labelClass) class="{{ $labelClass }}" @endif>{{ policy_label('husband_name') }} {!! $star !!}</label>
         <input type="text" name="life_proposed_husband_name" value="{{ $val('husband_name') }}" class="{{ $inputClass }}">
     @php $close(); @endphp
 
     @php $open(); @endphp
-        <label @if($labelClass) class="{{ $labelClass }}" @endif>Mother Maiden Name {!! $star !!}</label>
+        <label @if($labelClass) class="{{ $labelClass }}" @endif>{{ policy_label('mother_maiden_name') }} {!! $star !!}</label>
         <input type="text" name="life_proposed_mother_maiden_name" value="{{ $val('mother_maiden_name') }}" class="{{ $inputClass }}">
     @php $close(); @endphp
 
     @php $open(); @endphp
-        <label @if($labelClass) class="{{ $labelClass }}" @endif>Father’s Name {!! $star !!}</label>
+        <label @if($labelClass) class="{{ $labelClass }}" @endif>{{ policy_label('father_name_of_life_proposed') }} {!! $star !!}</label>
         <input type="text" name="life_proposed_father_name" value="{{ $val('father_name') }}" class="{{ $inputClass }}">
     @php $close(); @endphp
 
     @php $open(); @endphp
-        <label @if($labelClass) class="{{ $labelClass }}" @endif>Religion {!! $star !!}</label>
+        <label @if($labelClass) class="{{ $labelClass }}" @endif>{{ policy_label('religion') }} {!! $star !!}</label>
         <input type="text" name="life_proposed_religion" value="{{ $val('religion') }}" class="{{ $inputClass }}">
     @php $close(); @endphp
 
     @php $open(); @endphp
-        <label @if($labelClass) class="{{ $labelClass }}" @endif>Email Address {!! $star !!}</label>
+        <label @if($labelClass) class="{{ $labelClass }}" @endif>{{ policy_label('email_address') }} {!! $star !!}</label>
         <input type="email" name="life_proposed_email" value="{{ $val('email') }}" class="{{ $inputClass }}">
     @php $close(); @endphp
 
     @php $open(); @endphp
-        <label @if($labelClass) class="{{ $labelClass }}" @endif>Phone Number Office</label>
+        <label @if($labelClass) class="{{ $labelClass }}" @endif>{{ policy_label('phone_office') }}</label>
         <input type="text" name="life_proposed_phone_office" value="{{ $val('phone_office') }}" class="{{ $inputClass }}">
     @php $close(); @endphp
 
     @php $open(); @endphp
-        <label @if($labelClass) class="{{ $labelClass }}" @endif>Phone Number Residential</label>
+        <label @if($labelClass) class="{{ $labelClass }}" @endif>{{ policy_label('phone_residential') }}</label>
         <input type="text" name="life_proposed_phone_residential" value="{{ $val('phone_residential') }}" class="{{ $inputClass }}">
     @php $close(); @endphp
 
     @php $open(); @endphp
-        <label @if($labelClass) class="{{ $labelClass }}" @endif>Is Client Dual National? {!! $star !!}</label>
+        @include('frontend.partials.country_select', [
+            'countries' => $countries ?? collect(),
+            'fieldName' => 'life_proposed_country_of_residence_id',
+            'countrySelectId' => 'life_proposed_country_of_residence_id',
+            'selectedCountryId' => $val('country_of_residence_id'),
+            'countryRequired' => false,
+            'countryShowAsterisk' => true,
+            'countrySelectClass' => $isEdit ? 'form-select js-country-select' : $inputClass.' js-country-select',
+            'countryLabel' => policy_label('country_of_residence'),
+            'countryLabelClass' => $labelClass,
+        ])
+    @php $close(); @endphp
+
+    @php $open(); @endphp
+        <label @if($labelClass) class="{{ $labelClass }}" @endif>{{ policy_label('current_address') }} {!! $star !!}</label>
+        <textarea name="life_proposed_current_address" class="{{ $inputClass }}" rows="2" minlength="5">{{ $val('current_address') }}</textarea>
+    @php $close(); @endphp
+
+    @php $open(); @endphp
+        <label @if($labelClass) class="{{ $labelClass }}" @endif>{{ policy_label('is_dual_national') }} {!! $star !!}</label>
         <select name="life_proposed_is_client_dual_national" class="{{ $selectClass }}">
             <option value="">Select Option</option>
             <option value="Yes" @selected($val('is_client_dual_national') == 'Yes')>Yes</option>
@@ -145,7 +177,7 @@
             'selectedNameField' => 'life_proposed_primary_nationality',
             'countryRequired' => false,
             'countrySelectClass' => $inputClass,
-            'countryLabel' => 'Primary Nationality (قومیت)',
+            'countryLabel' => policy_label('primary_nationality'),
             'countryLabelClass' => $labelClass,
         ])
     @php $close(); @endphp
@@ -160,46 +192,33 @@
             'selectedNameField' => 'life_proposed_dual_nationality_country',
             'countryRequired' => false,
             'countrySelectClass' => $inputClass,
-            'countryLabel' => 'Dual Nationality Country',
+            'countryLabel' => policy_label('dual_nationality_country'),
             'countryLabelClass' => $labelClass,
         ])
     @php $close(); @endphp
 
     @php $open(); @endphp
-        <label @if($labelClass) class="{{ $labelClass }}" @endif>Tax/TIN Number {!! $star !!}</label>
+        <label @if($labelClass) class="{{ $labelClass }}" @endif>{{ policy_label('tax_tin_number') }} {!! $star !!}</label>
         <input type="text" name="life_proposed_dual_tax_tin_number" value="{{ $val('dual_tax_tin_number') }}" class="{{ $inputClass }}">
     @php $close(); @endphp
 
     @php $open(); @endphp
-        <label @if($labelClass) class="{{ $labelClass }}" @endif>Mobile Number {!! $star !!}</label>
+        <label @if($labelClass) class="{{ $labelClass }}" @endif>{{ policy_label('dual_mobile_number') }} {!! $star !!}</label>
         <input type="text" name="life_proposed_dual_mobile_number" value="{{ $val('dual_mobile_number') }}" class="{{ $inputClass }}">
     @php $close(); @endphp
 
     @php $open(); @endphp
-        <label @if($labelClass) class="{{ $labelClass }}" @endif>Address {!! $star !!}</label>
+        <label @if($labelClass) class="{{ $labelClass }}" @endif>{{ policy_label('dual_address') }} {!! $star !!}</label>
         <textarea name="life_proposed_dual_address" class="{{ $inputClass }}" rows="2">{{ $val('dual_address') }}</textarea>
     @php $close(); @endphp
 
     @php $open(); @endphp
-        <label @if($labelClass) class="{{ $labelClass }}" @endif>Passport Number {!! $star !!}</label>
+        <label @if($labelClass) class="{{ $labelClass }}" @endif>{{ policy_label('passport_number') }} {!! $star !!}</label>
         <input type="text" name="life_proposed_dual_passport_number" value="{{ $val('dual_passport_number') }}" class="{{ $inputClass }}">
     @php $close(); @endphp
 
     @php $open(); @endphp
-        @include('frontend.partials.birth_place_select', [
-            'cities' => $cities ?? collect(),
-            'birthPlaceFieldName' => 'life_proposed_birth_place_city_id',
-            'birthPlaceSelectId' => 'life_proposed_birth_place_city_id',
-            'selectedBirthCityId' => $val('birth_place_city_id'),
-            'birthPlaceRequired' => true,
-            'birthPlaceClass' => $isEdit ? 'form-select birth-place-city-select' : $inputClass.' birth-place-city-select',
-            'birthPlaceLabel' => 'Birth Place (مقامِ پیدائش)',
-            'birthPlaceLabelClass' => $labelClass,
-        ])
-    @php $close(); @endphp
-
-    @php $open(); @endphp
-        <label @if($labelClass) class="{{ $labelClass }}" @endif>Relationship with Proposer {!! $star !!}</label>
+        <label @if($labelClass) class="{{ $labelClass }}" @endif>{{ policy_label('relationship_with_proposer') }} {!! $star !!}</label>
         <input type="text" name="life_proposed_relationship" value="{{ $val('relationship') }}" class="{{ $inputClass }}">
     @php $close(); @endphp
 </div>

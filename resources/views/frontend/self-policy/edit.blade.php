@@ -38,12 +38,20 @@
     }
 
     .section-title {
-        font-size: 18px;
-        font-weight: 700;
-        color: #0d47a1;
-        margin-bottom: 20px;
-        border-left: 4px solid #0d47a1;
-        padding-left: 12px;
+        font-size: 1.05rem;
+        font-weight: 600;
+        color: #2f3b4a;
+        margin: 0;
+        border: 0;
+        padding: 0;
+    }
+
+    .policy-edit-section.policy-fieldset {
+        margin-bottom: 1.5rem;
+    }
+
+    .policy-edit-section .policy-fieldset__header .section-title {
+        color: #2f3b4a;
     }
 
     .detail-box {
@@ -167,6 +175,7 @@
 
 <link rel="stylesheet" href="{{ asset('frontend/css/sub-header.css') }}">
 <link rel="stylesheet" href="{{ asset('frontend/css/profile.css') }}">
+<link rel="stylesheet" href="{{ asset('frontend/css/dashboard.css') }}">
 
 <main class="fix">
     <section id="section-dashboard" class="profile-wrapper">
@@ -232,62 +241,87 @@
                     @method('PUT')
 
                     {{-- Personal Information --}}
-                    <div class="section-title">Personal Information</div>
+                    <div class="policy-fieldset policy-edit-section">
+                    <div class="policy-fieldset__header">
+                        <h3 class="policy-fieldset__title section-title">{{ policy_label('personal_information') }}</h3>
+                    </div>
 
                     <div class="row">
 
                         <div class="col-md-4 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Life Proposed Full Name <span class="required-asterisk">*</span></label>
+                                <label class="detail-label">{{ policy_label('life_proposed_full_name') }} <span class="required-asterisk">*</span></label>
                                 <input type="text" name="life_proposed_full_name" class="form-control" value="{{ old('life_proposed_full_name', $data->life_proposed_full_name) }}">
                             </div>
                         </div>
 
                         <div class="col-md-4 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Mobile Number Personal <span class="required-asterisk">*</span></label>
+                                <label class="detail-label">{{ policy_label('mobile_number_personal') }} <span class="required-asterisk">*</span></label>
                                 <input type="text" name="mobile_number" id="mobile_number" class="form-control jbl-mobile-format" placeholder="0321-8976654" maxlength="12" inputmode="numeric" pattern="03[0-9]{2}-[0-9]{7}" value="{{ old('mobile_number', $data->mobile_number) }}">
                             </div>
                         </div>
 
                         <div class="col-md-4 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">CNIC No <span class="required-asterisk">*</span></label>
+                                <label class="detail-label">{{ policy_label('cnic') }} <span class="required-asterisk">*</span></label>
                                 <input type="text" name="cnic_number" id="cnic_number" class="form-control jbl-cnic-format" placeholder="42101-1234567-1" maxlength="15" inputmode="numeric" pattern="[0-9]{5}-[0-9]{7}-[0-9]{1}" value="{{ old('cnic_number', $data->cnic_number) }}">
                             </div>
                         </div>
 
                         <div class="col-md-4 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Cnic Issue Date</label>
+                                <label class="detail-label">{{ policy_label('cnic_issue_date') }}</label>
                                 <input type="date" name="cnic_issue_date" class="form-control" value="{{ old('cnic_issue_date', $data->cnic_issue_date) }}">
                             </div>
                         </div>
 
                         <div class="col-md-4 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Cnic Expiry Date</label>
+                                <label class="detail-label">{{ policy_label('cnic_expiry_date') }}</label>
                                 <input type="date" name="cnic_expiry_date" class="form-control" value="{{ old('cnic_expiry_date', $data->cnic_expiry_date) }}">
                             </div>
                         </div>
 
                         <div class="col-md-4 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Date Of Birth <span class="required-asterisk">*</span></label>
+                                <label class="detail-label">{{ policy_label('date_of_birth') }} <span class="required-asterisk">*</span></label>
                                 <input type="date" name="date_of_birth" class="form-control" value="{{ old('date_of_birth', $data->date_of_birth) }}" max="{{ now('Asia/Karachi')->subYears(18)->toDateString() }}">
                             </div>
                         </div>
 
                         <div class="col-md-4 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Age Nearest Birth-date <span class="required-asterisk">*</span></label>
+                                @php
+                                    $selectedBirthCityId = old(
+                                        'birth_place_city_id',
+                                        $data->birth_place_city_id
+                                            ?? optional(($cities ?? collect())->first(
+                                                fn ($c) => strcasecmp($c->name, (string) ($data->birth_placed ?? '')) === 0
+                                            ))->id
+                                    );
+                                @endphp
+                                @include('frontend.partials.birth_place_select', [
+                                    'cities' => $cities ?? collect(),
+                                    'selectedBirthCityId' => $selectedBirthCityId,
+                                    'birthPlaceRequired' => true,
+                                    'birthPlaceClass' => 'form-select birth-place-city-select',
+                                    'birthPlaceLabel' => policy_label('place_of_birth'),
+                                    'birthPlaceLabelClass' => 'detail-label',
+                                ])
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <div class="detail-box">
+                                <label class="detail-label">{{ policy_label('age_nearest_birthdate') }} <span class="required-asterisk">*</span></label>
                                 <input type="text" name="age_nearest_date" class="form-control" value="{{ old('age_nearest_date', $data->age_nearest_date) }}">
                             </div>
                         </div>
 
                         <div class="col-md-4 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Gender/Sex <span class="required-asterisk">*</span></label>
+                                <label class="detail-label">{{ policy_label('gender') }} <span class="required-asterisk">*</span></label>
                                 <select name="gender" id="gender" class="form-select">
                                     <option value="">-- Select --</option>
                                     @foreach(['Male','Female','Other'] as $g)
@@ -299,7 +333,7 @@
 
                         <div class="col-md-4 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Marital Status <span class="required-asterisk">*</span></label>
+                                <label class="detail-label">{{ policy_label('marital_status') }} <span class="required-asterisk">*</span></label>
                                 <select name="marital_status" id="marital_status" class="form-select">
                                     <option value="">-- Select --</option>
                                     @foreach(['Married','Unmarried'] as $ms)
@@ -311,63 +345,85 @@
 
                         <div class="col-md-4 mb-3" id="wife_name_wrap" style="display: none;">
                             <div class="detail-box">
-                                <label class="detail-label">Wife Name of Life Proposed <span class="required-asterisk">*</span></label>
+                                <label class="detail-label">{{ policy_label('wife_name') }} <span class="required-asterisk">*</span></label>
                                 <input type="text" name="wife_name" id="wife_name" class="form-control" value="{{ old('wife_name', $data->wife_name) }}">
                             </div>
                         </div>
 
                         <div class="col-md-4 mb-3" id="husband_name_wrap" style="display: none;">
                             <div class="detail-box">
-                                <label class="detail-label">Husband Name of Life Proposed <span class="required-asterisk">*</span></label>
+                                <label class="detail-label">{{ policy_label('husband_name') }} <span class="required-asterisk">*</span></label>
                                 <input type="text" name="husband_name" id="husband_name" class="form-control" value="{{ old('husband_name', $data->husband_name) }}">
                             </div>
                         </div>
 
                         <div class="col-md-4 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Mother Maiden Name <span class="required-asterisk">*</span></label>
+                                <label class="detail-label">{{ policy_label('mother_maiden_name') }} <span class="required-asterisk">*</span></label>
                                 <input type="text" name="mother_maiden_name" class="form-control" value="{{ old('mother_maiden_name', $data->mother_maiden_name) }}">
                             </div>
                         </div>
 
                         <div class="col-md-4 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Father's Name of Life Proposed <span class="required-asterisk">*</span></label>
+                                <label class="detail-label">{{ policy_label('father_name_of_life_proposed') }} <span class="required-asterisk">*</span></label>
                                 <input type="text" name="father_name" class="form-control" value="{{ old('father_name', $data->father_name) }}">
                             </div>
                         </div>
 
                         <div class="col-md-3 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Religion <span class="required-asterisk">*</span></label>
+                                <label class="detail-label">{{ policy_label('religion') }} <span class="required-asterisk">*</span></label>
                                 <input type="text" name="religion" class="form-control" value="{{ old('religion', $data->religion) }}">
                             </div>
                         </div>
 
                         <div class="col-md-3 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Email Address <span class="required-asterisk">*</span></label>
+                                <label class="detail-label">{{ policy_label('email_address') }} <span class="required-asterisk">*</span></label>
                                 <input type="email" name="user_email" class="form-control" value="{{ old('user_email', $data->user_email) }}">
                             </div>
                         </div>
 
                         <div class="col-md-3 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Phone Number Office</label>
+                                <label class="detail-label">{{ policy_label('phone_office') }}</label>
                                 <input type="text" name="phone_number_office" class="form-control" value="{{ old('phone_number_office', $data->phone_number_office) }}">
                             </div>
                         </div>
 
                         <div class="col-md-3 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Phone Number Residential</label>
+                                <label class="detail-label">{{ policy_label('phone_residential') }}</label>
                                 <input type="text" name="phone_number_residente" class="form-control" value="{{ old('phone_number_residente', $data->phone_number_residente) }}">
                             </div>
                         </div>
 
                         <div class="col-md-3 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Is Client Dual National? <span class="required-asterisk">*</span></label>
+                                @include('frontend.partials.country_select', [
+                                    'countries' => $countries ?? collect(),
+                                    'fieldName' => 'country_of_residence_id',
+                                    'countrySelectId' => 'country_of_residence_id',
+                                    'selectedCountryId' => old('country_of_residence_id', $data->country_of_residence_id ?? null),
+                                    'countryRequired' => true,
+                                    'countrySelectClass' => 'form-select',
+                                    'countryLabel' => policy_label('country_of_residence'),
+                                    'countryLabelClass' => 'detail-label',
+                                ])
+                            </div>
+                        </div>
+
+                        <div class="col-md-3 mb-3">
+                            <div class="detail-box">
+                                <label class="detail-label">{{ policy_label('current_address') }} <span class="required-asterisk">*</span></label>
+                                <textarea name="current_address" class="form-control" rows="2" required minlength="5">{{ old('current_address', $data->current_address) }}</textarea>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3 mb-3">
+                            <div class="detail-box">
+                                <label class="detail-label">{{ policy_label('is_dual_national') }} <span class="required-asterisk">*</span></label>
                                 <select name="is_client_dual_national" id="isClientDualNationalSelect" class="form-select">
                                     <option value="">-- Select --</option>
                                     <option value="Yes" @selected(old('is_client_dual_national', $data->is_client_dual_national) == 'Yes')>Yes</option>
@@ -387,7 +443,7 @@
                                     'selectedNameField' => 'primary_nationality',
                                     'countryRequired' => false,
                                     'countrySelectClass' => 'form-select',
-                                    'countryLabel' => 'Primary Nationality',
+                                    'countryLabel' => policy_label('primary_nationality'),
                                     'countryLabelClass' => 'detail-label',
                                 ])
                             </div>
@@ -404,7 +460,7 @@
                                     'selectedNameField' => 'dual_nationality_country',
                                     'countryRequired' => false,
                                     'countrySelectClass' => 'form-select',
-                                    'countryLabel' => 'Dual Nationality Country',
+                                    'countryLabel' => policy_label('dual_nationality_country'),
                                     'countryLabelClass' => 'detail-label',
                                 ])
                             </div>
@@ -412,57 +468,35 @@
 
                         <div class="col-md-3 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Tax/TIN Number <span class="required-asterisk">*</span></label>
+                                <label class="detail-label">{{ policy_label('tax_tin_number') }} <span class="required-asterisk">*</span></label>
                                 <input type="text" name="dual_tax_tin_number" id="dual_tax_tin_number" class="form-control" value="{{ old('dual_tax_tin_number', $data->dual_tax_tin_number) }}">
                             </div>
                         </div>
 
                         <div class="col-md-3 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Mobile Number <span class="required-asterisk">*</span></label>
+                                <label class="detail-label">{{ policy_label('mobile_number') }} <span class="required-asterisk">*</span></label>
                                 <input type="text" name="dual_mobile_number" id="dual_mobile_number" class="form-control" value="{{ old('dual_mobile_number', $data->dual_mobile_number) }}">
                             </div>
                         </div>
 
                         <div class="col-md-3 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Address <span class="required-asterisk">*</span></label>
+                                <label class="detail-label">{{ policy_label('address') }} <span class="required-asterisk">*</span></label>
                                 <textarea name="dual_address" id="dual_address" class="form-control" rows="2">{{ old('dual_address', $data->dual_address) }}</textarea>
                             </div>
                         </div>
 
                         <div class="col-md-3 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Dual Nationality Passport Number <span class="required-asterisk">*</span></label>
+                                <label class="detail-label">{{ policy_label('passport_number') }} <span class="required-asterisk">*</span></label>
                                 <input type="text" name="dual_passport_number" id="dual_passport_number" class="form-control" value="{{ old('dual_passport_number', $data->dual_passport_number) }}">
                             </div>
                         </div>
 
                         <div class="col-md-3 mb-3">
                             <div class="detail-box">
-                                @php
-                                    $selectedBirthCityId = old(
-                                        'birth_place_city_id',
-                                        $data->birth_place_city_id
-                                            ?? optional(($cities ?? collect())->first(
-                                                fn ($c) => strcasecmp($c->name, (string) ($data->birth_placed ?? '')) === 0
-                                            ))->id
-                                    );
-                                @endphp
-                                @include('frontend.partials.birth_place_select', [
-                                    'cities' => $cities ?? collect(),
-                                    'selectedBirthCityId' => $selectedBirthCityId,
-                                    'birthPlaceRequired' => true,
-                                    'birthPlaceClass' => 'form-select birth-place-city-select',
-                                    'birthPlaceLabel' => 'Birth Place',
-                                    'birthPlaceLabelClass' => 'detail-label',
-                                ])
-                            </div>
-                        </div>
-
-                        <div class="col-md-3 mb-3">
-                            <div class="detail-box">
-                                <label class="detail-label">Proposer & Life Proposed are same <span class="required-asterisk">*</span></label>
+                                <label class="detail-label">{{ policy_label('is_same_person') }} <span class="required-asterisk">*</span></label>
                                 <select name="is_same_person" id="isSamePersonSelect" class="form-select">
                                     <option value="">-- Select --</option>
                                     <option value="Yes" @selected(old('is_same_person', $data->is_same_person) == 'Yes')>Yes</option>
@@ -481,22 +515,22 @@
                         </div><!-- /#lifeProposedWrapper -->
 
                     </div>
-
-                    <div class="custom-divider"></div>
+                    </div>{{-- /personal information fieldset --}}
 
                     {{-- Address Details --}}
-                    <div class="section-title">Address Details</div>
-
                     {{-- NOTE: $provinces is passed from the controller (Provinces::get()).
                          City and District options are loaded dynamically via AJAX (see script below),
                          using routes: frontend.getcityData and frontend.getDistrictData. --}}
 
+                    <div class="policy-fieldset policy-edit-section">
+                    <div class="policy-fieldset__header">
+                        <h3 class="policy-fieldset__title section-title">{{ policy_label('permanent_address') }}</h3>
+                    </div>
                     <div class="row">
-                        <h6>Permanent Address</h6>
 
                         <div class="col-md-6 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Province <span class="required-asterisk">*</span></label>
+                                <label class="detail-label">{{ policy_label('province') }} <span class="required-asterisk">*</span></label>
                                 <select name="permanent_province_id" id="permanent_province_id" class="form-select jbl-dynamic-input">
                                     <option value="">-- Select Province --</option>
                                     @foreach($provinces as $prov)
@@ -508,7 +542,7 @@
 
                         <div class="col-md-6 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">City <span class="required-asterisk">*</span></label>
+                                <label class="detail-label">{{ policy_label('city') }} <span class="required-asterisk">*</span></label>
                                 <select name="permanent_city_id" id="permanent_city_id" class="form-select jbl-dynamic-input">
                                     <option value="">-- Select City --</option>
                                 </select>
@@ -517,7 +551,7 @@
 
                         <div class="col-md-6 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">District <span class="required-asterisk">*</span></label>
+                                <label class="detail-label">{{ policy_label('district') }} <span class="required-asterisk">*</span></label>
                                 <select name="permanent_district_id" id="permanent_district_id" class="form-select jbl-dynamic-input">
                                     <option value="">-- Select District --</option>
                                 </select>
@@ -526,18 +560,22 @@
 
                         <div class="col-md-6 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Address <span class="required-asterisk">*</span></label>
+                                <label class="detail-label">{{ policy_label('address') }} <span class="required-asterisk">*</span></label>
                                 <textarea name="permanent_address" class="form-control" rows="2">{{ old('permanent_address', $data->permanent_address) }}</textarea>
                             </div>
                         </div>
                     </div>
+                    </div>{{-- /permanent address --}}
 
+                    <div class="policy-fieldset policy-edit-section">
+                    <div class="policy-fieldset__header">
+                        <h3 class="policy-fieldset__title section-title">{{ policy_label('correspondence_address') }}</h3>
+                    </div>
                     <div class="row">
-                        <h6>Correspondence Address</h6>
 
                         <div class="col-md-6 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Province <span class="required-asterisk">*</span></label>
+                                <label class="detail-label">{{ policy_label('province') }} <span class="required-asterisk">*</span></label>
                                 <select name="corres_province_id" id="corres_province_id" class="form-select jbl-dynamic-input">
                                     <option value="">-- Select Province --</option>
                                     @foreach($provinces as $prov)
@@ -549,7 +587,7 @@
 
                         <div class="col-md-6 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">City <span class="required-asterisk">*</span></label>
+                                <label class="detail-label">{{ policy_label('city') }} <span class="required-asterisk">*</span></label>
                                 <select name="corres_city_id" id="corres_city_id" class="form-select jbl-dynamic-input">
                                     <option value="">-- Select City --</option>
                                 </select>
@@ -558,7 +596,7 @@
 
                         <div class="col-md-6 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">District <span class="required-asterisk">*</span></label>
+                                <label class="detail-label">{{ policy_label('district') }} <span class="required-asterisk">*</span></label>
                                 <select name="corres_district_id" id="corres_district_id" class="form-select jbl-dynamic-input">
                                     <option value="">-- Select District --</option>
                                 </select>
@@ -567,18 +605,22 @@
 
                         <div class="col-md-6 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Address <span class="required-asterisk">*</span></label>
+                                <label class="detail-label">{{ policy_label('address') }} <span class="required-asterisk">*</span></label>
                                 <textarea name="corres_address" class="form-control" rows="2">{{ old('corres_address', $data->corres_address) }}</textarea>
                             </div>
                         </div>
                     </div>
+                    </div>{{-- /correspondence address --}}
 
+                    <div class="policy-fieldset policy-edit-section">
+                    <div class="policy-fieldset__header">
+                        <h3 class="policy-fieldset__title section-title">{{ policy_label('temporary_address') }}</h3>
+                    </div>
                     <div class="row">
-                        <h6>Temporary Address</h6>
 
                         <div class="col-md-6 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Province <span class="required-asterisk">*</span></label>
+                                <label class="detail-label">{{ policy_label('province') }} <span class="required-asterisk">*</span></label>
                                 <select name="temp_province_id" id="temp_province_id" class="form-select jbl-dynamic-input">
                                     <option value="">-- Select Province --</option>
                                     @foreach($provinces as $prov)
@@ -590,7 +632,7 @@
 
                         <div class="col-md-6 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">City <span class="required-asterisk">*</span></label>
+                                <label class="detail-label">{{ policy_label('city') }} <span class="required-asterisk">*</span></label>
                                 <select name="temp_city_id" id="temp_city_id" class="form-select jbl-dynamic-input">
                                     <option value="">-- Select City --</option>
                                 </select>
@@ -599,7 +641,7 @@
 
                         <div class="col-md-6 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">District <span class="required-asterisk">*</span></label>
+                                <label class="detail-label">{{ policy_label('district') }} <span class="required-asterisk">*</span></label>
                                 <select name="temp_district_id" id="temp_district_id" class="form-select jbl-dynamic-input">
                                     <option value="">-- Select District --</option>
                                 </select>
@@ -608,16 +650,18 @@
 
                         <div class="col-md-6 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Address <span class="required-asterisk">*</span></label>
+                                <label class="detail-label">{{ policy_label('address') }} <span class="required-asterisk">*</span></label>
                                 <textarea name="temp_address" class="form-control" rows="2">{{ old('temp_address', $data->temp_address) }}</textarea>
                             </div>
                         </div>
                     </div>
-
-                    <div class="custom-divider"></div>
+                    </div>{{-- /temporary address --}}
 
                     {{-- Occupation & Income --}}
-                    <div class="section-title">Occupation & Income</div>
+                    <div class="policy-fieldset policy-edit-section">
+                    <div class="policy-fieldset__header">
+                        <h3 class="policy-fieldset__title section-title">{{ policy_label('occupation_income') }}</h3>
+                    </div>
 
                     <div class="row">
 
@@ -636,7 +680,7 @@
                         @endphp
                         <div class="col-md-4 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Occupation Type <span class="required-asterisk">*</span></label>
+                                <label class="detail-label">{{ policy_label('occupation_type') }} <span class="required-asterisk">*</span></label>
                                 <select id="occupation_type" class="form-select" required>
                                     <option value="">-- Select --</option>
                                     <option value="Employment" @selected($occupationType === 'Employment')>Employment</option>
@@ -662,7 +706,7 @@
                         @endphp
                         <div class="col-md-4 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Filer Status <span class="required-asterisk">*</span></label>
+                                <label class="detail-label">{{ policy_label('filer_status') }} <span class="required-asterisk">*</span></label>
                                 <select name="filer_status" class="form-select" required>
                                     <option value="">-- Select --</option>
                                     <option value="Filer" @selected($filerStatus === 'Filer')>Filer</option>
@@ -672,7 +716,7 @@
                         </div>
                         <div class="col-md-4 mb-3 js-ntn-wrap">
                             <div class="detail-box">
-                                <label class="detail-label">NTN Number <span class="required-asterisk">*</span></label>
+                                <label class="detail-label">{{ policy_label('ntn_number') }} <span class="required-asterisk">*</span></label>
                                 <input type="text" name="ntn_number" class="form-control" value="{{ $ntnNumber }}" maxlength="20" placeholder="Enter NTN Number">
                             </div>
                         </div>
@@ -680,7 +724,7 @@
 
                         <div class="col-md-4 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">If holding Land? <span class="required-asterisk">*</span></label>
+                                <label class="detail-label">{{ policy_label('holding_land') }} <span class="required-asterisk">*</span></label>
                                 <select name="is_holding_land" id="is_holding_land" class="form-select">
                                     <option value="">-- Select --</option>
                                     <option value="Yes" @selected(old('is_holding_land', $data->is_holding_land) == 'Yes')>Yes</option>
@@ -695,45 +739,47 @@
 
                         <div class="col-md-4 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Average monthly income (PKR) <span class="required-asterisk">*</span></label>
+                                <label class="detail-label">{{ policy_label('average_monthly_income') }} <span class="required-asterisk">*</span></label>
                                 <input type="number" step="0.01" name="avaerage_monthly_income" class="form-control" value="{{ old('avaerage_monthly_income', $data->avaerage_monthly_income) }}">
                             </div>
                         </div>
 
                         <div class="col-md-6 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">If Defence / Ex-Defence, Airline Flight Crew or Plant Protection Pilot <span class="required-asterisk">*</span></label>
+                                <label class="detail-label">{{ policy_label('ex_defence') }} <span class="required-asterisk">*</span></label>
                                 <input type="text" name="ex_defence_personal" class="form-control" value="{{ old('ex_defence_personal', $data->ex_defence_personal) }}">
                             </div>
                         </div>
 
                         <div class="col-md-6 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Discharged on medical grounds from service/employment <span class="required-asterisk">*</span></label>
+                                <label class="detail-label">{{ policy_label('discharged_medical') }} <span class="required-asterisk">*</span></label>
                                 <input type="text" name="discharged_on_medical" class="form-control" value="{{ old('discharged_on_medical', $data->discharged_on_medical) }}">
                             </div>
                         </div>
 
                         <div class="col-md-6 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Engaged / intend to engage in hazardous occupation or pastime <span class="required-asterisk">*</span></label>
+                                <label class="detail-label">{{ policy_label('hazardous_occupation') }} <span class="required-asterisk">*</span></label>
                                 <input type="text" name="hazardous_occupation" class="form-control" value="{{ old('hazardous_occupation', $data->hazardous_occupation) }}">
                             </div>
                         </div>
 
                         <div class="col-md-6 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Comments</label>
+                                <label class="detail-label">{{ policy_label('comments') }}</label>
                                 <textarea name="comment" class="form-control" rows="2">{{ old('comment', $data->comment) }}</textarea>
                             </div>
                         </div>
 
                     </div>
-
-                    <div class="custom-divider"></div>
+                    </div>{{-- /occupation --}}
 
                     {{-- Family History Information --}}
-                    <div class="section-title">Family History Information</div>
+                    <div class="policy-fieldset policy-edit-section">
+                    <div class="policy-fieldset__header">
+                        <h3 class="policy-fieldset__title section-title">{{ policy_label('family_history_information') }}</h3>
+                    </div>
 
                     @php
                         $father = $data->family_history->firstWhere('memner_flag', 'father');
@@ -751,25 +797,25 @@
                     <div class="row">
 
                         {{-- Father --}}
-                        <h6 class="col-12 text-primary mt-2">Father</h6>
+                        <h6 class="col-12 text-primary mt-2">{{ policy_label('father') }}</h6>
                         <input type="hidden" name="father_id" value="{{ $father->id ?? '' }}">
                         <input type="hidden" name="father_flag" value="father">
 
                         <div class="col-md-4 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Age <span class="required-asterisk">*</span></label>
+                                <label class="detail-label">{{ policy_label('age') }} <span class="required-asterisk">*</span></label>
                                 <input type="text" name="father_age" class="form-control" value="{{ old('father_age', $father->age ?? '') }}">
                             </div>
                         </div>
                         <div class="col-md-4 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">State Of Health <span class="required-asterisk">*</span></label>
+                                <label class="detail-label">{{ policy_label('state_of_health') }} <span class="required-asterisk">*</span></label>
                                 <input type="text" name="father_health" class="form-control" value="{{ old('father_health', $father->state_of_health ?? '') }}">
                             </div>
                         </div>
                         <div class="col-md-4 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Is the member alive?</label>
+                                <label class="detail-label">{{ policy_label('is_member_alive') }}</label>
                                 <select name="father_is_alive" class="form-control">
                                     <option value="Yes" @selected(old('father_is_alive', $memberIsDeceased($father) ? 'No' : 'Yes') === 'Yes')>Yes</option>
                                     <option value="No" @selected(old('father_is_alive', $memberIsDeceased($father) ? 'No' : 'Yes') === 'No')>No</option>
@@ -778,19 +824,19 @@
                         </div>
                         <div class="col-md-4 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Year Of Death</label>
+                                <label class="detail-label">{{ policy_label('year_of_death') }}</label>
                                 <input type="text" name="father_year_of_death" class="form-control jbl-year-format" placeholder="YYYY" inputmode="numeric" maxlength="4" pattern="[0-9]{4}" value="{{ old('father_year_of_death', $father->year_of_death ?? '') }}">
                             </div>
                         </div>
                         <div class="col-md-4 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Age Of Death</label>
+                                <label class="detail-label">{{ policy_label('age_of_death') }}</label>
                                 <input type="number" name="father_age_of_death" class="form-control" value="{{ old('father_age_of_death', $father->age_of_death ?? '') }}">
                             </div>
                         </div>
                         <div class="col-md-8 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Cause Of Death</label>
+                                <label class="detail-label">{{ policy_label('cause_of_death') }}</label>
                                 <textarea name="father_cause_of_death" class="form-control" rows="2" placeholder="Enter cause of death details...">{{ old('father_cause_of_death', $father->cause_of_death ?? '') }}</textarea>
                             </div>
                         </div>
@@ -798,25 +844,25 @@
                         <div class="col-12"><hr class="my-3"></div>
 
                         {{-- Mother --}}
-                        <h6 class="col-12 text-primary">Mother</h6>
+                        <h6 class="col-12 text-primary">{{ policy_label('mother') }}</h6>
                         <input type="hidden" name="mother_id" value="{{ $mother->id ?? '' }}">
                         <input type="hidden" name="mother_flag" value="mother">
 
                         <div class="col-md-4 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Age <span class="required-asterisk">*</span></label>
+                                <label class="detail-label">{{ policy_label('age') }} <span class="required-asterisk">*</span></label>
                                 <input type="text" name="mother_age" class="form-control" value="{{ old('mother_age', $mother->age ?? '') }}">
                             </div>
                         </div>
                         <div class="col-md-4 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">State Of Health <span class="required-asterisk">*</span></label>
+                                <label class="detail-label">{{ policy_label('state_of_health') }} <span class="required-asterisk">*</span></label>
                                 <input type="text" name="mother_health" class="form-control" value="{{ old('mother_health', $mother->state_of_health ?? '') }}">
                             </div>
                         </div>
                         <div class="col-md-4 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Is the member alive?</label>
+                                <label class="detail-label">{{ policy_label('is_member_alive') }}</label>
                                 <select name="mother_is_alive" class="form-control">
                                     <option value="Yes" @selected(old('mother_is_alive', $memberIsDeceased($mother) ? 'No' : 'Yes') === 'Yes')>Yes</option>
                                     <option value="No" @selected(old('mother_is_alive', $memberIsDeceased($mother) ? 'No' : 'Yes') === 'No')>No</option>
@@ -825,19 +871,19 @@
                         </div>
                         <div class="col-md-4 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Year Of Death</label>
+                                <label class="detail-label">{{ policy_label('year_of_death') }}</label>
                                 <input type="text" name="mother_year_of_death" class="form-control jbl-year-format" placeholder="YYYY" inputmode="numeric" maxlength="4" pattern="[0-9]{4}" value="{{ old('mother_year_of_death', $mother->year_of_death ?? '') }}">
                             </div>
                         </div>
                         <div class="col-md-4 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Age Of Death</label>
+                                <label class="detail-label">{{ policy_label('age_of_death') }}</label>
                                 <input type="number" name="mother_age_of_death" class="form-control" value="{{ old('mother_age_of_death', $mother->age_of_death ?? '') }}">
                             </div>
                         </div>
                         <div class="col-md-8 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Cause Of Death</label>
+                                <label class="detail-label">{{ policy_label('cause_of_death') }}</label>
                                 <textarea name="mother_cause_of_death" class="form-control" rows="2" placeholder="Enter cause of death details...">{{ old('mother_cause_of_death', $mother->cause_of_death ?? '') }}</textarea>
                             </div>
                         </div>
@@ -845,25 +891,25 @@
                         <div class="col-12"><hr class="my-3"></div>
 
                         {{-- Spouse --}}
-                        <h6 class="col-12 text-primary">Spouse</h6>
+                        <h6 class="col-12 text-primary">{{ policy_label('spouse') }}</h6>
                         <input type="hidden" name="spouse_id" value="{{ $spouse->id ?? '' }}">
                         <input type="hidden" name="spouse_flag" value="spouse">
 
                         <div class="col-md-4 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Age</label>
+                                <label class="detail-label">{{ policy_label('age') }}</label>
                                 <input type="text" name="spouse_age" class="form-control" value="{{ old('spouse_age', $spouse->age ?? '') }}">
                             </div>
                         </div>
                         <div class="col-md-4 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">State Of Health</label>
+                                <label class="detail-label">{{ policy_label('state_of_health') }}</label>
                                 <input type="text" name="spouse_health" class="form-control" value="{{ old('spouse_health', $spouse->state_of_health ?? '') }}">
                             </div>
                         </div>
                         <div class="col-md-4 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Is the member alive?</label>
+                                <label class="detail-label">{{ policy_label('is_member_alive') }}</label>
                                 <select name="spouse_is_alive" class="form-control">
                                     <option value="Yes" @selected(old('spouse_is_alive', $memberIsDeceased($spouse) ? 'No' : 'Yes') === 'Yes')>Yes</option>
                                     <option value="No" @selected(old('spouse_is_alive', $memberIsDeceased($spouse) ? 'No' : 'Yes') === 'No')>No</option>
@@ -872,19 +918,19 @@
                         </div>
                         <div class="col-md-4 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Year Of Death</label>
+                                <label class="detail-label">{{ policy_label('year_of_death') }}</label>
                                 <input type="text" name="spouse_year_of_death" class="form-control jbl-year-format" placeholder="YYYY" inputmode="numeric" maxlength="4" pattern="[0-9]{4}" value="{{ old('spouse_year_of_death', $spouse->year_of_death ?? '') }}">
                             </div>
                         </div>
                         <div class="col-md-4 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Age Of Death</label>
+                                <label class="detail-label">{{ policy_label('age_of_death') }}</label>
                                 <input type="number" name="spouse_age_of_death" class="form-control" value="{{ old('spouse_age_of_death', $spouse->age_of_death ?? '') }}">
                             </div>
                         </div>
                         <div class="col-md-8 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Cause Of Death</label>
+                                <label class="detail-label">{{ policy_label('cause_of_death') }}</label>
                                 <textarea name="spouse_cause_of_death" class="form-control" rows="2" placeholder="Enter cause of death details...">{{ old('spouse_cause_of_death', $spouse->cause_of_death ?? '') }}</textarea>
                             </div>
                         </div>
@@ -893,7 +939,7 @@
 
                         {{-- Brothers --}}
                         <div class="col-12 d-flex justify-content-between align-items-center mb-2">
-                            <h6 class="text-primary mb-0">Brothers Details</h6>
+                            <h6 class="text-primary mb-0">{{ policy_label('brothers_details') }}</h6>
                             <button type="button" class="btn btn-sm btn-success add-member" data-type="brother"> + Add Brother Info</button>
                         </div>
                         <div id="brothers_container" class="col-12 row px-0 mx-0">
@@ -902,30 +948,30 @@
                             <input type="hidden" name="memner_flag_brother[]" value="brother">
                             <div class="col-12 row dynamic-row align-items-end border p-3 mb-3 bg-light rounded position-relative mx-0">
                                 <div class="col-md-4 mb-2 px-1">
-                                    <label class="detail-label">Brother Age</label>
+                                    <label class="detail-label">{{ policy_label('brother_age') }}</label>
                                     <input type="text" name="brother_age[]" class="form-control" value="{{ $b->age }}">
                                 </div>
                                 <div class="col-md-4 mb-2 px-1">
-                                    <label class="detail-label">State Of Health</label>
+                                    <label class="detail-label">{{ policy_label('state_of_health') }}</label>
                                     <input type="text" name="brother_health[]" class="form-control" value="{{ $b->state_of_health }}">
                                 </div>
                                 <div class="col-md-4 mb-2 px-1">
-                                    <label class="detail-label">Is the member alive?</label>
+                                    <label class="detail-label">{{ policy_label('is_member_alive') }}</label>
                                     <select name="brother_is_alive[]" class="form-control">
                                         <option value="Yes" @selected(!$memberIsDeceased($b))>Yes</option>
                                         <option value="No" @selected($memberIsDeceased($b))>No</option>
                                     </select>
                                 </div>
                                 <div class="col-md-4 mb-2 px-1">
-                                    <label class="detail-label">Year Of Death</label>
+                                    <label class="detail-label">{{ policy_label('year_of_death') }}</label>
                                     <input type="text" name="brother_year_of_death[]" class="form-control jbl-year-format" placeholder="YYYY" inputmode="numeric" maxlength="4" pattern="[0-9]{4}" value="{{ $b->year_of_death }}">
                                 </div>
                                 <div class="col-md-4 mb-2 px-1">
-                                    <label class="detail-label">Age Of Death</label>
+                                    <label class="detail-label">{{ policy_label('age_of_death') }}</label>
                                     <input type="number" name="brother_age_of_death[]" class="form-control" value="{{ $b->age_of_death }}">
                                 </div>
                                 <div class="col-md-6 mb-2 px-1">
-                                    <label class="detail-label">Cause Of Death</label>
+                                    <label class="detail-label">{{ policy_label('cause_of_death') }}</label>
                                     <textarea name="brother_cause_of_death[]" class="form-control" rows="2" placeholder="Enter cause of death details...">{{ $b->cause_of_death }}</textarea>
                                 </div>
                                 <div class="col-md-2 mb-2 text-center px-1">
@@ -939,7 +985,7 @@
 
                         {{-- Sisters --}}
                         <div class="col-12 d-flex justify-content-between align-items-center mb-2">
-                            <h6 class="text-primary mb-0">Sisters Details</h6>
+                            <h6 class="text-primary mb-0">{{ policy_label('sisters_details') }}</h6>
                             <button type="button" class="btn btn-sm btn-success add-member" data-type="sister"> + Add Sister Info</button>
                         </div>
                         <div id="sisters_container" class="col-12 row px-0 mx-0">
@@ -948,30 +994,30 @@
                             <input type="hidden" name="memner_flag_sister[]" value="sister">
                             <div class="col-12 row dynamic-row align-items-end border p-3 mb-3 bg-light rounded position-relative mx-0">
                                 <div class="col-md-4 mb-2 px-1">
-                                    <label class="detail-label">Sister Age</label>
+                                    <label class="detail-label">{{ policy_label('sister_age') }}</label>
                                     <input type="text" name="sister_age[]" class="form-control" value="{{ $s->age }}">
                                 </div>
                                 <div class="col-md-4 mb-2 px-1">
-                                    <label class="detail-label">State Of Health</label>
+                                    <label class="detail-label">{{ policy_label('state_of_health') }}</label>
                                     <input type="text" name="sister_health[]" class="form-control" value="{{ $s->state_of_health }}">
                                 </div>
                                 <div class="col-md-4 mb-2 px-1">
-                                    <label class="detail-label">Is the member alive?</label>
+                                    <label class="detail-label">{{ policy_label('is_member_alive') }}</label>
                                     <select name="sister_is_alive[]" class="form-control">
                                         <option value="Yes" @selected(!$memberIsDeceased($s))>Yes</option>
                                         <option value="No" @selected($memberIsDeceased($s))>No</option>
                                     </select>
                                 </div>
                                 <div class="col-md-4 mb-2 px-1">
-                                    <label class="detail-label">Year Of Death</label>
+                                    <label class="detail-label">{{ policy_label('year_of_death') }}</label>
                                     <input type="text" name="sister_year_of_death[]" class="form-control jbl-year-format" placeholder="YYYY" inputmode="numeric" maxlength="4" pattern="[0-9]{4}" value="{{ $s->year_of_death }}">
                                 </div>
                                 <div class="col-md-4 mb-2 px-1">
-                                    <label class="detail-label">Age Of Death</label>
+                                    <label class="detail-label">{{ policy_label('age_of_death') }}</label>
                                     <input type="number" name="sister_age_of_death[]" class="form-control" value="{{ $s->age_of_death }}">
                                 </div>
                                 <div class="col-md-6 mb-2 px-1">
-                                    <label class="detail-label">Cause Of Death</label>
+                                    <label class="detail-label">{{ policy_label('cause_of_death') }}</label>
                                     <textarea name="sister_cause_of_death[]" class="form-control" rows="2" placeholder="Enter cause of death details...">{{ $s->cause_of_death }}</textarea>
                                 </div>
                                 <div class="col-md-2 mb-2 text-center px-1">
@@ -985,7 +1031,7 @@
 
                         {{-- Sons --}}
                         <div class="col-12 d-flex justify-content-between align-items-center mb-2">
-                            <h6 class="text-primary mb-0">Sons Details</h6>
+                            <h6 class="text-primary mb-0">{{ policy_label('sons_details') }}</h6>
                             <button type="button" class="btn btn-sm btn-success add-member" data-type="son"> + Add Son Info</button>
                         </div>
                         <div id="sons_container" class="col-12 row px-0 mx-0">
@@ -994,30 +1040,30 @@
                             <input type="hidden" name="memner_flag_son[]" value="son">
                             <div class="col-12 row dynamic-row align-items-end border p-3 mb-3 bg-light rounded position-relative mx-0">
                                 <div class="col-md-4 mb-2 px-1">
-                                    <label class="detail-label">Son Age</label>
+                                    <label class="detail-label">{{ policy_label('son_age') }}</label>
                                     <input type="text" name="son_age[]" class="form-control" value="{{ $s->age }}">
                                 </div>
                                 <div class="col-md-4 mb-2 px-1">
-                                    <label class="detail-label">State Of Health</label>
+                                    <label class="detail-label">{{ policy_label('state_of_health') }}</label>
                                     <input type="text" name="son_health[]" class="form-control" value="{{ $s->state_of_health }}">
                                 </div>
                                 <div class="col-md-4 mb-2 px-1">
-                                    <label class="detail-label">Is the member alive?</label>
+                                    <label class="detail-label">{{ policy_label('is_member_alive') }}</label>
                                     <select name="son_is_alive[]" class="form-control">
                                         <option value="Yes" @selected(!$memberIsDeceased($s))>Yes</option>
                                         <option value="No" @selected($memberIsDeceased($s))>No</option>
                                     </select>
                                 </div>
                                 <div class="col-md-4 mb-2 px-1">
-                                    <label class="detail-label">Year Of Death</label>
+                                    <label class="detail-label">{{ policy_label('year_of_death') }}</label>
                                     <input type="text" name="son_year_of_death[]" class="form-control jbl-year-format" placeholder="YYYY" inputmode="numeric" maxlength="4" pattern="[0-9]{4}" value="{{ $s->year_of_death }}">
                                 </div>
                                 <div class="col-md-4 mb-2 px-1">
-                                    <label class="detail-label">Age Of Death</label>
+                                    <label class="detail-label">{{ policy_label('age_of_death') }}</label>
                                     <input type="number" name="son_age_of_death[]" class="form-control" value="{{ $s->age_of_death }}">
                                 </div>
                                 <div class="col-md-6 mb-2 px-1">
-                                    <label class="detail-label">Cause Of Death</label>
+                                    <label class="detail-label">{{ policy_label('cause_of_death') }}</label>
                                     <textarea name="son_cause_of_death[]" class="form-control" rows="2" placeholder="Enter cause of death details...">{{ $s->cause_of_death }}</textarea>
                                 </div>
                                 <div class="col-md-2 mb-2 text-center px-1">
@@ -1031,7 +1077,7 @@
 
                         {{-- Daughters --}}
                         <div class="col-12 d-flex justify-content-between align-items-center mb-2">
-                            <h6 class="text-primary mb-0">Daughters Details</h6>
+                            <h6 class="text-primary mb-0">{{ policy_label('daughters_details') }}</h6>
                             <button type="button" class="btn btn-sm btn-success add-member" data-type="daughter"> + Add Daughter Info</button>
                         </div>
                         <div id="daughters_container" class="col-12 row px-0 mx-0">
@@ -1040,30 +1086,30 @@
                             <input type="hidden" name="memner_flag_daughter[]" value="daughter">
                             <div class="col-12 row dynamic-row align-items-end border p-3 mb-3 bg-light rounded position-relative mx-0">
                                 <div class="col-md-4 mb-2 px-1">
-                                    <label class="detail-label">Daughter Age</label>
+                                    <label class="detail-label">{{ policy_label('daughter_age') }}</label>
                                     <input type="text" name="daughter_age[]" class="form-control" value="{{ $d->age }}">
                                 </div>
                                 <div class="col-md-4 mb-2 px-1">
-                                    <label class="detail-label">State Of Health</label>
+                                    <label class="detail-label">{{ policy_label('state_of_health') }}</label>
                                     <input type="text" name="daughter_health[]" class="form-control" value="{{ $d->state_of_health }}">
                                 </div>
                                 <div class="col-md-4 mb-2 px-1">
-                                    <label class="detail-label">Is the member alive?</label>
+                                    <label class="detail-label">{{ policy_label('is_member_alive') }}</label>
                                     <select name="daughter_is_alive[]" class="form-control">
                                         <option value="Yes" @selected(!$memberIsDeceased($d))>Yes</option>
                                         <option value="No" @selected($memberIsDeceased($d))>No</option>
                                     </select>
                                 </div>
                                 <div class="col-md-4 mb-2 px-1">
-                                    <label class="detail-label">Year Of Death</label>
+                                    <label class="detail-label">{{ policy_label('year_of_death') }}</label>
                                     <input type="text" name="daughter_year_of_death[]" class="form-control jbl-year-format" placeholder="YYYY" inputmode="numeric" maxlength="4" pattern="[0-9]{4}" value="{{ $d->year_of_death }}">
                                 </div>
                                 <div class="col-md-4 mb-2 px-1">
-                                    <label class="detail-label">Age Of Death</label>
+                                    <label class="detail-label">{{ policy_label('age_of_death') }}</label>
                                     <input type="number" name="daughter_age_of_death[]" class="form-control" value="{{ $d->age_of_death }}">
                                 </div>
                                 <div class="col-md-6 mb-2 px-1">
-                                    <label class="detail-label">Cause Of Death</label>
+                                    <label class="detail-label">{{ policy_label('cause_of_death') }}</label>
                                     <textarea name="daughter_cause_of_death[]" class="form-control" rows="2" placeholder="Enter cause of death details...">{{ $d->cause_of_death }}</textarea>
                                 </div>
                                 <div class="col-md-2 mb-2 text-center px-1">
@@ -1074,24 +1120,26 @@
                         </div>
 
                     </div>
-
-                    <div class="custom-divider"></div>
+                    </div>{{-- /family history --}}
 
                     {{-- Female Section --}}
-                    <div class="section-title">Female Section</div>
+                    <div id="js-female-section-edit" class="policy-fieldset policy-edit-section" @if(old('gender', $data->gender ?? '') !== 'Female') style="display:none;" @endif>
+                    <div class="policy-fieldset__header">
+                        <h3 class="policy-fieldset__title section-title">{{ policy_label('female_section') }}</h3>
+                    </div>
 
                     <div class="row">
 
                         <div class="col-md-3 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Date of Last Delivery</label>
+                                <label class="detail-label">{{ policy_label('date_of_last_delivery') }}</label>
                                 <input type="date" name="date_of_last_delivery" class="form-control" value="{{ old('date_of_last_delivery', $data->date_of_last_delivery) }}">
                             </div>
                         </div>
 
                         <div class="col-md-3 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Miscarriage Dates</label>
+                                <label class="detail-label">{{ policy_label('miscarriage_dates') }}</label>
                                 <div id="miscarriage_dates_list">
                                     @php
                                         $miscarriageDates = \App\Support\MiscarriageDates::split(old('miscarriage_dates', $data->miscarriage_dates));
@@ -1109,7 +1157,7 @@
 
                         <div class="col-md-3 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Is Pregnant</label>
+                                <label class="detail-label">{{ policy_label('are_you_pregnant') }}</label>
                                 <select name="is_pregnant" class="form-select">
                                     <option value="">-- Select --</option>
                                     <option value="Yes" @selected(old('is_pregnant', $data->is_pregnant) == 'Yes')>Yes</option>
@@ -1120,21 +1168,21 @@
 
                         <div class="col-md-3 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Caesarean Details</label>
+                                <label class="detail-label">{{ policy_label('caesarean_details') }}</label>
                                 <input type="text" name="caesarean_details" class="form-control" value="{{ old('caesarean_details', $data->caesarean_details) }}">
                             </div>
                         </div>
 
                         <div class="col-md-3 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">LMP Date</label>
+                                <label class="detail-label">{{ policy_label('lmp_date') }}</label>
                                 <input type="date" name="lmp_date" class="form-control" value="{{ old('lmp_date', $data->lmp_date) }}">
                             </div>
                         </div>
 
                         <div class="col-md-3 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Female Disease History</label>
+                                <label class="detail-label">{{ policy_label('female_disease_history') }}</label>
                                 @php
                                     $femaleDiseaseUnpacked = \App\Support\FemaleDiseases::unpack($data->female_disease_name);
                                     $femaleDiseaseHistory = old('female_disease_history', $data->female_disease_history);
@@ -1148,7 +1196,7 @@
                                     <option value="No" @selected($femaleDiseaseHistory === 'No')>No</option>
                                 </select>
                                 <div class="js-female-disease-wrap mt-2" @unless($showFemaleDiseaseExtras) style="display:none;" @endunless>
-                                    <label class="detail-label">Female Disease</label>
+                                    <label class="detail-label">{{ policy_label('female_disease') }}</label>
                                     <select name="female_disease_name" class="form-select">
                                         <option value="">-- Select --</option>
                                         @foreach(\App\Support\FemaleDiseases::options() as $value => $label)
@@ -1157,7 +1205,7 @@
                                     </select>
                                 </div>
                                 <div class="js-female-disease-wrap mt-2" @unless($showFemaleDiseaseExtras) style="display:none;" @endunless>
-                                    <label class="detail-label">Description</label>
+                                    <label class="detail-label">{{ policy_label('description') }}</label>
                                     <input type="text" name="female_disease_details" class="form-control" maxlength="500" value="{{ $femaleDiseaseDetails }}">
                                 </div>
                             </div>
@@ -1165,86 +1213,88 @@
 
                         <div class="col-md-3 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Self Monthly Income</label>
+                                <label class="detail-label">{{ policy_label('self_monthly_income') }}</label>
                                 <input type="number" step="0.01" name="self_monthly_income" class="form-control" value="{{ old('self_monthly_income', $data->self_monthly_income) }}">
                             </div>
                         </div>
 
                         <div class="col-md-3 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Husband Monthly Income</label>
+                                <label class="detail-label">{{ policy_label('husband_monthly_income') }}</label>
                                 <input type="number" step="0.01" name="husband_monthly_income" class="form-control" value="{{ old('husband_monthly_income', $data->husband_monthly_income) }}">
                             </div>
                         </div>
 
                         <div class="col-md-3 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Qualification</label>
+                                <label class="detail-label">{{ policy_label('qualification') }}</label>
                                 <input type="text" name="qualification" class="form-control" value="{{ old('qualification', $data->qualification) }}">
                             </div>
                         </div>
 
                         <div class="col-md-3 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Pays Tax / Land Revenue</label>
+                                <label class="detail-label">{{ policy_label('tax_paid') }}</label>
                                 <input type="text" name="pays_tax_land_revenue" class="form-control" value="{{ old('pays_tax_land_revenue', $data->pays_tax_land_revenue) }}">
                             </div>
                         </div>
 
                         <div class="col-md-3 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Husband Policy No.</label>
+                                <label class="detail-label">{{ policy_label('husband_policy_no') }}</label>
                                 <input type="text" name="husband_policy_no" class="form-control" value="{{ old('husband_policy_no', $data->husband_policy_no) }}">
                             </div>
                         </div>
 
                         <div class="col-md-3 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Husband Zone / Company</label>
+                                <label class="detail-label">{{ policy_label('husband_zone_company') }}</label>
                                 <input type="text" name="husband_zone_company" class="form-control" value="{{ old('husband_zone_company', $data->husband_zone_company) }}">
                             </div>
                         </div>
 
                         <div class="col-md-3 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Husband Sum Assured</label>
+                                <label class="detail-label">{{ policy_label('husband_sum_assured') }}</label>
                                 <input type="number" step="0.01" name="husband_sum_assured" class="form-control" value="{{ old('husband_sum_assured', $data->husband_sum_assured) }}">
                             </div>
                         </div>
 
                     </div>
-
-                    <div class="custom-divider"></div>
+                    </div>{{-- /female section --}}
 
                     {{-- Nominee Information --}}
-                    <div class="section-title">Nominee Information</div>
+                    <div class="policy-fieldset policy-edit-section">
+                    <div class="policy-fieldset__header">
+                        <h3 class="policy-fieldset__title section-title">{{ policy_label('nominee_information') }}</h3>
+                    </div>
 
                     <div class="row">
 
                         <div class="col-md-3 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Nominee Name <span class="required-asterisk">*</span></label>
+                                <label class="detail-label">{{ policy_label('nominee_name') }} <span class="required-asterisk">*</span></label>
                                 <input type="text" name="nominee_name" class="form-control" value="{{ old('nominee_name', $data->nominee_name) }}">
                             </div>
                         </div>
 
                         <div class="col-md-3 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Nominee CNIC <span class="required-asterisk">*</span></label>
+                                <label class="detail-label">{{ policy_label('nominee_cnic') }} <span class="required-asterisk">*</span></label>
                                 <input type="text" name="nominee_cnic" id="nominee_cnic" class="form-control jbl-cnic-format" placeholder="42101-1234567-1" maxlength="15" inputmode="numeric" pattern="[0-9]{5}-[0-9]{7}-[0-9]{1}" value="{{ old('nominee_cnic', $data->nominee_cnic) }}">
                             </div>
                         </div>
 
                         <div class="col-md-3 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Nominee Age <span class="required-asterisk">*</span></label>
+                                <label class="detail-label">{{ policy_label('nominee_age') }} <span class="required-asterisk">*</span></label>
                                 <input type="number" name="nominee_age" id="nominee_age" class="form-control" min="0" max="120" value="{{ old('nominee_age', $data->nominee_age) }}">
                             </div>
                         </div>
 
                         <div class="col-md-3 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Nominee Relationship <span class="required-asterisk">*</span></label>
+                                <label class="detail-label">{{ policy_label('relationship_with_you') }} <span class="required-asterisk">*</span></label>
                                 <input type="text" name="nominee_relationship" class="form-control" value="{{ old('nominee_relationship', $data->nominee_relationship) }}">
                             </div>
                         </div>
@@ -1255,49 +1305,51 @@
                         @endphp
                         <div class="col-md-3 mb-3 js-appointee-wrap js-appointee-section" @unless($isMinorNominee) style="display:none;" @endunless>
                             <div class="detail-box">
-                                <label class="detail-label">Appointee Name <span class="required-asterisk">*</span></label>
+                                <label class="detail-label">{{ policy_label('appointee_name') }} <span class="required-asterisk">*</span></label>
                                 <input type="text" name="appointee_name" class="form-control" value="{{ old('appointee_name', $data->appointee_name) }}">
                             </div>
                         </div>
 
                         <div class="col-md-3 mb-3 js-appointee-wrap js-appointee-section" @unless($isMinorNominee) style="display:none;" @endunless>
                             <div class="detail-box">
-                                <label class="detail-label">Appointee Relationship <span class="required-asterisk">*</span></label>
+                                <label class="detail-label">{{ policy_label('appointee_relationship') }} <span class="required-asterisk">*</span></label>
                                 <input type="text" name="appointee_relationship" class="form-control" value="{{ old('appointee_relationship', $data->appointee_relationship) }}">
                             </div>
                         </div>
 
                         <div class="col-md-3 mb-3 js-appointee-wrap js-appointee-section" @unless($isMinorNominee) style="display:none;" @endunless>
                             <div class="detail-box">
-                                <label class="detail-label">Appointee CNIC <span class="required-asterisk">*</span></label>
+                                <label class="detail-label">{{ policy_label('appointee_cnic') }} <span class="required-asterisk">*</span></label>
                                 <input type="text" name="appointee_cnic" class="form-control jbl-cnic-format" placeholder="42101-1234567-1" maxlength="15" inputmode="numeric" pattern="[0-9]{5}-[0-9]{7}-[0-9]{1}" value="{{ old('appointee_cnic', $data->appointee_cnic) }}">
                             </div>
                         </div>
 
                         <div class="col-md-3 mb-3 js-appointee-wrap js-appointee-section" @unless($isMinorNominee) style="display:none;" @endunless>
                             <div class="detail-box">
-                                <label class="detail-label">Appointee Mobile <span class="required-asterisk">*</span></label>
+                                <label class="detail-label">{{ policy_label('appointee_mobile') }} <span class="required-asterisk">*</span></label>
                                 <input type="text" name="appointee_mobile" class="form-control jbl-mobile-format" placeholder="0300-1234567" maxlength="12" inputmode="numeric" pattern="03[0-9]{2}-[0-9]{7}" value="{{ old('appointee_mobile', $data->appointee_mobile) }}">
                             </div>
                         </div>
 
                     </div>
-
-                    <div class="custom-divider"></div>
+                    </div>{{-- /nominee --}}
 
                     {{-- Documents (image upload with preview) --}}
-                    <div class="section-title">Documents</div>
+                    <div class="policy-fieldset policy-edit-section">
+                    <div class="policy-fieldset__header">
+                        <h3 class="policy-fieldset__title section-title">{{ policy_label('documents') }}</h3>
+                    </div>
 
                     <div class="row">
 
                         @php
                         $documentFields = [
-                            'proposer_cnic_front'  => 'Proposer CNIC Front',
-                            'proposer_cnic_back'   => 'Proposer CNIC Back',
-                            'life_proposed_document' => 'Life Proposed CNIC / B-Form',
-                            'nominee_document'     => 'Nominee Document',
-                            'proposer_photo'       => 'Proposer Photo',
-                            'income_proof'         => 'Income Proof',
+                            'proposer_cnic_front'  => policy_label('proposer_cnic_front'),
+                            'proposer_cnic_back'   => policy_label('proposer_cnic_back'),
+                            'life_proposed_document' => policy_label('life_proposed_document'),
+                            'nominee_document'     => policy_label('nominee_document'),
+                            'proposer_photo'       => policy_label('proposer_photo'),
+                            'income_proof'         => policy_label('income_proof'),
                         ];
                         @endphp
 
@@ -1325,14 +1377,17 @@
                         @endforeach
 
                     </div>
-
-                    <div class="custom-divider"></div>
+                    </div>{{-- /documents --}}
 
                     {{-- Health Information --}}
-                    <div class="section-title">Health Information</div>
+                    <div class="policy-fieldset policy-edit-section">
+                    <div class="policy-fieldset__header">
+                        <h3 class="policy-fieldset__title section-title">{{ policy_label('health_information') }}</h3>
+                    </div>
 
                     <div class="row">
                         @include('frontend.partials.health_measurements', [
+                            'bilingualLabels' => true,
                             'health' => $data,
                             'fieldClass' => 'form-control',
                             'selectClass' => 'form-select',
@@ -1343,42 +1398,41 @@
 
                         <div class="col-md-6 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">State average daily consumption of Tobacco, Pan/Niswar, Alcohol, Drugs <span class="required-asterisk">*</span></label>
+                                <label class="detail-label">{{ policy_label('daily_consumption') }} <span class="required-asterisk">*</span></label>
                                 <input type="text" name="daily_consumption" class="form-control" value="{{ old('daily_consumption', $data->daily_consumption) }}">
                             </div>
                         </div>
 
                         <div class="col-md-3 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">State Physical Impairments (if any) </label>
+                                <label class="detail-label">{{ policy_label('physical_impairments') }} </label>
                                 <input type="text" name="physical_impairments" class="form-control" value="{{ old('physical_impairments', $data->physical_impairments) }}">
                             </div>
                         </div>
 
                         <div class="col-md-3 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Last Illness / Injury <span class="required-asterisk">*</span></label>
+                                <label class="detail-label">{{ policy_label('last_illness_injury') }} <span class="required-asterisk">*</span></label>
                                 <input type="text" name="last_illness_injury" class="form-control" value="{{ old('last_illness_injury', $data->last_illness_injury) }}">
                             </div>
                         </div>
 
                         <div class="col-md-3 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Medical Investigations <span class="required-asterisk">*</span></label>
+                                <label class="detail-label">{{ policy_label('medical_investigations') }} <span class="required-asterisk">*</span></label>
                                 <input type="text" name="medical_investigations" class="form-control" value="{{ old('medical_investigations', $data->medical_investigations) }}">
                             </div>
                         </div>
 
                         <div class="col-md-6 mb-3">
                             <div class="detail-box">
-                                <label class="detail-label">Medical History <span class="required-asterisk">*</span></label>
+                                <label class="detail-label">{{ policy_label('medical_history') }} <span class="required-asterisk">*</span></label>
                                 <textarea name="medical_history" class="form-control" rows="4">{{ old('medical_history', $data->medical_history) }}</textarea>
                             </div>
                         </div>
 
                     </div>
-
-                    <div class="custom-divider"></div>
+                    </div>{{-- /health --}}
 
                     {{-- Submit --}}
                     <div class="d-flex justify-content-end gap-2 mt-4">
@@ -1522,7 +1576,7 @@
                 $('#employment_fields').html(`
                     <div class="col-md-6 mb-3">
                         <div class="detail-box">
-                            <label class="detail-label">Designation / Job Title <span class="required-asterisk">*</span></label>
+                            <label class="detail-label">{{ policy_label('designation') }} <span class="required-asterisk">*</span></label>
                             <input type="text" name="employment_designation"
                                 value="{{ old('employment_designation', $data->employment_designation ?? '') }}"
                                 class="form-control" required>
@@ -1530,7 +1584,7 @@
                     </div>
                     <div class="col-md-6 mb-3">
                         <div class="detail-box">
-                            <label class="detail-label">Company Name <span class="required-asterisk">*</span></label>
+                            <label class="detail-label">{{ policy_label('company_name') }} <span class="required-asterisk">*</span></label>
                             <input type="text" name="employment_company_name"
                                 value="{{ old('employment_company_name', $data->employment_company_name ?? '') }}"
                                 class="form-control" required>
@@ -1546,7 +1600,7 @@
                 $('#business_fields').html(`
                     <div class="col-md-6 mb-3">
                         <div class="detail-box">
-                            <label class="detail-label">Business Name <span class="required-asterisk">*</span></label>
+                            <label class="detail-label">{{ policy_label('business_name') }} <span class="required-asterisk">*</span></label>
                             <input type="text" name="business_name"
                                 value="{{ old('business_name', $data->business_name ?? '') }}"
                                 class="form-control" required>
@@ -1554,7 +1608,7 @@
                     </div>
                     <div class="col-md-6 mb-3">
                         <div class="detail-box">
-                            <label class="detail-label">Nature of Business <span class="required-asterisk">*</span></label>
+                            <label class="detail-label">{{ policy_label('nature_of_business') }} <span class="required-asterisk">*</span></label>
                             <input type="text" name="nature_of_business"
                                 value="{{ old('nature_of_business', $data->nature_of_business ?? '') }}"
                                 class="form-control"
@@ -1582,7 +1636,7 @@
                 $('#land_fields').html(`
                     <div class="col-md-6 mb-3">
                         <div class="detail-box">
-                            <label class="detail-label">Land Unit <span class="required-asterisk">*</span></label>
+                            <label class="detail-label">{{ policy_label('land_unit') }} <span class="required-asterisk">*</span></label>
                             <select name="land_unit" class="form-select" required>
                                 <option value="">Select Unit</option>
                                 <option value="Marla" {{ old('land_unit', $data->land_unit ?? '') == 'Marla' ? 'selected' : '' }}>Marla</option>
@@ -1596,7 +1650,7 @@
                     </div>
                     <div class="col-md-6 mb-3">
                         <div class="detail-box">
-                            <label class="detail-label">Total Area <span class="required-asterisk">*</span></label>
+                            <label class="detail-label">{{ policy_label('total_area') }} <span class="required-asterisk">*</span></label>
                             <input type="number" step="0.01" min="0" name="total_acreage"
                                 value="{{ old('total_acreage', $data->total_acreage ?? '') }}"
                                 class="form-control" placeholder="Enter value in selected unit" required>
@@ -1604,7 +1658,7 @@
                     </div>
                     <div class="col-md-6 mb-3">
                         <div class="detail-box">
-                            <label class="detail-label">Land Location <span class="required-asterisk">*</span></label>
+                            <label class="detail-label">{{ policy_label('land_location') }} <span class="required-asterisk">*</span></label>
                             <input type="text" name="land_location"
                                 value="{{ old('land_location', $data->land_location ?? '') }}"
                                 class="form-control" required>
@@ -1612,7 +1666,7 @@
                     </div>
                     <div class="col-md-6 mb-3">
                         <div class="detail-box">
-                            <label class="detail-label">Land Type <span class="required-asterisk">*</span></label>
+                            <label class="detail-label">{{ policy_label('land_type') }} <span class="required-asterisk">*</span></label>
                             <select name="land_type" class="form-select" required>
                                 <option value="">Select Type</option>
                                 <option value="Agricultural" {{ old('land_type', $data->land_type ?? '') == 'Agricultural' ? 'selected' : '' }}>Agricultural</option>
@@ -1623,7 +1677,7 @@
                     </div>
                     <div class="col-md-6 mb-3">
                         <div class="detail-box">
-                            <label class="detail-label">Estimated Land Value <span class="required-asterisk">*</span></label>
+                            <label class="detail-label">{{ policy_label('estimated_land_value') }} <span class="required-asterisk">*</span></label>
                             <input type="number" step="0.01" name="estimated_land_value"
                                 value="{{ old('estimated_land_value', $data->estimated_land_value ?? '') }}"
                                 class="form-control" required>
@@ -1644,6 +1698,13 @@
         });
 
         // ================= Family History dynamic member rows =================
+        const policyFamilyAgeLabels = {
+            Brother: @json(policy_label('brother_age')),
+            Sister: @json(policy_label('sister_age')),
+            Son: @json(policy_label('son_age')),
+            Daughter: @json(policy_label('daughter_age')),
+        };
+
         const templates = {
             brother: () => createMemberRow('brother', 'Brother'),
             sister: () => createMemberRow('sister', 'Sister'),
@@ -1657,31 +1718,31 @@
             <input type="hidden" name="memner_flag_${type}[]" value="${type}">
             <div class="col-12 row dynamic-row align-items-end border p-3 mb-3 bg-light rounded position-relative mx-0">
                 <div class="col-md-4 mb-2 px-1">
-                    <label class="detail-label">${labelPrefix} Age</label>
+                    <label class="detail-label">${policyFamilyAgeLabels[labelPrefix] || (labelPrefix + ' Age')}</label>
                     <input type="text" name="${type}_age[]" class="form-control">
                 </div>
                 <div class="col-md-4 mb-2 px-1">
-                    <label class="detail-label">State Of Health</label>
+                    <label class="detail-label">{{ policy_label('state_of_health') }}</label>
                     <input type="text" name="${type}_health[]" class="form-control">
                 </div>
                 <div class="col-md-4 mb-2 px-1">
-                    <label class="detail-label">Is the member alive?</label>
+                    <label class="detail-label">{{ policy_label('is_member_alive') }}</label>
                     <select name="${type}_is_alive[]" class="form-control">
                         <option value="Yes" selected>Yes</option>
                         <option value="No">No</option>
                     </select>
                 </div>
                 <div class="col-md-4 mb-2 px-1">
-                    <label class="detail-label">Year Of Death</label>
+                    <label class="detail-label">{{ policy_label('year_of_death') }}</label>
                     <input type="text" name="${type}_year_of_death[]" class="form-control jbl-year-format"
                         placeholder="YYYY" inputmode="numeric" maxlength="4" pattern="[0-9]{4}">
                 </div>
                 <div class="col-md-4 mb-2 px-1">
-                    <label class="detail-label">Age Of Death</label>
+                    <label class="detail-label">{{ policy_label('age_of_death') }}</label>
                     <input type="number" name="${type}_age_of_death[]" class="form-control">
                 </div>
                 <div class="col-md-6 mb-2 px-1">
-                    <label class="detail-label">Cause Of Death</label>
+                    <label class="detail-label">{{ policy_label('cause_of_death') }}</label>
                     <textarea name="${type}_cause_of_death[]" class="form-control" rows="2" placeholder="Enter cause of death details..."></textarea>
                 </div>
                 <div class="col-md-2 mb-2 text-center px-1">
@@ -1863,6 +1924,21 @@
 
         $('#gender, #marital_status').on('change', toggleSpouseNameFields);
         toggleSpouseNameFields();
+
+        function toggleFemaleSectionEdit() {
+            var show = (($('#gender').val() || '').trim() === 'Female');
+            var $wrap = $('#js-female-section-edit');
+            if (!$wrap.length) {
+                return;
+            }
+            if (show) {
+                $wrap.show();
+            } else {
+                $wrap.hide();
+            }
+        }
+        $('#gender').on('change', toggleFemaleSectionEdit);
+        toggleFemaleSectionEdit();
     });
 </script>
 @endpush

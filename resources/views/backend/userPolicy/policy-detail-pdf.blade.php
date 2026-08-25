@@ -130,30 +130,30 @@
 
                 <tr>
                     <td>
-                        <div class="summary-title">Policy Number</div>
+                        <div class="summary-title">{{ policy_label('policy_number') }}</div>
                         <div class="summary-value">{{ $data->policy_id ?? '---' }}</div>
                     </td>
 
                     <td>
-                        <div class="summary-title">Plan Name</div>
+                        <div class="summary-title">{{ policy_label('plan_name') }}</div>
                         <div class="summary-value">{{ $data->product->name ?? '---' }}</div>
                     </td>
                 </tr>
 
                 <tr>
                     <td>
-                        <div class="summary-title">Sum Assured</div>
+                        <div class="summary-title">{{ policy_label('sum_assured') }}</div>
                         <div class="summary-value">{{ number_format($data->sum_assured) ?? '---' }}</div>
                     </td>
 
                     <td>
-                        <div class="summary-title">Policy Term</div>
+                        <div class="summary-title">{{ policy_label('policy_term') }}</div>
                         <div class="summary-value">{{ $data->term ?? '---' }} Years</div>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <div class="summary-title">Submitted Date</div>
+                        <div class="summary-title">{{ policy_label('submitted_date') }}</div>
                         <div class="summary-value">
                             @if($data->created_at)
                                 {{ $data->created_at->timezone('Asia/Karachi')->format('d-m-Y h:i A') }}
@@ -163,7 +163,7 @@
                         </div>
                     </td>
                     <td>
-                        <div class="summary-title">Premium Paid</div>
+                        <div class="summary-title">{{ policy_label('premium_paid') }}</div>
                         <div class="summary-value">{{ $data->premium_paid !== null && $data->premium_paid !== '' ? number_format((float) $data->premium_paid) : '---' }}</div>
                     </td>
                 </tr>
@@ -172,149 +172,168 @@
 
             {{-- PERSONAL INFORMATION --}}
             <div class="section-title">
-                Personal Information
+                {{ policy_label('personal_information') }}
             </div>
 
             <table>
 
                 <tr>
                     <td>
-                        <div class="detail-label">Life Proposed Full Name</div>
+                        <div class="detail-label">{{ policy_label('life_proposed_full_name') }}</div>
                         <div class="detail-value">{{ $data->life_proposed_full_name ?? '---' }}</div>
                     </td>
 
                     <td>
-                        <div class="detail-label">Mobile Number Personal</div>
+                        <div class="detail-label">{{ policy_label('mobile_number_personal') }}</div>
                         <div class="detail-value">{{ $data->mobile_number ?? '---' }}</div>
                     </td>
                 </tr>
 
                 <tr>
                     <td>
-                        <div class="detail-label">CNIC / B-FORM NO</div>
+                        <div class="detail-label">{{ policy_label('cnic_bform') }}</div>
                         <div class="detail-value">{{ $data->cnic_number ?? '---' }}</div>
                     </td>
 
                     <td>
-                        <div class="detail-label">CNIC Issue Date</div>
+                        <div class="detail-label">{{ policy_label('cnic_issue_date') }}</div>
                         <div class="detail-value">{{ $data->cnic_issue_date ?? '---' }}</div>
                     </td>
                 </tr>
 
                 <tr>
                     <td>
-                        <div class="detail-label">CNIC Expiry Date</div>
+                        <div class="detail-label">{{ policy_label('cnic_expiry_date') }}</div>
                         <div class="detail-value">{{ $data->cnic_expiry_date ?? '---' }}</div>
                     </td>
 
                     <td>
-                        <div class="detail-label">Date Of Birth</div>
+                        <div class="detail-label">{{ policy_label('date_of_birth') }}</div>
                         <div class="detail-value">{{ $data->date_of_birth ?? '---' }}</div>
                     </td>
                 </tr>
 
                 <tr>
                     <td>
-                        <div class="detail-label">Age Nearest Birth-date</div>
+                        <div class="detail-label">{{ policy_label('place_of_birth') }}</div>
+                        <div class="detail-value">{{ $data->birth_placed ?? '---' }}</div>
+                    </td>
+                    <td>
+                        <div class="detail-label">{{ policy_label('age_nearest_birthdate') }}</div>
                         <div class="detail-value">{{ $data->age_nearest_date ?? '---' }}</div>
                     </td>
+                </tr>
+
+                <tr>
                     <td>
-                        <div class="detail-label">Gender</div>
+                        <div class="detail-label">{{ policy_label('gender') }}</div>
                         <div class="detail-value">{{ $data->gender ?? '---' }}</div>
                     </td>
-                </tr>
-
-                <tr>
                     <td>
-                        <div class="detail-label">Marital Status</div>
+                        <div class="detail-label">{{ policy_label('marital_status') }}</div>
                         <div class="detail-value">{{ $data->marital_status ?? '---' }}</div>
                     </td>
-                    <td>
-                        <div class="detail-label">Mother Maiden Name</div>
-                        <div class="detail-value">{{ $data->mother_maiden_name ?? '---' }}</div>
-                    </td>
                 </tr>
 
                 <tr>
                     <td>
-                        <div class="detail-label">Father's Name of Life Proposed</div>
+                        <div class="detail-label">{{ policy_label('mother_maiden_name') }}</div>
+                        <div class="detail-value">{{ $data->mother_maiden_name ?? '---' }}</div>
+                    </td>
+                    <td>
+                        <div class="detail-label">{{ policy_label('father_name_of_life_proposed') }}</div>
                         <div class="detail-value">{{ $data->father_name ?? '---' }}</div>
                     </td>
+                </tr>
+
+                <tr>
                     @if(($data->marital_status ?? '') === 'Married' && ($data->gender ?? '') === 'Male')
                     <td>
-                        <div class="detail-label">Wife Name of Life Proposed</div>
+                        <div class="detail-label">{{ policy_label('wife_name') }}</div>
                         <div class="detail-value">{{ $data->wife_name ?? '---' }}</div>
                     </td>
                     @elseif(($data->marital_status ?? '') === 'Married' && ($data->gender ?? '') === 'Female')
                     <td>
-                        <div class="detail-label">Husband Name of Life Proposed</div>
+                        <div class="detail-label">{{ policy_label('husband_name') }}</div>
                         <div class="detail-value">{{ $data->husband_name ?? '---' }}</div>
                     </td>
                     @else
                     <td>
-                        <div class="detail-label">Spouse Name</div>
+                        <div class="detail-label">{{ policy_label('spouse') }}</div>
                         <div class="detail-value">---</div>
                     </td>
                     @endif
-                </tr>
-
-                <tr>
                     <td>
-                        <div class="detail-label">Religion</div>
+                        <div class="detail-label">{{ policy_label('religion') }}</div>
                         <div class="detail-value">{{ $data->religion ?? '---' }}</div>
                     </td>
+                </tr>
+
+                <tr>
                     <td>
-                        <div class="detail-label">Email Address</div>
+                        <div class="detail-label">{{ policy_label('email_address') }}</div>
                         <div class="detail-value">{{ $data->user_email ?? '---' }}</div>
                     </td>
-                </tr>
-
-                <tr>
                     <td>
-                        <div class="detail-label">Phone Number Office</div>
+                        <div class="detail-label">{{ policy_label('phone_office') }}</div>
                         <div class="detail-value">{{ $data->phone_number_office ?? '---' }}</div>
                     </td>
+                </tr>
+
+                <tr>
                     <td>
-                        <div class="detail-label">Phone Number Residential</div>
+                        <div class="detail-label">{{ policy_label('phone_residential') }}</div>
                         <div class="detail-value">{{ $data->phone_number_residente ?? '---' }}</div>
+                    </td>
+                    <td>
+                        <div class="detail-label">{{ policy_label('country_of_residence') }}</div>
+                        <div class="detail-value">{{ optional($data->countryOfResidence)->name ?? '---' }}</div>
                     </td>
                 </tr>
 
                 <tr>
                     <td>
-                        <div class="detail-label">Is Client Dual National?</div>
-                        <div class="detail-value">{{ $data->is_client_dual_national ?? '---' }}</div>
+                        <div class="detail-label">{{ policy_label('current_address') }}</div>
+                        <div class="detail-value">{{ $data->current_address ?? '---' }}</div>
                     </td>
                     <td>
-                        <div class="detail-label">Primary Nationality</div>
+                        <div class="detail-label">{{ policy_label('is_dual_national') }}</div>
+                        <div class="detail-value">{{ $data->is_client_dual_national ?? '---' }}</div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <div class="detail-label">{{ policy_label('primary_nationality') }}</div>
                         <div class="detail-value">{{ $data->is_client_dual_national == 'No' ? 'Pakistani' : ($data->primary_nationality ?? '---') }}</div>
                     </td>
+                    <td></td>
                 </tr>
 
                 @if($data->is_client_dual_national == 'Yes')
                 <tr>
                     <td>
-                        <div class="detail-label">Dual Nationality Country</div>
+                        <div class="detail-label">{{ policy_label('dual_nationality_country') }}</div>
                         <div class="detail-value">{{ optional($data->dualNationalityCountry)->name ?? $data->dual_nationality_country ?? '---' }}</div>
                     </td>
                     <td>
-                        <div class="detail-label">Tax/TIN Number</div>
+                        <div class="detail-label">{{ policy_label('tax_tin_number') }}</div>
                         <div class="detail-value">{{ $data->dual_tax_tin_number ?? '---' }}</div>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <div class="detail-label">Mobile Number</div>
+                        <div class="detail-label">{{ policy_label('mobile_number') }}</div>
                         <div class="detail-value">{{ $data->dual_mobile_number ?? '---' }}</div>
                     </td>
                     <td>
-                        <div class="detail-label">Address</div>
+                        <div class="detail-label">{{ policy_label('address') }}</div>
                         <div class="detail-value">{{ $data->dual_address ?? '---' }}</div>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <div class="detail-label">Dual Nationality Passport Number</div>
+                        <div class="detail-label">{{ policy_label('passport_number') }}</div>
                         <div class="detail-value">{{ $data->dual_passport_number ?? '---' }}</div>
                     </td>
                     <td></td>
@@ -323,122 +342,125 @@
 
                 <tr>
                     <td>
-                        <div class="detail-label">Birth Place</div>
-                        <div class="detail-value">{{ $data->birth_placed ?? '---' }}</div>
-                    </td>
-
-                    <td>
-                        <div class="detail-label">Proposer & Life Proposed are same</div>
+                        <div class="detail-label">{{ policy_label('is_same_person') }}</div>
                         <div class="detail-value">{{ $data->is_same_person ?? '---' }}</div>
                     </td>
+                    <td></td>
                 </tr>
 
                 @php $lp = \App\Support\LifeProposedProfile::values($data); @endphp
                 @if(($data->is_same_person ?? '') === 'No')
                 <tr>
                     <td>
-                        <div class="detail-label">Life Proposed Name</div>
+                        <div class="detail-label">{{ policy_label('life_proposed_full_name') }}</div>
                         <div class="detail-value">{{ $lp['name'] ?? '---' }}</div>
                     </td>
                     <td>
-                        <div class="detail-label">Life Proposed Mobile</div>
+                        <div class="detail-label">{{ policy_label('mobile_number_personal') }}</div>
                         <div class="detail-value">{{ $lp['mobile'] ?? '---' }}</div>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <div class="detail-label">Life Proposed CNIC / B-Form</div>
+                        <div class="detail-label">{{ policy_label('life_proposed_document') }}</div>
                         <div class="detail-value">{{ $lp['cnic'] ?? '---' }}</div>
                     </td>
                     <td>
-                        <div class="detail-label">Life Proposed DOB / Age</div>
-                        <div class="detail-value">{{ ($lp['dob'] ?? '---') }} / {{ ($lp['age'] ?? '---') }}</div>
+                        <div class="detail-label">{{ policy_label('date_of_birth') }}</div>
+                        <div class="detail-value">{{ $lp['dob'] ?? '---' }}</div>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <div class="detail-label">Life Proposed Gender / Marital</div>
+                        <div class="detail-label">{{ policy_label('place_of_birth') }}</div>
+                        <div class="detail-value">{{ $lp['birth_placed'] ?? '---' }}</div>
+                    </td>
+                    <td>
+                        <div class="detail-label">{{ policy_label('age') }}</div>
+                        <div class="detail-value">{{ $lp['age'] ?? '---' }}</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="detail-label">{{ policy_label('gender') }}</div>
                         <div class="detail-value">{{ ($lp['gender'] ?? '---') }} / {{ ($lp['marital_status'] ?? '---') }}</div>
                     </td>
                     <td>
-                        <div class="detail-label">Relationship with Proposer</div>
+                        <div class="detail-label">{{ policy_label('relationship_with_proposer') }}</div>
                         <div class="detail-value">{{ $lp['relationship'] ?? '---' }}</div>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <div class="detail-label">Life Proposed Father / Mother</div>
+                        <div class="detail-label">{{ policy_label('father_name') }}</div>
                         <div class="detail-value">{{ ($lp['father_name'] ?? '---') }} / {{ ($lp['mother_maiden_name'] ?? '---') }}</div>
                     </td>
                     <td>
-                        <div class="detail-label">Life Proposed Email</div>
+                        <div class="detail-label">{{ policy_label('email_address') }}</div>
                         <div class="detail-value">{{ $lp['email'] ?? '---' }}</div>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <div class="detail-label">Life Proposed Birth Place</div>
-                        <div class="detail-value">{{ $lp['birth_placed'] ?? '---' }}</div>
-                    </td>
-                    <td>
-                        <div class="detail-label">Life Proposed Religion</div>
+                        <div class="detail-label">{{ policy_label('religion') }}</div>
                         <div class="detail-value">{{ $lp['religion'] ?? '---' }}</div>
                     </td>
-                </tr>
-                <tr>
                     <td>
-                        <div class="detail-label">Life Proposed CNIC Issue Date</div>
+                        <div class="detail-label">{{ policy_label('cnic_issue_date') }}</div>
                         <div class="detail-value">{{ $lp['cnic_issue_date'] ?? '---' }}</div>
                     </td>
+                </tr>
+                <tr>
                     <td>
-                        <div class="detail-label">Life Proposed CNIC Expiry Date</div>
+                        <div class="detail-label">{{ policy_label('cnic_expiry_date') }}</div>
                         <div class="detail-value">{{ $lp['cnic_expiry_date'] ?? '---' }}</div>
                     </td>
-                </tr>
-                <tr>
                     <td>
-                        <div class="detail-label">Life Proposed Wife / Husband</div>
+                        <div class="detail-label">{{ policy_label('spouse') }}</div>
                         <div class="detail-value">{{ ($lp['wife_name'] ?? '---') }} / {{ ($lp['husband_name'] ?? '---') }}</div>
                     </td>
+                </tr>
+                <tr>
                     <td>
-                        <div class="detail-label">Life Proposed Office / Residential Phone</div>
+                        <div class="detail-label">{{ policy_label('phone_office') }}</div>
                         <div class="detail-value">{{ ($lp['phone_office'] ?? '---') }} / {{ ($lp['phone_residential'] ?? '---') }}</div>
+                    </td>
+                    <td>
+                        <div class="detail-label">{{ policy_label('is_dual_national') }}</div>
+                        <div class="detail-value">{{ $lp['is_client_dual_national'] ?? '---' }}</div>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <div class="detail-label">Life Proposed Dual National?</div>
-                        <div class="detail-value">{{ $lp['is_client_dual_national'] ?? '---' }}</div>
-                    </td>
-                    <td>
-                        <div class="detail-label">Life Proposed Primary Nationality</div>
+                        <div class="detail-label">{{ policy_label('primary_nationality') }}</div>
                         <div class="detail-value">{{ $lp['primary_nationality'] ?? '---' }}</div>
                     </td>
+                    <td></td>
                 </tr>
                 @if(($lp['is_client_dual_national'] ?? '') === 'Yes')
                 <tr>
                     <td>
-                        <div class="detail-label">Life Proposed Dual Nationality Country</div>
+                        <div class="detail-label">{{ policy_label('dual_nationality_country') }}</div>
                         <div class="detail-value">{{ $lp['dual_nationality_country'] ?? '---' }}</div>
                     </td>
                     <td>
-                        <div class="detail-label">Life Proposed Tax/TIN</div>
+                        <div class="detail-label">{{ policy_label('tax_tin_number') }}</div>
                         <div class="detail-value">{{ $lp['dual_tax_tin_number'] ?? '---' }}</div>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <div class="detail-label">Life Proposed Dual Mobile</div>
+                        <div class="detail-label">{{ policy_label('dual_mobile_number') }}</div>
                         <div class="detail-value">{{ $lp['dual_mobile_number'] ?? '---' }}</div>
                     </td>
                     <td>
-                        <div class="detail-label">Life Proposed Dual Address</div>
+                        <div class="detail-label">{{ policy_label('dual_address') }}</div>
                         <div class="detail-value">{{ $lp['dual_address'] ?? '---' }}</div>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <div class="detail-label">Life Proposed Passport Number</div>
+                        <div class="detail-label">{{ policy_label('passport_number') }}</div>
                         <div class="detail-value">{{ $lp['dual_passport_number'] ?? '---' }}</div>
                     </td>
                     <td></td>
@@ -450,14 +472,14 @@
 
             {{-- POLICY INFORMATION --}}
             <div class="section-title">
-                Policy Information
+                {{ policy_label('policy_information') }}
             </div>
 
             <table>
 
                 <tr>
                     <td>
-                        <div class="detail-label">Policy Status</div>
+                        <div class="detail-label">{{ policy_label('policy_status') }}</div>
                         <div class="detail-value ">
                             <!-- Status Badge -->
                             <span style="
@@ -478,60 +500,60 @@
                     </td>
 
                     <td>
-                        <div class="detail-label">Table</div>
+                        <div class="detail-label">{{ policy_label('table') }}</div>
                         <div class="detail-value">{{ $data->table_no ?? '---' }}</div>
                     </td>
                 </tr>
 
                 <tr>
                     <td>
-                        <div class="detail-label">Term</div>
+                        <div class="detail-label">{{ policy_label('term') }}</div>
                         <div class="detail-value">{{ $data->term ?? '---' }}</div>
                     </td>
 
                     <td>
-                        <div class="detail-label">Sum Assured</div>
+                        <div class="detail-label">{{ policy_label('sum_assured') }}</div>
                         <div class="detail-value">{{ $data->sum_assured ?? '---' }}</div>
                     </td>
                 </tr>
 
                 <tr>
                     <td>
-                        <div class="detail-label">IS ND APPLIED</div>
+                        <div class="detail-label">{{ policy_label('is_nd_applied') }}</div>
                         <div class="detail-value">{{ $data->is_nd_applied ?? '---' }}</div>
                     </td>
 
                     <td>
-                        <div class="detail-label">Payment Mode</div>
+                        <div class="detail-label">{{ policy_label('payment_mode') }}</div>
                         <div class="detail-value">{{ $data->payment_mode ?? '---' }}</div>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <div class="detail-label">Premium Paid</div>
+                        <div class="detail-label">{{ policy_label('premium_paid') }}</div>
                         <div class="detail-value">{{ $data->premium_paid !== null && $data->premium_paid !== '' ? number_format((float) $data->premium_paid) : '---' }}</div>
                     </td>
                     <td>
-                        <div class="detail-label">Age Proof</div>
+                        <div class="detail-label">{{ policy_label('age_proof') }}</div>
                         <div class="detail-value">{{ $data->age_proof ?? '---' }}</div>
                     </td>
                 </tr>
 
                 <tr>
                     <td>
-                        <div class="detail-label">Accidental Death Benefit (ADB)</div>
+                        <div class="detail-label">{{ policy_label('adb_rider') }}</div>
                         <div class="detail-value">{{ $data->adb_rider ?? '---' }}</div>
                     </td>
 
                     <td>
-                        <div class="detail-label">Term Insurance Rider (TIR)</div>
+                        <div class="detail-label">{{ policy_label('tir_rider') }}</div>
                         <div class="detail-value">{{ $data->tir_rider ?? '---' }}</div>
                     </td>
                 </tr>
 
                 <tr>
                     <td>
-                        <div class="detail-label">Family Income Benefit (FIB)</div>
+                        <div class="detail-label">{{ policy_label('fib_rider') }}</div>
                         <div class="detail-value">{{ $data->fib_rider ?? '---' }}</div>
                     </td>
 
@@ -542,85 +564,85 @@
 
             {{-- ADDRESS DETAILS --}}
             <div class="section-title">
-                Address Details
+                {{ policy_label('address_details') }}
             </div>
 
             <table>
                 <tr>
-                    <td colspan="2"> Permanent Address</td>
+                    <td colspan="2"> {{ policy_label('permanent_address') }}</td>
                 </tr>
                 <tr>
                     <td>
-                        <div class="detail-label">Province</div>
+                        <div class="detail-label">{{ policy_label('province') }}</div>
                         <div class="detail-value">{{ $data->get_permanent_province->name ?? '---' }}</div>
                     </td>
 
                     <td>
-                        <div class="detail-label">City</div>
+                        <div class="detail-label">{{ policy_label('city') }}</div>
                         <div class="detail-value">{{ $data->get_permanent_city->name ?? '---'}}</div>
                     </td>
                 </tr>
 
                 <tr>
                     <td>
-                        <div class="detail-label">District</div>
+                        <div class="detail-label">{{ policy_label('district') }}</div>
                         <div class="detail-value">{{ $data->get_permanent_district->name ?? '---'  }}</div>
                     </td>
 
                     <td>
-                        <div class="detail-label">Address</div>
+                        <div class="detail-label">{{ policy_label('address') }}</div>
                         <div class="detail-value">{{ $data->permanent_address ?? '---' }}</div>
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2"> Correspondence Address</td>
+                    <td colspan="2"> {{ policy_label('correspondence_address') }}</td>
                 </tr>
                 <tr>
                     <td>
-                        <div class="detail-label">Province</div>
+                        <div class="detail-label">{{ policy_label('province') }}</div>
                         <div class="detail-value">{{ $data->get_corres_province->name ?? '---' }}</div>
                     </td>
 
                     <td>
-                        <div class="detail-label">City</div>
+                        <div class="detail-label">{{ policy_label('city') }}</div>
                         <div class="detail-value">{{ $data->get_corres_city->name ?? '---'}}</div>
                     </td>
                 </tr>
 
                 <tr>
                     <td>
-                        <div class="detail-label">District</div>
+                        <div class="detail-label">{{ policy_label('district') }}</div>
                         <div class="detail-value">{{ $data->get_corres_district->name ?? '---'  }}</div>
                     </td>
 
                     <td>
-                        <div class="detail-label">Address</div>
+                        <div class="detail-label">{{ policy_label('address') }}</div>
                         <div class="detail-value">{{ $data->corres_address ?? '---' }}</div>
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2"> Temporary Address</td>
+                    <td colspan="2"> {{ policy_label('temporary_address') }}</td>
                 </tr>
                 <tr>
                     <td>
-                        <div class="detail-label">Province</div>
+                        <div class="detail-label">{{ policy_label('province') }}</div>
                         <div class="detail-value">{{ $data->get_temp_province->name ?? '---' }}</div>
                     </td>
 
                     <td>
-                        <div class="detail-label">City</div>
+                        <div class="detail-label">{{ policy_label('city') }}</div>
                         <div class="detail-value">{{ $data->get_temp_city->name ?? '---'}}</div>
                     </td>
                 </tr>
 
                 <tr>
                     <td>
-                        <div class="detail-label">District</div>
+                        <div class="detail-label">{{ policy_label('district') }}</div>
                         <div class="detail-value">{{ $data->get_temp_district->name ?? '---'  }}</div>
                     </td>
 
                     <td>
-                        <div class="detail-label">Address</div>
+                        <div class="detail-label">{{ policy_label('address') }}</div>
                         <div class="detail-value">{{ $data->temp_address ?? '---' }}</div>
                     </td>
                 </tr>
@@ -629,119 +651,113 @@
 
             {{-- OCCUPATION --}}
             <div class="section-title">
-                Occupation & Income
+                {{ policy_label('occupation_income') }}
             </div>
 
             <table>
 
                 <tr>
                     <td>
-                        <div class="detail-label">Employment</div>
+                        <div class="detail-label">{{ policy_label('employment') }}</div>
                         <div class="detail-value">{{ $data->is_emaployemnt ?? '---' }}</div>
                     </td>
                     <td>
-                        <div class="detail-label">Employment Designation</div>
+                        <div class="detail-label">{{ policy_label('designation') }}</div>
                         <div class="detail-value">{{ $data->employment_designation ?? '---' }}</div>
                     </td>
                 </tr>
 
                 <tr>
                     <td>
-                        <div class="detail-label">Company Name</div>
+                        <div class="detail-label">{{ policy_label('company_name') }}</div>
                         <div class="detail-value">{{ $data->employment_company_name ?? '---' }}</div>
                     </td>
                     <td>
-                        <div class="detail-label">Businessman</div>
+                        <div class="detail-label">{{ policy_label('businessman') }}</div>
                         <div class="detail-value">{{ $data->is_business ?? '---' }}</div>
                     </td>
                 </tr>
 
                 <tr>
                     <td>
-                        <div class="detail-label">Business Name</div>
+                        <div class="detail-label">{{ policy_label('business_name') }}</div>
                         <div class="detail-value">{{ $data->business_name ?? '---' }}</div>
                     </td>
                     <td>
-                        <div class="detail-label">Nature Of Business</div>
+                        <div class="detail-label">{{ policy_label('nature_of_business') }}</div>
                         <div class="detail-value">{{ $data->nature_of_business ?? '---' }}</div>
                     </td>
                 </tr>
 
                 <tr>
                     <td>
-                        <div class="detail-label">Filer Status</div>
+                        <div class="detail-label">{{ policy_label('filer_status') }}</div>
                         <div class="detail-value">{{ $data->filer_status ?? '---' }}</div>
                     </td>
                     <td>
-                        <div class="detail-label">NTN Number</div>
+                        <div class="detail-label">{{ policy_label('ntn_number') }}</div>
                         <div class="detail-value">{{ ($data->filer_status ?? '') === 'Filer' ? ($data->ntn_number ?? '---') : '---' }}</div>
                     </td>
                 </tr>
 
                 <tr>
                     <td>
-                        <div class="detail-label">Holding Land</div>
+                        <div class="detail-label">{{ policy_label('holding_land') }}</div>
                         <div class="detail-value">{{ $data->is_holding_land ?? '---' }}</div>
                     </td>
                     <td>
-                        <div class="detail-label">Land Unit</div>
+                        <div class="detail-label">{{ policy_label('land_unit') }}</div>
                         <div class="detail-value">{{ $data->land_unit ?? '---' }}</div>
                     </td>
                 </tr>
 
                 <tr>
                     <td>
-                        <div class="detail-label">Total Area</div>
+                        <div class="detail-label">{{ policy_label('total_area') }}</div>
                         <div class="detail-value">{{ $data->total_acreage ?? '---' }}{{ !empty($data->land_unit) ? ' ' . $data->land_unit : '' }}</div>
                     </td>
                     <td>
-                        <div class="detail-label">Land Location</div>
+                        <div class="detail-label">{{ policy_label('land_location') }}</div>
                         <div class="detail-value">{{ $data->land_location ?? '---' }}</div>
                     </td>
                 </tr>
 
                 <tr>
                     <td>
-                        <div class="detail-label">Land Type</div>
+                        <div class="detail-label">{{ policy_label('land_type') }}</div>
                         <div class="detail-value">{{ $data->land_type ?? '---' }}</div>
                     </td>
                     <td>
-                        <div class="detail-label">Estimated Land Value</div>
+                        <div class="detail-label">{{ policy_label('estimated_land_value') }}</div>
                         <div class="detail-value">{{ $data->estimated_land_value ?? '---' }}</div>
                     </td>
                 </tr>
 
                 <tr>
                     <td>
-                        <div class="detail-label">Average Monthly Income</div>
+                        <div class="detail-label">{{ policy_label('average_monthly_income') }}</div>
                         <div class="detail-value">PKR {{ $data->avaerage_monthly_income ?? '---' }}</div>
                     </td>
                     <td>
-                        <div class="detail-label">
-                            If Defence or Ex-Defence Personnel, Commercial Airline Flight Crew or Plant Protection Pilot
-                        </div>
+                        <div class="detail-label">{{ policy_label('ex_defence') }}</div>
                         <div class="detail-value">{{ $data->ex_defence_personal ?? '---' }}</div>
                     </td>
                 </tr>
 
                 <tr>
                     <td>
-                        <div class="detail-label">
-                            Have you ever been discharged on medical grounds from service / employment
-                        </div>
+                        <div class="detail-label">{{ policy_label('discharged_medical') }}</div>
                         <div class="detail-value">{{ $data->discharged_on_medical ?? '---' }}</div>
                     </td>
                     <td>
-                        <div class="detail-label">
-                            Are you presently engaged or intend to engage in any hazardous occupation or pastime?
-                        </div>
+                        <div class="detail-label">{{ policy_label('hazardous_occupation') }}</div>
                         <div class="detail-value">{{ $data->hazardous_occupation ?? '---' }}</div>
                     </td>
                 </tr>
 
                 <tr>
                     <td colspan="2">
-                        <div class="detail-label">Comments</div>
+                        <div class="detail-label">{{ policy_label('comments') }}</div>
                         <div class="detail-value">{{ $data->comment ?? '---' }}</div>
                     </td>
                 </tr>
@@ -750,31 +766,31 @@
 
             {{-- Voucher Information --}}
             <div class="section-title">
-                Payment Information
+                {{ policy_label('payment_information') }}
             </div>
 
             <table>
 
                 <tr>
                     <td>
-                        <div class="detail-label">Consumer No</div>
+                        <div class="detail-label">{{ policy_label('consumer_no') }}</div>
                         <div class="detail-value">{{ $data->voucher->consumer_number ?? '---' }}</div>
                     </td>
 
                     <td>
-                        <div class="detail-label">Amount With In Due Date</div>
+                        <div class="detail-label">{{ policy_label('amount_within_due_date') }}</div>
                         <div class="detail-value">{{ number_format($data->voucher->amount_within_due_date) ?? '---' }}</div>
                     </td>
                 </tr>
 
                 <tr>
                     <td>
-                        <div class="detail-label">Amount After Date</div>
+                        <div class="detail-label">{{ policy_label('amount_after_due_date') }}</div>
                         <div class="detail-value">{{ number_format($data->voucher->amount_after_due_date) ?? '---' }}</div>
                     </td>
 
                     <td>
-                        <div class="detail-label">Due Date</div>
+                        <div class="detail-label">{{ policy_label('due_date') }}</div>
                         <div class="detail-value">{{ $data->voucher->due_date ?? '---' }}</div>
                     </td>
                 </tr>
@@ -783,7 +799,7 @@
 
             {{-- Family History Information --}}
             <div class="section-title">
-                Family History Information
+                {{ policy_label('family_history_information') }}
             </div>
 
             @if($data->family_history && $data->family_history->count() > 0)
@@ -797,34 +813,34 @@
 
                 <tr>
                     <td>
-                        <div class="detail-label">Current Age</div>
+                        <div class="detail-label">{{ policy_label('current_age') }}</div>
                         <div class="detail-value">{{ $member->age ?? '---' }}</div>
                     </td>
                     <td>
-                        <div class="detail-label">State of Health</div>
+                        <div class="detail-label">{{ policy_label('state_of_health') }}</div>
                         <div class="detail-value">{{ $member->state_of_health ?? '---' }}</div>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <div class="detail-label">Is Alive?</div>
+                        <div class="detail-label">{{ policy_label('is_alive') }}</div>
                         <div class="detail-value">{{ filled($member->year_of_death) ? 'No' : 'Yes' }}</div>
                     </td>
                     <td>
-                        <div class="detail-label">Year of Death</div>
+                        <div class="detail-label">{{ policy_label('year_of_death') }}</div>
                         <div class="detail-value">{{ $member->year_of_death ?? '---' }}</div>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <div class="detail-label">Age of Death</div>
+                        <div class="detail-label">{{ policy_label('age_of_death') }}</div>
                         <div class="detail-value">{{ $member->age_of_death ?? '---' }}</div>
                     </td>
                 </tr>
 
                 <tr>
                     <td>
-                        <div class="detail-label">Cause of Death</div>
+                        <div class="detail-label">{{ policy_label('cause_of_death') }}</div>
                         <div class="detail-value">{{ $member->cause_of_death ?? '---' }}</div>
                     </td>
                     <td></td>
@@ -843,43 +859,43 @@
 
             {{-- Female Section --}}
             <div class="section-title">
-                Female Section
+                {{ policy_label('female_section') }}
             </div>
 
             <table>
 
                 <tr>
                     <td>
-                        <div class="detail-label">Date of Last Delivery</div>
+                        <div class="detail-label">{{ policy_label('date_of_last_delivery') }}</div>
                         <div class="detail-value">{{ $data->date_of_last_delivery ?? '---' }}</div>
                     </td>
 
                     <td>
-                        <div class="detail-label">Miscarriage Dates</div>
+                        <div class="detail-label">{{ policy_label('miscarriage_dates') }}</div>
                         <div class="detail-value">{{ \App\Support\MiscarriageDates::display($data->miscarriage_dates ?? null) }}</div>
                     </td>
                 </tr>
 
                 <tr>
                     <td>
-                        <div class="detail-label">Is Pregnant</div>
+                        <div class="detail-label">{{ policy_label('are_you_pregnant') }}</div>
                         <div class="detail-value">{{ $data->is_pregnant ?? '---' }}</div>
                     </td>
 
                     <td>
-                        <div class="detail-label">Caesarean Details</div>
+                        <div class="detail-label">{{ policy_label('caesarean_details') }}</div>
                         <div class="detail-value">{{ $data->caesarean_details ?? '---' }}</div>
                     </td>
                 </tr>
 
                 <tr>
                     <td>
-                        <div class="detail-label">LMP Date</div>
+                        <div class="detail-label">{{ policy_label('lmp_date') }}</div>
                         <div class="detail-value">{{ $data->lmp_date ?? '---' }}</div>
                     </td>
 
                     <td>
-                        <div class="detail-label">Female Disease History</div>
+                        <div class="detail-label">{{ policy_label('female_disease_history') }}</div>
                         <div class="detail-value">{{ $data->female_disease_history ?? '---' }}</div>
                     </td>
                 </tr>
@@ -887,11 +903,11 @@
                 @if(($data->female_disease_history ?? '') === 'Yes')
                 <tr>
                     <td>
-                        <div class="detail-label">Female Disease</div>
+                        <div class="detail-label">{{ policy_label('female_disease') }}</div>
                         <div class="detail-value">{{ \App\Support\FemaleDiseases::name($data->female_disease_name) ?? '---' }}</div>
                     </td>
                     <td>
-                        <div class="detail-label">Female Disease Description</div>
+                        <div class="detail-label">{{ policy_label('description') }}</div>
                         <div class="detail-value">{{ \App\Support\FemaleDiseases::details($data->female_disease_name) ?? '---' }}</div>
                     </td>
                 </tr>
@@ -899,43 +915,43 @@
 
                 <tr>
                     <td>
-                        <div class="detail-label">Self Monthly Income</div>
+                        <div class="detail-label">{{ policy_label('self_monthly_income') }}</div>
                         <div class="detail-value">{{ $data->self_monthly_income ?? '---' }}</div>
                     </td>
 
                     <td>
-                        <div class="detail-label">Husband Monthly Income</div>
+                        <div class="detail-label">{{ policy_label('husband_monthly_income') }}</div>
                         <div class="detail-value">{{ $data->husband_monthly_income ?? '---' }}</div>
                     </td>
                 </tr>
 
                 <tr>
                     <td>
-                        <div class="detail-label">Qualification</div>
+                        <div class="detail-label">{{ policy_label('qualification') }}</div>
                         <div class="detail-value">{{ $data->qualification ?? '---' }}</div>
                     </td>
 
                     <td>
-                        <div class="detail-label">Pays Tax / Land Revenue</div>
+                        <div class="detail-label">{{ policy_label('tax_paid') }}</div>
                         <div class="detail-value">{{ $data->pays_tax_land_revenue ?? '---' }}</div>
                     </td>
                 </tr>
 
                 <tr>
                     <td>
-                        <div class="detail-label">Husband Policy No.</div>
+                        <div class="detail-label">{{ policy_label('husband_policy_no') }}</div>
                         <div class="detail-value">{{ $data->husband_policy_no ?? '---' }}</div>
                     </td>
 
                     <td>
-                        <div class="detail-label">Husband Zone / Company</div>
+                        <div class="detail-label">{{ policy_label('husband_zone_company') }}</div>
                         <div class="detail-value">{{ $data->husband_zone_company ?? '---' }}</div>
                     </td>
                 </tr>
 
                 <tr>
                     <td>
-                        <div class="detail-label">Husband Sum Assured</div>
+                        <div class="detail-label">{{ policy_label('husband_sum_assured') }}</div>
                         <div class="detail-value">{{ $data->husband_sum_assured ?? '---' }}</div>
                     </td>
 
@@ -946,31 +962,31 @@
 
             {{-- Nominee Information --}}
             <div class="section-title">
-                Nominee Information
+                {{ policy_label('nominee_information') }}
             </div>
 
             <table>
 
                 <tr>
                     <td>
-                        <div class="detail-label">Nominee Name</div>
+                        <div class="detail-label">{{ policy_label('nominee_name') }}</div>
                         <div class="detail-value">{{ $data->nominee_name ?? '---' }}</div>
                     </td>
 
                     <td>
-                        <div class="detail-label">Nominee CNIC</div>
+                        <div class="detail-label">{{ policy_label('nominee_cnic') }}</div>
                         <div class="detail-value">{{ $data->nominee_cnic ?? '---' }}</div>
                     </td>
                 </tr>
 
                 <tr>
                     <td>
-                        <div class="detail-label">Nominee Age</div>
+                        <div class="detail-label">{{ policy_label('nominee_age') }}</div>
                         <div class="detail-value">{{ $data->nominee_age ?? '---' }}</div>
                     </td>
 
                     <td>
-                        <div class="detail-label">Nominee Relationship</div>
+                        <div class="detail-label">{{ policy_label('relationship_with_you') }}</div>
                         <div class="detail-value">{{ $data->nominee_relationship ?? '---' }}</div>
                     </td>
                 </tr>
@@ -981,23 +997,23 @@
                 @if($isMinorNominee)
                 <tr>
                     <td>
-                        <div class="detail-label">Appointee Name</div>
+                        <div class="detail-label">{{ policy_label('appointee_name') }}</div>
                         <div class="detail-value">{{ $data->appointee_name ?? '---' }}</div>
                     </td>
 
                     <td>
-                        <div class="detail-label">Appointee Relationship</div>
+                        <div class="detail-label">{{ policy_label('appointee_relationship') }}</div>
                         <div class="detail-value">{{ $data->appointee_relationship ?? '---' }}</div>
                     </td>
                 </tr>
 
                 <tr>
                     <td>
-                        <div class="detail-label">Appointee CNIC</div>
+                        <div class="detail-label">{{ policy_label('appointee_cnic') }}</div>
                         <div class="detail-value">{{ $data->appointee_cnic ?? '---' }}</div>
                     </td>
                     <td>
-                        <div class="detail-label">Appointee Mobile</div>
+                        <div class="detail-label">{{ policy_label('appointee_mobile') }}</div>
                         <div class="detail-value">{{ $data->appointee_mobile ?? '---' }}</div>
                     </td>
                 </tr>
@@ -1007,14 +1023,14 @@
 
             {{-- Documents --}}
             <div class="section-title">
-                Documents
+                {{ policy_label('documents') }}
             </div>
 
             <table>
 
                 <tr>
                     <td>
-                        <div class="detail-label">Proposer CNIC Front</div>
+                        <div class="detail-label">{{ policy_label('proposer_cnic_front') }}</div>
                         <div class="detail-value">
                             @if($data->proposer_cnic_front)
                             <img src="{{ public_path('uploads/policy_documents/'.$data->proposer_cnic_front) }}"
@@ -1027,7 +1043,7 @@
                     </td>
 
                     <td>
-                        <div class="detail-label">Proposer CNIC Back</div>
+                        <div class="detail-label">{{ policy_label('proposer_cnic_back') }}</div>
                         <div class="detail-value">
                             @if($data->proposer_cnic_back)
                             <img src="{{ public_path('uploads/policy_documents/'.$data->proposer_cnic_back) }}"
@@ -1043,7 +1059,7 @@
                 @if(($data->is_same_person ?? '') === 'No')
                 <tr>
                     <td>
-                        <div class="detail-label">Life Proposed CNIC / B-Form</div>
+                        <div class="detail-label">{{ policy_label('life_proposed_document') }}</div>
                         <div class="detail-value">
                             @if($data->life_proposed_document)
                             <img src="{{ public_path('uploads/policy_documents/'.$data->life_proposed_document) }}"
@@ -1060,7 +1076,7 @@
 
                 <tr>
                     <td>
-                        <div class="detail-label">Nominee Document</div>
+                        <div class="detail-label">{{ policy_label('nominee_document') }}</div>
                         <div class="detail-value">
                             @if($data->nominee_document)
                             <img src="{{ public_path('uploads/policy_documents/'.$data->nominee_document) }}"
@@ -1073,7 +1089,7 @@
                     </td>
 
                     <td>
-                        <div class="detail-label">Proposer Photo</div>
+                        <div class="detail-label">{{ policy_label('proposer_photo') }}</div>
                         <div class="detail-value">
                             @if($data->proposer_photo)
                             <img src="{{ public_path('uploads/policy_documents/'.$data->proposer_photo) }}"
@@ -1088,7 +1104,7 @@
 
                 <tr>
                     <td>
-                        <div class="detail-label">Income Proof</div>
+                        <div class="detail-label">{{ policy_label('income_proof') }}</div>
                         <div class="detail-value">
                             @if($data->income_proof)
                             <img src="{{ public_path('uploads/policy_documents/'.$data->income_proof) }}"
@@ -1113,110 +1129,110 @@
 
             </table>
             <div class="section-title">
-                Health Information
+                {{ policy_label('health_information') }}
             </div>
 
             <table>
 
                 <tr>
                     <td>
-                        <div class="detail-label">Height CM</div>
+                        <div class="detail-label">{{ policy_label('height_cm') }}</div>
                         <div class="detail-value">{{ $data->height_cm ?? '---' }}</div>
                     </td>
 
                     <td>
-                        <div class="detail-label">Height FT</div>
+                        <div class="detail-label">{{ policy_label('height_ft') }}</div>
                         <div class="detail-value">{{ $data->height_ft ?? '---' }}</div>
                     </td>
                 </tr>
 
                 <tr>
                     <td>
-                        <div class="detail-label">Weight KG</div>
+                        <div class="detail-label">{{ policy_label('weight_kg') }}</div>
                         <div class="detail-value">{{ $data->weight_kg ?? '---' }}</div>
                     </td>
 
                     <td>
-                        <div class="detail-label">Chest Insp CM</div>
+                        <div class="detail-label">{{ policy_label('chest_inspiration') }}</div>
                         <div class="detail-value">{{ $data->chest_insp_cm ?? '---' }}</div>
                     </td>
                 </tr>
 
                 <tr>
                     <td>
-                        <div class="detail-label">Chest Insp Inches</div>
+                        <div class="detail-label">{{ policy_label('chest_inspiration') }}</div>
                         <div class="detail-value">{{ $data->chest_insp_inches ?? '---' }}</div>
                     </td>
 
                     <td>
-                        <div class="detail-label">Chest Exp CM</div>
+                        <div class="detail-label">{{ policy_label('chest_expansion') }}</div>
                         <div class="detail-value">{{ $data->chest_exp_cm ?? '---' }}</div>
                     </td>
                 </tr>
 
                 <tr>
                     <td>
-                        <div class="detail-label">Chest Exp Inches</div>
+                        <div class="detail-label">{{ policy_label('chest_expansion') }}</div>
                         <div class="detail-value">{{ $data->chest_exp_inches ?? '---' }}</div>
                     </td>
 
                     <td>
-                        <div class="detail-label">Abdomen CM</div>
+                        <div class="detail-label">{{ policy_label('abdomen') }}</div>
                         <div class="detail-value">{{ $data->abdomen_cm ?? '---' }}</div>
                     </td>
                 </tr>
 
                 <tr>
                     <td>
-                        <div class="detail-label">Abdomen Inches</div>
+                        <div class="detail-label">{{ policy_label('abdomen') }}</div>
                         <div class="detail-value">{{ $data->abdomen_inches ?? '---' }}</div>
                     </td>
 
                     <td>
-                        <div class="detail-label">Weight Loss KG</div>
+                        <div class="detail-label">{{ policy_label('expected_weight_loss') }}</div>
                         <div class="detail-value">{{ $data->weight_loss_kg ?? '---' }}</div>
                     </td>
                 </tr>
 
                 <tr>
                     <td>
-                        <div class="detail-label">Weight Gain KG</div>
+                        <div class="detail-label">{{ policy_label('expected_weight_gain') }}</div>
                         <div class="detail-value">{{ $data->weight_gain_kg ?? '---' }}</div>
                     </td>
 
                     <td>
-                        <div class="detail-label">Daily Consumption</div>
+                        <div class="detail-label">{{ policy_label('daily_consumption') }}</div>
                         <div class="detail-value">{{ $data->daily_consumption ?? '---' }}</div>
                     </td>
                 </tr>
 
                 <tr>
                     <td>
-                        <div class="detail-label">Physical Impairments</div>
+                        <div class="detail-label">{{ policy_label('physical_impairments') }}</div>
                         <div class="detail-value">{{ $data->physical_impairments ?? '---' }}</div>
                     </td>
 
                     <td>
-                        <div class="detail-label">Last Illness / Injury</div>
+                        <div class="detail-label">{{ policy_label('last_illness_injury') }}</div>
                         <div class="detail-value">{{ $data->last_illness_injury ?? '---' }}</div>
                     </td>
                 </tr>
 
                 <tr>
                     <td>
-                        <div class="detail-label">Medical Investigations</div>
+                        <div class="detail-label">{{ policy_label('medical_investigations') }}</div>
                         <div class="detail-value">{{ $data->medical_investigations ?? '---' }}</div>
                     </td>
 
                     <td>
-                        <div class="detail-label">Medical History</div>
+                        <div class="detail-label">{{ policy_label('medical_history') }}</div>
                         <div class="detail-value">{{ $data->medical_history ?? '---' }}</div>
                     </td>
                 </tr>
 
                 <tr>
                     <td>
-                        <div class="detail-label">Weight Increase Reason</div>
+                        <div class="detail-label">{{ policy_label('reason_weight_change') }}</div>
                         <div class="detail-value">{{ $data->weight_increase_reason ?? '---' }}</div>
                     </td>
 
@@ -1231,4 +1247,5 @@
 
 </body>
 
+</html>
 </html>

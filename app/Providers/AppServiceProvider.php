@@ -22,6 +22,11 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton(CnicMobileLinkService::class);
+
+        $helpers = app_path('Helpers/helpers.php');
+        if (is_file($helpers)) {
+            require_once $helpers;
+        }
     }
 
     /**

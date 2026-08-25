@@ -96,6 +96,10 @@
                 background-color: #e9ecef !important;
                 cursor: not-allowed;
             }
+            /* Hide Select2 clear chip that can render under the field */
+            .js-country-select + .select2-container .select2-selection__clear {
+                display: none !important;
+            }
         </style>
     @endpush
 
@@ -111,7 +115,7 @@
                         }
                         $el.select2({
                             placeholder: $el.data('placeholder') || 'Select Country',
-                            allowClear: true,
+                            allowClear: !$el.prop('required'),
                             width: '100%'
                         });
                     });

@@ -10,7 +10,7 @@
     $selectedBirthCityId = old($birthPlaceFieldName, $selectedBirthCityId ?? null);
     $birthPlaceRequired = $birthPlaceRequired ?? true;
     $birthPlaceClass = $birthPlaceClass ?? 'form-control account';
-    $birthPlaceLabel = $birthPlaceLabel ?? 'Birth Place (مقامِ پیدائش)';
+    $birthPlaceLabel = $birthPlaceLabel ?? 'Place of Birth (مقام پیدائش)';
     $birthPlaceLabelClass = $birthPlaceLabelClass ?? '';
 @endphp
 
@@ -25,9 +25,9 @@
     id="{{ $birthPlaceSelectId }}"
     class="{{ $birthPlaceClass }} birth-place-city-select"
     @if($birthPlaceRequired) required @endif
-    data-placeholder="Select Birth Place"
+    data-placeholder="Select Place of Birth"
 >
-    <option value="">Select Birth Place</option>
+    <option value="">Select Place of Birth</option>
     @foreach($citiesList as $city)
         <option value="{{ $city->id }}" @selected((string) $selectedBirthCityId === (string) $city->id)>
             {{ $city->name }}
@@ -67,7 +67,7 @@
                             return;
                         }
                         $el.select2({
-                            placeholder: $el.data('placeholder') || 'Select Birth Place',
+                            placeholder: $el.data('placeholder') || 'Select Place of Birth',
                             allowClear: !$el.prop('required'),
                             width: '100%'
                         });

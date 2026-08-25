@@ -17,14 +17,21 @@ class PolicyCalculatorController extends Controller
         $policy_product_id = $request->policy_product_id;
         $age = $request->age_birth;
 
+        $adbRider = $request->adb_rider;
+        $tirRider = $request->tir_rider;
+        if ($request->is_nd_applied === 'Yes') {
+            $adbRider = 'No';
+            $tirRider = 'No';
+        }
+
         $result = PremiumCalculator::calculate(
             $sum_assured,
             $payment_mode,
             $term,
             $policy_product_id,
             $age,
-            $request->adb_rider,
-            $request->tir_rider
+            $adbRider,
+            $tirRider
         );
 
         if ($result === null) {

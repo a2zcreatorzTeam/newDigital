@@ -27,6 +27,11 @@ class BasicDetail extends Model
         return $this->belongsTo(Country::class, 'primary_nationality_country_id');
     }
 
+    public function countryOfResidence()
+    {
+        return $this->belongsTo(Country::class, 'country_of_residence_id');
+    }
+
     
 
 }

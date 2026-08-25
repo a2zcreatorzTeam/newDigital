@@ -1,0 +1,136 @@
+/* Policy Buy form — accessible field help tooltips */
+.field-help {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
+    margin-left: 0.35rem;
+    line-height: 1;
+}
+
+.field-help__trigger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.15rem;
+    height: 1.15rem;
+    padding: 0;
+    border: 1px solid #1f93d1;
+    border-radius: 50%;
+    background: #fff;
+    color: #1f93d1;
+    font-size: 0.7rem;
+    font-weight: 700;
+    font-style: normal;
+    line-height: 1;
+    cursor: help;
+    flex-shrink: 0;
+    transition: background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.field-help__trigger:hover,
+.field-help__trigger:focus,
+.field-help__trigger[aria-expanded="true"] {
+    background: #1f93d1;
+    color: #fff;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(31, 147, 209, 0.25);
+}
+
+.field-help__panel {
+    position: absolute;
+    z-index: 1080;
+    left: 50%;
+    bottom: calc(100% + 0.45rem);
+    width: max-content;
+    max-width: min(18rem, calc(100vw - 2rem));
+    padding: 0.55rem 0.7rem;
+    border-radius: 0.4rem;
+    background: #16324f;
+    color: #fff;
+    font-size: 0.8125rem;
+    font-weight: 400;
+    line-height: 1.4;
+    text-align: left;
+    white-space: normal;
+    box-shadow: 0 8px 24px rgba(15, 40, 70, 0.28);
+    transform: translateX(-50%);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.12s ease, visibility 0.12s ease;
+}
+
+.field-help__panel::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -6px;
+    border: 6px solid transparent;
+    border-top-color: #16324f;
+}
+
+.field-help.is-open .field-help__panel,
+.field-help__trigger:focus + .field-help__panel,
+.field-help:focus-within .field-help__panel {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+/* Prefer hover open only when fine pointer is available */
+@media (hover: hover) and (pointer: fine) {
+    .field-help:hover .field-help__panel {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+    }
+}
+
+.field-help--below .field-help__panel {
+    top: calc(100% + 0.45rem);
+    bottom: auto;
+}
+
+.field-help--below .field-help__panel::after {
+    top: auto;
+    bottom: 100%;
+    border-top-color: transparent;
+    border-bottom-color: #16324f;
+}
+
+.field-help--start .field-help__panel {
+    left: 0;
+    transform: none;
+}
+
+.field-help--start .field-help__panel::after {
+    left: 0.75rem;
+    margin-left: 0;
+}
+
+.field-help--end .field-help__panel {
+    left: auto;
+    right: 0;
+    transform: none;
+}
+
+.field-help--end .field-help__panel::after {
+    left: auto;
+    right: 0.75rem;
+    margin-left: 0;
+}
+
+/* Keep labels wrapping cleanly with the icon */
+label .field-help,
+.policy-preview__label .field-help {
+    white-space: nowrap;
+}
+
+@media (max-width: 575.98px) {
+    .field-help__panel {
+        max-width: min(16rem, calc(100vw - 1.5rem));
+        font-size: 0.78rem;
+    }
+}

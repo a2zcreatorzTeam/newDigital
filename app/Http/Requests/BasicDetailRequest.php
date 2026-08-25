@@ -26,6 +26,12 @@ class BasicDetailRequest extends FormRequest
 
     protected function prepareForValidation(): void
     {
+        // Professional profile is about the logged-in user only.
+        // Proposer vs Life Proposed is asked later during policy purchase.
+        $this->merge([
+            'is_same_person' => 'Yes',
+        ]);
+
         $this->mergeAgeNearestBirthday();
         $this->mergeDualNationalityDefaults();
         $this->mergeLifeProposedDefaults(false);
@@ -74,10 +80,22 @@ class BasicDetailRequest extends FormRequest
                 'max:255',
             ],
             'religion' => 'nullable|string|max:100',
-            'email' => 'required|email|max:255',
+            'email' => [
+                'required',
+                'email',
+                'max:255',
+                Rule::unique('users', 'email')->ignore(Auth::id()),
+            ],
             // 'age_proof' => 'nullable|string|max:255',
             'phone_number_office' => 'nullable|digits_between:7,15',
             'phone_number_residente' => 'nullable|digits_between:7,15',
+
+            'country_of_residence_id' => [
+                'required',
+                'integer',
+                Rule::exists('countries', 'id')->where(fn ($query) => $query->where('status', true)),
+            ],
+            'current_address' => 'required|string|min:5|max:1000',
 
             ...$this->dualNationalityRules(),
 
@@ -120,6 +138,11 @@ class BasicDetailRequest extends FormRequest
 
             'email.required' => 'Email is required',
             'email.email' => 'Enter valid email',
+
+            'country_of_residence_id.required' => 'Country of Residence is required',
+            'country_of_residence_id.exists' => 'Please select a valid Country of Residence',
+            'current_address.required' => 'Current Address is required',
+            'current_address.min' => 'Please enter a valid Current Address',
 
             'is_client_dual_national.required' => 'Select dual nationality option',
             'primary_nationality.required' => 'Primary nationality is required',

@@ -14,14 +14,14 @@
         <table>
             <thead>
                 <tr>
-                    <th>No</th>
-                    <th>Policy Number</th>
-                    <th>Policy Plan</th>
-                    <th>User</th>
-                    <th>User Detail</th>
-                    <th>Submitted Date</th>
-                    <th>Status</th>
-                    <th>Action</th>
+                    <th>{{ policy_label('serial_no') }}</th>
+                    <th>{{ policy_label('policy_number') }}</th>
+                    <th>{{ policy_label('policy_plan') }}</th>
+                    <th>{{ policy_label('user') }}</th>
+                    <th>{{ policy_label('user_detail') }}</th>
+                    <th>{{ policy_label('submitted_date') }}</th>
+                    <th>{{ policy_label('status') }}</th>
+                    <th>{{ policy_label('action') }}</th>
                 </tr>
             </thead>
             <tbody>

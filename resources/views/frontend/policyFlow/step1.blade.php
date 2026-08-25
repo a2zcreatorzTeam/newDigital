@@ -187,6 +187,13 @@
                          </div>
                          <div class="col-md-6 px-0 px-sm-3">
                              <div>
+                                 <div><label>Place of Birth / مقامِ پیدائش<span class="requi">*</span></label>
+                                     <div class="jbl-field"><input required type="text" name="mobile_no" class="jbl-dynamic-input"></div>
+                                 </div>
+                             </div>
+                         </div>
+                         <div class="col-md-6 px-0 px-sm-3">
+                             <div>
                                  <div><label>Age Nearest Birth-date (عمر)<span class="requi">*</span></label>
                                      <div class="jbl-field"><input required type="text" name="mobile_no" class="jbl-dynamic-input"></div>
                                  </div>
@@ -273,13 +280,6 @@
                          <div class="col-md-6 px-0 px-sm-3">
                              <div>
                                  <div><label>Dual Nationality / قومیت<span class="requi">*</span></label>
-                                     <div class="jbl-field"><input required type="text" name="mobile_no" class="jbl-dynamic-input"></div>
-                                 </div>
-                             </div>
-                         </div>
-                         <div class="col-md-6 px-0 px-sm-3">
-                             <div>
-                                 <div><label>Birth Place / مقامِ پیدائش<span class="requi">*</span></label>
                                      <div class="jbl-field"><input required type="text" name="mobile_no" class="jbl-dynamic-input"></div>
                                  </div>
                              </div>

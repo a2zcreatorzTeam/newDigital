@@ -144,6 +144,13 @@ class PolicyUserDataUpdate extends FormRequest
             'phone_number_office' => 'nullable|string|max:20',
             'phone_number_residente' => 'nullable|string|max:20',
 
+            'country_of_residence_id' => [
+                'required',
+                'integer',
+                Rule::exists('countries', 'id')->where(fn ($query) => $query->where('status', true)),
+            ],
+            'current_address' => 'required|string|min:5|max:1000',
+
             // ===== Nationality =====
             ...$this->dualNationalityRules(),
 
@@ -317,6 +324,10 @@ class PolicyUserDataUpdate extends FormRequest
             'life_proposed_full_name.required' => 'Full name is required.',
             'mobile_number.required' => 'Mobile number is required.',
             'birth_place_city_id.required' => 'Birth place is required.',
+            'country_of_residence_id.required' => 'Country of Residence is required.',
+            'country_of_residence_id.exists' => 'Please select a valid Country of Residence.',
+            'current_address.required' => 'Current Address is required.',
+            'current_address.min' => 'Please enter a valid Current Address.',
             'birth_place_city_id.exists' => 'Please select a valid city from the list.',
 
             'cnic_expiry_date.after' => 'CNIC expiry date must be after issue date.',

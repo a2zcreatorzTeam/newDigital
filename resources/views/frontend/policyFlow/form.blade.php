@@ -2,15 +2,15 @@
     <div class="form-card">
         <nav class="dashboard-policy-tabs-wrap" aria-label="Policy form sections">
             <div id="nav-tab" role="tablist" class="nav nav-tabs ib-acq-navtab dashboard-policy-tabs">
-                <a id="nav-Personal_Details-tab" data-toggle="tab" href="#nav-Personal_Details" role="tab" aria-controls="nav-Personal_Details" aria-selected="true" class="nav-item nav-link acq-nav-btn active"><span class="tab-step">1</span><span class="tab-label">Address Details</span></a>
-                <a id="basic_Details-tab" data-toggle="tab" href="#basic_Details" role="tab" aria-controls="basic_Details" aria-selected="false" class="nav-item nav-link acq-nav-btn"><span class="tab-step">2</span><span class="tab-label">Basic Details</span></a>
-                <a id="occupation-tab" data-toggle="tab" href="#occupation" role="tab" aria-controls="occupation" aria-selected="false" class="nav-item nav-link acq-nav-btn"><span class="tab-step">3</span><span class="tab-label">Occupation</span></a>
-                <a id="product_detail-tab" data-toggle="tab" href="#product_detail" role="tab" aria-controls="product_detail" aria-selected="false" class="nav-item nav-link acq-nav-btn"><span class="tab-step">4</span><span class="tab-label">Product Details</span></a>
-                <a id="family-history-tab" data-toggle="tab" href="#family_history" role="tab" aria-controls="family_history" aria-selected="false" class="nav-item nav-link acq-nav-btn"><span class="tab-step">5</span><span class="tab-label">Family History</span></a>
-                <a id="women-tab" data-toggle="tab" href="#women" role="tab" aria-controls="women" aria-selected="false" class="nav-item nav-link acq-nav-btn"><span class="tab-step">6</span><span class="tab-label">Female Section</span></a>
-                <a id="nominee-tab" data-toggle="tab" href="#nominee" role="tab" aria-controls="nominee" aria-selected="false" class="nav-item nav-link acq-nav-btn"><span class="tab-step">7</span><span class="tab-label">Nominee</span></a>
-                <a id="documents-tab" data-toggle="tab" href="#documents" role="tab" aria-controls="documents" aria-selected="false" class="nav-item nav-link acq-nav-btn"><span class="tab-step">8</span><span class="tab-label">Documents</span></a>
-                <a id="health_info-tab" data-toggle="tab" href="#health_info" role="tab" aria-controls="health_info" aria-selected="false" class="nav-item nav-link acq-nav-btn"><span class="tab-step">9</span><span class="tab-label">Health Information</span></a>
+                <a id="nav-Personal_Details-tab" data-toggle="tab" href="#nav-Personal_Details" role="tab" aria-controls="nav-Personal_Details" aria-selected="true" class="nav-item nav-link acq-nav-btn active"><span class="tab-step">1</span><span class="tab-label">{{ policy_label('address_details') }}</span></a>
+                <a id="basic_Details-tab" data-toggle="tab" href="#basic_Details" role="tab" aria-controls="basic_Details" aria-selected="false" class="nav-item nav-link acq-nav-btn"><span class="tab-step">2</span><span class="tab-label">{{ policy_label('basic_details') }}</span></a>
+                <a id="occupation-tab" data-toggle="tab" href="#occupation" role="tab" aria-controls="occupation" aria-selected="false" class="nav-item nav-link acq-nav-btn"><span class="tab-step">3</span><span class="tab-label">{{ policy_label('occupation') }}</span></a>
+                <a id="product_detail-tab" data-toggle="tab" href="#product_detail" role="tab" aria-controls="product_detail" aria-selected="false" class="nav-item nav-link acq-nav-btn"><span class="tab-step">4</span><span class="tab-label">{{ policy_label('product_details') }}</span></a>
+                <a id="family-history-tab" data-toggle="tab" href="#family_history" role="tab" aria-controls="family_history" aria-selected="false" class="nav-item nav-link acq-nav-btn"><span class="tab-step">5</span><span class="tab-label">{{ policy_label('family_history') }}</span></a>
+                <a id="women-tab" data-toggle="tab" href="#women" role="tab" aria-controls="women" aria-selected="false" class="nav-item nav-link acq-nav-btn @if(($user->basicDetail->gender ?? '') !== 'Female') d-none @endif"><span class="tab-step">6</span><span class="tab-label">{{ policy_label('female_section') }}</span></a>
+                <a id="nominee-tab" data-toggle="tab" href="#nominee" role="tab" aria-controls="nominee" aria-selected="false" class="nav-item nav-link acq-nav-btn"><span class="tab-step">7</span><span class="tab-label">{{ policy_label('nominee') }}</span></a>
+                <a id="documents-tab" data-toggle="tab" href="#documents" role="tab" aria-controls="documents" aria-selected="false" class="nav-item nav-link acq-nav-btn"><span class="tab-step">8</span><span class="tab-label">{{ policy_label('documents') }}</span></a>
+                <a id="health_info-tab" data-toggle="tab" href="#health_info" role="tab" aria-controls="health_info" aria-selected="false" class="nav-item nav-link acq-nav-btn"><span class="tab-step">9</span><span class="tab-label">{{ policy_label('health_information') }}</span></a>
             </div>
         </nav>
         <div id="nav-tabContent" class="tab-content">
@@ -83,7 +83,7 @@
             if (!$err.length || !$err.offset()) {
                 return;
             }
-            $('html, body').stop(true).animate({ scrollTop: $err.offset().top - 120 }, 350);
+            $('html, body').stop(true).animate({ scrollTop: Math.max(0, $err.offset().top - getStickyHeaderOffset()) }, 350);
             if ($err.is('input, select, textarea')) {
                 $err.trigger('focus');
             }
@@ -92,18 +92,43 @@
         window.scrollToPolicyStepError = scrollToFirstStepError;
         window.validatePolicyFormPane = validatePane;
 
+        function getStickyHeaderOffset() {
+            var $sticky = $('#sticky-header').first();
+            var stickyH = ($sticky.length && $sticky.is(':visible')) ? ($sticky.outerHeight() || 0) : 0;
+            // Extra breathing room so section headings are not hidden under sticky header
+            return stickyH + 24;
+        }
+
+        // Horizontal nav only — never use scrollIntoView (it can move the page vertically).
+        function scrollActiveTabIntoNavView($tab) {
+            var $wrap = $('.dashboard-policy-tabs-wrap').first();
+            if (!$wrap.length || !$tab || !$tab.length) {
+                return;
+            }
+            var tabEl = $tab.get(0);
+            var wrapEl = $wrap.get(0);
+            if (!tabEl || !wrapEl) {
+                return;
+            }
+            var left = tabEl.offsetLeft - (wrapEl.clientWidth / 2) + (tabEl.clientWidth / 2);
+            $wrap.stop(true).animate({ scrollLeft: Math.max(0, left) }, 300);
+        }
+
+        // Page scroll only for explicit step navigation (click / Next / Previous).
         function scrollToFormCardTop() {
-            let $target = $('.form-card').first();
+            var $target = $('#nav-tabContent .tab-pane.active.show').first();
+            if (!$target.length) {
+                $target = $('.form-card').first();
+            }
             if (!$target.length) {
                 $target = $('#nav-tab');
             }
-            if (!$target.length) {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+            if (!$target.length || !$target.offset()) {
                 return;
             }
 
-            let offsetTop = $target.offset().top - 20;
-            $('html, body').stop(true).animate({ scrollTop: offsetTop }, 350);
+            var offsetTop = $target.offset().top - getStickyHeaderOffset();
+            $('html, body').stop(true).animate({ scrollTop: Math.max(0, offsetTop) }, 420);
         }
 
         function showTab(tabId) {
@@ -111,6 +136,64 @@
             $(tabId).tab('show');
             ignoreTabGuard = false;
         }
+
+        // Page scroll only for explicit step navigation (click / Next / Previous).
+        var allowPageScrollOnTabShow = false;
+
+        function isTabVisible(tabId) {
+            if (tabId === '#women-tab') {
+                return window.isFemaleSectionApplicable ? window.isFemaleSectionApplicable() : (($('#gender').val() || '') === 'Female');
+            }
+            var $tab = $(tabId);
+            if (!$tab.length) {
+                return false;
+            }
+            return $tab.is(':visible') && !$tab.hasClass('d-none');
+        }
+
+        function nextVisibleTabIndex(fromIndex, direction) {
+            var step = direction === 'next' ? 1 : -1;
+            var i = fromIndex + step;
+            while (i >= 0 && i < tabOrder.length) {
+                if (isTabVisible(tabOrder[i])) {
+                    return i;
+                }
+                i += step;
+            }
+            return -1;
+        }
+
+        window.isFemaleSectionApplicable = function () {
+            // Female section applies to the life proposed / insured person.
+            if (($('#is_same_person').val() || '') === 'No') {
+                var lpGender = ($('#life_proposed_gender').val()
+                    || $('select[name="life_proposed_gender"]').val()
+                    || '').trim();
+                if (lpGender) {
+                    return lpGender === 'Female';
+                }
+            }
+            return (($('#gender').val() || '').trim() === 'Female');
+        };
+
+        window.toggleFemaleSectionVisibility = function () {
+            var show = window.isFemaleSectionApplicable();
+            var $tab = $('#women-tab');
+            var $pane = $('#women');
+
+            if (show) {
+                $tab.removeClass('d-none').attr('aria-hidden', 'false').show();
+                $pane.attr('aria-hidden', 'false');
+            } else {
+                $tab.addClass('d-none').attr('aria-hidden', 'true').hide();
+                $pane.attr('aria-hidden', 'true');
+                // If user is currently on Female Section, move to Nominee.
+                if ($tab.hasClass('active') || $pane.hasClass('active') || $pane.hasClass('show')) {
+                    allowPageScrollOnTabShow = false;
+                    showTab('#nominee-tab');
+                }
+            }
+        };
 
         function goToTab(direction) {
             // Current active tab ka index nikalna
@@ -131,13 +214,14 @@
                     Swal.fire('Error', 'Proposer must be 18 years or older.');
                     return;
                 }
-                newIndex = currentIndex + 1;
+                newIndex = nextVisibleTabIndex(currentIndex, 'next');
             } else if (direction === 'prev') {
-                newIndex = currentIndex - 1;
+                newIndex = nextVisibleTabIndex(currentIndex, 'prev');
             }
 
             // Boundary check
             if (newIndex >= 0 && newIndex < tabOrder.length) {
+                allowPageScrollOnTabShow = true;
                 showTab(tabOrder[newIndex]);
             }
         }
@@ -150,6 +234,30 @@
         // Previous button click
         $(document).on('click', '.ib-prev-btn', function() {
             goToTab('prev');
+        });
+
+        $(document).on('change', '#gender, #life_proposed_gender, #is_same_person, select[name="life_proposed_gender"]', function () {
+            if (typeof window.toggleFemaleSectionVisibility === 'function') {
+                window.toggleFemaleSectionVisibility();
+            }
+        });
+        window.toggleFemaleSectionVisibility();
+
+        // Explicit click: switch step + smooth-scroll page. Manual page scroll never goes through here.
+        $(document).on('click', '#nav-tab a.acq-nav-btn[data-toggle="tab"]', function(e) {
+            e.preventDefault();
+            var $tab = $(this);
+            if ($tab.hasClass('d-none') || !$tab.is(':visible')) {
+                return;
+            }
+            allowPageScrollOnTabShow = true;
+            if ($tab.hasClass('active')) {
+                scrollActiveTabIntoNavView($tab);
+                scrollToFormCardTop();
+                allowPageScrollOnTabShow = false;
+                return;
+            }
+            $tab.tab('show');
         });
 
         // Block jumping ahead to a later tab while the current (or in-between) step is invalid
@@ -169,9 +277,13 @@
             }
 
             for (var i = currentIndex; i < targetIndex; i++) {
+                if (!isTabVisible(tabOrder[i])) {
+                    continue;
+                }
                 var $pane = paneForTabId(tabOrder[i]);
                 if (!validatePane($pane)) {
                     e.preventDefault();
+                    allowPageScrollOnTabShow = false;
                     if (i !== currentIndex) {
                         showTab(tabOrder[i]);
                     }
@@ -181,11 +293,35 @@
             }
         });
 
-        // After any tab switch (Next / Previous / tab click), start at the top of the card
+        // Block opening Female Section when gender is not Female
+        $(document).on('show.bs.tab', '#women-tab', function (e) {
+            if (ignoreTabGuard) {
+                return;
+            }
+            if (!isTabVisible('#women-tab')) {
+                e.preventDefault();
+            }
+        });
+
+        // After tab switch: update highlight + horizontal nav.
+        // Page scroll only when the user clicked a step / Next / Previous (not from other tab triggers).
         $(document).on('shown.bs.tab', '#nav-tab a[data-toggle="tab"]', function() {
-            var href = $(this).attr('href');
+            var $tab = $(this);
+            var href = $tab.attr('href');
             var $pane = href ? $(href) : $();
-            if ($pane.find('.error-message').length) {
+            var shouldScrollPage = allowPageScrollOnTabShow;
+            allowPageScrollOnTabShow = false;
+
+            $('#nav-tab a.acq-nav-btn').attr('aria-selected', 'false');
+            $tab.attr('aria-selected', 'true');
+
+            scrollActiveTabIntoNavView($tab);
+
+            if (!shouldScrollPage) {
+                return;
+            }
+
+            if ($pane.find('.error-message, .error-border').length) {
                 scrollToFirstStepError($pane);
                 return;
             }
@@ -217,7 +353,19 @@
                 window.syncPolicyPreviewToForm();
             }
 
-            let formData = new FormData(form);
+            if (typeof window.policyUploadHasPending === 'function' && window.policyUploadHasPending()) {
+                Swal.fire('Please wait', 'Some documents are still uploading. Try again in a moment.', 'warning');
+                return;
+            }
+
+            if (typeof window.policyUploadHasMissingRequired === 'function' && window.policyUploadHasMissingRequired()) {
+                Swal.fire('Documents required', 'Please wait for required documents to finish uploading, then try again.', 'warning');
+                return;
+            }
+
+            let formData = typeof window.buildPolicyFormDataWithoutFiles === 'function'
+                ? window.buildPolicyFormDataWithoutFiles(form)
+                : new FormData(form);
             let csrfToken = $('meta[name="csrf-token"]').attr('content') || $('input[name="_token"]').val();
             if (csrfToken && !formData.has('_token')) {
                 formData.append('_token', csrfToken);
@@ -397,7 +545,7 @@
                 $('#employment_fields').html(`
             <div class="col-md-6 px-0 px-sm-3">
                 <label>
-                    Designation / Job Title
+                    Designation / Job Title (عہدہ / ملازمت کا عنوان)
                     <span class="requi">*</span>
                 </label>
                 <input type="text"
@@ -409,7 +557,7 @@
 
             <div class="col-md-6 px-0 px-sm-3">
                 <label>
-                    Company Name
+                    Company Name (کمپنی کا نام)
                     <span class="requi">*</span>
                 </label>
                 <input type="text"
@@ -430,7 +578,7 @@
                 $('#business_fields').html(`
             <div class="col-md-6 px-0 px-sm-3">
                 <label>
-                    Business Name
+                    Business Name (کاروبار کا نام)
                     <span class="requi">*</span>
                 </label>
                 <input type="text"
@@ -442,7 +590,7 @@
 
             <div class="col-md-6 px-0 px-sm-3">
                 <label>
-                    Nature of Business
+                    Nature of Business (کاروبار کی نوعیت)
                     <span class="requi">*</span>
                 </label>
                 <input type="text"
@@ -506,7 +654,7 @@
 
             <div class="col-md-6 px-0 px-sm-3">
                 <label>
-                    Land Unit (<span lang="ur" dir="rtl" class="urdu-text">زمین کی اکائی</span>)
+                    Land Unit (زمین کی اکائی)
                     <span class="requi">*</span>
                 </label>
                 <select name="land_unit" class="form-control jbl-dynamic-input" required>
@@ -522,7 +670,7 @@
 
             <div class="col-md-6 px-0 px-sm-3">
                 <label>
-                    Total Area (<span lang="ur" dir="rtl" class="urdu-text">کل رقبہ</span>)
+                    Total Area (کل رقبہ)
                     <span class="requi">*</span>
                 </label>
                 <input type="number"
@@ -537,7 +685,7 @@
 
             <div class="col-md-6 px-0 px-sm-3">
                 <label>
-                    Land Location
+                    Land Location (زمین کا مقام)
                     <span class="requi">*</span>
                 </label>
                 <input type="text"
@@ -549,7 +697,7 @@
 
             <div class="col-md-6 px-0 px-sm-3">
                 <label>
-                    Land Type
+                    Land Type (زمین کی قسم)
                     <span class="requi">*</span>
                 </label>
                 <select name="land_type" class="form-control jbl-dynamic-input" required>
@@ -562,7 +710,7 @@
 
             <div class="col-md-6 px-0 px-sm-3">
                 <label>
-                    Estimated Land Value
+                    Estimated Land Value (زمین کی تخمینی قیمت)
                     <span class="requi">*</span>
                 </label>
                 <input type="number"

@@ -52,6 +52,49 @@ class PolicyUserDataRequest extends FormRequest
         $this->mergeAppointeeDefaults();
         $this->mergeLifeProposedDefaults();
         $this->mergeConvertedHealthMeasurements();
+
+        // When ND is applied, ADB/TIR riders are not applicable.
+        if ($this->input('is_nd_applied') === 'Yes') {
+            $this->merge([
+                'adb_rider' => 'No',
+                'tir_rider' => 'No',
+            ]);
+        }
+    }
+
+    /**
+     * Accept either a direct file upload or a pre-uploaded temp token (ModSecurity-friendly).
+     *
+     * @return array<string, mixed>
+     */
+    protected function documentFieldRules(string $field, bool $required = true, bool $imagesOnly = false): array
+    {
+        $tokenField = $field . '_temp_token';
+        $mimes = $imagesOnly ? 'jpg,jpeg,png' : 'jpg,jpeg,png,pdf';
+
+        return [
+            $field => [
+                Rule::requiredIf(fn () => $required && !$this->filled($tokenField)),
+                'nullable',
+                'file',
+                "mimes:{$mimes}",
+                'max:4096',
+            ],
+            $tokenField => [
+                Rule::requiredIf(fn () => $required && !$this->hasFile($field)),
+                'nullable',
+                'string',
+                'uuid',
+            ],
+        ];
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    protected function optionalDocumentFieldRules(string $field, bool $imagesOnly = false): array
+    {
+        return $this->documentFieldRules($field, false, $imagesOnly);
     }
 
     /**
@@ -129,6 +172,13 @@ class PolicyUserDataRequest extends FormRequest
             'phone_number_office' => 'nullable|string|max:20',
             'phone_number_residente' => 'nullable|string|max:20',
 
+            'country_of_residence_id' => [
+                'required',
+                'integer',
+                Rule::exists('countries', 'id')->where(fn ($query) => $query->where('status', true)),
+            ],
+            'current_address' => 'required|string|min:5|max:1000',
+
             // ===== Nationality =====
             ...$this->dualNationalityRules(),
 
@@ -200,14 +250,14 @@ class PolicyUserDataRequest extends FormRequest
             'table_no' => 'required',
             'term' => 'required',
             'sum_assured' => 'required',
-            'is_nd_applied' => 'required',
+            'is_nd_applied' => 'required|in:Yes,No',
             'payment_mode' => 'required',
             // remove fields by statelife 
             // 'automatic_paid_up' => 'required',
             // 'automatic_premium_loan' => 'required',
             // 'aib_rider' => 'required',
-            'adb_rider' => 'required',
-            'tir_rider' => 'required',
+            'adb_rider' => 'required_if:is_nd_applied,No|nullable|in:Yes,No',
+            'tir_rider' => 'required_if:is_nd_applied,No|nullable|in:Yes,No',
             // 'fib_rider' => 'required',
 
             // ===== Family History =====
@@ -243,28 +293,32 @@ class PolicyUserDataRequest extends FormRequest
 
         //    documents
 
-        'proposer_cnic_front' => 'required|file|mimes:jpg,jpeg,png,pdf|max:4096',
-        'proposer_cnic_back' => 'required|file|mimes:jpg,jpeg,png,pdf|max:4096',
+        ...$this->documentFieldRules('proposer_cnic_front'),
+        ...$this->documentFieldRules('proposer_cnic_back'),
         ...$this->lifeProposedDocumentRules(true),
-        'nominee_document' => 'required|file|mimes:jpg,jpeg,png,pdf|max:4096',
-        'proposer_photo' => 'required|file|mimes:jpg,jpeg,png|max:4096',
-        'income_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:4096',
+        ...$this->documentFieldRules('nominee_document'),
+        ...$this->documentFieldRules('proposer_photo', true, true),
+        ...$this->optionalDocumentFieldRules('income_proof'),
 
         // Medical documents (optional)
-        'medical_doc_referred_opd' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:4096',
-        'medical_doc_previous_opd' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:4096',
-        'medical_doc_summary_reports' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:4096',
-        'medical_doc_present_history' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:4096',
-        'medical_doc_death_mlc' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:4096',
-        'medical_doc_medicolegal' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:4096',
+        ...$this->optionalDocumentFieldRules('medical_doc_referred_opd'),
+        ...$this->optionalDocumentFieldRules('medical_doc_previous_opd'),
+        ...$this->optionalDocumentFieldRules('medical_doc_summary_reports'),
+        ...$this->optionalDocumentFieldRules('medical_doc_present_history'),
+        ...$this->optionalDocumentFieldRules('medical_doc_death_mlc'),
+        ...$this->optionalDocumentFieldRules('medical_doc_medicolegal'),
         'medical_extra_docs' => 'nullable|array|max:5',
         'medical_extra_docs.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:4096',
+        'medical_extra_temp_tokens' => 'nullable|array|max:5',
+        'medical_extra_temp_tokens.*' => 'nullable|string|uuid',
         'medical_extra_labels' => 'nullable|array|max:5',
         'medical_extra_labels.*' => 'nullable|string|max:255',
 
         // Other documents (optional, max 5)
         'other_docs' => 'nullable|array|max:5',
         'other_docs.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:4096',
+        'other_doc_temp_tokens' => 'nullable|array|max:5',
+        'other_doc_temp_tokens.*' => 'nullable|string|uuid',
         'other_doc_labels' => 'nullable|array|max:5',
         'other_doc_labels.*' => 'nullable|string|max:255',
 
@@ -321,6 +375,10 @@ class PolicyUserDataRequest extends FormRequest
             'mobile_number.required' => 'Mobile number is required.',
             'birth_place_city_id.required' => 'Birth place is required.',
             'birth_place_city_id.exists' => 'Please select a valid city from the list.',
+            'country_of_residence_id.required' => 'Country of Residence is required.',
+            'country_of_residence_id.exists' => 'Please select a valid Country of Residence.',
+            'current_address.required' => 'Current Address is required.',
+            'current_address.min' => 'Please enter a valid Current Address.',
 
             'cnic_expiry_date.after' => 'CNIC expiry date must be after issue date.',
 
@@ -367,7 +425,9 @@ class PolicyUserDataRequest extends FormRequest
             'automatic_premium_loan.required' => 'Select premium loan option.',
             'aib_rider.required' => 'Please select Accidental Death & Indemnity Benefit Option.',
             'adb_rider.required' => 'Please select Accidental Death Benefit (ADB) Option.',
+            'adb_rider.required_if' => 'Please select Accidental Death Benefit (ADB) Option.',
             'tir_rider.required' => 'Please select Term Insurance Rider (TIR) Option.',
+            'tir_rider.required_if' => 'Please select Term Insurance Rider (TIR) Option.',
             'fib_rider.required' => 'Please select Family Income Benefit (FIB) Option.',
 
 

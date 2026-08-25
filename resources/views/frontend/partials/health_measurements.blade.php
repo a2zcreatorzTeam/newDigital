@@ -1,7 +1,8 @@
 {{--
   Simplified health measurements UI.
   Expects: $health (object/array with existing values) OR individual defaults.
-  Optional: $fieldClass, $labelClass, $wrapperClass, $colClass
+  Optional: $fieldClass, $labelClass, $wrapperClass, $colClass, $bilingualLabels
+  Backend stores length in CM and weight in KG via App\Support\UnitConverter.
 --}}
 @php
     $health = $health ?? null;
@@ -10,43 +11,35 @@
     $labelClass = $labelClass ?? '';
     $colClass = $colClass ?? 'col-md-6 px-0 px-sm-3 mb-3';
     $showBanner = $showBanner ?? true;
+    $bilingualLabels = $bilingualLabels ?? false;
 
-    $heightCm = (float) old('height_cm', data_get($health, 'height_cm', 0));
-    $weightKg = (float) old('weight_kg', data_get($health, 'weight_kg', 0));
-    $chestInspCm = (float) old('chest_insp_cm', data_get($health, 'chest_insp_cm', 0));
-    $chestExpCm = (float) old('chest_exp_cm', data_get($health, 'chest_exp_cm', 0));
-    $abdomenCm = (float) old('abdomen_cm', data_get($health, 'abdomen_cm', 0));
-    $gain = (float) old('weight_gain_kg', data_get($health, 'weight_gain_kg', 0));
-    $loss = (float) old('weight_loss_kg', data_get($health, 'weight_loss_kg', 0));
+    $lblHeight = $bilingualLabels ? policy_label('height') : 'Height (قد)';
+    $lblWeight = $bilingualLabels ? policy_label('weight') : 'Weight (وزن)';
+    $lblChestInsp = $bilingualLabels ? policy_label('chest_inspiration') : 'Chest Inspiration';
+    $lblChestExp = $bilingualLabels ? policy_label('chest_expansion') : 'Chest Expansion';
+    $lblAbdomen = $bilingualLabels ? policy_label('abdomen') : 'Abdomen';
+    $lblWeightChange = $bilingualLabels ? policy_label('weight_change') : 'Weight Change';
+    $lblExpectedGain = $bilingualLabels ? policy_label('expected_weight_gain') : 'Expected Weight Gain';
+    $lblExpectedLoss = $bilingualLabels ? policy_label('expected_weight_loss') : 'Expected Weight Loss';
+    $lblReasonGain = $bilingualLabels ? policy_label('reason_weight_gain') : 'Reason for Weight Gain';
+    $lblReasonLoss = $bilingualLabels ? policy_label('reason_weight_loss') : 'Reason for Weight Loss';
+    $lblReasonEither = $bilingualLabels ? policy_label('reason_weight_change') : 'Reason for Weight Gain or Weight Loss';
 
-    $heightValue = old('height_value', $heightCm ?: '');
-    $heightUnit = old('height_unit', 'cm');
-    $weightValue = old('weight_value', $weightKg ?: '');
-    $weightUnit = old('weight_unit', 'kg');
-    $chestInspValue = old('chest_insp_value', $chestInspCm ?: '');
-    $chestInspUnit = old('chest_insp_unit', 'cm');
-    $chestExpValue = old('chest_exp_value', $chestExpCm ?: '');
-    $chestExpUnit = old('chest_exp_unit', 'cm');
-    $abdomenValue = old('abdomen_value', $abdomenCm ?: '');
-    $abdomenUnit = old('abdomen_unit', 'cm');
-
-    if ($gain > 0 && $loss <= 0) {
-        $defaultChangeType = 'Gain';
-        $defaultChangeValue = $gain;
-    } elseif ($loss > 0 && $gain <= 0) {
-        $defaultChangeType = 'Loss';
-        $defaultChangeValue = $loss;
-    } elseif ($gain > 0 && $loss > 0) {
-        $defaultChangeType = $gain >= $loss ? 'Gain' : 'Loss';
-        $defaultChangeValue = $gain >= $loss ? $gain : $loss;
-    } else {
-        $defaultChangeType = '';
-        $defaultChangeValue = '';
-    }
-    $weightChangeType = old('weight_change_type', $defaultChangeType);
-    $weightChangeValue = old('weight_change_value', $defaultChangeValue);
-    $weightChangeUnit = old('weight_change_unit', 'kg');
-    $weightReason = old('weight_increase_reason', data_get($health, 'weight_increase_reason', ''));
+    $m = \App\Support\UnitConverter::displayHealthMeasurements($health);
+    $heightValue = $m['height_value'];
+    $heightUnit = $m['height_unit'];
+    $weightValue = $m['weight_value'];
+    $weightUnit = $m['weight_unit'];
+    $chestInspValue = $m['chest_insp_value'];
+    $chestInspUnit = $m['chest_insp_unit'];
+    $chestExpValue = $m['chest_exp_value'];
+    $chestExpUnit = $m['chest_exp_unit'];
+    $abdomenValue = $m['abdomen_value'];
+    $abdomenUnit = $m['abdomen_unit'];
+    $weightChangeType = $m['weight_change_type'];
+    $weightChangeValue = $m['weight_change_value'];
+    $weightChangeUnit = $m['weight_change_unit'];
+    $weightReason = $m['weight_increase_reason'];
 @endphp
 
 <style>
@@ -85,26 +78,27 @@
 {{-- Height --}}
 <div class="{{ $colClass }}">
     <div class="{{ isset($useDetailBox) && $useDetailBox ? 'detail-box' : 'form-group' }}">
-        <label class="{{ $labelClass }}">Height (قد)<span class="requi text-danger">*</span></label>
+        <label class="{{ $labelClass }}">{{ $lblHeight }}<span class="requi text-danger">*</span></label>
         <div class="health-measure-group">
             <input type="number" step="0.01" min="0.01" name="height_value" id="height_value"
                 class="{{ $fieldClass }} health-measure-input" value="{{ $heightValue }}" required>
             <select name="height_unit" id="height_unit" class="{{ $selectClass }} health-measure-unit" required>
                 <option value="cm" @selected($heightUnit === 'cm')>CM</option>
                 <option value="m" @selected($heightUnit === 'm')>Meters (M)</option>
+                <option value="mm" @selected($heightUnit === 'mm')>MM</option>
                 <option value="ft" @selected($heightUnit === 'ft')>Feet (FT)</option>
                 <option value="in" @selected($heightUnit === 'in')>Inches (IN)</option>
             </select>
         </div>
-        <input type="hidden" name="height_cm" id="height_cm" value="{{ old('height_cm', data_get($health, 'height_cm')) }}">
-        <input type="hidden" name="height_ft" id="height_ft" value="{{ old('height_ft', data_get($health, 'height_ft')) }}">
+        <input type="hidden" name="height_cm" id="height_cm" value="{{ $m['height_cm'] }}">
+        <input type="hidden" name="height_ft" id="height_ft" value="{{ $m['height_ft'] }}">
     </div>
 </div>
 
 {{-- Weight --}}
 <div class="{{ $colClass }}">
     <div class="{{ isset($useDetailBox) && $useDetailBox ? 'detail-box' : 'form-group' }}">
-        <label class="{{ $labelClass }}">Weight (وزن)<span class="requi text-danger">*</span></label>
+        <label class="{{ $labelClass }}">{{ $lblWeight }}<span class="requi text-danger">*</span></label>
         <div class="health-measure-group">
             <input type="number" step="0.01" min="0.01" name="weight_value" id="weight_value"
                 class="{{ $fieldClass }} health-measure-input" value="{{ $weightValue }}" required>
@@ -116,14 +110,14 @@
                 <option value="oz" @selected($weightUnit === 'oz')>Ounces (OZ)</option>
             </select>
         </div>
-        <input type="hidden" name="weight_kg" id="weight_kg" value="{{ old('weight_kg', data_get($health, 'weight_kg')) }}">
+        <input type="hidden" name="weight_kg" id="weight_kg" value="{{ $m['weight_kg'] }}">
     </div>
 </div>
 
 {{-- Chest Insp --}}
 <div class="{{ $colClass }}">
     <div class="{{ isset($useDetailBox) && $useDetailBox ? 'detail-box' : 'form-group' }}">
-        <label class="{{ $labelClass }}">Chest Inspiration<span class="requi text-danger">*</span></label>
+        <label class="{{ $labelClass }}">{{ $lblChestInsp }}<span class="requi text-danger">*</span></label>
         <div class="health-measure-group">
             <input type="number" step="0.01" min="0.01" name="chest_insp_value" id="chest_insp_value"
                 class="{{ $fieldClass }} health-measure-input" value="{{ $chestInspValue }}" required>
@@ -142,45 +136,47 @@
 {{-- Chest Exp --}}
 <div class="{{ $colClass }}">
     <div class="{{ isset($useDetailBox) && $useDetailBox ? 'detail-box' : 'form-group' }}">
-        <label class="{{ $labelClass }}">Chest Expansion<span class="requi text-danger">*</span></label>
+        <label class="{{ $labelClass }}">{{ $lblChestExp }}<span class="requi text-danger">*</span></label>
         <div class="health-measure-group">
             <input type="number" step="0.01" min="0.01" name="chest_exp_value" id="chest_exp_value"
                 class="{{ $fieldClass }} health-measure-input" value="{{ $chestExpValue }}" required>
             <select name="chest_exp_unit" id="chest_exp_unit" class="{{ $selectClass }} health-measure-unit" required>
                 <option value="cm" @selected($chestExpUnit === 'cm')>CM</option>
-                <option value="in" @selected($chestExpUnit === 'in')>Inches (IN)</option>
-                <option value="mm" @selected($chestExpUnit === 'mm')>MM</option>
                 <option value="m" @selected($chestExpUnit === 'm')>Meters (M)</option>
+                <option value="mm" @selected($chestExpUnit === 'mm')>MM</option>
+                <option value="ft" @selected($chestExpUnit === 'ft')>Feet (FT)</option>
+                <option value="in" @selected($chestExpUnit === 'in')>Inches (IN)</option>
             </select>
         </div>
-        <input type="hidden" name="chest_exp_cm" id="chest_exp_cm" value="{{ old('chest_exp_cm', data_get($health, 'chest_exp_cm')) }}">
-        <input type="hidden" name="chest_exp_inches" id="chest_exp_inches" value="{{ old('chest_exp_inches', data_get($health, 'chest_exp_inches')) }}">
+        <input type="hidden" name="chest_exp_cm" id="chest_exp_cm" value="{{ $m['chest_exp_cm'] }}">
+        <input type="hidden" name="chest_exp_inches" id="chest_exp_inches" value="{{ $m['chest_exp_inches'] }}">
     </div>
 </div>
 
 {{-- Abdomen --}}
 <div class="{{ $colClass }}">
     <div class="{{ isset($useDetailBox) && $useDetailBox ? 'detail-box' : 'form-group' }}">
-        <label class="{{ $labelClass }}">Abdomen<span class="requi text-danger">*</span></label>
+        <label class="{{ $labelClass }}">{{ $lblAbdomen }}<span class="requi text-danger">*</span></label>
         <div class="health-measure-group">
             <input type="number" step="0.01" min="0.01" name="abdomen_value" id="abdomen_value"
                 class="{{ $fieldClass }} health-measure-input" value="{{ $abdomenValue }}" required>
             <select name="abdomen_unit" id="abdomen_unit" class="{{ $selectClass }} health-measure-unit" required>
                 <option value="cm" @selected($abdomenUnit === 'cm')>CM</option>
-                <option value="in" @selected($abdomenUnit === 'in')>Inches (IN)</option>
-                <option value="mm" @selected($abdomenUnit === 'mm')>MM</option>
                 <option value="m" @selected($abdomenUnit === 'm')>Meters (M)</option>
+                <option value="mm" @selected($abdomenUnit === 'mm')>MM</option>
+                <option value="ft" @selected($abdomenUnit === 'ft')>Feet (FT)</option>
+                <option value="in" @selected($abdomenUnit === 'in')>Inches (IN)</option>
             </select>
         </div>
-        <input type="hidden" name="abdomen_cm" id="abdomen_cm" value="{{ old('abdomen_cm', data_get($health, 'abdomen_cm')) }}">
-        <input type="hidden" name="abdomen_inches" id="abdomen_inches" value="{{ old('abdomen_inches', data_get($health, 'abdomen_inches')) }}">
+        <input type="hidden" name="abdomen_cm" id="abdomen_cm" value="{{ $m['abdomen_cm'] }}">
+        <input type="hidden" name="abdomen_inches" id="abdomen_inches" value="{{ $m['abdomen_inches'] }}">
     </div>
 </div>
 
 {{-- Weight Change Type --}}
 <div class="{{ $colClass }}">
     <div class="{{ isset($useDetailBox) && $useDetailBox ? 'detail-box' : 'form-group' }}">
-        <label class="{{ $labelClass }}">Weight Change<span class="requi text-danger">*</span></label>
+        <label class="{{ $labelClass }}">{{ $lblWeightChange }}<span class="requi text-danger">*</span></label>
         <select name="weight_change_type" id="weight_change_type" class="{{ $selectClass }}" required>
             <option value="">Select Gain or Loss</option>
             <option value="Gain" @selected($weightChangeType === 'Gain')>Gain</option>
@@ -192,7 +188,7 @@
 <div class="{{ $colClass }}" id="weight_change_value_wrap" style="{{ $weightChangeType ? '' : 'display:none;' }}">
     <div class="{{ isset($useDetailBox) && $useDetailBox ? 'detail-box' : 'form-group' }}">
         <label class="{{ $labelClass }}" id="weight_change_value_label">
-            @if($weightChangeType === 'Loss') Expected Weight Loss @else Expected Weight Gain @endif
+            @if($weightChangeType === 'Loss') {{ $lblExpectedLoss }} @else {{ $lblExpectedGain }} @endif
             <span class="requi text-danger">*</span>
         </label>
         <div class="health-measure-group">
@@ -206,8 +202,8 @@
                 <option value="oz" @selected($weightChangeUnit === 'oz')>Ounces (OZ)</option>
             </select>
         </div>
-        <input type="hidden" name="weight_gain_kg" id="weight_gain_kg" value="{{ old('weight_gain_kg', data_get($health, 'weight_gain_kg')) }}">
-        <input type="hidden" name="weight_loss_kg" id="weight_loss_kg" value="{{ old('weight_loss_kg', data_get($health, 'weight_loss_kg')) }}">
+        <input type="hidden" name="weight_gain_kg" id="weight_gain_kg" value="{{ $m['weight_gain_kg'] }}">
+        <input type="hidden" name="weight_loss_kg" id="weight_loss_kg" value="{{ $m['weight_loss_kg'] }}">
     </div>
 </div>
 
@@ -215,11 +211,11 @@
     <div class="{{ isset($useDetailBox) && $useDetailBox ? 'detail-box' : 'form-group' }}">
         <label class="{{ $labelClass }}" id="weight_change_reason_label">
             @if($weightChangeType === 'Loss')
-                Reason for Weight Loss
+                {{ $lblReasonLoss }}
             @elseif($weightChangeType === 'Gain')
-                Reason for Weight Gain
+                {{ $lblReasonGain }}
             @else
-                Reason for Weight Gain or Weight Loss
+                {{ $lblReasonEither }}
             @endif
             <span class="requi text-danger">*</span>
         </label>
@@ -230,142 +226,23 @@
 
 @once
 @push('js')
+<script src="{{ asset('frontend/js/unit-converter.js') }}"></script>
 <script>
-(function ($) {
-    var LENGTH_TO_CM = { cm: 1, m: 100, mm: 0.1, in: 2.54, ft: 30.48 };
-    var WEIGHT_TO_KG = { kg: 1, lb: 0.45359237, st: 6.35029318, g: 0.001, oz: 0.0283495231 };
-
-    function toNum(v) {
-        var n = parseFloat(v);
-        return isNaN(n) ? null : n;
+(function () {
+    if (typeof window.UnitConverter === 'undefined') {
+        return;
     }
-
-    function lengthToCm(value, unit) {
-        return value * (LENGTH_TO_CM[unit] || 1);
-    }
-
-    function weightToKg(value, unit) {
-        return value * (WEIGHT_TO_KG[unit] || 1);
-    }
-
-    function convertViaBase(value, fromUnit, toUnit, toBase) {
-        if (fromUnit === toUnit) return value;
-        var base = value * (toBase[fromUnit] || 1);
-        return base / (toBase[toUnit] || 1);
-    }
-
-    function convertDisplayedValue($unitSelect, $valueInput, fromUnit, toUnit) {
-        var val = toNum($valueInput.val());
-        if (val === null || fromUnit === toUnit) return;
-
-        var converted;
-        if ($unitSelect.is('#height_unit') || $unitSelect.is('#chest_insp_unit') ||
-            $unitSelect.is('#chest_exp_unit') || $unitSelect.is('#abdomen_unit')) {
-            converted = convertViaBase(val, fromUnit, toUnit, LENGTH_TO_CM);
-        } else {
-            converted = convertViaBase(val, fromUnit, toUnit, WEIGHT_TO_KG);
+    window.UnitConverter.configure(@json(\App\Support\UnitConverter::jsConfig()));
+    window.UnitConverter.bindHealthForm({
+        labels: {
+            expectedGain: @json($lblExpectedGain),
+            expectedLoss: @json($lblExpectedLoss),
+            reasonGain: @json($lblReasonGain),
+            reasonLoss: @json($lblReasonLoss),
+            reasonEither: @json($lblReasonEither)
         }
-        $valueInput.val(parseFloat(converted.toFixed(2)));
-    }
-
-    function syncHealthMeasurements() {
-        var heightVal = toNum($('#height_value').val());
-        var heightUnit = $('#height_unit').val();
-        if (heightVal !== null) {
-            var heightCm = lengthToCm(heightVal, heightUnit);
-            $('#height_cm').val(heightCm.toFixed(2));
-            $('#height_ft').val((heightCm / 30.48).toFixed(2));
-        }
-
-        var weightVal = toNum($('#weight_value').val());
-        var weightUnit = $('#weight_unit').val();
-        if (weightVal !== null) {
-            $('#weight_kg').val(weightToKg(weightVal, weightUnit).toFixed(2));
-        }
-
-        function syncLength(prefix) {
-            var val = toNum($('#' + prefix + '_value').val());
-            var unit = $('#' + prefix + '_unit').val();
-            if (val === null) return;
-            var cm = lengthToCm(val, unit);
-            $('#' + prefix + '_cm').val(cm.toFixed(2));
-            $('#' + prefix + '_inches').val((cm / 2.54).toFixed(2));
-        }
-        syncLength('chest_insp');
-        syncLength('chest_exp');
-        syncLength('abdomen');
-
-        var changeType = $('#weight_change_type').val();
-        var changeVal = toNum($('#weight_change_value').val());
-        var changeUnit = $('#weight_change_unit').val();
-        var kg = changeVal !== null ? parseFloat(weightToKg(changeVal, changeUnit).toFixed(2)) : null;
-
-        if (changeType === 'Gain') {
-            $('#weight_gain_kg').val(kg !== null ? kg : '');
-            $('#weight_loss_kg').val(0);
-        } else if (changeType === 'Loss') {
-            $('#weight_loss_kg').val(kg !== null ? kg : '');
-            $('#weight_gain_kg').val(0);
-        }
-    }
-
-    function toggleWeightChangeUi() {
-        var type = $('#weight_change_type').val();
-        var $wrap = $('#weight_change_value_wrap');
-        var $value = $('#weight_change_value');
-        if (type === 'Gain' || type === 'Loss') {
-            $wrap.show();
-            $value.prop('required', true);
-            $('#weight_change_value_label').html(
-                (type === 'Gain' ? 'Expected Weight Gain' : 'Expected Weight Loss') +
-                ' <span class="requi text-danger">*</span>'
-            );
-            $('#weight_change_reason_label').html(
-                (type === 'Gain' ? 'Reason for Weight Gain' : 'Reason for Weight Loss') +
-                ' <span class="requi text-danger">*</span>'
-            );
-        } else {
-            $wrap.hide();
-            $value.prop('required', false).val('');
-            $('#weight_change_reason_label').html(
-                'Reason for Weight Gain or Weight Loss <span class="requi text-danger">*</span>'
-            );
-            $('#weight_gain_kg').val('');
-            $('#weight_loss_kg').val('');
-        }
-        syncHealthMeasurements();
-    }
-
-    $(document).ready(function () {
-        $('.health-measure-unit, #weight_change_unit').each(function () {
-            $(this).data('prev-unit', $(this).val());
-        });
-
-        $(document).on('change', '.health-measure-unit, #weight_change_unit', function () {
-            var $unit = $(this);
-            var fromUnit = $unit.data('prev-unit') || $unit.val();
-            var toUnit = $unit.val();
-            var $value = $unit.closest('.health-measure-group').find('input[type="number"]').first();
-            convertDisplayedValue($unit, $value, fromUnit, toUnit);
-            $unit.data('prev-unit', toUnit);
-            syncHealthMeasurements();
-        });
-
-        $(document).on('input', '.health-measure-input, #weight_change_value', syncHealthMeasurements);
-        $(document).on('change', '#weight_change_type', toggleWeightChangeUi);
-        toggleWeightChangeUi();
-        syncHealthMeasurements();
-
-        $(document).on('submit', 'form', function () {
-            if ($(this).find('#height_value').length) {
-                syncHealthMeasurements();
-            }
-        });
-        $(document).on('click', '#user_details_submited', function () {
-            syncHealthMeasurements();
-        });
     });
-})(jQuery);
+})();
 </script>
 @endpush
 @endonce

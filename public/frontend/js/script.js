@@ -76,7 +76,19 @@
             return !radioGroupChecked($container, $el.attr('name'));
         }
         if (($el.attr('type') || '').toLowerCase() === 'file') {
-            return !(elFiles($el).length);
+            if (elFiles($el).length) {
+                return false;
+            }
+            var name = $el.attr('name') || '';
+            var tokenName = name.replace(/\[\]$/, '') + '_temp_token';
+            if (name === 'medical_extra_docs[]') {
+                tokenName = 'medical_extra_temp_tokens[]';
+            } else if (name === 'other_docs[]') {
+                tokenName = 'other_doc_temp_tokens[]';
+            }
+            var $scope = $el.closest('[data-doc-row], .jbl-field, .col-md-6').first();
+            var token = $scope.find('input[type="hidden"][name="' + tokenName + '"]').val();
+            return !token;
         }
         if ($el.is('select')) {
             var selected = $el.val();

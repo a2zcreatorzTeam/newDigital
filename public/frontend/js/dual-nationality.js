@@ -85,7 +85,7 @@
         }
         $el.select2({
             placeholder: $el.data('placeholder') || 'Select Country',
-            allowClear: !el.disabled,
+            allowClear: !el.disabled && !el.required,
             width: '100%'
         });
     }

@@ -48,7 +48,6 @@
     <br>
     <p>Not a User? Please <a id="signup" class="js-show-signup" style="cursor: pointer;">Sign Up</a></p>
 </form>
-C:\Users\ShoaibPc\Herd\newdigital\resources\views\frontend\layout\authentication\signin.blade.php
 @push('js')
 <script>
     $(document).ready(function() {

@@ -7,7 +7,7 @@
             <div class="col-6">
                 <div class="form-group">
                     <label for="">Life Proposed Full Name (بیمہ زندگی کے لئے مجوزہ کا پورا نام)<span class="text-danger"> *</span></label>
-                    <input type="text" value="{{$user->basicDetail?->life_proposed_full_name ?? ''}}" name="life_proposed_full_name" class="form-control account" required>
+                    <input type="text" value="{{ old('life_proposed_full_name', $user->basicDetail?->life_proposed_full_name ?: ($user->name ?? '')) }}" name="life_proposed_full_name" class="form-control account" required>
                     @error('life_proposed_full_name')
                     <div class="invalid-feedback" style="display: block;">
                         {{ $message }}
@@ -18,14 +18,14 @@
             <div class="col-6">
                 <div class="form-group">
                     <label for="">Mobile Number Personal (ذاتی موبائل نمبر)<span class="text-danger"> *</span></label>
-                    <input type="text" value="{{$user->basicDetail->mobile_number ?? ''}}" name="mobile_number" class="form-control account" placeholder="0322-9847785" required>
+                    <input type="text" value="{{ old('mobile_number', $user->basicDetail?->mobile_number ?: ($user->phone_no ?? '')) }}" name="mobile_number" class="form-control account" placeholder="0322-9847785" required>
                 </div>
             </div>
 
             <div class="col-6">
                 <div class="form-group">
                     <label for="">CNIC / B-FORM NO (قومی شناختی کارڈ نمبر)<span class="text-danger"> *</span></label>
-                    <input type="text" required name="cnic_number" value="{{$user->basicDetail->cnic_number ?? ''}}" class="form-control account">
+                    <input type="text" required name="cnic_number" value="{{ old('cnic_number', $user->basicDetail?->cnic_number ?: ($user->cnic ?? '')) }}" class="form-control account">
                 </div>
             </div>
             <div class="col-6">
@@ -51,6 +51,27 @@
                     <input type="date" name="date_of_birth" class="form-control account" value="{{$user->basicDetail->date_of_birth ?? ''}}" required max="{{ now('Asia/Karachi')->subYears(18)->toDateString() }}">
                 </div>
 
+            </div>
+
+            <div class="col-6">
+                <div class="form-group">
+                    @php
+                        $selectedBirthCityId = old(
+                            'birth_place_city_id',
+                            $user->basicDetail->birth_place_city_id
+                                ?? optional(($cities ?? collect())->first(
+                                    fn ($c) => strcasecmp($c->name, (string) ($user->basicDetail->birth_placed ?? '')) === 0
+                                ))->id
+                        );
+                    @endphp
+                    @include('frontend.partials.birth_place_select', [
+                        'cities' => $cities ?? collect(),
+                        'selectedBirthCityId' => $selectedBirthCityId,
+                        'birthPlaceRequired' => true,
+                        'birthPlaceClass' => 'form-control account',
+                        'birthPlaceLabel' => 'Place of Birth (مقامِ پیدائش)',
+                    ])
+                </div>
             </div>
 
 
@@ -133,7 +154,7 @@
             <div class="col-6">
                 <div class="form-group">
                     <label>Email Address (ای میل ایڈریس)<span class="text-danger"> *</span></label>
-                    <input type="email" name="email" class="form-control required account" value="{{ $user->basicDetail->email ?? '' }}">
+                    <input type="email" name="email" class="form-control required account" value="{{ old('email', $user->basicDetail?->email ?: ($user->email ?? '')) }}">
                 </div>
             </div>
 
@@ -159,6 +180,27 @@
         <div class="form-group">
             <label>Phone Number Residential (رہائشی فون نمبر)</label>
             <input type="text" name='phone_number_residente' class="form-control account" value="{{ $user->basicDetail->phone_number_residente ?? '' }}">
+        </div>
+    </div>
+
+    <div class="col-6">
+        <div class="form-group">
+            @include('frontend.partials.country_select', [
+                'countries' => $countries ?? collect(),
+                'fieldName' => 'country_of_residence_id',
+                'countrySelectId' => 'country_of_residence_id',
+                'selectedCountryId' => old('country_of_residence_id', $user->basicDetail?->country_of_residence_id ?: ($user->country_of_residence_id ?? null)),
+                'countryRequired' => true,
+                'countrySelectClass' => 'form-control account',
+                'countryLabel' => 'Country of Residence (رہائشی ملک)',
+            ])
+        </div>
+    </div>
+
+    <div class="col-6">
+        <div class="form-group">
+            <label>Current Address (موجودہ پتہ)<span class="text-danger"> *</span></label>
+            <textarea name="current_address" class="form-control account" rows="2" required minlength="5">{{ old('current_address', $user->basicDetail?->current_address ?: ($user->current_address ?? '')) }}</textarea>
         </div>
     </div>
 
@@ -234,47 +276,6 @@
         </div>
     </div>
 
-    <!-- Birth Place -->
-    <div class="col-6">
-        <div class="form-group">
-            @php
-                $selectedBirthCityId = old(
-                    'birth_place_city_id',
-                    $user->basicDetail->birth_place_city_id
-                        ?? optional(($cities ?? collect())->first(
-                            fn ($c) => strcasecmp($c->name, (string) ($user->basicDetail->birth_placed ?? '')) === 0
-                        ))->id
-                );
-            @endphp
-            @include('frontend.partials.birth_place_select', [
-                'cities' => $cities ?? collect(),
-                'selectedBirthCityId' => $selectedBirthCityId,
-                'birthPlaceRequired' => true,
-                'birthPlaceClass' => 'form-control account',
-                'birthPlaceLabel' => 'Birth Place (مقامِ پیدائش)',
-            ])
-        </div>
-    </div>
-
-    <!-- Proposer & Life Proposed Same -->
-    <div class="col-6">
-        <div class="form-group">
-            <label>Proposer & Life Proposed are same?<span class="text-danger"> *</span></label>
-            <select name="is_same_person" required class="form-control" id="is_same_person">
-                <option value="">Select Option</option>
-                <option value="Yes" {{ ($user->basicDetail->is_same_person ?? '') == 'Yes' ? 'selected' : '' }}>Yes</option>
-                <option value="No" {{ ($user->basicDetail->is_same_person ?? '') == 'No' ? 'selected' : '' }}>No</option>
-            </select>
-        </div>
-    </div>
-    <div id="same_person_fields" class="col-12" @if(($user->basicDetail->is_same_person ?? '') !== 'No') style="display:none;" @endif>
-        @include('frontend.partials.life_proposed_fields', [
-            'variant' => 'profile',
-            'lp' => \App\Support\LifeProposedProfile::values($user->basicDetail ?? null),
-            'cities' => $cities ?? collect(),
-            'countries' => $countries ?? collect(),
-        ])
-    </div>
     <!-- ... (Other Basic Fields) ... -->
     </div>
     <div class="update-btn-container">
@@ -301,7 +302,7 @@
                 let fieldValue = ($(this).val() || '').trim();
 
                 // In fields ko skip karna hai (Optional fields)
-                let optionalFields = ['phone_number_office', 'phone_number_residente', 'mother_maiden_name', 'father_name', 'life_proposed_phone_office', 'life_proposed_phone_residential'];
+                let optionalFields = ['phone_number_office', 'phone_number_residente', 'mother_maiden_name', 'father_name'];
 
                 // Agar field khali hai AUR wo optional list mein NAHI hai
                 if (fieldValue === "" && fieldName && !optionalFields.includes(fieldName)) {
@@ -336,6 +337,14 @@
             if ($('#is_client_dual_national').val() === 'Yes') {
                 markCountry($(this).find('select[name="primary_nationality_country_id"]'), !!$(this).find('select[name="primary_nationality_country_id"]').val());
                 markCountry($(this).find('select[name="dual_nationality_country_id"]'), !!$(this).find('select[name="dual_nationality_country_id"]').val());
+            }
+
+            markCountry($(this).find('select[name="country_of_residence_id"]'), !!$(this).find('select[name="country_of_residence_id"]').val());
+
+            var currentAddress = ($.trim($(this).find('[name="current_address"]').val() || ''));
+            if (currentAddress.length < 5) {
+                $(this).find('[name="current_address"]').css('border-color', 'red');
+                isValid = false;
             }
 
             if (!isValid) {
@@ -463,15 +472,6 @@
 
         $('#gender, #marital_status').on('change', toggleSpouseNameFields);
         toggleSpouseNameFields();
-
-        $('#is_same_person').on('change', function () {
-            if (typeof window.applyLifeProposedLogic === 'function') {
-                window.applyLifeProposedLogic($('#is_same_person').val() === 'Yes');
-            }
-        });
-        if (typeof window.applyLifeProposedLogic === 'function') {
-            window.applyLifeProposedLogic(false);
-        }
 
     });
 </script>

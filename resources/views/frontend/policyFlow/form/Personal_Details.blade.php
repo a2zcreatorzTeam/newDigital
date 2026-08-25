@@ -2,117 +2,139 @@
     <div class="container">
         <div class="row">
             <div class="col-12 d-flex justify-content-between align-items-center flex-wrap">
-                <h3 class="ib-form-subheading mb-0">Address Details (پتے کی تفصیلات)</h3>
-                <button type="button" id="copyPermanentAddressBtn" class="btn btn-primary btn-sm copy-permanent-address-btn" style="display: none;">
-                    Use Same Address
-                </button>
+                <h3 class="ib-form-subheading mb-0">{{ policy_label('address_details') }}</h3>
             </div>
 
             <!-- Permanent Address -->
-            <h5 class="col-12 ib-form-subheading-second">Permanent Address (مستقل پتہ)</h5>
+            <div class="col-12">
+                <div class="policy-fieldset address-section-card">
+                    <div class="policy-fieldset__header address-section-card__header">
+                        <h5 class="ib-form-subheading-second policy-fieldset__title address-section-card__title">{{ policy_label('permanent_address') }}</h5>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 px-0 px-sm-3">
+                            <label>{{ policy_label('province') }}<span class="requi">*</span></label>
+                            <select name="permanent_province_id" id="permanent_province_id" required class="form-control jbl-dynamic-input permanent-address-field">
+                                <option value="">Select Province</option>
+                                @foreach ($provinces as $item)
+                                <option value="{{ $item->id }}" {{ ($user->AddressInfo->permanent_province_id ?? '') == $item->id ? 'selected' : '' }}>
+                                    {{ $item->name }}
+                                </option>
+                                @endforeach
+                            </select>
+                        </div>
 
-            <div class="col-md-4 px-0 px-sm-3">
-                <label>Province (صوبہ)<span class="requi">*</span></label>
-                <select name="permanent_province_id" id="permanent_province_id" required class="form-control jbl-dynamic-input permanent-address-field">
-                    <option value="">Select Province</option>
-                    @foreach ($provinces as $item)
-                    <option value="{{ $item->id }}" {{ ($user->AddressInfo->permanent_province_id ?? '') == $item->id ? 'selected' : '' }}>
-                        {{ $item->name }}
-                    </option>
-                    @endforeach
-                </select>
+                        <div class="col-md-4 px-0 px-sm-3">
+                            <label>{{ policy_label('city') }}<span class="requi">*</span></label>
+                            <select name="permanent_city_id" id="permanent_city_id" required class="form-control jbl-dynamic-input permanent-address-field">
+                                <option value="">Select City</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-4 px-0 px-sm-3">
+                            <label>{{ policy_label('district') }}<span class="requi">*</span></label>
+                            <select name="permanent_district_id" id="permanent_district_id" required class="form-control jbl-dynamic-input permanent-address-field">
+                                <option value="">Select District</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-12 px-0 px-sm-3">
+                            <label>{{ policy_label('address_line') }}<span class="requi">*</span></label>
+                            <input type="text" name="permanent_address" id="permanent_address" required class="form-control jbl-dynamic-input permanent-address-field"
+                                value="{{$user->AddressInfo->permanent_address ?? ''}}">
+                        </div>
+                    </div>
+                </div>
             </div>
-
-            <div class="col-md-4 px-0 px-sm-3">
-                <label>City (شہر)<span class="requi">*</span></label>
-                <select name="permanent_city_id" id="permanent_city_id" required class="form-control jbl-dynamic-input permanent-address-field">
-                    <option value="">Select City</option>
-                </select>
-            </div>
-
-            <div class="col-md-4 px-0 px-sm-3">
-                <label>District (ضلع)<span class="requi">*</span></label>
-                <select name="permanent_district_id" id="permanent_district_id" required class="form-control jbl-dynamic-input permanent-address-field">
-                    <option value="">Select District</option>
-                </select>
-            </div>
-
-            <div class="col-md-12 px-0 px-sm-3">
-                <label>Address Line<span class="requi">*</span></label>
-                <input type="text" name="permanent_address" id="permanent_address" required class="form-control jbl-dynamic-input permanent-address-field"
-                    value="{{$user->AddressInfo->permanent_address ?? ''}}">
-            </div>
-
 
             <!-- Correspondence Address -->
-            <h5 class="col-12 ib-form-subheading-second">Correspondence Address (رابطے کا پتہ)</h5>
+            <div class="col-12">
+                <div class="policy-fieldset address-section-card">
+                    <div class="policy-fieldset__header address-section-card__header">
+                        <h5 class="ib-form-subheading-second policy-fieldset__title address-section-card__title">{{ policy_label('correspondence_address') }}</h5>
+                        <button type="button" id="copyPermanentToCorresBtn" class="btn btn-primary btn-sm copy-permanent-address-btn" disabled>
+                            Use Permanent Address
+                        </button>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 px-0 px-sm-3">
+                            <label>{{ policy_label('province') }}<span class="requi">*</span></label>
+                            <select name="corres_province_id" required id="corres_province_id" class="form-control jbl-dynamic-input dependent-address-field">
+                                <option value="">Select Province</option>
+                                @foreach ($provinces as $item)
+                                <option value="{{ $item->id }}" {{ ($user->AddressInfo->corres_province_id ?? '') == $item->id ? 'selected' : '' }}>
+                                    {{ $item->name }}
+                                </option>
+                                @endforeach
+                            </select>
+                        </div>
 
-            <div class="col-md-4 px-0 px-sm-3">
-                <label>Province<span class="requi">*</span></label>
-                <select name="corres_province_id" required id="corres_province_id" class="form-control jbl-dynamic-input dependent-address-field">
-                    <option value="">Select Province</option>
-                    @foreach ($provinces as $item)
-                    <option value="{{ $item->id }}" {{ ($user->AddressInfo->corres_province_id ?? '') == $item->id ? 'selected' : '' }}>
-                        {{ $item->name }}
-                    </option>
-                    @endforeach
-                </select>
+                        <div class="col-md-4 px-0 px-sm-3">
+                            <label>{{ policy_label('city') }}<span class="requi">*</span></label>
+                            <select name="corres_city_id" id="corres_city_id" required class="form-control jbl-dynamic-input dependent-address-field">
+                                <option value="">Select City</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-4 px-0 px-sm-3">
+                            <label>{{ policy_label('district') }}<span class="requi">*</span></label>
+                            <select name="corres_district_id" id="corres_district_id" required class="form-control jbl-dynamic-input dependent-address-field">
+                                <option value="">Select District</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-12 px-0 px-sm-3">
+                            <label>{{ policy_label('address_line') }}<span class="requi">*</span></label>
+                            <input type="text" name="corres_address" id="corres_address" required class="form-control jbl-dynamic-input dependent-address-field"
+                                value="{{$user->AddressInfo->corres_address ?? ''}}">
+                        </div>
+                    </div>
+                </div>
             </div>
-
-            <div class="col-md-4 px-0 px-sm-3">
-                <label>City<span class="requi">*</span></label>
-                <select name="corres_city_id" id="corres_city_id" required class="form-control jbl-dynamic-input dependent-address-field">
-                    <option value="">Select City</option>
-                </select>
-            </div>
-
-            <div class="col-md-4 px-0 px-sm-3">
-                <label>District<span class="requi">*</span></label>
-                <select name="corres_district_id" id="corres_district_id" required class="form-control jbl-dynamic-input dependent-address-field">
-                    <option value="">Select District</option>
-                </select>
-            </div>
-
-            <div class="col-md-12 px-0 px-sm-3">
-                <label>Address Line<span class="requi">*</span></label>
-                <input type="text" name="corres_address" id="corres_address" required class="form-control jbl-dynamic-input dependent-address-field"
-                    value="{{$user->AddressInfo->corres_address ?? ''}}">
-            </div>
-
 
             <!-- Temporary Address -->
-            <h5 class="col-12 ib-form-subheading-second">Temporary Address (عارضی پتہ)</h5>
+            <div class="col-12">
+                <div class="policy-fieldset address-section-card">
+                    <div class="policy-fieldset__header address-section-card__header">
+                        <h5 class="ib-form-subheading-second policy-fieldset__title address-section-card__title">{{ policy_label('temporary_address') }}</h5>
+                        <button type="button" id="copyPermanentToTempBtn" class="btn btn-primary btn-sm copy-permanent-address-btn" disabled>
+                            Use Permanent Address
+                        </button>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 px-0 px-sm-3">
+                            <label>{{ policy_label('province') }}<span class="requi">*</span></label>
+                            <select name="temp_province_id" id="temp_province_id" required class="form-control jbl-dynamic-input dependent-address-field">
+                                <option value="">Select Province</option>
+                                @foreach ($provinces as $item)
+                                <option value="{{ $item->id }}" {{ ($user->AddressInfo->temp_province_id ?? '') == $item->id ? 'selected' : '' }}>
+                                    {{ $item->name }}
+                                </option>
+                                @endforeach
+                            </select>
+                        </div>
 
-            <div class="col-md-4 px-0 px-sm-3">
-                <label>Province<span class="requi">*</span></label>
-                <select name="temp_province_id" id="temp_province_id" required class="form-control jbl-dynamic-input dependent-address-field">
-                    <option value="">Select Province</option>
-                    @foreach ($provinces as $item)
-                    <option value="{{ $item->id }}" {{ ($user->AddressInfo->temp_province_id ?? '') == $item->id ? 'selected' : '' }}>
-                        {{ $item->name }}
-                    </option>
-                    @endforeach
-                </select>
-            </div>
+                        <div class="col-md-4 px-0 px-sm-3">
+                            <label>{{ policy_label('city') }}<span class="requi">*</span></label>
+                            <select name="temp_city_id" id="temp_city_id" required class="form-control jbl-dynamic-input dependent-address-field">
+                                <option value="">Select City</option>
+                            </select>
+                        </div>
 
-            <div class="col-md-4 px-0 px-sm-3">
-                <label>City<span class="requi">*</span></label>
-                <select name="temp_city_id" id="temp_city_id" required class="form-control jbl-dynamic-input dependent-address-field">
-                    <option value="">Select City</option>
-                </select>
-            </div>
+                        <div class="col-md-4 px-0 px-sm-3">
+                            <label>{{ policy_label('district') }}<span class="requi">*</span></label>
+                            <select name="temp_district_id" id="temp_district_id" required class="form-control jbl-dynamic-input dependent-address-field">
+                                <option value="">Select District</option>
+                            </select>
+                        </div>
 
-            <div class="col-md-4 px-0 px-sm-3">
-                <label>District<span class="requi">*</span></label>
-                <select name="temp_district_id" id="temp_district_id" required class="form-control jbl-dynamic-input dependent-address-field">
-                    <option value="">Select District</option>
-                </select>
-            </div>
-
-            <div class="col-md-12 px-0 px-sm-3">
-                <label>Address Line<span class="requi">*</span></label>
-                <input type="text" name="temp_address" id="temp_address" required class="form-control jbl-dynamic-input dependent-address-field"
-                    value="{{$user->AddressInfo->temp_address ?? ''}}">
+                        <div class="col-md-12 px-0 px-sm-3">
+                            <label>{{ policy_label('address_line') }}<span class="requi">*</span></label>
+                            <input type="text" name="temp_address" id="temp_address" required class="form-control jbl-dynamic-input dependent-address-field"
+                                value="{{$user->AddressInfo->temp_address ?? ''}}">
+                        </div>
+                    </div>
+                </div>
             </div>
 
         </div>
@@ -127,13 +149,20 @@
 <style>
     .copy-permanent-address-btn {
         white-space: nowrap;
-        margin: 0.9375rem 0;
+        margin: 0;
+        flex-shrink: 0;
     }
 
     .dependent-address-field:disabled {
         background-color: #e9ecef;
         cursor: not-allowed;
         opacity: 0.75;
+    }
+
+    @media (max-width: 575.98px) {
+        .copy-permanent-address-btn {
+            width: 100%;
+        }
     }
 </style>
 
@@ -160,13 +189,10 @@
         return !!(province && city && district && address);
     }
 
-    // Task 1: show/hide copy button when permanent address is filled
+    // Enable/disable per-section copy buttons when permanent address is complete
     function updateCopyPermanentAddressButton() {
-        if (isPermanentAddressComplete()) {
-            $('#copyPermanentAddressBtn').show();
-        } else {
-            $('#copyPermanentAddressBtn').hide();
-        }
+        let ready = isPermanentAddressComplete();
+        $('#copyPermanentToCorresBtn, #copyPermanentToTempBtn').prop('disabled', !ready);
     }
 
     // Task 2: lock correspondence & temporary until permanent is complete
@@ -191,6 +217,26 @@
 
         loadCities(province, '#' + targetPrefix + '_city_id', city, function() {
             loadDistricts(city, '#' + targetPrefix + '_district_id', district);
+        });
+    }
+
+    function applyPermanentAddressTo(targetPrefix, addressFieldId, successText) {
+        if (!isPermanentAddressComplete()) {
+            Swal.fire('Info', 'Please complete all Permanent Address fields first.', 'info');
+            return;
+        }
+
+        // Ensure targets are editable before writing values
+        $('.dependent-address-field').prop('disabled', false);
+        copyAddressToTarget(targetPrefix, addressFieldId);
+        refreshAddressUiState();
+
+        Swal.fire({
+            title: 'Copied!',
+            text: successText,
+            icon: 'success',
+            timer: 1800,
+            showConfirmButton: false
         });
     }
 
@@ -281,28 +327,14 @@
         loadDistricts(this.value, '#temp_district_id');
     });
 
-    // Task 1: copy permanent -> correspondence + temporary
-    $('#copyPermanentAddressBtn').on('click', function() {
-        if (!isPermanentAddressComplete()) {
-            Swal.fire('Info', 'Please complete all Permanent Address fields first.', 'info');
-            return;
-        }
+    // Copy permanent -> correspondence only
+    $('#copyPermanentToCorresBtn').on('click', function() {
+        applyPermanentAddressTo('corres', 'corres_address', 'Permanent address copied to Correspondence address.');
+    });
 
-        // Ensure targets are editable before writing values
-        $('.dependent-address-field').prop('disabled', false);
-
-        copyAddressToTarget('corres', 'corres_address');
-        copyAddressToTarget('temp', 'temp_address');
-
-        refreshAddressUiState();
-
-        Swal.fire({
-            title: 'Copied!',
-            text: 'Permanent address copied to Correspondence and Temporary address.',
-            icon: 'success',
-            timer: 1800,
-            showConfirmButton: false
-        });
+    // Copy permanent -> temporary only
+    $('#copyPermanentToTempBtn').on('click', function() {
+        applyPermanentAddressTo('temp', 'temp_address', 'Permanent address copied to Temporary address.');
     });
 
     // Disabled fields are skipped by FormData — re-enable right before submit

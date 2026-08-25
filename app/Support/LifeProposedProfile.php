@@ -26,6 +26,9 @@ class LifeProposedProfile
         'email',
         'phone_office',
         'phone_residential',
+        'country_of_residence_id',
+        'country_of_residence',
+        'current_address',
         'is_client_dual_national',
         'primary_nationality_country_id',
         'primary_nationality',
@@ -93,6 +96,13 @@ class LifeProposedProfile
             $city = City::query()->find($extras['birth_place_city_id']);
             if ($city) {
                 $extras['birth_placed'] = $city->name;
+            }
+        }
+
+        if (!empty($extras['country_of_residence_id'])) {
+            $country = \App\Models\Country::query()->find($extras['country_of_residence_id']);
+            if ($country) {
+                $extras['country_of_residence'] = $country->name;
             }
         }
 

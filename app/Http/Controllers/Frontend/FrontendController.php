@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AddressInfoRequest;
 use App\Http\Requests\BasicDetailRequest;
+use App\Http\Requests\PolicyTempUploadRequest;
 use App\Http\Requests\PolicyUserDataRequest;
 use App\Http\Requests\UserHealthRequest;
 use App\Http\Requests\UserOccupationRequest;
@@ -30,7 +31,9 @@ use App\Services\CnicMobileLinkService;
 use App\Services\PolicyFormDraftService;
 use App\Support\LifeProposedDocument;
 use App\Support\LifeProposedProfile;
+use App\Support\PolicyTempUpload;
 use App\Support\PremiumCalculator;
+use App\Support\UserIdentitySync;
 use App\Models\PolicyFormDraft;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
@@ -42,6 +45,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 class FrontendController extends Controller
@@ -87,9 +91,33 @@ class FrontendController extends Controller
             'phone_no' => ['required', 'regex:/^03[0-9]{2}-[0-9]{7}$/', new MobileLinkedToCnic('cnic')],
             'cnic' => 'required|regex:/^[0-9]{5}-[0-9]{7}-[0-9]$/',
             'password' => 'required|min:8|confirmed',
+            'phone_is_own' => 'required|in:yes,no',
+            'phone_owner_relationship' => [
+                Rule::requiredIf(fn () => $request->input('phone_is_own') === 'no'),
+                'nullable',
+                'in:Father,Mother,Spouse,Brother,Sister,Son,Daughter,Other',
+            ],
+            'phone_owner_relationship_other' => [
+                Rule::requiredIf(fn () => $request->input('phone_is_own') === 'no'
+                    && $request->input('phone_owner_relationship') === 'Other'),
+                'nullable',
+                'string',
+                'max:100',
+            ],
+            'phone_owner_permission' => [
+                'required',
+                'in:yes',
+            ],
         ], [
             'phone_no.regex' => 'Enter a valid mobile number (e.g. 0300-1234567).',
             'cnic.regex' => 'CNIC format must be like 42101-1234567-1.',
+            'phone_is_own.required' => 'Please confirm whether this phone number is your own.',
+            'phone_is_own.in' => 'Please confirm whether this phone number is your own.',
+            'phone_owner_relationship.required' => 'Please select your relationship with the phone number owner.',
+            'phone_owner_relationship.in' => 'Please select a valid relationship with the phone number owner.',
+            'phone_owner_relationship_other.required' => 'Please specify your relationship with the phone number owner.',
+            'phone_owner_permission.required' => 'You must have permission from the phone number owner to continue with registration.',
+            'phone_owner_permission.in' => 'You must have permission from the phone number owner to continue with registration.',
         ]);
 
         try {
@@ -103,6 +131,8 @@ class FrontendController extends Controller
                 'cnic' => $validated['cnic'],
                 'password' => Hash::make($validated['password']),
             ]);
+
+            UserIdentitySync::seedBasicDetailFromUser($user);
 
             app(CnicMobileLinkService::class)->ensureLink(
                 $validated['cnic'],
@@ -204,6 +234,7 @@ class FrontendController extends Controller
 
             // ✅ VERIFIED USER LOGIN
             Auth::login($user);
+            UserIdentitySync::seedBasicDetailFromUser($user);
 
             $redirect = route('frontend.index');
             $referer = $request->headers->get('referer');
@@ -297,6 +328,9 @@ class FrontendController extends Controller
             return redirect()->back()->with('info', 'You must log in first before proceeding');
         }
         $user = User::with('basicDetail.lifeProposedDetail', 'AddressInfo', 'occupation', 'health')->where('id', Auth::user()->id)->first();
+        UserIdentitySync::seedBasicDetailFromUser($user);
+        $user->load('basicDetail.lifeProposedDetail', 'AddressInfo', 'occupation', 'health');
+
         if (
             !$user->basicDetail ||
             !$user->AddressInfo ||
@@ -352,6 +386,8 @@ class FrontendController extends Controller
         }
 
         $user = User::with('basicDetail.lifeProposedDetail', 'AddressInfo', 'occupation', 'health')->where('id', Auth::user()->id)->first();
+        UserIdentitySync::seedBasicDetailFromUser($user);
+        $user->load('basicDetail.lifeProposedDetail', 'AddressInfo', 'occupation', 'health');
         $provinces = Provinces::get();
         $cities = City::query()->orderBy('name')->get(['id', 'name']);
         return view('frontend.profile-form', ['user' => $user, 'provinces' => $provinces, 'cities' => $cities]);
@@ -372,25 +408,15 @@ class FrontendController extends Controller
                 $data + ['user_id' => $userId]
             );
 
-            LifeProposedProfile::syncForProfile($basicDetail, $data['is_same_person'] ?? 'Yes', $lpExtras);
+            LifeProposedProfile::syncForProfile($basicDetail, 'Yes', $lpExtras);
+
+            UserIdentitySync::syncUserFromBasicDetail(auth()->user(), $data);
 
             if (!empty($data['cnic_number']) && !empty($data['mobile_number'])) {
                 app(CnicMobileLinkService::class)->ensureLink(
                     $data['cnic_number'],
                     $data['mobile_number'],
                     'basic_details',
-                    $userId
-                );
-            }
-            if (($data['is_same_person'] ?? '') === 'No'
-                && !empty($data['life_proposed_cnic'])
-                && !empty($lpExtras['mobile'])
-                && (int) ($lpExtras['age'] ?? 0) >= 18
-            ) {
-                app(CnicMobileLinkService::class)->ensureLink(
-                    $data['life_proposed_cnic'],
-                    $lpExtras['mobile'],
-                    'life_proposed_profile',
                     $userId
                 );
             }
@@ -655,7 +681,97 @@ class FrontendController extends Controller
         return $fileName;
     }
 
+    /**
+     * Upload one policy document at a time (ModSecurity-friendly).
+     */
+    public function uploadPolicyTempFile(PolicyTempUploadRequest $request)
+    {
+        $userId = auth()->id();
+        if (!$userId) {
+            return response()->json(['success' => false, 'message' => 'Unauthorized'], 401);
+        }
 
+        try {
+            PolicyTempUpload::purgeStaleForUser((int) $userId);
+
+            $field = (string) $request->input('field');
+            if ($request->hasFile('file')) {
+                $stored = PolicyTempUpload::store($request->file('file'), (int) $userId, $field);
+            } else {
+                $stored = PolicyTempUpload::storeFromBase64(
+                    (string) $request->input('file_base64'),
+                    (string) $request->input('original_name', 'upload.bin'),
+                    (int) $userId,
+                    $field
+                );
+            }
+
+            return response()->json([
+                'success' => true,
+                'token' => $stored['token'],
+                'field' => $stored['field'],
+                'original_name' => $stored['original_name'],
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage() ?: 'Upload failed.',
+            ], 422);
+        }
+    }
+
+    /**
+     * Resolve a document from direct upload or a pre-uploaded temp token.
+     */
+    private function resolveDocumentUpload(Request $request, int $userId, string $field, ?string $tempFieldKey = null): ?string
+    {
+        $direct = $this->uploadFile($request, $field);
+        if ($direct) {
+            return $direct;
+        }
+
+        $tokenField = ($tempFieldKey ?? $field) . '_temp_token';
+        $token = $request->input($tokenField);
+        if (!$token) {
+            return null;
+        }
+
+        try {
+            return PolicyTempUpload::promote($userId, (string) $token, $tempFieldKey ?? $field);
+        } catch (\Throwable $e) {
+            throw ValidationException::withMessages([
+                $field => 'Please re-upload this document (previous upload expired or invalid).',
+            ]);
+        }
+    }
+
+    /**
+     * @param  array<int, string|null>  $tokens
+     * @return array<int, array{key: string, label: string, file: string}>
+     */
+    private function resolveTempTokenDocuments(Request $request, int $userId, array $tokens, string $tempFieldKey, string $labelPrefix, array $labels = []): array
+    {
+        $docs = [];
+        foreach ($tokens as $index => $token) {
+            if (!$token) {
+                continue;
+            }
+            try {
+                $fileName = PolicyTempUpload::promote($userId, (string) $token, $tempFieldKey);
+            } catch (\Throwable $e) {
+                throw ValidationException::withMessages([
+                    $tempFieldKey => 'Please re-upload additional documents (previous upload expired or invalid).',
+                ]);
+            }
+            $docs[] = [
+                'key' => $tempFieldKey . '_' . $index,
+                'label' => $labels[$index] ?? ($labelPrefix . ' ' . ($index + 1)),
+                'file' => $fileName,
+            ];
+        }
+
+        return $docs;
+    }
 
     public function policyDataSave(PolicyUserDataRequest $request)
     {
@@ -697,15 +813,14 @@ class FrontendController extends Controller
 
             $lifeProposedFile = null;
             if (($data['is_same_person'] ?? '') === 'No') {
-                $lifeProposedFile = $this->uploadFile($request, 'life_proposed_document');
+                $lifeProposedFile = $this->resolveDocumentUpload($request, (int) $userId, 'life_proposed_document');
             }
-            unset($data['life_proposed_document']);
+            unset($data['life_proposed_document'], $data['life_proposed_document_temp_token']);
 
             foreach ($documents as $document) {
-                // Never mass-assign UploadedFile objects
-                unset($data[$document]);
+                unset($data[$document], $data[$document . '_temp_token']);
 
-                $imageName = $this->uploadFile($request, $document);
+                $imageName = $this->resolveDocumentUpload($request, (int) $userId, $document);
 
                 if ($imageName) {
                     $data[$document] = $imageName;
@@ -723,7 +838,7 @@ class FrontendController extends Controller
                 'medical_doc_medicolegal' => 'Medicolegal / Legal / FIR / Panchanama / Inquest / Others',
             ];
             foreach ($fixedMedical as $field => $label) {
-                $fileName = $this->uploadFile($request, $field);
+                $fileName = $this->resolveDocumentUpload($request, (int) $userId, $field);
                 if ($fileName) {
                     $medicalDocs[] = [
                         'key' => $field,
@@ -731,7 +846,7 @@ class FrontendController extends Controller
                         'file' => $fileName,
                     ];
                 }
-                unset($data[$field]);
+                unset($data[$field], $data[$field . '_temp_token']);
             }
             if ($request->hasFile('medical_extra_docs')) {
                 $extraLabels = $request->input('medical_extra_labels', []);
@@ -746,6 +861,21 @@ class FrontendController extends Controller
                         'file' => $fileName,
                     ];
                 }
+            }
+            $medicalExtraTokens = array_filter((array) $request->input('medical_extra_temp_tokens', []));
+            if (!empty($medicalExtraTokens)) {
+                $extraLabels = $request->input('medical_extra_labels', []);
+                $medicalDocs = array_merge(
+                    $medicalDocs,
+                    $this->resolveTempTokenDocuments(
+                        $request,
+                        (int) $userId,
+                        $medicalExtraTokens,
+                        'medical_extra_doc',
+                        'Additional Medical Document',
+                        $extraLabels
+                    )
+                );
             }
             $data['medical_documents'] = !empty($medicalDocs) ? json_encode($medicalDocs) : null;
 
@@ -765,13 +895,41 @@ class FrontendController extends Controller
                     ];
                 }
             }
+            $otherTokens = array_filter((array) $request->input('other_doc_temp_tokens', []));
+            if (!empty($otherTokens)) {
+                $otherLabels = $request->input('other_doc_labels', []);
+                $otherDocs = array_merge(
+                    $otherDocs,
+                    $this->resolveTempTokenDocuments(
+                        $request,
+                        (int) $userId,
+                        $otherTokens,
+                        'other_doc',
+                        'Other Document',
+                        $otherLabels
+                    )
+                );
+            }
             $data['other_documents'] = LifeProposedDocument::put(
                 !empty($otherDocs) ? json_encode($otherDocs) : null,
                 $lifeProposedFile
             );
 
             // Remove non-column array inputs from mass assignment
-            unset($data['medical_extra_docs'], $data['medical_extra_labels'], $data['other_docs'], $data['other_doc_labels']);
+            unset(
+                $data['medical_extra_docs'],
+                $data['medical_extra_labels'],
+                $data['medical_extra_temp_tokens'],
+                $data['other_docs'],
+                $data['other_doc_labels'],
+                $data['other_doc_temp_tokens']
+            );
+            foreach (array_keys($fixedMedical) as $medField) {
+                unset($data[$medField . '_temp_token']);
+            }
+            foreach ($documents as $document) {
+                unset($data[$document . '_temp_token']);
+            }
 
             // Family history is stored in a related table — strip from policy mass-assignment
             $familyKeys = [
@@ -1099,6 +1257,7 @@ class FrontendController extends Controller
         $user->save();
 
         Auth::login($user);
+        UserIdentitySync::seedBasicDetailFromUser($user);
         return response()->json([
             'status' => true,
             'message' => 'Email verified successfully'

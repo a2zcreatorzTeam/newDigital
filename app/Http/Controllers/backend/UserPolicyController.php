@@ -81,7 +81,7 @@ class UserPolicyController extends Controller
             abort(404);
         }
 
-        $data = UserPolicyData::with('voucher', 'family_history', 'lifeProposedDetail')->where('id', $id)->firstOrFail();
+        $data = UserPolicyData::with('voucher', 'family_history', 'lifeProposedDetail', 'countryOfResidence', 'dualNationalityCountry', 'primaryNationalityCountry')->where('id', $id)->firstOrFail();
         return view('backend.userPolicy.policy_detail', compact('data'));
     }
 
@@ -94,7 +94,7 @@ class UserPolicyController extends Controller
             abort(404);
         }
 
-        $data = UserPolicyData::with('voucher', 'family_history', 'lifeProposedDetail')
+        $data = UserPolicyData::with('voucher', 'family_history', 'lifeProposedDetail', 'countryOfResidence', 'dualNationalityCountry', 'primaryNationalityCountry')
             ->where('id', $id)
             ->firstOrFail();
 
@@ -153,6 +153,7 @@ class UserPolicyController extends Controller
             'product',
             'policyPlan.mainClass',
             'dualNationalityCountry',
+            'countryOfResidence',
             'lifeProposedDetail',
             'voucher',
             'family_history',

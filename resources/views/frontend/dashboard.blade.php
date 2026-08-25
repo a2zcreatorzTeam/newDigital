@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="{{ asset('frontend/css/di-form.css') }}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <link rel="stylesheet" href="{{ asset('frontend/css/dashboard.css') }}">
+<link rel="stylesheet" href="{{ asset('frontend/css/field-help.css') }}">
 
 
 
@@ -51,6 +52,7 @@
                     data-product-id="{{ $id }}"
                     data-product-name="{{ $product->name ?? '' }}"
                     data-queue-save-url="{{ route('frontend.queue.save') }}"
+                    data-policy-upload-url="{{ route('frontend.policyUploadTemp') }}"
                     data-draft-id="{{ $draft->id ?? '' }}">
                     @csrf
 
@@ -84,10 +86,21 @@
 </main>
 <!-- main-area-end -->
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<!-- <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script> -->
-<script src="{{ asset('frontend/js/script.js') }}"></script>
-
 @endsection
+
+@push('js')
+<script src="{{ asset('frontend/js/script.js') }}"></script>
+<script src="{{ asset('frontend/js/policy-upload.js') }}"></script>
+<script src="{{ asset('frontend/js/field-help.js') }}"></script>
+<script>
+    if (typeof window.initPolicyUpload === 'function') {
+        window.initPolicyUpload({
+            uploadUrl: @json(route('frontend.policyUploadTemp')),
+            csrfToken: @json(csrf_token())
+        });
+    }
+    if (typeof window.FieldHelp !== 'undefined') {
+        window.FieldHelp.init('#msform');
+    }
+</script>
+@endpush

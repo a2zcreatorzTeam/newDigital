@@ -184,6 +184,13 @@ trait PreparesLifeProposed
             'life_proposed_email' => [$requiredIfSeparate, 'nullable', 'email', 'max:255'],
             'life_proposed_phone_office' => ['nullable', 'string', 'max:20'],
             'life_proposed_phone_residential' => ['nullable', 'string', 'max:20'],
+            'life_proposed_country_of_residence_id' => array_values(array_filter([
+                $requiredIfSeparate,
+                'nullable',
+                'integer',
+                $activeCountry(),
+            ])),
+            'life_proposed_current_address' => [$requiredIfSeparate, 'nullable', 'string', 'min:5', 'max:1000'],
             'life_proposed_is_client_dual_national' => [$requiredIfSeparate, 'nullable', 'in:Yes,No'],
             'life_proposed_primary_nationality_country_id' => array_values(array_filter([
                 $isDualNo ? 'nullable' : $requiredIfDual,
@@ -230,13 +237,33 @@ trait PreparesLifeProposed
                     if (!$this->isLifeProposedSeparate()) {
                         return false;
                     }
+                    if ($this->filled('life_proposed_document_temp_token')) {
+                        return false;
+                    }
+                    $needsDoc = $requiredWhenSeparate || !$this->hasExistingLifeProposedDocument();
 
-                    return $requiredWhenSeparate || !$this->hasExistingLifeProposedDocument();
+                    return $needsDoc && !$this->hasFile('life_proposed_document');
                 }),
                 'nullable',
                 'file',
                 'mimes:jpg,jpeg,png,pdf',
                 'max:4096',
+            ],
+            'life_proposed_document_temp_token' => [
+                Rule::requiredIf(function () use ($requiredWhenSeparate) {
+                    if (!$this->isLifeProposedSeparate()) {
+                        return false;
+                    }
+                    if ($this->hasFile('life_proposed_document')) {
+                        return false;
+                    }
+                    $needsDoc = $requiredWhenSeparate || !$this->hasExistingLifeProposedDocument();
+
+                    return $needsDoc && !$this->filled('life_proposed_document_temp_token');
+                }),
+                'nullable',
+                'string',
+                'uuid',
             ],
         ];
     }
@@ -264,6 +291,10 @@ trait PreparesLifeProposed
             'life_proposed_religion.required' => 'Life Proposed religion is required.',
             'life_proposed_email.required' => 'Life Proposed email is required.',
             'life_proposed_email.email' => 'Enter a valid Life Proposed email.',
+            'life_proposed_country_of_residence_id.required' => 'Life Proposed Country of Residence is required.',
+            'life_proposed_country_of_residence_id.exists' => 'Please select a valid Life Proposed Country of Residence.',
+            'life_proposed_current_address.required' => 'Life Proposed Current Address is required.',
+            'life_proposed_current_address.min' => 'Please enter a valid Life Proposed Current Address.',
             'life_proposed_is_client_dual_national.required' => 'Select dual nationality for Life Proposed.',
             'life_proposed_primary_nationality_country_id.required' => 'Please select Life Proposed primary nationality.',
             'life_proposed_dual_nationality_country_id.required' => 'Please select Life Proposed dual nationality country.',

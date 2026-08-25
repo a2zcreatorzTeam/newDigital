@@ -363,11 +363,11 @@
                     <table id="policyTable" class="claim-document-table">
                         <thead>
                             <tr>
-                                <th>Plan</th>
-                                <th>Policy No</th>
-                                <th>Policy Date</th>
-                                <th>Status</th>
-                                <th>Action</th>
+                                <th>{{ policy_label('plan_name') }}</th>
+                                <th>{{ policy_label('policy_number') }}</th>
+                                <th>{{ policy_label('policy_date') }}</th>
+                                <th>{{ policy_label('status') }}</th>
+                                <th>{{ policy_label('action') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -392,13 +392,13 @@
                                 </td>
                                 <td>
                                     <a href="{{ route('frontend.policyDetail',$encryptedId) }}">
-                                        <div class="claim-document-small">Policy No:</div>
+                                        <div class="claim-document-small">{{ policy_label('policy_number') }}</div>
                                         <div class="claim-document-num">{{ $row['policy_id'] }}</div>
                                     </a>
                                 </td>
                                 <td>
                                     <a href="{{ route('frontend.policyDetail',$encryptedId) }}">
-                                        <div class="claim-document-small">Policy Date</div>
+                                        <div class="claim-document-small">{{ policy_label('policy_date') }}</div>
                                         <div class="claim-document-num">{{ $row['created_at'] }}</div>
                                     </a>
                                 </td>

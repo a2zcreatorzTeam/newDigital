@@ -8,7 +8,7 @@
     'countryRequired' => $countryRequired ?? false,
     'countryShowAsterisk' => $countryShowAsterisk ?? true,
     'countrySelectClass' => $countrySelectClass ?? 'form-control account',
-    'countryLabel' => $countryLabel ?? 'Dual Nationality Country',
+    'countryLabel' => $countryLabel ?? policy_label('dual_nationality_country'),
     'countryLabelClass' => $countryLabelClass ?? '',
     'countries' => $countries ?? collect(),
 ])

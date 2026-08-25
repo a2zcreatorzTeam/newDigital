@@ -1,15 +1,19 @@
 <div id="documents" role="tabpanel" aria-labelledby="basic_Details-tab" class="tab-pane fade">
     <div class="container">
         <div class="row">
-            <h3 class="col-12 ib-form-subheading">Documents</h3>
+            <h3 class="col-12 ib-form-subheading">{{ policy_label('documents') }}</h3>
 
-            <!-- Existing Required Documents Upload Section (unchanged) -->
-            <div class="row">
+            <div class="col-12">
+                <div class="policy-fieldset">
+                    <div class="policy-fieldset__header">
+                        <h5 class="policy-fieldset__title">{{ policy_label('required_documents') }}</h5>
+                    </div>
+                    <div class="row">
                 <div class="col-md-6 px-0 px-sm-3 mb-3">
                     <div>
                         <div>
                             <div>
-                                <label>Proposer CNIC Front / شناختی کارڈ (فرنٹ)<span class="text text-danger">*</span></label>
+                                <label>{{ policy_label('proposer_cnic_front') }}<span class="text text-danger">*</span></label>
                                 <div class="jbl-field">
                                     <input type="file" name="proposer_cnic_front" class="form-control jbl-dynamic-input" id="proposer_cnic_front" accept="image/*,.pdf" required>
                                 </div>
@@ -22,7 +26,7 @@
                     <div>
                         <div>
                             <div>
-                                <label>Proposer CNIC Back / شناختی کارڈ (بیک)<span class="text text-danger">*</span></label>
+                                <label>{{ policy_label('proposer_cnic_back') }}<span class="text text-danger">*</span></label>
                                 <div class="jbl-field">
                                     <input type="file" name="proposer_cnic_back" class="form-control jbl-dynamic-input" id="proposer_cnic_back" accept="image/*,.pdf" required>
                                 </div>
@@ -35,7 +39,7 @@
                     <div>
                         <div>
                             <div>
-                                <label><span class="js-life-proposed-doc-label">Life Proposed CNIC / B-Form Copy / مجوزہ بیمہ کا شناختی کارڈ/بی فارم</span><span class="text text-danger">*</span></label>
+                                <label><span class="js-life-proposed-doc-label">{{ policy_label('life_proposed_document') }}</span><span class="text text-danger">*</span></label>
                                 <div class="jbl-field">
                                     <input type="file" name="life_proposed_document" class="form-control jbl-dynamic-input" id="life_proposed_document" accept="image/*,.pdf">
                                 </div>
@@ -48,7 +52,7 @@
                     <div>
                         <div>
                             <div>
-                                <label>Nominee CNIC / B-Form Copy / نامزد فرد کا شناختی کارڈ/بی فارم<span class="text text-danger">*</span></label>
+                                <label>{{ policy_label('nominee_document') }}<span class="text text-danger">*</span></label>
                                 <div class="jbl-field">
                                     <input type="file" name="nominee_document" class="form-control jbl-dynamic-input" id="nominee_document" accept="image/*,.pdf" required>
                                 </div>
@@ -61,7 +65,7 @@
                     <div>
                         <div>
                             <div>
-                                <label>Passport Size Photograph / پاسپورٹ سائز تصویر<span class="text text-danger">*</span></label>
+                                <label>{{ policy_label('proposer_photo') }}<span class="text text-danger">*</span></label>
                                 <div class="jbl-field">
                                     <input type="file" name="proposer_photo" class="form-control jbl-dynamic-input" id="proposer_photo" accept="image/*" required>
                                 </div>
@@ -74,7 +78,7 @@
                     <div>
                         <div>
                             <div>
-                                <label>Proof of Income / Income Proof (آمدنی کا ثبوت / بینک سٹیٹمنٹ)</label>
+                                <label>{{ policy_label('income_proof') }}</label>
                                 <div class="jbl-field">
                                     <input type="file" name="income_proof" class="form-control jbl-dynamic-input" id="income_proof" accept="image/*,.pdf">
                                 </div>
@@ -82,18 +86,22 @@
                         </div>
                     </div>
                 </div>
+                    </div>
+                </div>
             </div>
 
             {{-- Medical Documents (new) --}}
-            <div class="col-12 mt-4">
-                <div class="doc-extra-panel">
-                    <h4 class="doc-extra-title">Medical Documents</h4>
+            <div class="col-12 mt-1">
+                <div class="policy-fieldset doc-extra-panel">
+                    <div class="policy-fieldset__header">
+                        <h5 class="policy-fieldset__title doc-extra-title">{{ policy_label('medical_documents') }}</h5>
+                    </div>
                     <p class="doc-extra-subtitle">Upload all relevant medical documents.</p>
 
                     <div class="row" id="medical_docs_fixed">
                         <div class="col-md-6 mb-3">
                             <div class="doc-upload-row" data-doc-row>
-                                <label>Referred / OPD Letter / Slip / Card</label>
+                                <label>{{ policy_label('referred_opd') }}</label>
                                 <div class="doc-upload-controls">
                                     <input type="file" name="medical_doc_referred_opd" class="form-control jbl-dynamic-input doc-file-input" accept="image/*,.pdf">
                                     <span class="doc-file-name">No file chosen</span>
@@ -104,7 +112,7 @@
                         </div>
                         <div class="col-md-6 mb-3">
                             <div class="doc-upload-row" data-doc-row>
-                                <label>Previous OPD Card / Slip / Document</label>
+                                <label>{{ policy_label('previous_opd') }}</label>
                                 <div class="doc-upload-controls">
                                     <input type="file" name="medical_doc_previous_opd" class="form-control jbl-dynamic-input doc-file-input" accept="image/*,.pdf">
                                     <span class="doc-file-name">No file chosen</span>
@@ -115,7 +123,7 @@
                         </div>
                         <div class="col-md-6 mb-3">
                             <div class="doc-upload-row" data-doc-row>
-                                <label>Summary / Discharge / Operation / Lab Reports / Any others</label>
+                                <label>{{ policy_label('summary_discharge') }}</label>
                                 <div class="doc-upload-controls">
                                     <input type="file" name="medical_doc_summary_reports" class="form-control jbl-dynamic-input doc-file-input" accept="image/*,.pdf">
                                     <span class="doc-file-name">No file chosen</span>
@@ -126,7 +134,7 @@
                         </div>
                         <div class="col-md-6 mb-3">
                             <div class="doc-upload-row" data-doc-row>
-                                <label>Present / Brief History / Investigations / Picture (If any)</label>
+                                <label>{{ policy_label('present_history') }}</label>
                                 <div class="doc-upload-controls">
                                     <input type="file" name="medical_doc_present_history" class="form-control jbl-dynamic-input doc-file-input" accept="image/*,.pdf">
                                     <span class="doc-file-name">No file chosen</span>
@@ -137,7 +145,7 @@
                         </div>
                         <div class="col-md-6 mb-3">
                             <div class="doc-upload-row" data-doc-row>
-                                <label>Death / MLC / Postmortem / Police / Medico Legal</label>
+                                <label>{{ policy_label('death_mlc') }}</label>
                                 <div class="doc-upload-controls">
                                     <input type="file" name="medical_doc_death_mlc" class="form-control jbl-dynamic-input doc-file-input" accept="image/*,.pdf">
                                     <span class="doc-file-name">No file chosen</span>
@@ -148,7 +156,7 @@
                         </div>
                         <div class="col-md-6 mb-3">
                             <div class="doc-upload-row" data-doc-row>
-                                <label>Medicolegal / Legal / FIR / Panchanama / Inquest / Others</label>
+                                <label>{{ policy_label('medicolegal') }}</label>
                                 <div class="doc-upload-controls">
                                     <input type="file" name="medical_doc_medicolegal" class="form-control jbl-dynamic-input doc-file-input" accept="image/*,.pdf">
                                     <span class="doc-file-name">No file chosen</span>
@@ -168,16 +176,18 @@
             </div>
 
             {{-- Other Documents (new) --}}
-            <div class="col-12 mt-4">
-                <div class="doc-extra-panel">
-                    <h4 class="doc-extra-title">Other Documents</h4>
+            <div class="col-12 mt-1">
+                <div class="policy-fieldset doc-extra-panel">
+                    <div class="policy-fieldset__header">
+                        <h5 class="policy-fieldset__title doc-extra-title">{{ policy_label('other_documents') }}</h5>
+                    </div>
                     <p class="doc-extra-subtitle">Upload any other supporting documents.</p>
 
                     <div id="other_docs_list">
                         <div class="doc-upload-row mb-3 other-doc-item" data-doc-row data-other-index="1">
-                            <label for="other_doc_1">Other Document 1</label>
+                            <label for="other_doc_1">{{ policy_label('other_document') }} 1</label>
                             <div class="doc-upload-controls">
-                                <input type="hidden" name="other_doc_labels[]" value="Other Document 1">
+                                <input type="hidden" name="other_doc_labels[]" value="{{ policy_label('other_document') }} 1">
                                 <input type="file" name="other_docs[]" id="other_doc_1" class="form-control jbl-dynamic-input doc-file-input" accept="image/*,.pdf">
                                 <span class="doc-file-name">No file chosen</span>
                                 <span class="doc-file-ok d-none"><i class="fas fa-check-circle"></i></span>
@@ -202,22 +212,18 @@
 
 <style>
     #documents .doc-extra-panel {
-        border: 1px solid #d9e2ec;
-        border-radius: 0.75rem;
-        background: #fff;
-        padding: 1.1rem 1.15rem 0.85rem;
-        box-shadow: 0 4px 14px rgba(31, 147, 209, 0.05);
+        /* Uses shared .policy-fieldset chrome; keep light accents only */
+        box-shadow: none;
     }
 
     #documents .doc-extra-title {
-        margin: 0;
-        color: #1f93d1;
-        font-size: 1.15rem;
+        color: #2f3b4a;
+        font-size: 1.05rem;
         font-weight: 600;
     }
 
     #documents .doc-extra-subtitle {
-        margin: 0.25rem 0 1rem;
+        margin: 0 0 1rem;
         color: #6b7c88;
         font-size: 0.875rem;
     }
@@ -299,6 +305,8 @@
     $(document).ready(function() {
         const MAX_MEDICAL_EXTRA = 5;
         const MAX_OTHER_DOCS = 5;
+        const ADDITIONAL_MEDICAL_LABEL = 'Additional Medical Document (اضافی طبی دستاویز)';
+        const OTHER_DOCUMENT_LABEL = 'Other Document (دیگر دستاویز)';
 
         function refreshDocRow($row) {
             let input = $row.find('.doc-file-input')[0];
@@ -313,7 +321,7 @@
             let $items = $('#medical_docs_extra .medical-extra-item');
             $items.each(function(index) {
                 let n = index + 1;
-                let label = 'Additional Medical Document ' + n;
+                let label = ADDITIONAL_MEDICAL_LABEL + ' ' + n;
                 let id = 'medical_extra_doc_' + n;
                 $(this).find('label').first().attr('for', id).text(label);
                 $(this).find('input[name="medical_extra_labels[]"]').val(label);
@@ -327,7 +335,7 @@
             let $items = $('#other_docs_list .other-doc-item');
             $items.each(function(index) {
                 let n = index + 1;
-                let label = 'Other Document ' + n;
+                let label = OTHER_DOCUMENT_LABEL + ' ' + n;
                 let id = 'other_doc_' + n;
                 $(this).attr('data-other-index', n);
                 $(this).find('label').first().attr('for', id).text(label);
@@ -355,7 +363,7 @@
                 return;
             }
             let n = $('#medical_docs_extra .medical-extra-item').length + 1;
-            let label = 'Additional Medical Document ' + n;
+            let label = ADDITIONAL_MEDICAL_LABEL + ' ' + n;
             let id = 'medical_extra_doc_' + n;
             $('#medical_docs_extra').append(`
                 <div class="col-md-6 mb-3 medical-extra-item">
@@ -380,7 +388,7 @@
                 return;
             }
             let n = $('#other_docs_list .other-doc-item').length + 1;
-            let label = 'Other Document ' + n;
+            let label = OTHER_DOCUMENT_LABEL + ' ' + n;
             let id = 'other_doc_' + n;
             $('#other_docs_list').append(`
                 <div class="doc-upload-row mb-3 other-doc-item" data-doc-row data-other-index="${n}">

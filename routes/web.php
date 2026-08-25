@@ -108,6 +108,7 @@ Route::prefix('/')->name('frontend.')->controller(FrontendController::class)
                 Route::post('/updateOccupation', 'updateOccupation')->name('updateOccupation');
                 Route::post('/updateHealth', 'updateHealth')->name('updateHealth');
                 Route::post('policy/user/data/save', 'policyDataSave')->name('policyUserDataSave');
+                Route::post('policy/upload/temp', 'uploadPolicyTempFile')->name('policyUploadTemp')->middleware('throttle:60,1');
                 Route::post('get/plan/data', 'getPlanData')->name('getPlanData');
                 Route::post('get/sum/aasured', 'getSumAssured')->name('getSumAssured');
                 Route::get('payment/success', 'successPayment')->name('successPayment');
